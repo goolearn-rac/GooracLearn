@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goorac Learn | Prompt Engineering</title>
+    <style>
+        /* System Light/Dark Theme Variables */
+        :root {
+            --bg-color: #f0f2f5;
+            --text-color: #1c1e21;
+            --card-bg: #ffffff;
+            --primary-blue: #1877f2;
+            --primary-hover: #166fe5;
+            --border-color: #dddfe2;
+            --success: #31a24c;
+            --locked: #8a8d91;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #18191a;
+                --text-color: #e4e6eb;
+                --card-bg: #242526;
+                --primary-blue: #2d88ff;
+                --primary-hover: #1877f2;
+                --border-color: #3e4042;
+                --success: #2e8f46;
+                --locked: #b0b3b8;
+            }
+        }
+
+        /* Global Reset & Typography */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        * { box-sizing: border-box; }
+
+        /* Navigation */
+        .top-nav {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .brand { font-size: 20px; font-weight: 800; color: var(--primary-blue); }
+        .lang-toggle {
+            background: none; border: 1px solid var(--border-color);
+            color: var(--text-color); padding: 5px 10px; border-radius: 20px;
+            cursor: pointer; font-size: 14px; font-weight: bold;
+        }
+
+        /* Screen Containers */
+        .screen {
+            display: none;
+            flex: 1;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .active-screen { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Typography & Elements */
+        h2 { margin-top: 0; }
+        p { line-height: 1.6; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
+        .input-group input {
+            width: 100%; padding: 12px; border: 1px solid var(--border-color);
+            border-radius: 8px; background-color: var(--bg-color); color: var(--text-color);
+            font-size: 16px;
+        }
+        
+        .primary-btn {
+            background-color: var(--primary-blue); color: white; border: none;
+            border-radius: 8px; padding: 15px; width: 100%; font-size: 16px;
+            font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .primary-btn:hover { background-color: var(--primary-hover); }
+        .success-btn { background-color: var(--success); color: white; border: none; border-radius: 8px; padding: 15px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px;}
+
+        /* Dashboard List */
+        .module-list { list-style: none; padding: 0; margin: 0; }
+        .module-item {
+            background-color: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 16px; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer;
+        }
+        .module-item.locked { opacity: 0.6; cursor: not-allowed; }
+        .module-icon { font-size: 24px; margin-right: 15px; }
+        .module-info { flex: 1; }
+        .module-title { font-weight: 600; font-size: 16px; margin: 0; }
+        .module-status { font-size: 12px; color: var(--locked); margin-top: 4px; }
+
+        /* Payment & Perks */
+        .perks-box { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .perks-list { margin: 10px 0 0 0; padding-left: 20px; line-height: 1.8; }
+        .qr-container { text-align: center; background: white; padding: 15px; border-radius: 12px; display: inline-block; margin-bottom: 15px; }
+        
+        /* Certificate */
+        .cert-container { border: 8px solid var(--primary-blue); padding: 30px; text-align: center; border-radius: 12px; background: white; color: black; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation -->
+    <div class="top-nav">
+        <div class="brand">Goorac Learn</div>
+        <button class="lang-toggle" onclick="toggleLanguage()" id="lang-btn">English / தமிழ்</button>
+    </div>
+
+    <!-- 1. Login Screen -->
+    <div id="login-screen" class="screen">
+        <h2 data-en="Master Prompt Engineering" data-ta="Prompt Engineering-ஐ கற்றுக்கொள்ளுங்கள்">Master Prompt Engineering</h2>
+        <p data-en="Get officially certified by Goorac Corporation and master the skills of the future." data-ta="Goorac Corporation-ஆல் சான்றளிக்கப்பட்டு, எதிர்காலத் திறன்களை வளர்த்துக்கொள்ளுங்கள்."></p>
+        <button id="google-login-btn" class="primary-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Continue with Google
+        </button>
+    </div>
+
+    <!-- 2. Profile Screen -->
+    <div id="profile-screen" class="screen">
+        <h2>Complete Your Profile</h2>
+        <p>This name will appear on your final Goorac Certificate.</p>
+        <div class="input-group">
+            <label>Full Name</label>
+            <input type="text" id="prof-name" placeholder="Siva Manikandan M">
+        </div>
+        <div class="input-group">
+            <label>WhatsApp Number</label>
+            <input type="tel" id="prof-wa" placeholder="+91 9876543210">
+        </div>
+        <div class="input-group">
+            <label>College/Degree</label>
+            <input type="text" id="prof-degree" placeholder="BBA Digital Marketing">
+        </div>
+        <button id="save-profile-btn" class="primary-btn">Save & Continue</button>
+    </div>
+
+    <!-- 3. Payment Screen -->
+    <div id="payment-screen" class="screen">
+        <h2>Unlock the Course</h2>
+        
+        <div class="perks-box">
+            <strong>What you get for ₹149:</strong>
+            <ul class="perks-list">
+                <li>10 In-depth Prompt Engineering Modules</li>
+                <li>Dual Language (English & Tamil)</li>
+                <li>Goorac Corporation Verified Certificate</li>
+                <li>Lifetime Dashboard Access</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center;">
+            <div class="qr-container">
+                <!-- Auto-generates QR code for your specific UPI ID and amount -->
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi%3A%2F%2Fpay%3Fpa%3Dsivamanihandan%40oksbi%26pn%3DGoorac%20Corporation%26am%3D149.00%26cu%3DINR" alt="UPI QR Code" width="200">
+            </div>
+            <p>Scan to pay <b>₹149</b></p>
+            
+            <a href="upi://pay?pa=sivamanihandan@oksbi&pn=Goorac%20Corporation&am=149.00&cu=INR&tn=Prompt%20Engineering%20Course" class="success-btn" style="text-decoration:none; display:inline-block; margin-bottom: 20px;">
+                Open UPI App on Phone
+            </a>
+        </div>
+
+        <div class="input-group">
+            <label>Enter 12-Digit UPI Transaction ID (UTR)</label>
+            <input type="text" id="upi-input" placeholder="e.g. 312345678901">
+        </div>
+        <button id="submit-payment-btn" class="primary-btn">Submit Payment</button>
+    </div>
+
+    <!-- 4. Dashboard Screen -->
+    <div id="dashboard-screen" class="screen">
+        <h2 data-en="Your Learning Modules" data-ta="உங்கள் கற்றல் தொகுதிகள்">Your Learning Modules</h2>
+        <ul class="module-list" id="module-list-container">
+            <!-- JavaScript will inject modules here -->
+        </ul>
+        <button id="start-quiz-btn" class="success-btn" style="display:none; margin-top:20px;">Take Final Quiz</button>
+    </div>
+
+    <!-- 5. Module Viewer Screen -->
+    <div id="module-viewer-screen" class="screen">
+        <button onclick="showScreen('dashboard-screen')" style="background:none; border:none; color:var(--primary-blue); font-weight:bold; cursor:pointer; padding: 0 0 20px 0;">← Back to Dashboard</button>
+        <h2 id="viewer-title">Module Title</h2>
+        <div id="viewer-content" style="font-size: 16px; line-height: 1.8; margin-bottom: 40px;"></div>
+        <button id="mark-complete-btn" class="primary-btn">Mark Complete & Next</button>
+    </div>
+
+    <!-- 6. Quiz Screen -->
+    <div id="quiz-screen" class="screen">
+        <h2>Final Certification Quiz</h2>
+        <p>Answer correctly to generate your certificate.</p>
+        <div id="quiz-container"></div>
+        <button id="submit-quiz-btn" class="primary-btn">Submit Answers</button>
+    </div>
+
+    <!-- 7. Certificate / WhatsApp Screen -->
+    <div id="cert-screen" class="screen">
+        <div id="cert-pdf-view" style="display:none;">
+            <div class="cert-container" id="printable-cert">
+                <h1 style="color:#1877f2; margin-bottom:5px;">Goorac Corporation</h1>
+                <h3 style="margin-top:0; color:#555;">Certificate of Completion</h3>
+                <p>This certifies that</p>
+                <h2 id="cert-name-display" style="font-size: 28px; border-bottom: 2px solid #ccc; padding-bottom: 10px; display: inline-block; min-width: 80%;">Name</h2>
+                <p>has successfully completed the <b>Prompt Engineering Masterclass</b>.</p>
+            </div>
+            <button onclick="window.print()" class="primary-btn">Save PDF / Print</button>
+        </div>
+
+        <div id="cert-whatsapp-view" style="display:none; text-align:center;">
+            <h2>🎉 You Passed!</h2>
+            <p>Your payment is currently being verified. Click below to send a screenshot of your payment on WhatsApp, and we will issue your certificate instantly!</p>
+            <button id="whatsapp-claim-btn" class="success-btn">Claim on WhatsApp</button>
+        </div>
+    </div>
+
+    <!-- MAIN FIREBASE AND APP LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDeXk6z_5mYQZi_xIsQsN935KxuIBxAM3w",
+            authDomain: "gooraclearn.firebaseapp.com",
+            projectId: "gooraclearn",
+            storageBucket: "gooraclearn.firebasestorage.app",
+            messagingSenderId: "221459932053",
+            appId: "1:221459932053:web:af713811da7edd113e0c9c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        // Application State
+        let currentLang = 'en';
+        let currentUserData = null; // Memory cache to save Firebase reads!
+        let viewingModuleId = 1;
+
+        // ==========================================
+        // COURSE DATA (Zero database reads required)
+        // ==========================================
+        const courseData = [
+            { id: 1, icon: "🧠", title_en: "Intro to LLMs", title_ta: "LLM-களின் அறிமுகம்", content_en: "Large Language Models (LLMs) like ChatGPT predict the next word based on vast training data. They don't 'think', they calculate probabilities.", content_ta: "ChatGPT போன்ற பெரிய மொழி மாதிரிகள் (LLMs) முந்தைய தரவுகளின் அடிப்படையில் அடுத்த வார்த்தையை கணிக்கின்றன. அவை 'சிந்திப்பதில்லை', நிகழ்தகவுகளை கணக்கிடுகின்றன." },
+            { id: 2, icon: "🏗️", title_en: "Anatomy of a Prompt", title_ta: "ஒரு Prompt-ன் அமைப்பு", content_en: "A perfect prompt needs: Role (Act as...), Context (Here is the situation...), Task (Do this...), and Format (Output as...).", content_ta: "ஒரு சரியான Prompt-க்கு தேவையானது: பாத்திரம் (Role), சூழல் (Context), பணி (Task), மற்றும் வடிவம் (Format)." },
+            { id: 3, icon: "🎯", title_en: "Few-Shot Prompting", title_ta: "Few-Shot Prompting", content_en: "Instead of just asking for an output, give the AI 2 or 3 examples of what 'good' looks like before asking it to do the task.", content_ta: "வெறும் பதிலை மட்டும் கேட்காமல், AI-க்கு 2 அல்லது 3 சரியான உதாரணங்களை முதலில் கொடுத்து, பிறகு பணியை செய்யச் சொல்வது." },
+            { id: 4, icon: "⛓️", title_en: "Chain of Thought", title_ta: "சிந்தனை சங்கிலி (CoT)", content_en: "By adding the phrase 'Let's think step-by-step', you force the AI to break down complex logic, dramatically reducing errors.", content_ta: "'படிப்படியாக சிந்திப்போம்' (Let's think step-by-step) என்ற வார்த்தையைச் சேர்ப்பதன் மூலம், AI-ஐ தர்க்கரீதியாக சிந்திக்க வைத்து பிழைகளை குறைக்கலாம்." },
+            { id: 5, icon: "🎭", title_en: "Role & Persona", title_ta: "பாத்திரம் & ஆளுமை", content_en: "Telling an AI to 'Act as a Senior Developer' changes its vocabulary, tone, and the depth of the code it provides.", content_ta: "AI-ஐ 'ஒரு சீனியர் டெவலப்பராக செயல்படு' என சொல்வது அதன் வார்த்தைகள் மற்றும் பதிலின் ஆழத்தை மாற்றும்." },
+            { id: 6, icon: "📊", title_en: "Data Extraction", title_ta: "தரவு பிரித்தெடுத்தல்", content_en: "You can prompt AI to read messy text and output perfectly formatted JSON, CSV, or Markdown tables for your applications.", content_ta: "முறையற்ற உரை (text)-ஐ கொடுத்து, அதிலிருந்து JSON, CSV அல்லது Markdown அட்டவணையாக தரவை சரியாக பிரித்தெடுக்க AI-ஐ பயன்படுத்தலாம்." },
+            { id: 7, icon: "🚫", title_en: "Guardrails & Limits", title_ta: "வரம்புகள் மற்றும் தடைகள்", content_en: "Negative prompting is crucial. Tell the AI explicitly what NOT to do (e.g., 'Do not invent facts, reply I don't know if unsure').", content_ta: "AI என்ன செய்யக்கூடாது என்பதை தெளிவாக சொல்ல வேண்டும் (உதாரணம்: 'தெரியவில்லை என்றால் பொய்களை உருவாக்காதே, தெரியாது என சொல்')." },
+            { id: 8, icon: "⚙️", title_en: "Temperature & Parameters", title_ta: "வெப்பநிலை & அளவுருக்கள்", content_en: "Temperature controls creativity. 0.0 is robotic and factual. 1.0 is highly creative and unpredictable.", content_ta: "Temperature படைப்பாற்றலை கட்டுப்படுத்துகிறது. 0.0 என்பது துல்லியமானது. 1.0 என்பது மிகவும் படைப்பாற்றல் மிக்கது." },
+            { id: 9, icon: "🛡️", title_en: "Prompt Injection", title_ta: "Prompt Injection", content_en: "Hackers can manipulate AI chatbots by feeding them hidden instructions. Learn to sanitize user inputs to protect your AI.", content_ta: "ஹேக்கர்கள் AI-க்கு மறைமுக கட்டளைகளை கொடுத்து தவறாக பயன்படுத்தலாம். இதை தடுக்க உள்ளீடுகளை (inputs) பாதுகாப்பாக கையாள வேண்டும்." },
+            { id: 10, icon: "🚀", title_en: "Real-world Pipelines", title_ta: "நடைமுறை பயன்பாடுகள்", content_en: "Chaining prompts together: AI 1 reads the email -> AI 2 extracts the sentiment -> AI 3 drafts a reply based on the sentiment.", content_ta: "பல Prompt-களை இணைத்தல்: AI 1 மின்னஞ்சலை படிக்கும் -> AI 2 மனநிலையை அறியும் -> AI 3 அதற்கேற்ப பதிலை எழுதும்." }
+        ];
+
+        const quizData = [
+            { q: "What does adding 'Think step-by-step' do?", opts: ["Makes it type faster", "Reduces logic errors", "Uses more colors"], ans: 1 },
+            { q: "What temperature setting is best for coding/facts?", opts: ["0.0", "0.7", "1.0"], ans: 0 },
+            { q: "Providing 3 examples before asking a task is called:", opts: ["Zero-shot", "Few-shot", "Hot-shot"], ans: 1 }
+            // For brevity in code, a 3-question quiz to represent the flow
+        ];
+
+        // ==========================================
+        // UI HELPERS
+        // ==========================================
+        window.showScreen = (screenId) => {
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active-screen'));
+            document.getElementById(screenId).classList.add('active-screen');
+            window.scrollTo(0,0);
+        };
+
+        window.toggleLanguage = () => {
+            currentLang = currentLang === 'en' ? 'ta' : 'en';
+            // Update UI elements with data-en/ta attributes
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.innerText = currentLang === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-ta');
+            });
+            // Re-render dashboard or module if active
+            if(document.getElementById('dashboard-screen').classList.contains('active-screen')) renderDashboard();
+            if(document.getElementById('module-viewer-screen').classList.contains('active-screen')) loadModule(viewingModuleId);
+        };
+
+        // ==========================================
+        // AUTHENTICATION & ROUTING LOGIC
+        // ==========================================
+        document.getElementById('google-login-btn').onclick = () => signInWithPopup(auth, provider);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Highly Optimized: Only read from Firebase once on load
+                const docRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    currentUserData = docSnap.data();
+                    routeUser();
+                } else {
+                    currentUserData = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
+                    showScreen('profile-screen');
+                }
+            } else {
+                showScreen('login-screen');
+            }
+        });
+
+        function routeUser() {
+            if (!currentUserData.fullName) return showScreen('profile-screen');
+            if (currentUserData.paymentStatus === 'none') return showScreen('payment-screen');
+            if (currentUserData.hasPassedQuiz) {
+                showCertificate();
+                return showScreen('cert-screen');
+            }
+            renderDashboard();
+            showScreen('dashboard-screen');
+        }
+
+        // ==========================================
+        // PROFILE & PAYMENT SAVING
+        // ==========================================
+        document.getElementById('save-profile-btn').onclick = async () => {
+            const name = document.getElementById('prof-name').value;
+            const wa = document.getElementById('prof-wa').value;
+            const deg = document.getElementById('prof-degree').value;
+            if(!name || !wa) return alert("Name and WhatsApp are required");
+
+            currentUserData.fullName = name;
+            currentUserData.whatsappNumber = wa;
+            currentUserData.collegeDegree = deg;
+            
+            await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
+            routeUser();
+        };
+
+        document.getElementById('submit-payment-btn').onclick = async () => {
+            const upiId = document.getElementById('upi-input').value;
+            if(upiId.length < 10) return alert("Please enter a valid UPI UTR Number");
+
+            currentUserData.upiTransactionId = upiId;
+            currentUserData.paymentStatus = 'pending_check'; // Optimistic unlock
+            
+            await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
+            routeUser();
+        };
+
+        // ==========================================
+        // COURSE & MODULE LOGIC
+        // ==========================================
+        function renderDashboard() {
+            const container = document.getElementById('module-list-container');
+            container.innerHTML = '';
+            let allComplete = currentUserData.currentModule > 10;
+
+            courseData.forEach(mod => {
+                const isUnlocked = mod.id <= currentUserData.currentModule;
+                const title = currentLang === 'en' ? mod.title_en : mod.title_ta;
+                
+                container.innerHTML += `
+                    <li class="module-item ${isUnlocked ? '' : 'locked'}" onclick="${isUnlocked ? `loadModule(${mod.id})` : ''}">
+                        <div class="module-icon">${mod.icon}</div>
+                        <div class="module-info">
+                            <h3 class="module-title">${mod.id}. ${title}</h3>
+                            <div class="module-status">${isUnlocked ? '🔓 Unlocked' : '🔒 Locked'}</div>
+                        </div>
+                    </li>
+                `;
+            });
+
+            if (allComplete) document.getElementById('start-quiz-btn').style.display = 'block';
+        }
+
+        window.loadModule = (id) => {
+            viewingModuleId = id;
+            const mod = courseData.find(m => m.id === id);
+            document.getElementById('viewer-title').innerText = `${mod.id}. ${currentLang === 'en' ? mod.title_en : mod.title_ta}`;
+            document.getElementById('viewer-content').innerText = currentLang === 'en' ? mod.content_en : mod.content_ta;
+            
+            // Only show "Mark Complete" if it's the module they are currently working on
+            document.getElementById('mark-complete-btn').style.display = (id === currentUserData.currentModule) ? 'block' : 'none';
+            showScreen('module-viewer-screen');
+        }
+
+        document.getElementById('mark-complete-btn').onclick = async () => {
+            currentUserData.currentModule += 1;
+            // Write to Firebase in background to keep UI snappy
+            setDoc(doc(db, "users", auth.currentUser.uid), { currentModule: currentUserData.currentModule }, { merge: true });
+            routeUser();
+        };
+
+        // ==========================================
+        // QUIZ & CERTIFICATE LOGIC
+        // ==========================================
+        document.getElementById('start-quiz-btn').onclick = () => {
+            const qc = document.getElementById('quiz-container');
+            qc.innerHTML = quizData.map((q, i) => `
+                <div style="margin-bottom:20px; background:var(--card-bg); padding:15px; border-radius:8px;">
+                    <p style="font-weight:bold;">${i+1}. ${q.q}</p>
+                    ${q.opts.map((opt, oIdx) => `
+                        <label style="display:block; margin:8px 0;">
+                            <input type="radio" name="q${i}" value="${oIdx}"> ${opt}
+                        </label>
+                    `).join('')}
+                </div>
+            `).join('');
+            showScreen('quiz-screen');
+        };
+
+        document.getElementById('submit-quiz-btn').onclick = async () => {
+            let score = 0;
+            quizData.forEach((q, i) => {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if(selected && parseInt(selected.value) === q.ans) score++;
+            });
+
+            if (score >= Math.floor(quizData.length * 0.7)) {
+                currentUserData.hasPassedQuiz = true;
+                await setDoc(doc(db, "users", auth.currentUser.uid), { hasPassedQuiz: true }, { merge: true });
+                routeUser();
+            } else {
+                alert(`You scored ${score}/${quizData.length}. You need 70% to pass. Try again!`);
+            }
+        };
+
+        function showCertificate() {
+            if (currentUserData.paymentStatus === 'paid') {
+                document.getElementById('cert-pdf-view').style.display = 'block';
+                document.getElementById('cert-whatsapp-view').style.display = 'none';
+                document.getElementById('cert-name-display').innerText = currentUserData.fullName;
+            } else {
+                document.getElementById('cert-pdf-view').style.display = 'none';
+                document.getElementById('cert-whatsapp-view').style.display = 'block';
+            }
+        }
+
+        document.getElementById('whatsapp-claim-btn').onclick = () => {
+            const msg = `Hi! I passed the Prompt Engineering Quiz. My name is ${currentUserData.fullName} and my UPI ID was ${currentUserData.upiTransactionId}. Please verify and send my certificate!`;
+            window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+    </script>
+</body>
+</html>
