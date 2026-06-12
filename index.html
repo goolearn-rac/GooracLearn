@@ -1431,7 +1431,7 @@
                 document.getElementById('cert-date-display').innerText = "Issued on: " + formattedDate;
                 
                 // Dynamic QR Code encoding name, verified status, date, and issuer details
-                const encodedData = encodeURIComponent(`VERIFIED CREDENTIAL\nName: ${currentUserData.fullName}\nCourse: Prompt Engineering Masterclass\nIssuer: Quantum Learn (Quantum Corporation)\nDate: ${formattedDate}\nStatus: VERIFIED`);
+                const encodedData = encodeURIComponent(`VERIFIED CREDENTIAL\nName: ${currentUserData.fullName}\nCourse: Prompt Engineering Masterclass\nIssuer: Goorac Learn (Goorac Corporation)\nDate: ${formattedDate}\nStatus: VERIFIED`);
                 document.getElementById('cert-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedData}`;
 
             } else {
