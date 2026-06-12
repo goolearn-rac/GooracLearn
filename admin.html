@@ -156,7 +156,7 @@
         .btn-page:disabled { opacity: 0.5; cursor: not-allowed; }
 
         /* ========================================= */
-        /* NEW ADVANCED MOBILE ARCHITECTURE          */
+        /* ADVANCED MOBILE ARCHITECTURE              */
         /* ========================================= */
         
         .mobile-list { display: none; }
@@ -263,7 +263,6 @@
             </div>
             
             <div class="filter-controls">
-                <input type="date" id="date-filter" class="input-field" style="width: auto; margin-bottom: 0;" onchange="handleSearch()" title="Filter by Created Date">
                 <select id="sort-select" class="input-field" style="width: auto; margin-bottom: 0;" onchange="handleSearch()">
                     <option value="newest">Newest First</option>
                     <option value="oldest">Oldest First</option>
@@ -287,12 +286,12 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        </tbody>
+                    </tbody>
                 </table>
             </div>
 
             <div class="mobile-list" id="mobile-list">
-                </div>
+            </div>
             
             <div class="pagination">
                 <div class="page-info" id="page-info">Showing 0 of 0 users</div>
@@ -429,7 +428,6 @@
         window.handleSearch = () => {
             const query = document.getElementById('search-input').value.toLowerCase();
             const sortOrder = document.getElementById('sort-select').value;
-            const dateFilter = document.getElementById('date-filter').value;
             
             currentPage = 1; 
             
@@ -437,27 +435,15 @@
                 const matchesSearch = (user.fullName && user.fullName.toLowerCase().includes(query)) || 
                                       (user.whatsappNumber && user.whatsappNumber.includes(query)) ||
                                       (user.upiTransactionId && user.upiTransactionId.includes(query));
-                
-                let matchesDate = true;
-                if (dateFilter) {
-                    // Check if timestamp exists and is > 10000 to ignore the fallback indexing logic for date checks
-                    if (user._createdAt > 10000) {
-                        const userDate = new Date(user._createdAt).toISOString().split('T')[0];
-                        matchesDate = (userDate === dateFilter);
-                    } else {
-                        matchesDate = false; // Cannot match a specific date if no real timestamp exists
-                    }
-                }
-                
-                return matchesSearch && matchesDate;
+                return matchesSearch;
             });
 
-            // Apply Sorting
+            // Apply Sorting (Defaults to newest first seamlessly)
             filteredUsers.sort((a, b) => {
-                if (sortOrder === 'newest') {
-                    return b._createdAt - a._createdAt;
-                } else {
+                if (sortOrder === 'oldest') {
                     return a._createdAt - b._createdAt;
+                } else {
+                    return b._createdAt - a._createdAt;
                 }
             });
 
@@ -525,7 +511,7 @@
         };
 
         // ==========================================
-        // NEW: MOBILE MODAL ENGINE & HISTORY API
+        // MOBILE MODAL ENGINE & HISTORY API
         // ==========================================
         window.openUserModal = (uid) => {
             const user = allUsers.find(u => u.uid === uid);
@@ -580,7 +566,7 @@
             }
         });
 
-        // Table Rendering Engine (Now renders Desktop AND Mobile views)
+        // Table Rendering Engine (Renders Desktop AND Mobile views)
         function renderTable() {
             const tbody = document.getElementById('table-body');
             const mobileList = document.getElementById('mobile-list');
@@ -645,7 +631,7 @@
                     </tr>
                 `;
 
-                // 2. Inject Mobile Card (NEW)
+                // 2. Inject Mobile Card
                 mobileList.innerHTML += `
                     <div class="mobile-card" onclick="openUserModal('${user.uid}')">
                         <div class="mobile-card-header">
