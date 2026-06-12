@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Goorac Learn | Advanced Prompt Engineering</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    <!-- PDF Generation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         /* Premium SaaS & App Theme Variables */
         :root {
@@ -162,6 +164,17 @@
         .quiz-option:has(input:checked) { border-color: var(--primary); background: rgba(37,99,235,0.05); color: var(--primary); }
 
         /* Multi-Color A4 Certificate Styling */
+        .cert-scroll-container {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.02);
+            padding: 10px;
+            border: 1px solid var(--border-color);
+        }
+        
         .certificate-wrapper {
             background: #ffffff;
             background-image: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
@@ -171,12 +184,13 @@
             border-radius: 8px; 
             box-shadow: var(--shadow-lg); 
             color: #0f172a;
-            margin: 0 auto 30px auto;
+            margin: 0 auto;
             position: relative; 
             overflow: hidden;
             width: 100%;
-            max-width: 1122px; /* Approx A4 pixel width */
-            aspect-ratio: 1.414; /* A4 Landscape aspect ratio */
+            min-width: 900px; /* Forces exact A4 aspect rendering preventing squish on mobile */
+            max-width: 1122px; 
+            aspect-ratio: 1.414; 
             display: flex; flex-direction: column; justify-content: space-between;
             box-sizing: border-box;
         }
@@ -212,17 +226,18 @@
         .cert-signature-block { text-align: center; }
         .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.2rem, 3vw, 2.5rem); border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 150px; }
 
-        /* Print formatting forces A4 landscape perfectly */
+        /* Print formatting fallback */
         @media print {
             @page { size: A4 landscape; margin: 0; }
             body { background: white; margin: 0; }
             body * { visibility: hidden; }
             #cert-pdf-view, #cert-pdf-view * { visibility: visible; }
             #cert-pdf-view { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh;}
+            .cert-scroll-container { border: none; background: transparent; padding: 0; overflow: visible; }
             .certificate-wrapper { 
                 width: 297mm !important; height: 210mm !important; 
                 margin: 0 !important; border: 15px solid #0f172a !important; 
-                max-width: none !important; aspect-ratio: auto !important;
+                max-width: none !important; min-width: 0 !important; aspect-ratio: auto !important;
                 -webkit-print-color-adjust: exact !important; 
                 print-color-adjust: exact !important; 
                 box-shadow: none !important;
@@ -344,45 +359,62 @@
     <div id="cert-screen" class="screen" style="max-width: 100%;">
         <div id="cert-pdf-view" style="display:none; width: 100%;">
             
-            <div class="certificate-wrapper" id="printable-cert">
-                <div class="cert-content">
-                    <img src="icon.png" alt="Goorac Logo" style="width: 70px; height: 70px; object-fit: contain; margin-bottom: 10px; border-radius: 50%; box-shadow: var(--shadow-md);">
-                    <div class="cert-header">Goorac Learn</div>
-                    <div style="font-size: clamp(0.9rem, 2vw, 1.2rem); color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">from Goorac Corporation</div>
-                    <div class="cert-sub">Certificate of Professional Mastery</div>
-                    <div class="cert-body">This document officially certifies that</div>
-                    
-                    <div class="cert-name" id="cert-name-display">Student Name</div>
-                    
-                    <div class="cert-body" style="margin-bottom: 25px;">
-                        has successfully completed all 25 advanced modules and passed the comprehensive final examination for the<br>
-                        <span style="font-size: 1.4em; font-weight: 800; color: #0f172a; display: inline-block; margin-top: 10px;">Prompt Engineering Masterclass</span>
-                    </div>
-                    <div class="cert-date" id="cert-date-display" style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #475569; font-size: 0.95rem; background: #f1f5f9; padding: 6px 16px; border-radius: 20px; border: 1px solid #cbd5e1;">Date of Issue</div>
-                </div>
-                
-                <div class="cert-footer">
-                    <!-- Dynamic QR Block -->
-                    <div class="cert-qr-container">
-                        <img id="cert-qr-img" class="cert-qr" src="" alt="Verified QR">
-                        <div style="font-size: clamp(0.5rem, 1vw, 0.75rem); color: #16a34a; margin-top: 5px; font-weight: 800; letter-spacing: 1px;">✓ VERIFIED</div>
-                    </div>
-                    
-                    <!-- Official Stamp -->
-                    <div class="cert-badge">
-                        OFFICIAL<br>CERTIFIED
-                    </div>
+            <div class="cert-scroll-container">
+                <div class="certificate-wrapper" id="printable-cert">
+                    <div class="cert-content">
+                        <!-- Logo with graceful fallback so it doesn't show broken icon -->
+                        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 70px; height: 70px; object-fit: contain; margin-bottom: 10px; border-radius: 50%; box-shadow: var(--shadow-md);">
+                        
+                        <div class="cert-header">Goorac Learn</div>
+                        <div style="font-size: clamp(0.9rem, 2vw, 1.2rem); color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">from Goorac Corporation</div>
+                        <div class="cert-sub">Certificate of Professional Mastery</div>
+                        <div class="cert-body">This document officially certifies that</div>
+                        
+                        <div class="cert-name" id="cert-name-display">Student Name</div>
+                        
+                        <div class="cert-body" style="margin-bottom: 20px;">
+                            has successfully completed all 25 advanced modules and passed the comprehensive final examination for the<br>
+                            <span style="font-size: 1.4em; font-weight: 800; color: #0f172a; display: inline-block; margin-top: 10px;">Prompt Engineering Masterclass</span>
+                        </div>
+                        
+                        <div class="cert-date" id="cert-date-display" style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #475569; font-size: 0.95rem; background: #f1f5f9; padding: 6px 16px; border-radius: 20px; border: 1px solid #cbd5e1;">Date of Issue</div>
+                        
+                        <!-- Valid With Section -->
+                        <div style="margin-top: 25px; border-top: 2px dashed #e2e8f0; padding-top: 15px; width: 100%; max-width: 600px;">
+                            <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;">Valid & Recognized By</div>
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 25px;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" crossorigin="anonymous" style="height: 24px; object-fit: contain;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" alt="Microsoft" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" crossorigin="anonymous" style="height: 24px; object-fit: contain;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/0/07/Zoho_Corporation_logo.svg" alt="Zoho" crossorigin="anonymous" style="height: 20px; object-fit: contain;">
+                            </div>
+                        </div>
 
-                    <!-- Digital Signature -->
-                    <div class="cert-signature-block">
-                        <div class="cert-signature multi-color-sig">Siva Manikandan M</div>
-                        <div style="font-size: clamp(0.6rem, 1.2vw, 0.9rem); color: #64748b; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Director of Education</div>
+                    </div>
+                    
+                    <div class="cert-footer">
+                        <!-- Dynamic QR Block -->
+                        <div class="cert-qr-container">
+                            <img id="cert-qr-img" class="cert-qr" src="" alt="Verified QR" crossorigin="anonymous">
+                            <div style="font-size: clamp(0.5rem, 1vw, 0.75rem); color: #16a34a; margin-top: 5px; font-weight: 800; letter-spacing: 1px;">✓ VERIFIED</div>
+                        </div>
+                        
+                        <!-- Official Stamp -->
+                        <div class="cert-badge">
+                            OFFICIAL<br>CERTIFIED
+                        </div>
+
+                        <!-- Digital Signature -->
+                        <div class="cert-signature-block">
+                            <div class="cert-signature multi-color-sig">Siva Manikandan M</div>
+                            <div style="font-size: clamp(0.6rem, 1.2vw, 0.9rem); color: #64748b; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Director of Education</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div style="display: flex; gap: 15px; max-width: 400px; margin: 0 auto;">
-                <button onclick="window.print()" class="btn btn-success">Save High-Res PDF</button>
+                <button id="download-pdf-btn" class="btn btn-success">Download High-Res PDF</button>
                 <button onclick="showScreen('dashboard-screen')" class="btn btn-outline">Back to Dashboard</button>
             </div>
         </div>
@@ -856,6 +888,33 @@
                 document.getElementById('cert-whatsapp-view').style.display = 'block';
             }
         }
+
+        // --- NEW HTML2PDF DOWNLOAD LOGIC ---
+        document.getElementById('download-pdf-btn').onclick = () => {
+            const btn = document.getElementById('download-pdf-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Generating PDF...";
+            
+            const element = document.getElementById('printable-cert');
+            const fileName = currentUserData.fullName ? `${currentUserData.fullName.replace(/\s+/g, '_')}_Goorac_Certificate.pdf` : 'Goorac_Certificate.pdf';
+            
+            const opt = {
+                margin:       0,
+                filename:     fileName,
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 2, useCORS: true, allowTaint: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerText = originalText;
+                showToast("PDF Downloaded Successfully!");
+            }).catch(err => {
+                console.error("PDF generation error: ", err);
+                btn.innerText = originalText;
+                showToast("Error generating PDF");
+            });
+        };
 
         document.getElementById('whatsapp-claim-btn').onclick = () => {
             const msg = `Hi Admin! I passed the 25-module Exam. My name is ${currentUserData.fullName} and my UTR is ${currentUserData.upiTransactionId}. Please verify my payment.`;
