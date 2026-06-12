@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goorac Learn | Prompt Engineering</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Goorac Learn | Advanced Prompt Engineering</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
     <style>
-        /* Premium SaaS Theme Variables */
+        /* Premium SaaS & App Theme Variables */
         :root {
             --bg-color: #f8fafc;
             --surface-color: #ffffff;
@@ -18,9 +18,11 @@
             --success: #16a34a;
             --success-bg: #dcfce7;
             --locked-bg: #f1f5f9;
+            --code-bg: #1e293b;
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 8px;
             --radius-lg: 12px;
             --radius-xl: 16px;
         }
@@ -32,48 +34,51 @@
                 --text-main: #f8fafc;
                 --text-muted: #94a3b8;
                 --border-color: #334155;
-                --locked-bg: #0f172a;
+                --locked-bg: #0b1120;
                 --success-bg: #064e3b;
+                --code-bg: #000000;
             }
         }
 
-        /* Global Reset */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* Global Reset & App-like behavior */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { 
             background-color: var(--bg-color); color: var(--text-main); 
             font-family: 'Inter', sans-serif; line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
+            -webkit-font-smoothing: antialiased; overflow-x: hidden;
         }
 
         /* Top Navigation */
         .top-nav {
             background-color: var(--surface-color); border-bottom: 1px solid var(--border-color);
-            padding: 16px 24px; display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px); background-color: rgba(var(--surface-color), 0.9);
         }
-        .brand { font-size: 22px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+        .brand { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
 
         /* Screen Management */
-        .screen { display: none; flex: 1; padding: 40px 20px; max-width: 640px; margin: 0 auto; width: 100%; }
-        .active-screen { display: block; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .screen { display: none; flex: 1; padding: 30px 20px 80px 20px; max-width: 640px; margin: 0 auto; width: 100%; min-height: 100vh;}
+        .active-screen { display: block; animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(15px); } to { opacity: 1; transform: translateX(0); } }
 
-        /* Shared Components */
-        h1, h2, h3 { font-weight: 700; margin-bottom: 15px; line-height: 1.2; letter-spacing: -0.5px; }
+        /* Shared UI Components */
+        h1, h2, h3 { font-weight: 700; margin-bottom: 12px; line-height: 1.2; letter-spacing: -0.5px; }
         p { margin-bottom: 20px; color: var(--text-muted); font-size: 1.05rem; }
         
         .card {
             background: var(--surface-color); border-radius: var(--radius-xl);
-            border: 1px solid var(--border-color); padding: 30px;
+            border: 1px solid var(--border-color); padding: 24px;
             box-shadow: var(--shadow-md); margin-bottom: 24px;
         }
 
         .input-group { margin-bottom: 20px; }
         .input-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main); }
         .input-group input {
-            width: 100%; padding: 14px 16px; border: 1px solid var(--border-color);
+            width: 100%; padding: 16px; border: 1px solid var(--border-color);
             border-radius: var(--radius-lg); background-color: var(--bg-color); 
             color: var(--text-main); font-size: 1rem; transition: 0.2s; outline: none;
+            appearance: none; /* fixes iOS inner shadow */
         }
         .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
 
@@ -82,254 +87,222 @@
             border-radius: var(--radius-lg); padding: 16px; width: 100%; font-size: 1rem;
             font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 10px;
         }
-        .btn:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+        .btn:active { transform: scale(0.98); } /* Mobile tap feedback */
         .btn-success { background-color: var(--success); }
-        .btn-success:hover { background-color: #15803d; }
         .btn-outline { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
 
+        /* Custom Toast Notification */
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
+            text-align: center; border-radius: 30px; padding: 16px 24px;
+            position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%);
+            font-size: 15px; font-weight: 500; box-shadow: var(--shadow-lg);
+            opacity: 0; transition: opacity 0.3s, bottom 0.3s;
+        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
         /* Dashboard & Modules */
-        .progress-container { margin-bottom: 30px; }
-        .progress-bar-bg { background: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px; }
-        .progress-bar-fill { background: var(--primary); height: 100%; width: 0%; transition: width 0.5s ease; }
+        .progress-bar-bg { background: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px; margin-bottom: 30px;}
+        .progress-bar-fill { background: var(--primary); height: 100%; width: 0%; transition: width 0.8s ease-out; }
 
         .module-item {
             background-color: var(--surface-color); border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px;
+            border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px;
             display: flex; align-items: center; justify-content: space-between;
             cursor: pointer; transition: 0.2s; box-shadow: var(--shadow-sm);
         }
-        .module-item:hover:not(.locked) { border-color: var(--primary); transform: translateX(4px); }
-        .module-item.locked { background-color: var(--locked-bg); opacity: 0.7; cursor: not-allowed; }
+        .module-item:active:not(.locked) { transform: scale(0.98); background: var(--bg-color); }
+        .module-item.locked { background-color: var(--locked-bg); opacity: 0.6; cursor: not-allowed; }
         .module-item.completed { border-left: 4px solid var(--success); }
         
-        .mod-icon { font-size: 28px; width: 50px; height: 50px; background: var(--bg-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
+        .mod-icon { font-size: 24px; width: 44px; height: 44px; background: var(--bg-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
         .mod-details { flex: 1; }
-        .mod-title { font-weight: 600; font-size: 1.1rem; color: var(--text-main); margin-bottom: 4px; }
-        .mod-status { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); }
+        .mod-title { font-weight: 600; font-size: 1rem; color: var(--text-main); margin-bottom: 2px; }
+        .mod-status { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
 
-        /* Rich Content Viewer */
-        .content-body h3 { margin-top: 30px; font-size: 1.3rem; color: var(--primary); }
+        /* Rich Content & Advanced Code Boxes */
+        .mod-hero-img { width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .content-body h3 { margin-top: 30px; font-size: 1.25rem; color: var(--primary); }
         .content-body ul { margin-bottom: 20px; padding-left: 20px; color: var(--text-muted); }
         .content-body li { margin-bottom: 10px; }
         
-        .prompt-box {
-            background: #1e293b; color: #f8fafc; padding: 20px; border-radius: var(--radius-lg);
-            margin: 20px 0; border-left: 4px solid var(--primary); font-family: monospace; font-size: 0.95rem;
+        .code-wrapper {
+            position: relative; background: var(--code-bg); border-radius: var(--radius-lg);
+            margin: 24px 0; border: 1px solid var(--border-color); overflow: hidden;
         }
-        .prompt-box .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; display: block; margin-bottom: 8px; }
-        .prompt-box.bad { border-left-color: #ef4444; }
+        .code-header {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.05); padding: 8px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .code-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; font-weight: 600;}
+        .copy-btn {
+            background: transparent; color: #cbd5e1; border: 1px solid #475569; border-radius: 4px;
+            padding: 4px 10px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; font-weight: 600;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .copy-btn.copied { background: var(--success); border-color: var(--success); color: white; }
+        .code-wrapper pre {
+            padding: 20px; margin: 0; overflow-x: auto; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem; color: #f8fafc; white-space: pre-wrap; line-height: 1.5;
+        }
 
-        .lang-switch-bar {
-            display: flex; background: var(--locked-bg); padding: 5px; border-radius: 30px; width: fit-content; margin-bottom: 30px;
-        }
-        .lang-btn {
-            background: transparent; border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; color: var(--text-muted); transition: 0.2s;
-        }
+        .lang-switch-bar { display: flex; background: var(--locked-bg); padding: 4px; border-radius: 30px; width: fit-content; margin-bottom: 24px; }
+        .lang-btn { background: transparent; border: none; padding: 8px 24px; border-radius: 20px; cursor: pointer; font-weight: 600; color: var(--text-muted); transition: 0.2s; }
         .lang-btn.active { background: var(--surface-color); color: var(--primary); box-shadow: var(--shadow-sm); }
 
-        /* Modern Quiz UI */
+        /* Modern Quiz */
         .quiz-question { margin-bottom: 40px; }
-        .quiz-question h3 { font-size: 1.2rem; margin-bottom: 16px; }
-        
         .quiz-option {
-            display: block; padding: 16px 20px; border: 2px solid var(--border-color);
+            display: block; padding: 16px; border: 2px solid var(--border-color);
             border-radius: var(--radius-lg); margin-bottom: 12px; cursor: pointer;
             transition: 0.2s; font-weight: 500; background: var(--surface-color);
         }
-        .quiz-option:hover { border-color: var(--primary); background: var(--bg-color); }
         .quiz-option input[type="radio"] { display: none; }
-        /* When radio is checked, style the parent label */
-        .quiz-option:has(input:checked) {
-            border-color: var(--primary); background: rgba(37,99,235,0.05); color: var(--primary);
-        }
+        .quiz-option:has(input:checked) { border-color: var(--primary); background: rgba(37,99,235,0.05); color: var(--primary); }
 
-        /* Premium Certificate */
+        /* Certificate */
         .certificate-wrapper {
-            background: white; border: 12px solid #0f172a; padding: 40px; text-align: center;
+            background: white; border: 12px solid #0f172a; padding: 40px 20px; text-align: center;
             border-radius: 4px; box-shadow: var(--shadow-lg); color: #0f172a; margin-bottom: 30px;
             position: relative; overflow: hidden;
         }
-        .certificate-wrapper::before {
-            content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
-            border: 2px solid #cbd5e1; pointer-events: none;
-        }
-        .cert-header { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #1e293b; margin-bottom: 10px; }
-        .cert-sub { font-size: 1rem; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 40px; }
-        .cert-name { font-size: 2.5rem; font-weight: 700; border-bottom: 2px solid #2563eb; padding-bottom: 10px; margin: 0 auto 30px; display: inline-block; min-width: 80%; }
-        .cert-body { font-size: 1.1rem; color: #475569; margin-bottom: 40px; max-width: 80%; margin-left: auto; margin-right: auto; }
-        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; color: #0f172a; border-top: 1px solid #cbd5e1; padding-top: 10px; display: inline-block; width: 200px; }
-
+        .cert-header { font-family: 'Playfair Display', serif; font-size: 2rem; color: #1e293b; margin-bottom: 10px; }
+        .cert-sub { font-size: 0.8rem; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; }
+        .cert-name { font-size: 2rem; font-weight: 700; border-bottom: 2px solid #2563eb; padding-bottom: 10px; margin: 0 auto 20px; display: inline-block; min-width: 80%; }
+        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem; color: #0f172a; border-top: 1px solid #cbd5e1; padding-top: 10px; display: inline-block; width: 150px; }
     </style>
 </head>
 <body>
 
+    <!-- Toast Notification -->
+    <div id="toast">Message</div>
+
     <!-- Header -->
     <div class="top-nav">
         <div class="brand">Goorac <span style="color:var(--text-main)">Learn</span></div>
+        <div id="nav-profile" style="display:none; font-weight: 600; font-size: 0.9rem;"></div>
     </div>
 
-    <!-- 1. Landing / Login -->
+    <!-- 1. Landing -->
     <div id="login-screen" class="screen active-screen">
-        <div style="text-align: center; margin-bottom: 40px;">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary); margin-bottom: 20px;">
-                <path d="M12 14l9-5-9-5-9 5 9 5z"></path>
-                <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
-            </svg>
-            <h1 style="font-size: 2.5rem;">Master Prompt Engineering</h1>
-            <p>Become a certified AI communicator. Learn how to control ChatGPT, Claude, and Midjourney to get exactly what you want.</p>
-        </div>
+        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80" alt="AI Core" style="width:100%; height:180px; object-fit:cover; border-radius: var(--radius-xl); margin-bottom: 24px;">
+        <h1 style="font-size: 2.2rem;">Master Prompt Engineering</h1>
+        <p>Control ChatGPT, Claude, and Midjourney like a professional. 25 Advanced Modules. Official Certification.</p>
         
-        <div class="card">
-            <h3 style="text-align: center; margin-bottom: 20px;">Begin Your Journey</h3>
-            <button id="google-login-btn" class="btn" style="background: #0f172a;">
-                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                Sign in with Google
-            </button>
-        </div>
+        <button id="google-login-btn" class="btn" style="background: #0f172a; margin-top: 20px;">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Sign in with Google
+        </button>
     </div>
 
-    <!-- 2. Profile Setup -->
+    <!-- 2. Profile -->
     <div id="profile-screen" class="screen">
+        <h2>Certificate Setup</h2>
+        <p>Enter your details exactly as they should appear on your final diploma.</p>
         <div class="card">
-            <h2>Certificate Details</h2>
-            <p>How should your name appear on your Goorac Certificate?</p>
             <div class="input-group">
                 <label>Full Legal Name</label>
-                <input type="text" id="prof-name" placeholder="e.g., Siva Manikandan M">
+                <input type="text" id="prof-name" placeholder="Siva Manikandan M">
             </div>
             <div class="input-group">
-                <label>WhatsApp Number (For Support)</label>
+                <label>WhatsApp Number</label>
                 <input type="tel" id="prof-wa" placeholder="+91 9876543210">
             </div>
-            <div class="input-group">
-                <label>Highest Qualification</label>
-                <input type="text" id="prof-degree" placeholder="e.g., BBA Digital Marketing">
-            </div>
-            <button id="save-profile-btn" class="btn">Save & Continue</button>
+            <button id="save-profile-btn" class="btn">Continue</button>
         </div>
     </div>
 
-    <!-- 3. Payment Wall -->
+    <!-- 3. Payment -->
     <div id="payment-screen" class="screen">
-        <h2>Unlock the Course</h2>
-        <p>You are one step away from accessing the 10 premium modules.</p>
+        <h2>Unlock 25 Modules</h2>
+        <p>Get lifetime access and your verified certificate for just ₹149.</p>
         
-        <div class="card" style="border: 2px solid var(--primary); background: rgba(37,99,235,0.03);">
-            <h3 style="color: var(--primary);">What you get for ₹149:</h3>
-            <ul style="padding-left: 20px; margin-bottom: 20px; color: var(--text-main);">
-                <li style="margin-bottom: 8px;"><b>10 Deep-Dive Modules:</b> Real-world prompt frameworks.</li>
-                <li style="margin-bottom: 8px;"><b>Bilingual Support:</b> Switch between English and Tamil instantly.</li>
-                <li style="margin-bottom: 8px;"><b>Official Certification:</b> Downloadable Goorac PDF for your resume.</li>
-            </ul>
-
-            <div style="text-align: center; margin: 30px 0;">
-                <div style="background: white; padding: 15px; border-radius: 12px; display: inline-block; border: 1px solid var(--border-color);">
-                    <!-- Auto-generates QR code -->
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi%3A%2F%2Fpay%3Fpa%3Dsivamanihandan%40oksbi%26pn%3DGoorac%20Corporation%26am%3D149.00%26cu%3DINR" alt="UPI QR Code" width="180">
-                </div>
-                <p style="margin-top: 15px; font-weight: bold; color: var(--text-main);">Scan to pay ₹149</p>
+        <div class="card" style="text-align: center; border: 2px solid var(--primary);">
+            <div style="background: white; padding: 15px; border-radius: 12px; display: inline-block; border: 1px solid var(--border-color); margin-bottom: 15px;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi%3A%2F%2Fpay%3Fpa%3Dsivamanihandan%40oksbi%26pn%3DGoorac%20Corporation%26am%3D149.00%26cu%3DINR" alt="UPI QR Code" width="180">
             </div>
-
-            <div class="input-group">
-                <label>Verify Payment: Enter your 12-Digit UTR Number</label>
-                <input type="text" id="upi-input" placeholder="e.g. 312345678901">
+            <p style="font-weight: 700; color: var(--text-main); font-size: 1.2rem;">Scan to pay ₹149</p>
+            
+            <div class="input-group" style="text-align: left; margin-top: 30px;">
+                <label>Enter 12-Digit UTR / Transaction ID</label>
+                <input type="number" id="upi-input" placeholder="e.g. 312345678901">
             </div>
-            <button id="submit-payment-btn" class="btn">Submit Payment</button>
+            <button id="submit-payment-btn" class="btn">Verify & Unlock</button>
         </div>
     </div>
 
     <!-- 4. Dashboard -->
     <div id="dashboard-screen" class="screen">
-        <div class="progress-container">
-            <h2>Your Curriculum</h2>
-            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">
-                <span>Course Progress</span>
-                <span id="progress-text">0%</span>
-            </div>
-            <div class="progress-bar-bg">
-                <div class="progress-bar-fill" id="progress-bar"></div>
-            </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600;">
+            <span>Course Progress</span>
+            <span id="progress-text" style="color: var(--primary);">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
         </div>
 
         <div id="module-list-container">
-            <!-- JS injects modules here -->
+            <!-- JS injects 25 modules here -->
         </div>
         
         <div id="quiz-unlock-banner" style="display:none; margin-top: 30px;">
             <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
-                <h3 style="color: var(--success);">🎉 All Modules Completed!</h3>
-                <p style="color: #166534;">You are now ready to take the certification exam.</p>
-                <button id="start-quiz-btn" class="btn btn-success">Start Final Quiz</button>
+                <h3 style="color: var(--success);">🎉 Curriculum Complete!</h3>
+                <p style="color: #166534; font-size: 0.95rem;">Take the final 10-question exam to earn your certificate.</p>
+                <button id="start-quiz-btn" class="btn btn-success">Start Final Exam</button>
             </div>
         </div>
     </div>
 
-    <!-- 5. Rich Content Viewer -->
+    <!-- 5. Viewer -->
     <div id="module-viewer-screen" class="screen">
-        <button onclick="showScreen('dashboard-screen')" style="background:none; border:none; color:var(--text-muted); font-weight:600; cursor:pointer; padding: 0 0 20px 0; display:flex; align-items:center; gap:5px;">
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"></path></svg>
-            Back to Dashboard
+        <button onclick="goBack()" style="background:none; border:none; color:var(--text-muted); font-weight:600; cursor:pointer; padding: 0 0 20px 0; display:flex; align-items:center; gap:5px; font-size: 1rem;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"></path></svg> Back
         </button>
 
-        <!-- Translation Toggle -->
         <div class="lang-switch-bar">
             <button class="lang-btn active" id="btn-en" onclick="setContentLang('en')">English</button>
             <button class="lang-btn" id="btn-ta" onclick="setContentLang('ta')">தமிழ்</button>
         </div>
 
-        <h1 id="viewer-title" style="color: var(--primary); font-size: 2rem;"></h1>
-        <div class="content-body" id="viewer-content" style="font-size: 1.1rem; margin-bottom: 40px; color: var(--text-main);"></div>
+        <img id="viewer-img" class="mod-hero-img" src="" alt="Module Hero">
+        <h1 id="viewer-title" style="color: var(--primary); font-size: 1.8rem;"></h1>
+        <div class="content-body" id="viewer-content" style="font-size: 1.05rem; margin-bottom: 40px; color: var(--text-main);"></div>
         
-        <button id="mark-complete-btn" class="btn">Mark Completed & Continue</button>
+        <button id="mark-complete-btn" class="btn">Mark Completed & Next</button>
     </div>
 
-    <!-- 6. Styled Quiz -->
+    <!-- 6. Quiz -->
     <div id="quiz-screen" class="screen">
-        <div style="margin-bottom: 30px;">
-            <h2 style="color: var(--primary);">Certification Exam</h2>
-            <p>You need 70% to pass and generate your certificate. Take your time.</p>
-        </div>
-        
-        <div id="quiz-container">
-            <!-- JS injects beautifully styled questions here -->
-        </div>
-        
-        <button id="submit-quiz-btn" class="btn" style="margin-top: 20px;">Submit Exam</button>
+        <h2 style="color: var(--primary);">Certification Exam</h2>
+        <p>Answer 10 questions. You need 70% (7/10) to pass.</p>
+        <div id="quiz-container"></div>
+        <button id="submit-quiz-btn" class="btn">Submit Exam</button>
     </div>
 
-    <!-- 7. Dynamic Certificate -->
-    <div id="cert-screen" class="screen" style="max-width: 800px;">
+    <!-- 7. Certificate -->
+    <div id="cert-screen" class="screen">
         <div id="cert-pdf-view" style="display:none;">
-            <div class="certificate-wrapper" id="printable-cert">
+            <div class="certificate-wrapper">
                 <div class="cert-header">Goorac Corporation</div>
-                <div class="cert-sub">Certificate of Professional Completion</div>
-                <div class="cert-body">This document officially certifies that</div>
-                <div class="cert-name" id="cert-name-display">Student Name</div>
-                <div class="cert-body">
-                    has successfully completed the comprehensive curriculum and passed the final examination for the <b>Prompt Engineering Masterclass</b>.
-                </div>
-                <div style="margin-top: 50px; text-align: right; padding-right: 40px;">
-                    <div class="cert-signature">Goorac Admin</div>
-                    <div style="font-size: 0.8rem; color: #64748b; margin-top: 5px;">Director of Education</div>
-                </div>
+                <div class="cert-sub">Certificate of Mastery</div>
+                <div style="font-size: 1rem; color: #475569; margin-bottom: 20px;">Awarded to</div>
+                <div class="cert-name" id="cert-name-display">Name</div>
+                <div style="font-size: 0.95rem; color: #475569; margin-bottom: 30px;">For completing all 25 modules of the Prompt Engineering Masterclass.</div>
+                <div class="cert-signature">Goorac Admin</div>
             </div>
-            <div style="display: flex; gap: 15px; max-width: 400px; margin: 0 auto;">
-                <button onclick="window.print()" class="btn btn-success">Save PDF</button>
-                <button onclick="showScreen('dashboard-screen')" class="btn btn-outline">Dashboard</button>
-            </div>
+            <button onclick="window.print()" class="btn btn-success" style="margin-bottom: 15px;">Save PDF</button>
+            <button onclick="showScreen('dashboard-screen')" class="btn btn-outline">Back to Dashboard</button>
         </div>
 
         <div id="cert-whatsapp-view" style="display:none; text-align:center;" class="card">
-            <h2>🎉 Exam Passed!</h2>
-            <p>We are currently verifying your ₹149 payment. Click below to send a screenshot of your payment on WhatsApp, and we will unlock your certificate instantly.</p>
-            <button id="whatsapp-claim-btn" class="btn btn-success" style="background: #25D366; margin-top: 20px;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.161.453-.834.866-1.166.918-.332.053-.78.111-2.463-.586-2.02-2.39-2.05-2.439-2.296-2.766-.245-.328-.584-.874-.584-1.424 0-.55.286-.822.388-.936.103-.114.225-.143.3-.143s.149 0 .214.003c.066.002.155-.025.243.187.088.212.302.738.329.792.027.054.045.117.012.184-.033.066-.051.107-.101.167-.051.061-.108.132-.153.184-.049.057-.099.119-.044.214.056.095.247.406.528.658.362.326.669.426.764.478.094.053.15.045.207-.021.056-.066.242-.284.307-.382.066-.098.131-.082.219-.049.088.033.557.262.653.31.096.049.16.074.183.115.024.041.024.238-.137.691z"/></svg>
-                Claim via WhatsApp
-            </button>
+            <h2>🎉 You Passed!</h2>
+            <p>We are verifying your ₹149 payment. Click below to send a screenshot on WhatsApp to unlock your PDF instantly.</p>
+            <button id="whatsapp-claim-btn" class="btn btn-success" style="background: #25D366; margin-top: 20px;">Claim via WhatsApp</button>
         </div>
     </div>
 
-    <!-- MAIN APP LOGIC -->
+    <!-- APP LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
@@ -353,216 +326,201 @@
         let currentUserData = null; 
         let viewingModuleId = 1;
 
-        // ==========================================
-        // DEEP-DIVE RICH HTML COURSE DATA
-        // ==========================================
-        const courseData = [
-            { 
-                id: 1, icon: "🧠", 
-                title_en: "Foundation: How AI Thinks", 
-                title_ta: "அடிப்படைகள்: AI எவ்வாறு சிந்திக்கிறது", 
-                content_en: `
-                    <p>Large Language Models (LLMs) like ChatGPT are not humans. They don't have memories, feelings, or a true understanding of logic. They are advanced <b>Prediction Engines</b>.</p>
-                    <h3>The Concept of Tokens</h3>
-                    <p>AI doesn't read words; it reads "tokens". A token can be a full word, a syllable, or just a letter. When you give AI a prompt, it mathematically calculates what the most likely next token should be based on billions of pages of internet data it was trained on.</p>
-                    <div class="prompt-box">
-                        <span class="label">Mental Model</span>
-                        Think of AI as the world's most advanced autocomplete on your phone. If you type "I am going to the...", your phone suggests "Store". AI does this, but for entire paragraphs of code or essays.
-                    </div>
-                `,
-                content_ta: `
-                    <p>ChatGPT போன்ற Large Language Models (LLMs) மனிதர்கள் அல்ல. அவற்றுக்கு நினைவாற்றல், உணர்வுகள் அல்லது தர்க்கம் குறித்த உண்மையான புரிதல் இல்லை. அவை மேம்பட்ட <b>கணிப்பு இயந்திரங்கள் (Prediction Engines)</b> ஆகும்.</p>
-                    <h3>Tokens என்ற கருத்துரு</h3>
-                    <p>AI வார்த்தைகளை படிப்பதில்லை; அது "tokens"-களை படிக்கிறது. ஒரு token என்பது ஒரு வார்த்தையாகவோ, எழுத்துக்களாகவோ இருக்கலாம். நீங்கள் AI-க்கு ஒரு prompt கொடுக்கும்போது, அது பயிற்சி பெற்ற கோடிக்கணக்கான இணைய தரவுகளின் அடிப்படையில் அடுத்த token என்னவாக இருக்கும் என்பதை கணிதவியல் ரீதியாக கணக்கிடுகிறது.</p>
-                    <div class="prompt-box">
-                        <span class="label">Mental Model</span>
-                        AI-ஐ உங்கள் போனில் உள்ள autocomplete-இன் மிக மேம்பட்ட வடிவமாக நினைத்துக் கொள்ளுங்கள். "I am going to the..." என்று நீங்கள் டைப் செய்தால், உங்கள் போன் "Store" என்று பரிந்துரைக்கும். AI இதையே முழு கட்டுரைகளுக்கும் செய்கிறது.
-                    </div>
-                `
-            },
-            { 
-                id: 2, icon: "🏗️", 
-                title_en: "The ACT Framework", 
-                title_ta: "ACT கட்டமைப்பு", 
-                content_en: `
-                    <p>A bad prompt produces a bad, generic response. To get professional results, you must use the <b>ACT Framework</b>.</p>
-                    <ul>
-                        <li><b>A - Act as:</b> Give the AI a persona (e.g., Act as a senior marketing expert).</li>
-                        <li><b>C - Context:</b> Explain the background (e.g., I am selling software to dentists).</li>
-                        <li><b>T - Task:</b> Tell it exactly what to do and how to format it (e.g., Write 3 Facebook ad headlines).</li>
-                    </ul>
-                    <div class="prompt-box bad">
-                        <span class="label">Bad Prompt (Too Generic)</span>
-                        Write some ads for my dental software.
-                    </div>
-                    <div class="prompt-box">
-                        <span class="label">Pro Prompt (Using ACT)</span>
-                        Act as a senior B2B copywriter. I am launching a new scheduling software specifically for busy dental clinics. Write 3 short, punchy Facebook ad headlines targeting dental clinic owners.
-                    </div>
-                `,
-                content_ta: `
-                    <p>ஒரு சாதாரண prompt சாதாரணமான பதிலையே உருவாக்கும். தொழில்முறை முடிவுகளைப் பெற, நீங்கள் <b>ACT கட்டமைப்பைப்</b> பயன்படுத்த வேண்டும்.</p>
-                    <ul>
-                        <li><b>A - Act as (பாத்திரம்):</b> AI-க்கு ஒரு பாத்திரத்தை கொடுங்கள் (உதாரணம்: சீனியர் மார்க்கெட்டிங் நிபுணராக செயல்படு).</li>
-                        <li><b>C - Context (சூழல்):</b> பின்னணியை விளக்குங்கள் (உதாரணம்: நான் பல் மருத்துவர்களுக்கு சாஃப்ட்வேர் விற்கிறேன்).</li>
-                        <li><b>T - Task (பணி):</b> அது என்ன செய்ய வேண்டும் என்பதை தெளிவாகச் சொல்லுங்கள் (உதாரணம்: 3 பேஸ்புக் விளம்பர தலைப்புகளை எழுது).</li>
-                    </ul>
-                    <div class="prompt-box bad">
-                        <span class="label">தவறான Prompt</span>
-                        எனது சாஃப்ட்வேருக்கு சில விளம்பரங்களை எழுது.
-                    </div>
-                    <div class="prompt-box">
-                        <span class="label">Pro Prompt (ACT-ஐ பயன்படுத்தி)</span>
-                        ஒரு சீனியர் B2B காப்பீரைட்டராக செயல்படு. பல் மருத்துவமனைகளுக்கான புதிய scheduling சாஃப்ட்வேரை அறிமுகப்படுத்துகிறேன். பல் மருத்துவமனை உரிமையாளர்களை குறிவைத்து 3 சுருக்கமான பேஸ்புக் விளம்பர தலைப்புகளை எழுது.
-                    </div>
-                `
-            },
-            { 
-                id: 3, icon: "🎯", 
-                title_en: "Few-Shot Prompting", 
-                title_ta: "Few-Shot Prompting", 
-                content_en: `
-                    <p>Sometimes explaining what you want is harder than just <i>showing</i> what you want. <b>Few-Shot Prompting</b> involves giving the AI 2 or 3 completed examples before asking it to do the actual task.</p>
-                    <h3>Why this works:</h3>
-                    <p>AI is brilliant at pattern recognition. By providing examples, you bypass the need to explain the tone, length, or structure—the AI simply copies the pattern you provided.</p>
-                    <div class="prompt-box">
-                        <span class="label">Example of Few-Shot Formatting</span>
-                        Convert the product features into benefits.<br><br>
-                        Feature: Waterproof<br>
-                        Benefit: Never worry about rain damaging your phone.<br><br>
-                        Feature: 24hr Battery<br>
-                        Benefit: Leave your charger at home.<br><br>
-                        Feature: 5G Ready<br>
-                        Benefit: [AI WILL FILL THIS IN]
-                    </div>
-                `,
-                content_ta: `
-                    <p>சில நேரங்களில் உங்களுக்கு என்ன வேண்டும் என்பதை விளக்குவதை விட, <i>உதாரணங்களை காட்டுவது</i> எளிது. <b>Few-Shot Prompting</b> என்பது AI-க்கு உண்மையான பணியை கொடுப்பதற்கு முன் 2 அல்லது 3 சரியான உதாரணங்களை வழங்குவதாகும்.</p>
-                    <h3>இது ஏன் வேலை செய்கிறது:</h3>
-                    <p>AI வடிவங்களை (patterns) அடையாளம் காண்பதில் மிகச் சிறந்தது. உதாரணங்களை வழங்குவதன் மூலம், தொனி, நீளம் அல்லது அமைப்பை நீங்கள் விளக்க வேண்டியதில்லை—AI நீங்கள் வழங்கிய வடிவத்தை அப்படியே பின்பற்றும்.</p>
-                    <div class="prompt-box">
-                        <span class="label">Few-Shot உதாரணம்</span>
-                        தயாரிப்பு அம்சங்களை நன்மைகளாக மாற்று.<br><br>
-                        அம்சம்: Waterproof<br>
-                        நன்மை: மழையில் போன் நனைந்துவிடும் என்ற கவலை வேண்டாம்.<br><br>
-                        அம்சம்: 24hr Battery<br>
-                        நன்மை: சார்ஜரை வீட்டிலேயே வைத்துவிட்டு செல்லுங்கள்.<br><br>
-                        அம்சம்: 5G Ready<br>
-                        நன்மை: [AI இதை நிரப்பும்]
-                    </div>
-                `
-            },
-            // The remaining modules are structured similarly but kept concise here for code brevity. 
-            // In a real database, you would expand these exactly like modules 1-3.
-            { id: 4, icon: "⛓️", title_en: "Chain of Thought (CoT)", title_ta: "சிந்தனை சங்கிலி (CoT)", content_en: "<p>By adding the magic phrase <b>'Let's think step-by-step'</b> to the end of any math or logic prompt, you force the AI to break down its reasoning. This reduces AI hallucinations by over 50% on complex tasks.</p>", content_ta: "<p>எந்தவொரு கணித அல்லது தர்க்க prompt-இன் முடிவிலும் <b>'படிப்படியாக சிந்திப்போம் (Let's think step-by-step)'</b> என்ற மாய வார்த்தையைச் சேர்ப்பதன் மூலம், AI-ஐ அதன் காரணங்களை உடைக்க கட்டாயப்படுத்துகிறீர்கள். இது பிழைகளை பெருமளவு குறைக்கும்.</p>" },
-            { id: 5, icon: "📊", title_en: "Data Extraction & JSON", title_ta: "தரவு பிரித்தெடுத்தல்", content_en: "<p>AI is incredible at reading messy text (like a transcript) and outputting it into a perfectly formatted JSON array or CSV table. Always specify the exact keys you want in the JSON output.</p>", content_ta: "<p>முறையற்ற உரையை (உதாரணமாக, ஒரு உரையாடல்) படித்து, அதை கச்சிதமான JSON அல்லது CSV அட்டவணையாக மாற்றுவதில் AI மிகச் சிறந்தது.</p>" },
-            { id: 6, icon: "🚫", title_en: "Negative Prompting", title_ta: "எதிர்மறை Prompting", content_en: "<p>Often, telling AI what <i>not</i> to do is more important than what to do. Use phrases like: <b>'Do not use jargon. Do not hallucinate facts. If you do not know the answer, reply exactly with: I don't know.'</b></p>", content_ta: "<p>பெரும்பாலும், AI என்ன செய்ய <i>கூடாது</i> என்று சொல்வது மிகவும் முக்கியம். 'கடினமான வார்த்தைகளை பயன்படுத்தாதே. தெரியவில்லை என்றால் தெரியாது என்று சொல்' போன்ற வாக்கியங்களை பயன்படுத்தவும்.</p>" },
-            { id: 7, icon: "⚙️", title_en: "System Parameters", title_ta: "அமைப்பு அளவுருக்கள்", content_en: "<p>If you are using APIs, you can adjust the <b>Temperature</b>. A temperature of 0.0 makes the AI highly robotic and factual (perfect for code). A temperature of 0.8 makes it highly creative and unpredictable (perfect for poetry).</p>", content_ta: "<p>API-களை பயன்படுத்தினால், <b>Temperature</b>-ஐ மாற்றலாம். 0.0 என்பது AI-ஐ துல்லியமாக்கும் (கோடிங்-க்கு சிறந்தது). 0.8 என்பது படைப்பாற்றலை அதிகரிக்கும் (கவிதைகளுக்கு சிறந்தது).</p>" },
-            { id: 8, icon: "🛡️", title_en: "Prompt Injection", title_ta: "Prompt Injection பாதுகாப்பு", content_en: "<p>Prompt injection is a security vulnerability where users type hidden commands to make your AI break its rules. Always sanitize user inputs and use strict delimiters like ``` to separate instructions from user data.</p>", content_ta: "<p>Prompt injection என்பது AI-ஐ அதன் விதிகளை மீறச் செய்யும் ஒரு பாதுகாப்பு குறைபாடு ஆகும். பயனர் உள்ளீடுகளை எப்போதும் பாதுகாப்பாக கையாள வேண்டும்.</p>" },
-            { id: 9, icon: "🤖", title_en: "Meta-Prompting", title_ta: "Meta-Prompting", content_en: "<p>You can ask the AI to write prompts for you. Ask: <b>'I want to generate images of futuristic cities. Write 5 highly detailed midjourney prompts for me.'</b></p>", content_ta: "<p>உங்களுக்கான prompt-களை எழுத AI-யிடமே கேட்கலாம். 'எதிர்கால நகரங்களின் படங்களை உருவாக்க எனக்கு 5 மிட்ஜர்னி prompt-களை எழுது' என்று கேட்கவும்.</p>" },
-            { id: 10, icon: "🚀", title_en: "Building AI Pipelines", title_ta: "நடைமுறை பயன்பாடுகள்", content_en: "<p>The ultimate goal is chaining: Prompt 1 summarizes an email -> Passes it to Prompt 2 -> Prompt 2 identifies the emotion -> Passes to Prompt 3 -> Prompt 3 drafts a polite reply.</p>", content_ta: "<p>இறுதி இலக்கு பல prompt-களை இணைப்பது: Prompt 1 மின்னஞ்சலை சுருக்கும் -> Prompt 2 உணர்வை அறியும் -> Prompt 3 பதிலை எழுதும்.</p>" }
-        ];
+        // --- Custom Toast Notification ---
+        window.showToast = (msg) => {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        };
 
-        // ==========================================
-        // QUIZ DATA (Interactive format)
-        // ==========================================
-        const quizData = [
-            { q: "According to the ACT Framework, what does the 'A' stand for?", opts: ["Action", "Act as (Persona)", "Algorithm", "Analyze"], ans: 1 },
-            { q: "What is 'Few-Shot Prompting'?", opts: ["Asking the AI to be brief", "Providing 2-3 examples before asking the task", "Using a low temperature setting", "Generating 3 images at once"], ans: 1 },
-            { q: "Which phrase drastically reduces AI logic errors in complex math?", opts: ["Format as JSON", "Do not hallucinate", "Let's think step-by-step", "Act as a mathematician"], ans: 2 },
-            { q: "What does a Temperature setting of 0.0 do?", opts: ["Makes the AI highly creative", "Shuts the AI down", "Makes the AI factual, robotic, and consistent", "Deletes the prompt context"], ans: 2 },
-            { q: "What is Prompt Injection?", opts: ["Uploading code to the AI", "A security flaw where users bypass AI rules", "Feeding the AI a massive PDF file", "Using Python to write prompts"], ans: 1 }
-        ]; // Real quiz would have 10, kept to 5 for snippet length
+        // --- Copy Code Feature ---
+        window.copyCode = (btn) => {
+            const codeText = btn.parentElement.querySelector('pre').innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                btn.innerText = "Copied!";
+                btn.classList.add('copied');
+                setTimeout(() => { btn.innerText = "Copy"; btn.classList.remove('copied'); }, 2000);
+            });
+        };
 
-        // ==========================================
-        // UI ROUTING & HELPERS
-        // ==========================================
-        window.showScreen = (screenId) => {
+        // --- Mobile Back Button (History API) ---
+        window.showScreen = (screenId, pushHistory = true) => {
             document.querySelectorAll('.screen').forEach(el => el.classList.remove('active-screen'));
             document.getElementById(screenId).classList.add('active-screen');
             window.scrollTo(0,0);
+            if(pushHistory) history.pushState({ screen: screenId }, '', '#' + screenId);
         };
 
+        window.goBack = () => { history.back(); };
+        
+        window.addEventListener('popstate', (e) => {
+            if(e.state && e.state.screen) showScreen(e.state.screen, false);
+            else if(currentUserData) routeUser(false);
+        });
+
+        // ==========================================
+        // 25 ADVANCED MODULES DATA
+        // ==========================================
+        const generateCodeBox = (label, code) => `
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-label">${label}</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>${code}</code></pre>
+            </div>`;
+
+        const courseData = [
+            { 
+                id: 1, icon: "🧠", img: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&q=80",
+                title_en: "1. Intro to LLMs", title_ta: "1. LLM அறிமுகம்", 
+                content_en: `<p>LLMs predict tokens, not words. They lack true logic but excel at pattern matching.</p>`,
+                content_ta: `<p>LLM-கள் வார்த்தைகளை அல்ல, டோக்கன்களைக் கணிக்கின்றன. இவை வடிவங்களை அடையாளம் காண்பதில் சிறந்தவை.</p>`
+            },
+            { 
+                id: 2, icon: "🏗️", img: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
+                title_en: "2. The ACT Framework", title_ta: "2. ACT கட்டமைப்பு", 
+                content_en: `<p>Act as, Context, Task. This is the holy grail of basic prompting.</p>
+                ${generateCodeBox('Pro Prompt', 'Act as a Senior Marketer. Context: Selling B2B software. Task: Write 3 ad headlines.')}`,
+                content_ta: `<p>பாத்திரம் (Act as), சூழல் (Context), பணி (Task). இதுவே அடிப்படை ப்ராம்டிங்கின் ரகசியம்.</p>
+                ${generateCodeBox('Pro Prompt', 'ஒரு சீனியர் மார்க்கெட்டராக செயல்படு. சூழல்: B2B சாஃப்ட்வேர் விற்பனை. பணி: 3 விளம்பர தலைப்புகளை எழுது.')}`
+            },
+            { 
+                id: 3, icon: "🎯", img: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&q=80",
+                title_en: "3. Few-Shot Prompting", title_ta: "3. Few-Shot Prompting", 
+                content_en: `<p>Provide examples before asking for the output to lock in the exact format you want.</p>
+                ${generateCodeBox('Example Formatting', 'Input: Apple -> Output: Fruit\nInput: Carrot -> Output: Vegetable\nInput: Car -> Output:')}`,
+                content_ta: `<p>பதிலை கேட்கும் முன், நீங்கள் விரும்பும் வடிவமைப்பை AI-க்கு புரியவைக்க சில உதாரணங்களை கொடுங்கள்.</p>`
+            },
+            { 
+                id: 4, icon: "⛓️", img: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80",
+                title_en: "4. Chain of Thought (CoT)", title_ta: "4. சிந்தனை சங்கிலி (CoT)", 
+                content_en: `<p>Force the AI to explain its math before giving the answer.</p>
+                ${generateCodeBox('CoT Prompt', 'Solve this math problem. Let\\'s think step-by-step to ensure we get the right answer.')}`,
+                content_ta: `<p>பதிலை கொடுப்பதற்கு முன் அதன் தர்க்கத்தை விளக்க AI-ஐ கட்டாயப்படுத்துங்கள்.</p>`
+            },
+            { 
+                id: 5, icon: "🚫", img: "https://images.unsplash.com/photo-1614064641913-6b8322c45e54?w=800&q=80",
+                title_en: "5. Negative Prompting", title_ta: "5. எதிர்மறை Prompting", 
+                content_en: `<p>Tell it what NOT to do. Crucial for avoiding corporate jargon.</p>
+                ${generateCodeBox('Guardrail', 'Do not use words like "synergy" or "innovative". If you don\\'t know the answer, reply "I don\\'t know".')}`,
+                content_ta: `<p>எதைச் செய்யக்கூடாது என்பதை தெளிவாகக் கூறுங்கள்.</p>`
+            },
+            { id: 6, icon: "📊", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80", title_en: "6. Data Extraction", title_ta: "6. தரவு பிரித்தெடுத்தல்", content_en: `<p>Extract structured JSON from messy text.</p>${generateCodeBox('JSON Prompt', 'Read this email and output a strict JSON with keys: { "name", "date", "intent" }.')}`, content_ta: `<p>முறையற்ற உரையிலிருந்து JSON தரவை பிரிக்கவும்.</p>` },
+            { id: 7, icon: "⚙️", img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80", title_en: "7. Temperature Settings", title_ta: "7. வெப்பநிலை அமைப்புகள்", content_en: `<p>Temp 0.0 = robotic facts. Temp 1.0 = creative chaos.</p>`, content_ta: `<p>Temp 0.0 = துல்லியமானது. Temp 1.0 = படைப்பாற்றல் மிக்கது.</p>` },
+            { id: 8, icon: "🛡️", img: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=80", title_en: "8. Prompt Injection Security", title_ta: "8. Prompt Injection பாதுகாப்பு", content_en: `<p>Use delimiters like \`\`\` to separate user input from system instructions.</p>`, content_ta: `<p>பயனர் உள்ளீட்டை பிரிக்க \`\`\` போன்ற குறியீடுகளைப் பயன்படுத்தவும்.</p>` },
+            { id: 9, icon: "🎨", img: "https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=800&q=80", title_en: "9. Midjourney Basics", title_ta: "9. மிட்ஜர்னி அடிப்படைகள்", content_en: `<p>For AI images, specify: Subject, Medium, Lighting, Camera Lens, and Aspect Ratio.</p>${generateCodeBox('Midjourney', '/imagine prompt: A cyberpunk city street, neon lighting, cinematic, 35mm lens --ar 16:9')}`, content_ta: `<p>AI படங்களுக்கு: பொருள், ஒளி, கேமரா லென்ஸ் ஆகியவற்றைக் குறிப்பிடவும்.</p>` },
+            { id: 10, icon: "🤖", img: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&q=80", title_en: "10. Meta-Prompting", title_ta: "10. Meta-Prompting", content_en: `<p>Ask the AI to write prompts for you.</p>`, content_ta: `<p>உங்களுக்கான prompt-களை எழுத AI-யிடமே கேட்கவும்.</p>` },
+            { id: 11, icon: "📝", img: "https://images.unsplash.com/photo-1455390582262-044cdead2708?w=800&q=80", title_en: "11. Tone & Voice Matching", title_ta: "11. தொனி பொருத்துதல்", content_en: `<p>Provide a sample of your writing and ask AI to analyze and mimic the exact tone.</p>`, content_ta: `<p>உங்கள் எழுத்தின் ஒரு பகுதியை கொடுத்து, அதே பாணியில் எழுதச் சொல்லுங்கள்.</p>` },
+            { id: 12, icon: "💻", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80", title_en: "12. Code Generation", title_ta: "12. கோடிங் உருவாக்கம்", content_en: `<p>Specify the language, framework, and error-handling requirements.</p>`, content_ta: `<p>நிரலாக்க மொழி மற்றும் கட்டமைப்பை தெளிவாகக் குறிப்பிடவும்.</p>` },
+            { id: 13, icon: "🔍", img: "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=800&q=80", title_en: "13. Debugging Code with AI", title_ta: "13. பிழை திருத்துதல்", content_en: `<p>Paste the error log and the code. Ask "What line is causing this and why?"</p>`, content_ta: `<p>பிழை செய்தியை கொடுத்து, எதனால் ஏற்பட்டது என கேட்கவும்.</p>` },
+            { id: 14, icon: "🌳", img: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800&q=80", title_en: "14. Tree of Thoughts", title_ta: "14. சிந்தனை மரம்", content_en: `<p>Ask the AI to propose 3 different solutions, evaluate pros/cons of each, and pick the best.</p>`, content_ta: `<p>3 வெவ்வேறு தீர்வுகளை வழங்கி, சிறந்ததை தேர்ந்தெடுக்கச் சொல்லுங்கள்.</p>` },
+            { id: 15, icon: "📚", img: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80", title_en: "15. Summarization Limits", title_ta: "15. சுருக்க வரம்புகள்", content_en: `<p>AIs suffer from "Lost in the Middle" syndrome. Put key instructions at the very end of long texts.</p>`, content_ta: `<p>முக்கிய கட்டளைகளை நீண்ட உரையின் இறுதியில் வைக்கவும்.</p>` },
+            { id: 16, icon: "🔄", img: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800&q=80", title_en: "16. Iterative Refinement", title_ta: "16. தொடர் மேம்பாடு", content_en: `<p>Never accept the first output. Reply: "Make it 20% shorter and more punchy."</p>`, content_ta: `<p>முதல் பதிலை ஏற்க வேண்டாம். "இன்னும் சுருக்கமாக எழுது" என தொடரவும்.</p>` },
+            { id: 17, icon: "📑", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80", title_en: "17. Markdown & Tables", title_ta: "17. அட்டவணைகள்", content_en: `<p>Force output into Markdown tables for easy reading.</p>${generateCodeBox('Table Format', 'Compare React and Vue. Output the result ONLY as a Markdown table with 3 columns.')}`, content_ta: `<p>பதில்களை அட்டவணையாக வழங்கக் கோரவும்.</p>` },
+            { id: 18, icon: "🎭", img: "https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&q=80", title_en: "18. Advanced Personas", title_ta: "18. மேம்பட்ட ஆளுமைகள்", content_en: `<p>Don't just say "Act as a lawyer". Say "Act as a ruthless corporate lawyer with 20 years of experience in NY."</p>`, content_ta: `<p>பாத்திரங்களை மிகத் துல்லியமாக விவரிக்கவும்.</p>` },
+            { id: 19, icon: "⚖️", img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&q=80", title_en: "19. Bias Mitigation", title_ta: "19. சார்புகளை குறைத்தல்", content_en: `<p>Explicitly instruct the AI to consider diverse perspectives in its analysis.</p>`, content_ta: `<p>பல்வேறு கண்ணோட்டங்களை கருத்தில் கொள்ள AI-க்கு அறிவுறுத்தவும்.</p>` },
+            { id: 20, icon: "🌍", img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80", title_en: "20. Translation Prompts", title_ta: "20. மொழிபெயர்ப்பு", content_en: `<p>Always specify the dialect (e.g., "Translate to formal spoken Tamil, not textbook Tamil").</p>`, content_ta: `<p>பேச்சுவழக்கு தமிழா அல்லது எழுத்துவழக்கு தமிழா என குறிப்பிடவும்.</p>` },
+            { id: 21, icon: "🧩", img: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80", title_en: "21. Fill-in-the-Blank", title_ta: "21. வெற்றிடங்களை நிரப்புதல்", content_en: `<p>Give AI a template with [BRACKETS] and ask it to only output the filled brackets.</p>`, content_ta: `<p>[BRACKETS] கொண்ட ஒரு டெம்ப்ளேட்டை கொடுத்து நிரப்பச் சொல்லுங்கள்.</p>` },
+            { id: 22, icon: "🎤", img: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=800&q=80", title_en: "22. Interview Simulation", title_ta: "22. நேர்காணல் பயிற்சி", content_en: `<p>Prompt: "Act as a Google Hiring Manager. Ask me one question at a time and critique my answer."</p>`, content_ta: `<p>AI-ஐ ஒரு நேர்காணல் செய்பவராக மாற்றி பயிற்சி பெறுங்கள்.</p>` },
+            { id: 23, icon: "📖", img: "https://images.unsplash.com/photo-1474932430478-367dbb6832c1?w=800&q=80", title_en: "23. Storytelling Frameworks", title_ta: "23. கதை சொல்லும் முறை", content_en: `<p>Force the AI to use frameworks like "The Hero's Journey" for marketing copy.</p>`, content_ta: `<p>மார்க்கெட்டிங் எழுத்துக்களுக்கு கதை சொல்லும் கட்டமைப்புகளை பயன்படுத்தவும்.</p>` },
+            { id: 24, icon: "⚡", img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80", title_en: "24. Prompt Chaining", title_ta: "24. சங்கிலி முறை", content_en: `<p>Pass the output of Prompt A directly as the input for Prompt B.</p>`, content_ta: `<p>ஒரு Prompt-இன் பதிலை அடுத்த Prompt-க்கு உள்ளீடாக கொடுக்கவும்.</p>` },
+            { id: 25, icon: "🚀", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80", title_en: "25. AI Agents & The Future", title_ta: "25. எதிர்கால AI", content_en: `<p>Agents use prompts to browse the web, write code, and execute tasks autonomously.</p>`, content_ta: `<p>எதிர்காலத்தில் AI தானே சிந்தித்து வேலைகளைச் செய்யும் (Agents).</p>` }
+        ];
+
+        // ==========================================
+        // 10-QUESTION QUIZ
+        // ==========================================
+        const quizData = [
+            { q: "What does the 'C' in the ACT Framework stand for?", opts: ["Code", "Context", "Calculation", "Creative"], ans: 1 },
+            { q: "Which setting makes AI output highly robotic and factual?", opts: ["Temperature 1.0", "Top-K 50", "Temperature 0.0", "Presence Penalty"], ans: 2 },
+            { q: "Providing completed examples before asking a task is called:", opts: ["Zero-Shot", "Meta-Prompting", "Few-Shot Prompting", "Chain of Thought"], ans: 2 },
+            { q: "What phrase reduces logic errors in math prompts?", opts: ["Let's think step-by-step", "Solve instantly", "Do not hallucinate", "Use JSON"], ans: 0 },
+            { q: "What is Prompt Injection?", opts: ["Injecting code into the database", "A security flaw where users bypass AI instructions", "Making the AI run faster", "Adding more tokens"], ans: 1 },
+            { q: "In Midjourney, what command is used at the end to set aspect ratio?", opts: ["--size", "--ratio", "--ar", "--dim"], ans: 2 },
+            { q: "What is 'Tree of Thoughts'?", opts: ["A botanical dataset", "Asking AI to propose multiple solutions and evaluate them", "A Python library", "A type of token"], ans: 1 },
+            { q: "If an AI gives a generic answer, what was likely missing?", opts: ["Temperature 0.0", "A strict Persona/Role", "A JSON format", "A Markdown table"], ans: 1 },
+            { q: "Which of these is a Negative Prompt?", opts: ["Write a story", "Format as CSV", "Do not use corporate jargon", "Act as an expert"], ans: 2 },
+            { q: "What is Meta-Prompting?", opts: ["Prompting on Facebook", "Using AI to write prompts for you", "Writing prompts in Python", "Deleting the AI memory"], ans: 1 }
+        ];
+
+        // ==========================================
+        // UI & ROUTING
+        // ==========================================
         window.setContentLang = (lang) => {
             contentLang = lang;
             document.getElementById('btn-en').className = `lang-btn ${lang === 'en' ? 'active' : ''}`;
             document.getElementById('btn-ta').className = `lang-btn ${lang === 'ta' ? 'active' : ''}`;
             
-            // Re-render the content
             const mod = courseData.find(m => m.id === viewingModuleId);
-            document.getElementById('viewer-title').innerText = `${mod.id}. ${lang === 'en' ? mod.title_en : mod.title_ta}`;
+            document.getElementById('viewer-img').src = mod.img;
+            document.getElementById('viewer-title').innerText = lang === 'en' ? mod.title_en : mod.title_ta;
             document.getElementById('viewer-content').innerHTML = lang === 'en' ? mod.content_en : mod.content_ta;
         };
 
-        // ==========================================
-        // AUTHENTICATION LOGIC (Optimized 1-Read)
-        // ==========================================
         document.getElementById('google-login-btn').onclick = () => signInWithPopup(auth, provider);
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
+                document.getElementById('nav-profile').innerText = user.displayName?.split(' ')[0] || 'User';
+                document.getElementById('nav-profile').style.display = 'block';
                 const docSnap = await getDoc(doc(db, "users", user.uid));
                 if (docSnap.exists()) {
                     currentUserData = docSnap.data();
-                    routeUser();
+                    routeUser(true);
                 } else {
                     currentUserData = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
-                    showScreen('profile-screen');
+                    showScreen('profile-screen', true);
                 }
             } else {
-                showScreen('login-screen');
+                document.getElementById('nav-profile').style.display = 'none';
+                showScreen('login-screen', true);
             }
         });
 
-        function routeUser() {
-            if (!currentUserData.fullName) return showScreen('profile-screen');
-            if (currentUserData.paymentStatus === 'none') return showScreen('payment-screen');
+        function routeUser(pushHistory = true) {
+            if (!currentUserData.fullName) return showScreen('profile-screen', pushHistory);
+            if (currentUserData.paymentStatus === 'none') return showScreen('payment-screen', pushHistory);
             if (currentUserData.hasPassedQuiz) {
                 showCertificate();
-                return showScreen('cert-screen');
+                return showScreen('cert-screen', pushHistory);
             }
             renderDashboard();
-            showScreen('dashboard-screen');
+            showScreen('dashboard-screen', pushHistory);
         }
 
         // ==========================================
-        // FORM SUBMISSIONS
+        // FORMS & PROGRESS
         // ==========================================
         document.getElementById('save-profile-btn').onclick = async () => {
             const name = document.getElementById('prof-name').value;
             const wa = document.getElementById('prof-wa').value;
-            if(!name || !wa) return alert("Name and WhatsApp are required for certification.");
+            if(!name || !wa) return showToast("Name and WhatsApp required!");
 
             currentUserData.fullName = name;
             currentUserData.whatsappNumber = wa;
-            currentUserData.collegeDegree = document.getElementById('prof-degree').value || "N/A";
-            
             await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
-            routeUser();
+            routeUser(true);
         };
 
         document.getElementById('submit-payment-btn').onclick = async () => {
             const upiId = document.getElementById('upi-input').value;
-            if(upiId.length < 10) return alert("Please enter a valid 12-digit UTR Number");
+            if(upiId.length < 10) return showToast("Enter a valid 12-digit UTR");
 
             currentUserData.upiTransactionId = upiId;
             currentUserData.paymentStatus = 'pending_check'; 
-            
             await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
-            routeUser();
+            routeUser(true);
         };
 
-        // ==========================================
-        // DASHBOARD & MODULE ENGINE
-        // ==========================================
         function renderDashboard() {
             const container = document.getElementById('module-list-container');
             container.innerHTML = '';
             
-            // Progress Bar Logic
             let progressMod = currentUserData.currentModule;
-            if(progressMod > 10) progressMod = 10;
-            const percentage = ((progressMod - 1) / 10) * 100;
+            if(progressMod > 25) progressMod = 25;
+            const percentage = Math.round(((progressMod - 1) / 25) * 100);
             document.getElementById('progress-bar').style.width = percentage + '%';
             document.getElementById('progress-text').innerText = percentage + '%';
 
@@ -570,47 +528,39 @@
                 const isCompleted = mod.id < currentUserData.currentModule;
                 const isUnlocked = mod.id <= currentUserData.currentModule;
                 
-                let statusBadge = "🔒 Locked";
-                if(isUnlocked) statusBadge = "📖 Read Now";
-                if(isCompleted) statusBadge = "✅ Completed";
-
                 container.innerHTML += `
                     <div class="module-item ${isUnlocked ? '' : 'locked'} ${isCompleted ? 'completed' : ''}" onclick="${isUnlocked ? `loadModule(${mod.id})` : ''}">
                         <div class="mod-icon">${mod.icon}</div>
                         <div class="mod-details">
-                            <div class="mod-title">Module ${mod.id}: ${mod.title_en}</div>
-                            <div class="mod-status">${statusBadge}</div>
+                            <div class="mod-title">${mod.title_en}</div>
+                            <div class="mod-status">${isCompleted ? '✅ Completed' : (isUnlocked ? '📖 Ready' : '🔒 Locked')}</div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
 
-            document.getElementById('quiz-unlock-banner').style.display = currentUserData.currentModule > 10 ? 'block' : 'none';
+            document.getElementById('quiz-unlock-banner').style.display = currentUserData.currentModule > 25 ? 'block' : 'none';
         }
 
         window.loadModule = (id) => {
             viewingModuleId = id;
-            setContentLang(contentLang); // Hydrates the view
-            
+            setContentLang(contentLang);
             const btn = document.getElementById('mark-complete-btn');
             if(id === currentUserData.currentModule) {
                 btn.style.display = 'flex';
-                btn.innerText = id === 10 ? "Finish Course & Go to Quiz" : "Mark Completed & Continue";
-            } else {
-                btn.style.display = 'none';
-            }
-            
-            showScreen('module-viewer-screen');
+                btn.innerText = id === 25 ? "Finish Curriculum & Take Exam" : "Mark Completed & Next";
+            } else { btn.style.display = 'none'; }
+            showScreen('module-viewer-screen', true);
         }
 
         document.getElementById('mark-complete-btn').onclick = async () => {
             currentUserData.currentModule += 1;
             setDoc(doc(db, "users", auth.currentUser.uid), { currentModule: currentUserData.currentModule }, { merge: true });
-            routeUser();
+            routeUser(true);
+            showToast("Module Completed!");
         };
 
         // ==========================================
-        // MODERN QUIZ ENGINE
+        // QUIZ & CERTIFICATE
         // ==========================================
         document.getElementById('start-quiz-btn').onclick = () => {
             const qc = document.getElementById('quiz-container');
@@ -625,7 +575,7 @@
                     `).join('')}
                 </div>
             `).join('');
-            showScreen('quiz-screen');
+            showScreen('quiz-screen', true);
         };
 
         document.getElementById('submit-quiz-btn').onclick = async () => {
@@ -635,19 +585,16 @@
                 if(selected && parseInt(selected.value) === q.ans) score++;
             });
 
-            const passMark = Math.floor(quizData.length * 0.7);
-            if (score >= passMark) {
+            if (score >= 7) {
                 currentUserData.hasPassedQuiz = true;
                 await setDoc(doc(db, "users", auth.currentUser.uid), { hasPassedQuiz: true }, { merge: true });
-                routeUser();
+                showToast("Exam Passed! Generating Certificate...");
+                setTimeout(() => routeUser(true), 1500);
             } else {
-                alert(`You scored ${score} out of ${quizData.length}. You need ${passMark} to pass. Please review the modules and try again!`);
+                showToast(`Score: ${score}/10. You need 7 to pass. Try again!`);
             }
         };
 
-        // ==========================================
-        // CERTIFICATE HANDOFF
-        // ==========================================
         function showCertificate() {
             if (currentUserData.paymentStatus === 'paid') {
                 document.getElementById('cert-pdf-view').style.display = 'block';
@@ -660,10 +607,12 @@
         }
 
         document.getElementById('whatsapp-claim-btn').onclick = () => {
-            const msg = `Hi Goorac Admin! I passed the Prompt Engineering Exam. My name is ${currentUserData.fullName} and my payment UTR is ${currentUserData.upiTransactionId}. Please unlock my certificate!`;
-            window.open(`[https://wa.me/919876543210?text=$](https://wa.me/919876543210?text=$){encodeURIComponent(msg)}`, '_blank');
+            const msg = `Hi Admin! I passed the 25-module Exam. My name is ${currentUserData.fullName} and my UTR is ${currentUserData.upiTransactionId}. Please verify my payment.`;
+            window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
+        // Initialize state replacement for first load
+        history.replaceState({ screen: 'login-screen' }, '', '#login-screen');
     </script>
 </body>
 </html>
