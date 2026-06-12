@@ -125,6 +125,7 @@
         .content-body h3 { margin-top: 30px; font-size: 1.25rem; color: var(--primary); }
         .content-body ul { margin-bottom: 20px; padding-left: 20px; color: var(--text-muted); }
         .content-body li { margin-bottom: 10px; }
+        .content-body mark { background-color: #fef08a; padding: 2px 4px; border-radius: 4px; color: #854d0e; }
         
         .code-wrapper {
             position: relative; background: var(--code-bg); border-radius: var(--radius-lg);
@@ -253,11 +254,11 @@
         <div class="card">
             <div class="input-group">
                 <label>Full Legal Name</label>
-                <input type="text" id="prof-name" placeholder="John Doe">
+                <input type="text" id="prof-name" placeholder="E.g., Jane Smith">
             </div>
             <div class="input-group">
                 <label>WhatsApp Number</label>
-                <input type="tel" id="prof-wa" placeholder="+91 9000000000">
+                <input type="tel" id="prof-wa" placeholder="+91 9876543210">
             </div>
             <button id="save-profile-btn" class="btn">Continue</button>
         </div>
@@ -325,7 +326,7 @@
 
     <!-- 6. Quiz -->
     <div id="quiz-screen" class="screen">
-        <h2 style="color: var(--primary);">Certification Exam</h2>
+        <h2>Certification Exam</h2>
         <p>Answer 10 questions. You need 70% (7/10) to pass.</p>
         <div id="quiz-container"></div>
         <button id="submit-quiz-btn" class="btn">Submit Exam</button>
@@ -381,10 +382,9 @@
 
     <!-- APP LOGIC -->
     <script type="module">
-        /* FIXED FIREBASE VERSIONS TO STABLE CDN */
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDeXk6z_5mYQZi_xIsQsN935KxuIBxAM3w",
@@ -453,84 +453,92 @@
             { 
                 id: 1, icon: "🧠", img: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&q=80",
                 title_en: "1. Intro to LLMs", title_ta: "1. LLM அறிமுகம்", 
-                content_en: `<p>Large Language Models (LLMs) predict <b>tokens</b>, not words. They lack true logic but are unparalleled at <i>pattern matching</i>.</p>`,
-                content_ta: `<p>LLM-கள் வார்த்தைகளை அல்ல, <b>டோக்கன்களைக்</b> கணிக்கின்றன. இவை <i>வடிவங்களை அடையாளம் காண்பதில்</i> சிறந்தவை.</p>`
+                content_en: `<p>Large Language Models (LLMs) predict <b>tokens</b>, not words. They lack <i>true logic</i> but are <mark>unparalleled at pattern matching</mark>.</p>
+                <ul>
+                    <li><b>Generative:</b> They create net-new content every time.</li>
+                    <li><b>Stochastic:</b> Outputs shift even with identical inputs.</li>
+                </ul>`,
+                content_ta: `<p>LLM-கள் வார்த்தைகளை அல்ல, <b>டோக்கன்களைக்</b> கணிக்கின்றன. இவை <i>வடிவங்களை அடையாளம் காண்பதில்</i> <mark>மிகச் சிறந்தவை</mark>.</p>
+                <ul>
+                    <li><b>Generative:</b> இவை புதிய உள்ளடக்கத்தை உருவாக்குகின்றன.</li>
+                    <li><b>Stochastic:</b> ஒரே உள்ளீட்டிற்கும் பதில்கள் மாறக்கூடும்.</li>
+                </ul>`
             },
             { 
                 id: 2, icon: "🏗️", img: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
                 title_en: "2. The ACT Framework", title_ta: "2. ACT கட்டமைப்பு", 
-                content_en: `<p><b>Act as</b>, <b>Context</b>, <b>Task</b>. This is the holy grail of basic prompting to ensure you never get generic responses again.</p>
+                content_en: `<p><u>Act as</u>, <u>Context</u>, <u>Task</u>. This is the <b>holy grail</b> of basic prompting to ensure you <i>never</i> get generic responses again.</p>
                 ${generateCodeBox('Pro Prompt', 'Act as a Senior Marketer. Context: Selling B2B software. Task: Write 3 ad headlines.')}`,
-                content_ta: `<p><b>பாத்திரம் (Act as)</b>, <b>சூழல் (Context)</b>, <b>பணி (Task)</b>. இதுவே அடிப்படை ப்ராம்டிங்கின் ரகசியம்.</p>
+                content_ta: `<p><u>பாத்திரம் (Act as)</u>, <u>சூழல் (Context)</u>, <u>பணி (Task)</u>. இதுவே அடிப்படை ப்ராம்டிங்கின் <b>ரகசியம்</b>.</p>
                 ${generateCodeBox('Pro Prompt', 'ஒரு சீனியர் மார்க்கெட்டராக செயல்படு. சூழல்: B2B சாஃப்ட்வேர் விற்பனை. பணி: 3 விளம்பர தலைப்புகளை எழுது.')}`
             },
             { 
                 id: 3, icon: "🎯", img: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&q=80",
                 title_en: "3. Few-Shot Prompting", title_ta: "3. Few-Shot Prompting", 
-                content_en: `<p>Provide <b>concrete examples</b> before asking for the output to <i>lock in the exact format</i> you want.</p>
+                content_en: `<p>Provide <b>concrete examples</b> before asking for the output to <i>lock in the exact format</i> you strictly require.</p>
                 ${generateCodeBox('Example Formatting', 'Input: Apple -> Output: Fruit\nInput: Carrot -> Output: Vegetable\nInput: Car -> Output:')}`,
                 content_ta: `<p>பதிலை கேட்கும் முன், நீங்கள் விரும்பும் வடிவமைப்பை AI-க்கு புரியவைக்க <b>சரியான உதாரணங்களை</b> கொடுங்கள்.</p>`
             },
             { 
                 id: 4, icon: "⛓️", img: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80",
                 title_en: "4. Chain of Thought (CoT)", title_ta: "4. சிந்தனை சங்கிலி (CoT)", 
-                content_en: `<p>Force the AI to <i>explain its reasoning</i> before giving the answer to drastically reduce hallucination.</p>
+                content_en: `<p>Force the AI to <i>explain its reasoning</i> before giving the answer to drastically reduce <mark>hallucinations</mark>.</p>
                 ${generateCodeBox('CoT Prompt', 'Solve this math problem. Let\\'s think step-by-step to ensure we get the right answer.')}`,
                 content_ta: `<p>பதிலை கொடுப்பதற்கு முன் அதன் <i>தர்க்கத்தை விளக்க</i> AI-ஐ கட்டாயப்படுத்துங்கள்.</p>`
             },
             { 
                 id: 5, icon: "🚫", img: "https://images.unsplash.com/photo-1614064641913-6b8322c45e54?w=800&q=80",
                 title_en: "5. Negative Prompting", title_ta: "5. எதிர்மறை Prompting", 
-                content_en: `<p>Explicitly tell it what <b>NOT</b> to do. This is crucial for avoiding repetitive corporate jargon.</p>
+                content_en: `<p>Explicitly tell it what <b>NOT</b> to do. This is crucial for avoiding repetitive, dry corporate jargon.</p>
                 ${generateCodeBox('Guardrail', 'Do not use words like "synergy" or "innovative". If you don\\'t know the answer, reply "I don\\'t know".')}`,
                 content_ta: `<p><b>எதைச் செய்யக்கூடாது</b> என்பதை தெளிவாகக் கூறுங்கள்.</p>`
             },
             { 
                 id: 6, icon: "📊", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80", 
                 title_en: "6. Data Extraction", title_ta: "6. தரவு பிரித்தெடுத்தல்", 
-                content_en: `<p>Extract structured <b>JSON</b> arrays from unstructured, messy text.</p>${generateCodeBox('JSON Prompt', 'Read this email and output a strict JSON with keys: { "name", "date", "intent" }.')}`, 
+                content_en: `<p>Extract perfectly structured <b>JSON</b> arrays directly from <i>unstructured, messy text</i>.</p>${generateCodeBox('JSON Prompt', 'Read this email and output a strict JSON with keys: { "name", "date", "intent" }.')}`, 
                 content_ta: `<p>முறையற்ற உரையிலிருந்து <b>JSON தரவை</b> பிரிக்கவும்.</p>` 
             },
             { 
                 id: 7, icon: "⚙️", img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80", 
                 title_en: "7. Temperature Settings", title_ta: "7. வெப்பநிலை அமைப்புகள்", 
-                content_en: `<p>API <b>Temp 0.0</b> = robotic facts & code. <b>Temp 1.0</b> = creative, unpredictable chaos.</p>`, 
-                content_ta: `<p><b>Temp 0.0</b> = துல்லியமானது. <b>Temp 1.0</b> = படைப்பாற்றல் மிக்கது.</p>` 
+                content_en: `<p>API <b>Temp 0.0</b> = robotic facts & code. <br>API <b>Temp 1.0</b> = creative, unpredictable chaos.</p>`, 
+                content_ta: `<p><b>Temp 0.0</b> = துல்லியமானது. <br><b>Temp 1.0</b> = படைப்பாற்றல் மிக்கது.</p>` 
             },
             { 
                 id: 8, icon: "🛡️", img: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=80", 
                 title_en: "8. Prompt Injection Security", title_ta: "8. Prompt Injection பாதுகாப்பு", 
-                content_en: `<p>Always use strict <b>delimiters</b> like \`\`\` to separate malicious user input from your core system instructions.</p>`, 
+                content_en: `<p>Always use strict <b>delimiters</b> like \`\`\` to separate malicious user input from your core <i>system instructions</i>.</p>`, 
                 content_ta: `<p>பயனர் உள்ளீட்டை பிரிக்க \`\`\` போன்ற <b>குறியீடுகளைப்</b> பயன்படுத்தவும்.</p>` 
             },
             { 
                 id: 9, icon: "🎨", img: "https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=800&q=80", 
                 title_en: "9. Midjourney Basics", title_ta: "9. மிட்ஜர்னி அடிப்படைகள்", 
-                content_en: `<p>For AI images, specify: <b>Subject, Medium, Lighting, Camera Lens, and Aspect Ratio</b>.</p>${generateCodeBox('Midjourney', '/imagine prompt: A cyberpunk city street, neon lighting, cinematic, 35mm lens --ar 16:9')}`, 
+                content_en: `<p>For high-fidelity AI images, specify: <b>Subject, Medium, Lighting, Camera Lens, and Aspect Ratio</b>.</p>${generateCodeBox('Midjourney', '/imagine prompt: A cyberpunk city street, neon lighting, cinematic, 35mm lens --ar 16:9')}`, 
                 content_ta: `<p>AI படங்களுக்கு: <b>பொருள், ஒளி, கேமரா லென்ஸ்</b> ஆகியவற்றைக் குறிப்பிடவும்.</p>` 
             },
             { 
                 id: 10, icon: "🤖", img: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&q=80", 
                 title_en: "10. Meta-Prompting", title_ta: "10. Meta-Prompting", 
-                content_en: `<p>Stop guessing. Ask the AI to <i>write the perfect prompts</i> for you based on your desired outcome.</p>`, 
+                content_en: `<p>Stop guessing entirely. Ask the AI to <i>write the perfect prompt</i> for you based on your desired final outcome.</p>`, 
                 content_ta: `<p>உங்களுக்கான prompt-களை எழுத <i>AI-யிடமே கேட்கவும்</i>.</p>` 
             },
             { 
                 id: 11, icon: "📝", img: "https://images.unsplash.com/photo-1455390582262-044cdead2708?w=800&q=80", 
                 title_en: "11. Tone & Voice Matching", title_ta: "11. தொனி பொருத்துதல்", 
-                content_en: `<p>Provide a <b>sample of your writing</b> and ask the AI to analyze and <i>mimic the exact tone, cadence, and vocabulary</i>.</p>`, 
+                content_en: `<p>Provide a <b>sample of your writing</b> and explicitly ask the AI to analyze and <i>mimic the exact tone, cadence, and vocabulary</i>.</p>`, 
                 content_ta: `<p>உங்கள் எழுத்தின் <b>ஒரு பகுதியை</b> கொடுத்து, அதே <i>பாணியிலும், தொனியிலும்</i> எழுதச் சொல்லுங்கள்.</p>` 
             },
             { 
                 id: 12, icon: "💻", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80", 
                 title_en: "12. Code Generation", title_ta: "12. கோடிங் உருவாக்கம்", 
-                content_en: `<p>Always explicitly specify the <b>language, framework, error-handling methods, and edge cases</b> you want addressed.</p>`, 
+                content_en: `<p>Always explicitly specify the <b>language, framework, error-handling methods, and edge cases</b> you want robustly addressed.</p>`, 
                 content_ta: `<p>நிரலாக்க <b>மொழி மற்றும் கட்டமைப்பை</b> தெளிவாகக் குறிப்பிடவும்.</p>` 
             },
             { 
                 id: 13, icon: "🔍", img: "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=800&q=80", 
                 title_en: "13. Debugging Code with AI", title_ta: "13. பிழை திருத்துதல்", 
-                content_en: `<p>Paste the error log alongside the code and ask: <i>"What exact line is causing this exception and why?"</i></p>`, 
+                content_en: `<p>Paste the error log alongside the code and ask: <i>"What exact line is causing this exception, and why did it fail?"</i></p>`, 
                 content_ta: `<p>பிழை செய்தியை கொடுத்து, <i>எதனால் ஏற்பட்டது</i> என கேட்கவும்.</p>` 
             },
             { 
@@ -542,13 +550,13 @@
             { 
                 id: 15, icon: "📚", img: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80", 
                 title_en: "15. Summarization Limits", title_ta: "15. சுருக்க வரம்புகள்", 
-                content_en: `<p>AIs suffer from <b>"Lost in the Middle" syndrome</b>. Always put your most critical instructions at the very end of long texts.</p>`, 
+                content_en: `<p>AIs suffer from <b>"Lost in the Middle" syndrome</b>. Always put your most critical instructions at the <u>very end</u> of long texts.</p>`, 
                 content_ta: `<p>முக்கிய கட்டளைகளை நீண்ட உரையின் <b>இறுதியில்</b> வைக்கவும்.</p>` 
             },
             { 
                 id: 16, icon: "🔄", img: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800&q=80", 
                 title_en: "16. Iterative Refinement", title_ta: "16. தொடர் மேம்பாடு", 
-                content_en: `<p>Never accept the first output. Use conversational chains: <i>"Now make it 20% shorter and much more punchy."</i></p>`, 
+                content_en: `<p>Never accept the first output blindly. Use conversational chains: <i>"Now make it 20% shorter and much more punchy."</i></p>`, 
                 content_ta: `<p>முதல் பதிலை ஏற்க வேண்டாம். <i>"இன்னும் சுருக்கமாக எழுது"</i> என தொடரவும்.</p>` 
             },
             { 
@@ -602,7 +610,7 @@
             { 
                 id: 25, icon: "🚀", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80", 
                 title_en: "25. AI Agents & The Future", title_ta: "25. எதிர்கால AI", 
-                content_en: `<p><b>Autonomous Agents</b> use your system prompts to continuously browse the web, write code, and execute multi-step tasks without human intervention.</p>`, 
+                content_en: `<p><b>Autonomous Agents</b> use your system prompts to continuously browse the web, write code, and execute multi-step tasks <mark>without human intervention</mark>.</p>`, 
                 content_ta: `<p>எதிர்காலத்தில் AI தானே சிந்தித்து வேலைகளைச் செய்யும் <b>(Agents)</b>.</p>` 
             }
         ];
@@ -637,7 +645,7 @@
             document.getElementById('viewer-content').innerHTML = lang === 'en' ? mod.content_en : mod.content_ta;
         };
 
-        // FIXED ERROR HANDLING ON CLICK SO YOU KNOW IF POPUP FAILS
+        // FIXED ERROR HANDLING ON CLICK
         document.getElementById('google-login-btn').onclick = () => {
             signInWithPopup(auth, provider).catch(error => {
                 console.error("Login Error:", error);
@@ -737,6 +745,7 @@
         }
 
         document.getElementById('mark-complete-btn').onclick = async () => {
+            viewingModuleId = currentUserData.currentModule;
             currentUserData.currentModule += 1;
             setDoc(doc(db, "users", auth.currentUser.uid), { currentModule: currentUserData.currentModule }, { merge: true });
             routeUser(true);
@@ -785,7 +794,7 @@
                 document.getElementById('cert-whatsapp-view').style.display = 'none';
                 document.getElementById('cert-name-display').innerText = currentUserData.fullName;
                 
-                // NEW: Dynamic QR Code encoding the user's name
+                // Dynamic QR Code encoding the user's name
                 const encodedData = encodeURIComponent("Verified Certificate for: " + currentUserData.fullName + " | Goorac Corporation");
                 document.getElementById('cert-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedData}`;
 
