@@ -211,10 +211,8 @@
         .cert-body { font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #475569; margin-bottom: 10px; max-width: 85%; margin-left: auto; margin-right: auto; line-height: 1.5;}
         
         .multi-color-sig {
-            background: linear-gradient(45deg, #2563eb, #d946ef, #ea580c);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            /* html2canvas doesn't support background-clip:text. Switching to a solid professional ink color ensures the PDF matches the web preview exactly */
+            color: #1d4ed8; 
             font-weight: 800;
         }
 
@@ -370,10 +368,10 @@
                         <div style="margin-top: 15px; border-top: 2px dashed #e2e8f0; padding-top: 10px; width: 100%; max-width: 600px;">
                             <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Valid & Recognized By</div>
                             <div style="display: flex; justify-content: center; align-items: center; gap: 25px;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" alt="Microsoft" crossorigin="anonymous" style="height: 20px; object-fit: contain;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/0/07/Zoho_Corporation_logo.svg" alt="Zoho" crossorigin="anonymous" style="height: 18px; object-fit: contain;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/320px-Google_2015_logo.svg.png" alt="Google" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/320px-Microsoft_logo_%282012%29.svg.png" alt="Microsoft" crossorigin="anonymous" style="height: 20px; object-fit: contain;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/320px-Amazon_logo.svg.png" alt="Amazon" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Zoho_Corporation_logo.svg/320px-Zoho_Corporation_logo.svg.png" alt="Zoho" crossorigin="anonymous" style="height: 18px; object-fit: contain;">
                             </div>
                         </div>
 
@@ -889,7 +887,8 @@
                 margin:       0,
                 filename:     fileName,
                 image:        { type: 'jpeg', quality: 1 },
-                html2canvas:  { scale: 2, useCORS: true, allowTaint: true, scrollY: 0, scrollX: 0, windowWidth: 1122 },
+                /* Increased scale to 3 for ultra-crisp resolution */
+                html2canvas:  { scale: 3, useCORS: true, allowTaint: true, scrollY: 0, scrollX: 0, windowWidth: 1122 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
             };
             
