@@ -192,17 +192,25 @@
             pointer-events: none; z-index: 0;
         }
         .cert-content { z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1;}
-        .cert-header { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 3.5rem); color: #1e293b; margin-bottom: 5px; font-weight: 800;}
-        .cert-sub { font-size: clamp(0.7rem, 1.5vw, 1.2rem); color: #d4af37; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 30px; font-weight: bold; }
+        .cert-header { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 4rem); color: #1e293b; margin-bottom: 0; font-weight: 800;}
+        .cert-sub { font-size: clamp(0.7rem, 1.5vw, 1.2rem); color: #d4af37; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 25px; font-weight: bold; }
         .cert-name { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 5vw, 3.5rem); font-weight: 700; border-bottom: 2px solid #d4af37; padding-bottom: 10px; margin: 0 auto 20px; display: inline-block; min-width: 60%; color: #2563eb; line-height: 1.2;}
-        .cert-body { font-size: clamp(0.85rem, 2vw, 1.2rem); color: #475569; margin-bottom: 20px; max-width: 85%; margin-left: auto; margin-right: auto; line-height: 1.6;}
+        .cert-body { font-size: clamp(0.85rem, 2vw, 1.2rem); color: #475569; margin-bottom: 15px; max-width: 85%; margin-left: auto; margin-right: auto; line-height: 1.6;}
         
+        .multi-color-sig {
+            background: linear-gradient(45deg, #2563eb, #d946ef, #ea580c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
         .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; z-index: 2; position: relative; margin-top: auto;}
         .cert-qr-container { text-align: center; }
         .cert-qr { width: clamp(60px, 12vw, 110px); height: clamp(60px, 12vw, 110px); border: 3px solid #fff; box-shadow: var(--shadow-md); border-radius: 6px; background: white;}
         .cert-badge { width: clamp(60px, 12vw, 110px); height: clamp(60px, 12vw, 110px); background: radial-gradient(circle, #ffd700, #d4af37); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: clamp(0.5rem, 1vw, 0.75rem); border: 2px dashed white; line-height: 1.2;}
         .cert-signature-block { text-align: center; }
-        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.2rem, 3vw, 2.5rem); color: #0f172a; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 150px; }
+        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.2rem, 3vw, 2.5rem); border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 150px; }
 
         /* Print formatting forces A4 landscape perfectly */
         @media print {
@@ -338,20 +346,26 @@
             
             <div class="certificate-wrapper" id="printable-cert">
                 <div class="cert-content">
-                    <div class="cert-header">Goorac Corporation</div>
+                    <img src="icon.png" alt="Goorac Logo" style="width: 70px; height: 70px; object-fit: contain; margin-bottom: 10px; border-radius: 50%; box-shadow: var(--shadow-md);">
+                    <div class="cert-header">Goorac Learn</div>
+                    <div style="font-size: clamp(0.9rem, 2vw, 1.2rem); color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">from Goorac Corporation</div>
                     <div class="cert-sub">Certificate of Professional Mastery</div>
                     <div class="cert-body">This document officially certifies that</div>
+                    
                     <div class="cert-name" id="cert-name-display">Student Name</div>
-                    <div class="cert-body">
-                        has successfully completed all 25 advanced modules and passed the comprehensive final examination for the <b>Prompt Engineering Masterclass</b>.
+                    
+                    <div class="cert-body" style="margin-bottom: 25px;">
+                        has successfully completed all 25 advanced modules and passed the comprehensive final examination for the<br>
+                        <span style="font-size: 1.4em; font-weight: 800; color: #0f172a; display: inline-block; margin-top: 10px;">Prompt Engineering Masterclass</span>
                     </div>
+                    <div class="cert-date" id="cert-date-display" style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #475569; font-size: 0.95rem; background: #f1f5f9; padding: 6px 16px; border-radius: 20px; border: 1px solid #cbd5e1;">Date of Issue</div>
                 </div>
                 
                 <div class="cert-footer">
                     <!-- Dynamic QR Block -->
                     <div class="cert-qr-container">
                         <img id="cert-qr-img" class="cert-qr" src="" alt="Verified QR">
-                        <div style="font-size: clamp(0.5rem, 1vw, 0.75rem); color: #64748b; margin-top: 4px; font-weight: bold;">VERIFIED SECURE</div>
+                        <div style="font-size: clamp(0.5rem, 1vw, 0.75rem); color: #16a34a; margin-top: 5px; font-weight: 800; letter-spacing: 1px;">✓ VERIFIED</div>
                     </div>
                     
                     <!-- Official Stamp -->
@@ -361,7 +375,7 @@
 
                     <!-- Digital Signature -->
                     <div class="cert-signature-block">
-                        <div class="cert-signature">Siva Manikandan M</div>
+                        <div class="cert-signature multi-color-sig">Siva Manikandan M</div>
                         <div style="font-size: clamp(0.6rem, 1.2vw, 0.9rem); color: #64748b; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Director of Education</div>
                     </div>
                 </div>
@@ -824,10 +838,17 @@
             if (currentUserData.paymentStatus === 'paid') {
                 document.getElementById('cert-pdf-view').style.display = 'block';
                 document.getElementById('cert-whatsapp-view').style.display = 'none';
+                
+                // Inject the student's name into the certificate dynamically
                 document.getElementById('cert-name-display').innerText = currentUserData.fullName;
                 
-                // Dynamic QR Code encoding the user's name
-                const encodedData = encodeURIComponent("Verified Certificate for: " + currentUserData.fullName + " | Goorac Corporation");
+                // Calculate and inject the current date into the certificate dynamically
+                const issueDate = new Date();
+                const formattedDate = issueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                document.getElementById('cert-date-display').innerText = "Issued on: " + formattedDate;
+                
+                // Dynamic QR Code encoding name, verified status, date, and issuer details
+                const encodedData = encodeURIComponent(`VERIFIED CREDENTIAL\nName: ${currentUserData.fullName}\nCourse: Prompt Engineering Masterclass\nIssuer: Goorac Learn (Goorac Corporation)\nDate: ${formattedDate}\nStatus: VERIFIED`);
                 document.getElementById('cert-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedData}`;
 
             } else {
