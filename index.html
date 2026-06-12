@@ -202,11 +202,11 @@
         <div class="card">
             <div class="input-group">
                 <label>Full Legal Name</label>
-                <input type="text" id="prof-name" placeholder="Siva Manikandan M">
+                <input type="text" id="prof-name" placeholder="John Doe">
             </div>
             <div class="input-group">
                 <label>WhatsApp Number</label>
-                <input type="tel" id="prof-wa" placeholder="+91 9876543210">
+                <input type="tel" id="prof-wa" placeholder="+91 9000000000">
             </div>
             <button id="save-profile-btn" class="btn">Continue</button>
         </div>
@@ -375,58 +375,158 @@
             { 
                 id: 1, icon: "🧠", img: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&q=80",
                 title_en: "1. Intro to LLMs", title_ta: "1. LLM அறிமுகம்", 
-                content_en: `<p>LLMs predict tokens, not words. They lack true logic but excel at pattern matching.</p>`,
-                content_ta: `<p>LLM-கள் வார்த்தைகளை அல்ல, டோக்கன்களைக் கணிக்கின்றன. இவை வடிவங்களை அடையாளம் காண்பதில் சிறந்தவை.</p>`
+                content_en: `<p>Large Language Models (LLMs) predict <b>tokens</b>, not words. They lack true logic but are unparalleled at <i>pattern matching</i>.</p>`,
+                content_ta: `<p>LLM-கள் வார்த்தைகளை அல்ல, <b>டோக்கன்களைக்</b> கணிக்கின்றன. இவை <i>வடிவங்களை அடையாளம் காண்பதில்</i> சிறந்தவை.</p>`
             },
             { 
                 id: 2, icon: "🏗️", img: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
                 title_en: "2. The ACT Framework", title_ta: "2. ACT கட்டமைப்பு", 
-                content_en: `<p>Act as, Context, Task. This is the holy grail of basic prompting.</p>
+                content_en: `<p><b>Act as</b>, <b>Context</b>, <b>Task</b>. This is the holy grail of basic prompting to ensure you never get generic responses again.</p>
                 ${generateCodeBox('Pro Prompt', 'Act as a Senior Marketer. Context: Selling B2B software. Task: Write 3 ad headlines.')}`,
-                content_ta: `<p>பாத்திரம் (Act as), சூழல் (Context), பணி (Task). இதுவே அடிப்படை ப்ராம்டிங்கின் ரகசியம்.</p>
+                content_ta: `<p><b>பாத்திரம் (Act as)</b>, <b>சூழல் (Context)</b>, <b>பணி (Task)</b>. இதுவே அடிப்படை ப்ராம்டிங்கின் ரகசியம்.</p>
                 ${generateCodeBox('Pro Prompt', 'ஒரு சீனியர் மார்க்கெட்டராக செயல்படு. சூழல்: B2B சாஃப்ட்வேர் விற்பனை. பணி: 3 விளம்பர தலைப்புகளை எழுது.')}`
             },
             { 
                 id: 3, icon: "🎯", img: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&q=80",
                 title_en: "3. Few-Shot Prompting", title_ta: "3. Few-Shot Prompting", 
-                content_en: `<p>Provide examples before asking for the output to lock in the exact format you want.</p>
+                content_en: `<p>Provide <b>concrete examples</b> before asking for the output to <i>lock in the exact format</i> you want.</p>
                 ${generateCodeBox('Example Formatting', 'Input: Apple -> Output: Fruit\nInput: Carrot -> Output: Vegetable\nInput: Car -> Output:')}`,
-                content_ta: `<p>பதிலை கேட்கும் முன், நீங்கள் விரும்பும் வடிவமைப்பை AI-க்கு புரியவைக்க சில உதாரணங்களை கொடுங்கள்.</p>`
+                content_ta: `<p>பதிலை கேட்கும் முன், நீங்கள் விரும்பும் வடிவமைப்பை AI-க்கு புரியவைக்க <b>சரியான உதாரணங்களை</b> கொடுங்கள்.</p>`
             },
             { 
                 id: 4, icon: "⛓️", img: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80",
                 title_en: "4. Chain of Thought (CoT)", title_ta: "4. சிந்தனை சங்கிலி (CoT)", 
-                content_en: `<p>Force the AI to explain its math before giving the answer.</p>
+                content_en: `<p>Force the AI to <i>explain its reasoning</i> before giving the answer to drastically reduce hallucination.</p>
                 ${generateCodeBox('CoT Prompt', 'Solve this math problem. Let\\'s think step-by-step to ensure we get the right answer.')}`,
-                content_ta: `<p>பதிலை கொடுப்பதற்கு முன் அதன் தர்க்கத்தை விளக்க AI-ஐ கட்டாயப்படுத்துங்கள்.</p>`
+                content_ta: `<p>பதிலை கொடுப்பதற்கு முன் அதன் <i>தர்க்கத்தை விளக்க</i> AI-ஐ கட்டாயப்படுத்துங்கள்.</p>`
             },
             { 
                 id: 5, icon: "🚫", img: "https://images.unsplash.com/photo-1614064641913-6b8322c45e54?w=800&q=80",
                 title_en: "5. Negative Prompting", title_ta: "5. எதிர்மறை Prompting", 
-                content_en: `<p>Tell it what NOT to do. Crucial for avoiding corporate jargon.</p>
+                content_en: `<p>Explicitly tell it what <b>NOT</b> to do. This is crucial for avoiding repetitive corporate jargon.</p>
                 ${generateCodeBox('Guardrail', 'Do not use words like "synergy" or "innovative". If you don\\'t know the answer, reply "I don\\'t know".')}`,
-                content_ta: `<p>எதைச் செய்யக்கூடாது என்பதை தெளிவாகக் கூறுங்கள்.</p>`
+                content_ta: `<p><b>எதைச் செய்யக்கூடாது</b> என்பதை தெளிவாகக் கூறுங்கள்.</p>`
             },
-            { id: 6, icon: "📊", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80", title_en: "6. Data Extraction", title_ta: "6. தரவு பிரித்தெடுத்தல்", content_en: `<p>Extract structured JSON from messy text.</p>${generateCodeBox('JSON Prompt', 'Read this email and output a strict JSON with keys: { "name", "date", "intent" }.')}`, content_ta: `<p>முறையற்ற உரையிலிருந்து JSON தரவை பிரிக்கவும்.</p>` },
-            { id: 7, icon: "⚙️", img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80", title_en: "7. Temperature Settings", title_ta: "7. வெப்பநிலை அமைப்புகள்", content_en: `<p>Temp 0.0 = robotic facts. Temp 1.0 = creative chaos.</p>`, content_ta: `<p>Temp 0.0 = துல்லியமானது. Temp 1.0 = படைப்பாற்றல் மிக்கது.</p>` },
-            { id: 8, icon: "🛡️", img: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=80", title_en: "8. Prompt Injection Security", title_ta: "8. Prompt Injection பாதுகாப்பு", content_en: `<p>Use delimiters like \`\`\` to separate user input from system instructions.</p>`, content_ta: `<p>பயனர் உள்ளீட்டை பிரிக்க \`\`\` போன்ற குறியீடுகளைப் பயன்படுத்தவும்.</p>` },
-            { id: 9, icon: "🎨", img: "https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=800&q=80", title_en: "9. Midjourney Basics", title_ta: "9. மிட்ஜர்னி அடிப்படைகள்", content_en: `<p>For AI images, specify: Subject, Medium, Lighting, Camera Lens, and Aspect Ratio.</p>${generateCodeBox('Midjourney', '/imagine prompt: A cyberpunk city street, neon lighting, cinematic, 35mm lens --ar 16:9')}`, content_ta: `<p>AI படங்களுக்கு: பொருள், ஒளி, கேமரா லென்ஸ் ஆகியவற்றைக் குறிப்பிடவும்.</p>` },
-            { id: 10, icon: "🤖", img: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&q=80", title_en: "10. Meta-Prompting", title_ta: "10. Meta-Prompting", content_en: `<p>Ask the AI to write prompts for you.</p>`, content_ta: `<p>உங்களுக்கான prompt-களை எழுத AI-யிடமே கேட்கவும்.</p>` },
-            { id: 11, icon: "📝", img: "https://images.unsplash.com/photo-1455390582262-044cdead2708?w=800&q=80", title_en: "11. Tone & Voice Matching", title_ta: "11. தொனி பொருத்துதல்", content_en: `<p>Provide a sample of your writing and ask AI to analyze and mimic the exact tone.</p>`, content_ta: `<p>உங்கள் எழுத்தின் ஒரு பகுதியை கொடுத்து, அதே பாணியில் எழுதச் சொல்லுங்கள்.</p>` },
-            { id: 12, icon: "💻", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80", title_en: "12. Code Generation", title_ta: "12. கோடிங் உருவாக்கம்", content_en: `<p>Specify the language, framework, and error-handling requirements.</p>`, content_ta: `<p>நிரலாக்க மொழி மற்றும் கட்டமைப்பை தெளிவாகக் குறிப்பிடவும்.</p>` },
-            { id: 13, icon: "🔍", img: "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=800&q=80", title_en: "13. Debugging Code with AI", title_ta: "13. பிழை திருத்துதல்", content_en: `<p>Paste the error log and the code. Ask "What line is causing this and why?"</p>`, content_ta: `<p>பிழை செய்தியை கொடுத்து, எதனால் ஏற்பட்டது என கேட்கவும்.</p>` },
-            { id: 14, icon: "🌳", img: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800&q=80", title_en: "14. Tree of Thoughts", title_ta: "14. சிந்தனை மரம்", content_en: `<p>Ask the AI to propose 3 different solutions, evaluate pros/cons of each, and pick the best.</p>`, content_ta: `<p>3 வெவ்வேறு தீர்வுகளை வழங்கி, சிறந்ததை தேர்ந்தெடுக்கச் சொல்லுங்கள்.</p>` },
-            { id: 15, icon: "📚", img: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80", title_en: "15. Summarization Limits", title_ta: "15. சுருக்க வரம்புகள்", content_en: `<p>AIs suffer from "Lost in the Middle" syndrome. Put key instructions at the very end of long texts.</p>`, content_ta: `<p>முக்கிய கட்டளைகளை நீண்ட உரையின் இறுதியில் வைக்கவும்.</p>` },
-            { id: 16, icon: "🔄", img: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800&q=80", title_en: "16. Iterative Refinement", title_ta: "16. தொடர் மேம்பாடு", content_en: `<p>Never accept the first output. Reply: "Make it 20% shorter and more punchy."</p>`, content_ta: `<p>முதல் பதிலை ஏற்க வேண்டாம். "இன்னும் சுருக்கமாக எழுது" என தொடரவும்.</p>` },
-            { id: 17, icon: "📑", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80", title_en: "17. Markdown & Tables", title_ta: "17. அட்டவணைகள்", content_en: `<p>Force output into Markdown tables for easy reading.</p>${generateCodeBox('Table Format', 'Compare React and Vue. Output the result ONLY as a Markdown table with 3 columns.')}`, content_ta: `<p>பதில்களை அட்டவணையாக வழங்கக் கோரவும்.</p>` },
-            { id: 18, icon: "🎭", img: "https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&q=80", title_en: "18. Advanced Personas", title_ta: "18. மேம்பட்ட ஆளுமைகள்", content_en: `<p>Don't just say "Act as a lawyer". Say "Act as a ruthless corporate lawyer with 20 years of experience in NY."</p>`, content_ta: `<p>பாத்திரங்களை மிகத் துல்லியமாக விவரிக்கவும்.</p>` },
-            { id: 19, icon: "⚖️", img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&q=80", title_en: "19. Bias Mitigation", title_ta: "19. சார்புகளை குறைத்தல்", content_en: `<p>Explicitly instruct the AI to consider diverse perspectives in its analysis.</p>`, content_ta: `<p>பல்வேறு கண்ணோட்டங்களை கருத்தில் கொள்ள AI-க்கு அறிவுறுத்தவும்.</p>` },
-            { id: 20, icon: "🌍", img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80", title_en: "20. Translation Prompts", title_ta: "20. மொழிபெயர்ப்பு", content_en: `<p>Always specify the dialect (e.g., "Translate to formal spoken Tamil, not textbook Tamil").</p>`, content_ta: `<p>பேச்சுவழக்கு தமிழா அல்லது எழுத்துவழக்கு தமிழா என குறிப்பிடவும்.</p>` },
-            { id: 21, icon: "🧩", img: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80", title_en: "21. Fill-in-the-Blank", title_ta: "21. வெற்றிடங்களை நிரப்புதல்", content_en: `<p>Give AI a template with [BRACKETS] and ask it to only output the filled brackets.</p>`, content_ta: `<p>[BRACKETS] கொண்ட ஒரு டெம்ப்ளேட்டை கொடுத்து நிரப்பச் சொல்லுங்கள்.</p>` },
-            { id: 22, icon: "🎤", img: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=800&q=80", title_en: "22. Interview Simulation", title_ta: "22. நேர்காணல் பயிற்சி", content_en: `<p>Prompt: "Act as a Google Hiring Manager. Ask me one question at a time and critique my answer."</p>`, content_ta: `<p>AI-ஐ ஒரு நேர்காணல் செய்பவராக மாற்றி பயிற்சி பெறுங்கள்.</p>` },
-            { id: 23, icon: "📖", img: "https://images.unsplash.com/photo-1474932430478-367dbb6832c1?w=800&q=80", title_en: "23. Storytelling Frameworks", title_ta: "23. கதை சொல்லும் முறை", content_en: `<p>Force the AI to use frameworks like "The Hero's Journey" for marketing copy.</p>`, content_ta: `<p>மார்க்கெட்டிங் எழுத்துக்களுக்கு கதை சொல்லும் கட்டமைப்புகளை பயன்படுத்தவும்.</p>` },
-            { id: 24, icon: "⚡", img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80", title_en: "24. Prompt Chaining", title_ta: "24. சங்கிலி முறை", content_en: `<p>Pass the output of Prompt A directly as the input for Prompt B.</p>`, content_ta: `<p>ஒரு Prompt-இன் பதிலை அடுத்த Prompt-க்கு உள்ளீடாக கொடுக்கவும்.</p>` },
-            { id: 25, icon: "🚀", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80", title_en: "25. AI Agents & The Future", title_ta: "25. எதிர்கால AI", content_en: `<p>Agents use prompts to browse the web, write code, and execute tasks autonomously.</p>`, content_ta: `<p>எதிர்காலத்தில் AI தானே சிந்தித்து வேலைகளைச் செய்யும் (Agents).</p>` }
+            { 
+                id: 6, icon: "📊", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80", 
+                title_en: "6. Data Extraction", title_ta: "6. தரவு பிரித்தெடுத்தல்", 
+                content_en: `<p>Extract structured <b>JSON</b> arrays from unstructured, messy text.</p>${generateCodeBox('JSON Prompt', 'Read this email and output a strict JSON with keys: { "name", "date", "intent" }.')}`, 
+                content_ta: `<p>முறையற்ற உரையிலிருந்து <b>JSON தரவை</b> பிரிக்கவும்.</p>` 
+            },
+            { 
+                id: 7, icon: "⚙️", img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80", 
+                title_en: "7. Temperature Settings", title_ta: "7. வெப்பநிலை அமைப்புகள்", 
+                content_en: `<p>API <b>Temp 0.0</b> = robotic facts & code. <b>Temp 1.0</b> = creative, unpredictable chaos.</p>`, 
+                content_ta: `<p><b>Temp 0.0</b> = துல்லியமானது. <b>Temp 1.0</b> = படைப்பாற்றல் மிக்கது.</p>` 
+            },
+            { 
+                id: 8, icon: "🛡️", img: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=80", 
+                title_en: "8. Prompt Injection Security", title_ta: "8. Prompt Injection பாதுகாப்பு", 
+                content_en: `<p>Always use strict <b>delimiters</b> like \`\`\` to separate malicious user input from your core system instructions.</p>`, 
+                content_ta: `<p>பயனர் உள்ளீட்டை பிரிக்க \`\`\` போன்ற <b>குறியீடுகளைப்</b> பயன்படுத்தவும்.</p>` 
+            },
+            { 
+                id: 9, icon: "🎨", img: "https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=800&q=80", 
+                title_en: "9. Midjourney Basics", title_ta: "9. மிட்ஜர்னி அடிப்படைகள்", 
+                content_en: `<p>For AI images, specify: <b>Subject, Medium, Lighting, Camera Lens, and Aspect Ratio</b>.</p>${generateCodeBox('Midjourney', '/imagine prompt: A cyberpunk city street, neon lighting, cinematic, 35mm lens --ar 16:9')}`, 
+                content_ta: `<p>AI படங்களுக்கு: <b>பொருள், ஒளி, கேமரா லென்ஸ்</b> ஆகியவற்றைக் குறிப்பிடவும்.</p>` 
+            },
+            { 
+                id: 10, icon: "🤖", img: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&q=80", 
+                title_en: "10. Meta-Prompting", title_ta: "10. Meta-Prompting", 
+                content_en: `<p>Stop guessing. Ask the AI to <i>write the perfect prompts</i> for you based on your desired outcome.</p>`, 
+                content_ta: `<p>உங்களுக்கான prompt-களை எழுத <i>AI-யிடமே கேட்கவும்</i>.</p>` 
+            },
+            { 
+                id: 11, icon: "📝", img: "https://images.unsplash.com/photo-1455390582262-044cdead2708?w=800&q=80", 
+                title_en: "11. Tone & Voice Matching", title_ta: "11. தொனி பொருத்துதல்", 
+                content_en: `<p>Provide a <b>sample of your writing</b> and ask the AI to analyze and <i>mimic the exact tone, cadence, and vocabulary</i>.</p>`, 
+                content_ta: `<p>உங்கள் எழுத்தின் <b>ஒரு பகுதியை</b> கொடுத்து, அதே <i>பாணியிலும், தொனியிலும்</i> எழுதச் சொல்லுங்கள்.</p>` 
+            },
+            { 
+                id: 12, icon: "💻", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80", 
+                title_en: "12. Code Generation", title_ta: "12. கோடிங் உருவாக்கம்", 
+                content_en: `<p>Always explicitly specify the <b>language, framework, error-handling methods, and edge cases</b> you want addressed.</p>`, 
+                content_ta: `<p>நிரலாக்க <b>மொழி மற்றும் கட்டமைப்பை</b> தெளிவாகக் குறிப்பிடவும்.</p>` 
+            },
+            { 
+                id: 13, icon: "🔍", img: "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=800&q=80", 
+                title_en: "13. Debugging Code with AI", title_ta: "13. பிழை திருத்துதல்", 
+                content_en: `<p>Paste the error log alongside the code and ask: <i>"What exact line is causing this exception and why?"</i></p>`, 
+                content_ta: `<p>பிழை செய்தியை கொடுத்து, <i>எதனால் ஏற்பட்டது</i> என கேட்கவும்.</p>` 
+            },
+            { 
+                id: 14, icon: "🌳", img: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800&q=80", 
+                title_en: "14. Tree of Thoughts", title_ta: "14. சிந்தனை மரம்", 
+                content_en: `<p>Ask the AI to propose <b>3 different distinct solutions</b>, <i>critically evaluate</i> the pros and cons of each, and pick the best one.</p>`, 
+                content_ta: `<p><b>3 வெவ்வேறு தீர்வுகளை</b> வழங்கி, சிறந்ததை தேர்ந்தெடுக்கச் சொல்லுங்கள்.</p>` 
+            },
+            { 
+                id: 15, icon: "📚", img: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80", 
+                title_en: "15. Summarization Limits", title_ta: "15. சுருக்க வரம்புகள்", 
+                content_en: `<p>AIs suffer from <b>"Lost in the Middle" syndrome</b>. Always put your most critical instructions at the very end of long texts.</p>`, 
+                content_ta: `<p>முக்கிய கட்டளைகளை நீண்ட உரையின் <b>இறுதியில்</b> வைக்கவும்.</p>` 
+            },
+            { 
+                id: 16, icon: "🔄", img: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800&q=80", 
+                title_en: "16. Iterative Refinement", title_ta: "16. தொடர் மேம்பாடு", 
+                content_en: `<p>Never accept the first output. Use conversational chains: <i>"Now make it 20% shorter and much more punchy."</i></p>`, 
+                content_ta: `<p>முதல் பதிலை ஏற்க வேண்டாம். <i>"இன்னும் சுருக்கமாக எழுது"</i> என தொடரவும்.</p>` 
+            },
+            { 
+                id: 17, icon: "📑", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80", 
+                title_en: "17. Markdown & Tables", title_ta: "17. அட்டவணைகள்", 
+                content_en: `<p>Force output into <b>Markdown tables</b> for incredibly easy reading and direct exporting.</p>${generateCodeBox('Table Format', 'Compare React and Vue. Output the result ONLY as a Markdown table with 3 columns.')}`, 
+                content_ta: `<p>பதில்களை <b>அட்டவணையாக</b> வழங்கக் கோரவும்.</p>` 
+            },
+            { 
+                id: 18, icon: "🎭", img: "https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&q=80", 
+                title_en: "18. Advanced Personas", title_ta: "18. மேம்பட்ட ஆளுமைகள்", 
+                content_en: `<p>Don't just say "Act as a lawyer". Say: <b>"Act as a ruthless corporate lawyer with 20 years of M&A experience in New York."</b></p>`, 
+                content_ta: `<p>பாத்திரங்களை <b>மிகத் துல்லியமாக</b> விவரிக்கவும்.</p>` 
+            },
+            { 
+                id: 19, icon: "⚖️", img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&q=80", 
+                title_en: "19. Bias Mitigation", title_ta: "19. சார்புகளை குறைத்தல்", 
+                content_en: `<p>Explicitly instruct the AI to consider <b>diverse, counter-intuitive perspectives</b> in its analysis to avoid echo chambers.</p>`, 
+                content_ta: `<p>பல்வேறு <b>கண்ணோட்டங்களை</b> கருத்தில் கொள்ள AI-க்கு அறிவுறுத்தவும்.</p>` 
+            },
+            { 
+                id: 20, icon: "🌍", img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80", 
+                title_en: "20. Translation Prompts", title_ta: "20. மொழிபெயர்ப்பு", 
+                content_en: `<p>Always specify the <b>exact dialect and formality</b> (e.g., "Translate this to casual spoken Tamil, absolutely no textbook formal Tamil").</p>`, 
+                content_ta: `<p>பேச்சுவழக்கு தமிழா அல்லது எழுத்துவழக்கு தமிழா என <b>குறிப்பிடவும்</b>.</p>` 
+            },
+            { 
+                id: 21, icon: "🧩", img: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80", 
+                title_en: "21. Fill-in-the-Blank", title_ta: "21. வெற்றிடங்களை நிரப்புதல்", 
+                content_en: `<p>Give the AI a template with <b>[BRACKETS]</b> and explicitly command it to <i>only output the text to fill the brackets</i>.</p>`, 
+                content_ta: `<p><b>[BRACKETS]</b> கொண்ட ஒரு டெம்ப்ளேட்டை கொடுத்து நிரப்பச் சொல்லுங்கள்.</p>` 
+            },
+            { 
+                id: 22, icon: "🎤", img: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=800&q=80", 
+                title_en: "22. Interview Simulation", title_ta: "22. நேர்காணல் பயிற்சி", 
+                content_en: `<p>Prompt: <i>"Act as a Senior Google Hiring Manager. Ask me one technical question at a time, wait for my reply, and fiercely critique my answer."</i></p>`, 
+                content_ta: `<p>AI-ஐ ஒரு நேர்காணல் செய்பவராக மாற்றி <i>பயிற்சி பெறுங்கள்</i>.</p>` 
+            },
+            { 
+                id: 23, icon: "📖", img: "https://images.unsplash.com/photo-1474932430478-367dbb6832c1?w=800&q=80", 
+                title_en: "23. Storytelling Frameworks", title_ta: "23. கதை சொல்லும் முறை", 
+                content_en: `<p>Force the AI to use established emotional frameworks like <b>"The Hero's Journey"</b> or <b>"PAS (Problem-Agitation-Solution)"</b> for marketing copy.</p>`, 
+                content_ta: `<p>மார்க்கெட்டிங் எழுத்துக்களுக்கு கதை சொல்லும் <b>கட்டமைப்புகளை</b> பயன்படுத்தவும்.</p>` 
+            },
+            { 
+                id: 24, icon: "⚡", img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80", 
+                title_en: "24. Prompt Chaining", title_ta: "24. சங்கிலி முறை", 
+                content_en: `<p>Connect AI outputs systematically. Pass the <b>exact output of Prompt A</b> directly as the structured <b>input for Prompt B</b>.</p>`, 
+                content_ta: `<p>ஒரு Prompt-இன் பதிலை அடுத்த Prompt-க்கு <b>உள்ளீடாக</b> கொடுக்கவும்.</p>` 
+            },
+            { 
+                id: 25, icon: "🚀", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80", 
+                title_en: "25. AI Agents & The Future", title_ta: "25. எதிர்கால AI", 
+                content_en: `<p><b>Autonomous Agents</b> use your system prompts to continuously browse the web, write code, and execute multi-step tasks without human intervention.</p>`, 
+                content_ta: `<p>எதிர்காலத்தில் AI தானே சிந்தித்து வேலைகளைச் செய்யும் <b>(Agents)</b>.</p>` 
+            }
         ];
 
         // ==========================================
@@ -608,7 +708,7 @@
 
         document.getElementById('whatsapp-claim-btn').onclick = () => {
             const msg = `Hi Admin! I passed the 25-module Exam. My name is ${currentUserData.fullName} and my UTR is ${currentUserData.upiTransactionId}. Please verify my payment.`;
-            window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`, '_blank');
+            window.open(`https://wa.me/919443042733?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
         // Initialize state replacement for first load
