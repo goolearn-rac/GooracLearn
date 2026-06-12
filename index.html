@@ -160,16 +160,67 @@
         .quiz-option input[type="radio"] { display: none; }
         .quiz-option:has(input:checked) { border-color: var(--primary); background: rgba(37,99,235,0.05); color: var(--primary); }
 
-        /* Certificate */
+        /* Multi-Color A4 Certificate Styling */
         .certificate-wrapper {
-            background: white; border: 12px solid #0f172a; padding: 40px 20px; text-align: center;
-            border-radius: 4px; box-shadow: var(--shadow-lg); color: #0f172a; margin-bottom: 30px;
-            position: relative; overflow: hidden;
+            background: #ffffff;
+            background-image: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            border: 12px solid #0f172a;
+            padding: 6%; 
+            text-align: center;
+            border-radius: 8px; 
+            box-shadow: var(--shadow-lg); 
+            color: #0f172a;
+            margin: 0 auto 30px auto;
+            position: relative; 
+            overflow: hidden;
+            width: 100%;
+            max-width: 1122px; /* Approx A4 pixel width */
+            aspect-ratio: 1.414; /* A4 Landscape aspect ratio */
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-sizing: border-box;
         }
-        .cert-header { font-family: 'Playfair Display', serif; font-size: 2rem; color: #1e293b; margin-bottom: 10px; }
-        .cert-sub { font-size: 0.8rem; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; }
-        .cert-name { font-size: 2rem; font-weight: 700; border-bottom: 2px solid #2563eb; padding-bottom: 10px; margin: 0 auto 20px; display: inline-block; min-width: 80%; }
-        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem; color: #0f172a; border-top: 1px solid #cbd5e1; padding-top: 10px; display: inline-block; width: 150px; }
+        .certificate-wrapper::before {
+            content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 2px solid #d4af37; /* Gold inner border */
+            pointer-events: none; z-index: 1;
+        }
+        .certificate-wrapper::after {
+            content: 'GOORAC'; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: clamp(60px, 15vw, 180px); color: rgba(0,0,0,0.03); font-weight: 900;
+            pointer-events: none; z-index: 0;
+        }
+        .cert-content { z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1;}
+        .cert-header { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 3.5rem); color: #1e293b; margin-bottom: 5px; font-weight: 800;}
+        .cert-sub { font-size: clamp(0.7rem, 1.5vw, 1.2rem); color: #d4af37; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 30px; font-weight: bold; }
+        .cert-name { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 5vw, 3.5rem); font-weight: 700; border-bottom: 2px solid #d4af37; padding-bottom: 10px; margin: 0 auto 20px; display: inline-block; min-width: 60%; color: #2563eb; line-height: 1.2;}
+        .cert-body { font-size: clamp(0.85rem, 2vw, 1.2rem); color: #475569; margin-bottom: 20px; max-width: 85%; margin-left: auto; margin-right: auto; line-height: 1.6;}
+        
+        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; z-index: 2; position: relative; margin-top: auto;}
+        .cert-qr-container { text-align: center; }
+        .cert-qr { width: clamp(60px, 12vw, 110px); height: clamp(60px, 12vw, 110px); border: 3px solid #fff; box-shadow: var(--shadow-md); border-radius: 6px; background: white;}
+        .cert-badge { width: clamp(60px, 12vw, 110px); height: clamp(60px, 12vw, 110px); background: radial-gradient(circle, #ffd700, #d4af37); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: clamp(0.5rem, 1vw, 0.75rem); border: 2px dashed white; line-height: 1.2;}
+        .cert-signature-block { text-align: center; }
+        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.2rem, 3vw, 2.5rem); color: #0f172a; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 150px; }
+
+        /* Print formatting forces A4 landscape perfectly */
+        @media print {
+            @page { size: A4 landscape; margin: 0; }
+            body { background: white; margin: 0; }
+            body * { visibility: hidden; }
+            #cert-pdf-view, #cert-pdf-view * { visibility: visible; }
+            #cert-pdf-view { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh;}
+            .certificate-wrapper { 
+                width: 297mm !important; height: 210mm !important; 
+                margin: 0 !important; border: 15px solid #0f172a !important; 
+                max-width: none !important; aspect-ratio: auto !important;
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important; 
+                box-shadow: none !important;
+            }
+            .btn { display: none !important; }
+            .top-nav { display: none !important; }
+        }
     </style>
 </head>
 <body>
@@ -280,19 +331,45 @@
         <button id="submit-quiz-btn" class="btn">Submit Exam</button>
     </div>
 
-    <!-- 7. Certificate -->
-    <div id="cert-screen" class="screen">
-        <div id="cert-pdf-view" style="display:none;">
-            <div class="certificate-wrapper">
-                <div class="cert-header">Goorac Corporation</div>
-                <div class="cert-sub">Certificate of Mastery</div>
-                <div style="font-size: 1rem; color: #475569; margin-bottom: 20px;">Awarded to</div>
-                <div class="cert-name" id="cert-name-display">Name</div>
-                <div style="font-size: 0.95rem; color: #475569; margin-bottom: 30px;">For completing all 25 modules of the Prompt Engineering Masterclass.</div>
-                <div class="cert-signature">Goorac Admin</div>
+    <!-- 7. Multi-Color Digital Certificate -->
+    <div id="cert-screen" class="screen" style="max-width: 100%;">
+        <div id="cert-pdf-view" style="display:none; width: 100%;">
+            
+            <div class="certificate-wrapper" id="printable-cert">
+                <div class="cert-content">
+                    <div class="cert-header">Goorac Corporation</div>
+                    <div class="cert-sub">Certificate of Professional Mastery</div>
+                    <div class="cert-body">This document officially certifies that</div>
+                    <div class="cert-name" id="cert-name-display">Student Name</div>
+                    <div class="cert-body">
+                        has successfully completed all 25 advanced modules and passed the comprehensive final examination for the <b>Prompt Engineering Masterclass</b>.
+                    </div>
+                </div>
+                
+                <div class="cert-footer">
+                    <!-- Dynamic QR Block -->
+                    <div class="cert-qr-container">
+                        <img id="cert-qr-img" class="cert-qr" src="" alt="Verified QR">
+                        <div style="font-size: clamp(0.5rem, 1vw, 0.75rem); color: #64748b; margin-top: 4px; font-weight: bold;">VERIFIED SECURE</div>
+                    </div>
+                    
+                    <!-- Official Stamp -->
+                    <div class="cert-badge">
+                        OFFICIAL<br>CERTIFIED
+                    </div>
+
+                    <!-- Digital Signature -->
+                    <div class="cert-signature-block">
+                        <div class="cert-signature">Siva Manikandan M</div>
+                        <div style="font-size: clamp(0.6rem, 1.2vw, 0.9rem); color: #64748b; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Director of Education</div>
+                    </div>
+                </div>
             </div>
-            <button onclick="window.print()" class="btn btn-success" style="margin-bottom: 15px;">Save PDF</button>
-            <button onclick="showScreen('dashboard-screen')" class="btn btn-outline">Back to Dashboard</button>
+
+            <div style="display: flex; gap: 15px; max-width: 400px; margin: 0 auto;">
+                <button onclick="window.print()" class="btn btn-success">Save High-Res PDF</button>
+                <button onclick="showScreen('dashboard-screen')" class="btn btn-outline">Back to Dashboard</button>
+            </div>
         </div>
 
         <div id="cert-whatsapp-view" style="display:none; text-align:center;" class="card">
@@ -304,9 +381,10 @@
 
     <!-- APP LOGIC -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+        /* FIXED FIREBASE VERSIONS TO STABLE CDN */
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDeXk6z_5mYQZi_xIsQsN935KxuIBxAM3w",
@@ -559,7 +637,13 @@
             document.getElementById('viewer-content').innerHTML = lang === 'en' ? mod.content_en : mod.content_ta;
         };
 
-        document.getElementById('google-login-btn').onclick = () => signInWithPopup(auth, provider);
+        // FIXED ERROR HANDLING ON CLICK SO YOU KNOW IF POPUP FAILS
+        document.getElementById('google-login-btn').onclick = () => {
+            signInWithPopup(auth, provider).catch(error => {
+                console.error("Login Error:", error);
+                showToast("Sign In Failed: " + error.message);
+            });
+        };
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -700,6 +784,11 @@
                 document.getElementById('cert-pdf-view').style.display = 'block';
                 document.getElementById('cert-whatsapp-view').style.display = 'none';
                 document.getElementById('cert-name-display').innerText = currentUserData.fullName;
+                
+                // NEW: Dynamic QR Code encoding the user's name
+                const encodedData = encodeURIComponent("Verified Certificate for: " + currentUserData.fullName + " | Goorac Corporation");
+                document.getElementById('cert-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedData}`;
+
             } else {
                 document.getElementById('cert-pdf-view').style.display = 'none';
                 document.getElementById('cert-whatsapp-view').style.display = 'block';
