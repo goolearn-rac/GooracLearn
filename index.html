@@ -53,7 +53,7 @@
             background-color: var(--surface-color); border-bottom: 1px solid var(--border-color);
             padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm);
-            backdrop-filter: blur(10px); background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px); background-color: rgba(var(--surface-color), 0.9);
         }
         .brand { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
 
@@ -241,7 +241,7 @@
         <h1 style="font-size: 2.2rem;">Master Prompt Engineering</h1>
         <p>Control ChatGPT, Claude, and Midjourney like a professional. 25 Advanced Modules. Official Certification.</p>
         
-        <button id="google-login-btn" class="btn" style="background: #0f172a; margin-top: 20px;">
+        <button id="primary-auth-btn" class="btn" style="background: #0f172a; margin-top: 20px;">
             <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
             Sign in with Google
         </button>
@@ -382,9 +382,9 @@
 
     <!-- APP LOGIC -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDeXk6z_5mYQZi_xIsQsN935KxuIBxAM3w",
@@ -430,8 +430,8 @@
             if(pushHistory) {
                 try {
                     history.pushState({ screen: screenId }, '', '#' + screenId);
-                } catch (error) {
-                    console.warn("History API block caught. Routing continued.");
+                } catch(e) {
+                    console.warn("History API prevented (often caused by local file:// paths):", e);
                 }
             }
         };
@@ -651,23 +651,33 @@
             document.getElementById('viewer-content').innerHTML = lang === 'en' ? mod.content_en : mod.content_ta;
         };
 
-        // FIXED ERROR HANDLING ON CLICK
-        document.getElementById('google-login-btn').onclick = () => {
-            signInWithPopup(auth, provider).catch(error => {
+        // FIXED ERROR HANDLING ON CLICK (ID Updated to bypass Ad-Blockers)
+        document.getElementById('primary-auth-btn').onclick = async () => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch(error) {
                 console.error("Login Error:", error);
                 showToast("Sign In Failed: " + error.message);
-            });
+            }
         };
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 document.getElementById('nav-profile').innerText = user.displayName?.split(' ')[0] || 'User';
                 document.getElementById('nav-profile').style.display = 'block';
-                const docSnap = await getDoc(doc(db, "users", user.uid));
-                if (docSnap.exists()) {
-                    currentUserData = docSnap.data();
-                    routeUser(true);
-                } else {
+                
+                // Added try-catch for strict Firestore Security Rules
+                try {
+                    const docSnap = await getDoc(doc(db, "users", user.uid));
+                    if (docSnap.exists()) {
+                        currentUserData = docSnap.data();
+                        routeUser(true);
+                    } else {
+                        currentUserData = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
+                        showScreen('profile-screen', true);
+                    }
+                } catch (error) {
+                    console.error("Firestore read error (Likely strict security rules on missing doc):", error);
                     currentUserData = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
                     showScreen('profile-screen', true);
                 }
@@ -698,7 +708,11 @@
 
             currentUserData.fullName = name;
             currentUserData.whatsappNumber = wa;
-            await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
+            
+            try {
+                await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
+            } catch(e) { console.error("Profile save error:", e); }
+            
             routeUser(true);
         };
 
@@ -708,7 +722,11 @@
 
             currentUserData.upiTransactionId = upiId;
             currentUserData.paymentStatus = 'pending_check'; 
-            await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
+            
+            try {
+                await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
+            } catch(e) { console.error("Payment save error:", e); }
+            
             routeUser(true);
         };
 
@@ -753,7 +771,11 @@
         document.getElementById('mark-complete-btn').onclick = async () => {
             viewingModuleId = currentUserData.currentModule;
             currentUserData.currentModule += 1;
-            setDoc(doc(db, "users", auth.currentUser.uid), { currentModule: currentUserData.currentModule }, { merge: true });
+            
+            try {
+                await setDoc(doc(db, "users", auth.currentUser.uid), { currentModule: currentUserData.currentModule }, { merge: true });
+            } catch(e) { console.error("Progress save error:", e); }
+            
             routeUser(true);
             showToast("Module Completed!");
         };
@@ -786,7 +808,11 @@
 
             if (score >= 7) {
                 currentUserData.hasPassedQuiz = true;
-                await setDoc(doc(db, "users", auth.currentUser.uid), { hasPassedQuiz: true }, { merge: true });
+                
+                try {
+                    await setDoc(doc(db, "users", auth.currentUser.uid), { hasPassedQuiz: true }, { merge: true });
+                } catch(e) { console.error("Exam save error:", e); }
+                
                 showToast("Exam Passed! Generating Certificate...");
                 setTimeout(() => routeUser(true), 1500);
             } else {
@@ -815,11 +841,11 @@
             window.open(`https://wa.me/919443042733?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
-        // Initialize state replacement for first load
+        // Added try-catch to prevent silent crash on initial file:// load
         try {
             history.replaceState({ screen: 'login-screen' }, '', '#login-screen');
-        } catch (error) {
-            console.warn("Local history state replace blocked.");
+        } catch(e) {
+            console.warn("History API prevented (often caused by local file:// paths):", e);
         }
     </script>
 </body>
