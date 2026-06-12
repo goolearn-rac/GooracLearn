@@ -4,234 +4,332 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Goorac Learn | Prompt Engineering</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
     <style>
-        /* System Light/Dark Theme Variables */
+        /* Premium SaaS Theme Variables */
         :root {
-            --bg-color: #f0f2f5;
-            --text-color: #1c1e21;
-            --card-bg: #ffffff;
-            --primary-blue: #1877f2;
-            --primary-hover: #166fe5;
-            --border-color: #dddfe2;
-            --success: #31a24c;
-            --locked: #8a8d91;
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --border-color: #e2e8f0;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --locked-bg: #f1f5f9;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-lg: 12px;
+            --radius-xl: 16px;
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #18191a;
-                --text-color: #e4e6eb;
-                --card-bg: #242526;
-                --primary-blue: #2d88ff;
-                --primary-hover: #1877f2;
-                --border-color: #3e4042;
-                --success: #2e8f46;
-                --locked: #b0b3b8;
+                --bg-color: #0f172a;
+                --surface-color: #1e293b;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --border-color: #334155;
+                --locked-bg: #0f172a;
+                --success-bg: #064e3b;
             }
         }
 
-        /* Global Reset & Typography */
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+        /* Global Reset */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            background-color: var(--bg-color); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
-        * { box-sizing: border-box; }
 
-        /* Navigation */
+        /* Top Navigation */
         .top-nav {
-            background-color: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            background-color: var(--surface-color); border-bottom: 1px solid var(--border-color);
+            padding: 16px 24px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm);
         }
-        .brand { font-size: 20px; font-weight: 800; color: var(--primary-blue); }
-        .lang-toggle {
-            background: none; border: 1px solid var(--border-color);
-            color: var(--text-color); padding: 5px 10px; border-radius: 20px;
-            cursor: pointer; font-size: 14px; font-weight: bold;
+        .brand { font-size: 22px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+
+        /* Screen Management */
+        .screen { display: none; flex: 1; padding: 40px 20px; max-width: 640px; margin: 0 auto; width: 100%; }
+        .active-screen { display: block; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Shared Components */
+        h1, h2, h3 { font-weight: 700; margin-bottom: 15px; line-height: 1.2; letter-spacing: -0.5px; }
+        p { margin-bottom: 20px; color: var(--text-muted); font-size: 1.05rem; }
+        
+        .card {
+            background: var(--surface-color); border-radius: var(--radius-xl);
+            border: 1px solid var(--border-color); padding: 30px;
+            box-shadow: var(--shadow-md); margin-bottom: 24px;
         }
 
-        /* Screen Containers */
-        .screen {
-            display: none;
-            flex: 1;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-            width: 100%;
-        }
-        .active-screen { display: block; animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Typography & Elements */
-        h2 { margin-top: 0; }
-        p { line-height: 1.6; }
         .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
+        .input-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main); }
         .input-group input {
-            width: 100%; padding: 12px; border: 1px solid var(--border-color);
-            border-radius: 8px; background-color: var(--bg-color); color: var(--text-color);
-            font-size: 16px;
+            width: 100%; padding: 14px 16px; border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); background-color: var(--bg-color); 
+            color: var(--text-main); font-size: 1rem; transition: 0.2s; outline: none;
         }
-        
-        .primary-btn {
-            background-color: var(--primary-blue); color: white; border: none;
-            border-radius: 8px; padding: 15px; width: 100%; font-size: 16px;
-            font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .primary-btn:hover { background-color: var(--primary-hover); }
-        .success-btn { background-color: var(--success); color: white; border: none; border-radius: 8px; padding: 15px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px;}
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
 
-        /* Dashboard List */
-        .module-list { list-style: none; padding: 0; margin: 0; }
+        .btn {
+            background-color: var(--primary); color: white; border: none;
+            border-radius: var(--radius-lg); padding: 16px; width: 100%; font-size: 1rem;
+            font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+        .btn-success { background-color: var(--success); }
+        .btn-success:hover { background-color: #15803d; }
+        .btn-outline { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
+
+        /* Dashboard & Modules */
+        .progress-container { margin-bottom: 30px; }
+        .progress-bar-bg { background: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px; }
+        .progress-bar-fill { background: var(--primary); height: 100%; width: 0%; transition: width 0.5s ease; }
+
         .module-item {
-            background-color: var(--card-bg); border: 1px solid var(--border-color);
-            border-radius: 12px; padding: 16px; margin-bottom: 12px;
+            background-color: var(--surface-color); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px;
             display: flex; align-items: center; justify-content: space-between;
-            cursor: pointer;
+            cursor: pointer; transition: 0.2s; box-shadow: var(--shadow-sm);
         }
-        .module-item.locked { opacity: 0.6; cursor: not-allowed; }
-        .module-icon { font-size: 24px; margin-right: 15px; }
-        .module-info { flex: 1; }
-        .module-title { font-weight: 600; font-size: 16px; margin: 0; }
-        .module-status { font-size: 12px; color: var(--locked); margin-top: 4px; }
-
-        /* Payment & Perks */
-        .perks-box { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-        .perks-list { margin: 10px 0 0 0; padding-left: 20px; line-height: 1.8; }
-        .qr-container { text-align: center; background: white; padding: 15px; border-radius: 12px; display: inline-block; margin-bottom: 15px; }
+        .module-item:hover:not(.locked) { border-color: var(--primary); transform: translateX(4px); }
+        .module-item.locked { background-color: var(--locked-bg); opacity: 0.7; cursor: not-allowed; }
+        .module-item.completed { border-left: 4px solid var(--success); }
         
-        /* Certificate */
-        .cert-container { border: 8px solid var(--primary-blue); padding: 30px; text-align: center; border-radius: 12px; background: white; color: black; margin-bottom: 20px; }
+        .mod-icon { font-size: 28px; width: 50px; height: 50px; background: var(--bg-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
+        .mod-details { flex: 1; }
+        .mod-title { font-weight: 600; font-size: 1.1rem; color: var(--text-main); margin-bottom: 4px; }
+        .mod-status { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); }
+
+        /* Rich Content Viewer */
+        .content-body h3 { margin-top: 30px; font-size: 1.3rem; color: var(--primary); }
+        .content-body ul { margin-bottom: 20px; padding-left: 20px; color: var(--text-muted); }
+        .content-body li { margin-bottom: 10px; }
+        
+        .prompt-box {
+            background: #1e293b; color: #f8fafc; padding: 20px; border-radius: var(--radius-lg);
+            margin: 20px 0; border-left: 4px solid var(--primary); font-family: monospace; font-size: 0.95rem;
+        }
+        .prompt-box .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; display: block; margin-bottom: 8px; }
+        .prompt-box.bad { border-left-color: #ef4444; }
+
+        .lang-switch-bar {
+            display: flex; background: var(--locked-bg); padding: 5px; border-radius: 30px; width: fit-content; margin-bottom: 30px;
+        }
+        .lang-btn {
+            background: transparent; border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; color: var(--text-muted); transition: 0.2s;
+        }
+        .lang-btn.active { background: var(--surface-color); color: var(--primary); box-shadow: var(--shadow-sm); }
+
+        /* Modern Quiz UI */
+        .quiz-question { margin-bottom: 40px; }
+        .quiz-question h3 { font-size: 1.2rem; margin-bottom: 16px; }
+        
+        .quiz-option {
+            display: block; padding: 16px 20px; border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg); margin-bottom: 12px; cursor: pointer;
+            transition: 0.2s; font-weight: 500; background: var(--surface-color);
+        }
+        .quiz-option:hover { border-color: var(--primary); background: var(--bg-color); }
+        .quiz-option input[type="radio"] { display: none; }
+        /* When radio is checked, style the parent label */
+        .quiz-option:has(input:checked) {
+            border-color: var(--primary); background: rgba(37,99,235,0.05); color: var(--primary);
+        }
+
+        /* Premium Certificate */
+        .certificate-wrapper {
+            background: white; border: 12px solid #0f172a; padding: 40px; text-align: center;
+            border-radius: 4px; box-shadow: var(--shadow-lg); color: #0f172a; margin-bottom: 30px;
+            position: relative; overflow: hidden;
+        }
+        .certificate-wrapper::before {
+            content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 2px solid #cbd5e1; pointer-events: none;
+        }
+        .cert-header { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #1e293b; margin-bottom: 10px; }
+        .cert-sub { font-size: 1rem; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 40px; }
+        .cert-name { font-size: 2.5rem; font-weight: 700; border-bottom: 2px solid #2563eb; padding-bottom: 10px; margin: 0 auto 30px; display: inline-block; min-width: 80%; }
+        .cert-body { font-size: 1.1rem; color: #475569; margin-bottom: 40px; max-width: 80%; margin-left: auto; margin-right: auto; }
+        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; color: #0f172a; border-top: 1px solid #cbd5e1; padding-top: 10px; display: inline-block; width: 200px; }
+
     </style>
 </head>
 <body>
 
-    <!-- Top Navigation -->
+    <!-- Header -->
     <div class="top-nav">
-        <div class="brand">Goorac Learn</div>
-        <button class="lang-toggle" onclick="toggleLanguage()" id="lang-btn">English / தமிழ்</button>
+        <div class="brand">Goorac <span style="color:var(--text-main)">Learn</span></div>
     </div>
 
-    <!-- 1. Login Screen -->
-    <div id="login-screen" class="screen">
-        <h2 data-en="Master Prompt Engineering" data-ta="Prompt Engineering-ஐ கற்றுக்கொள்ளுங்கள்">Master Prompt Engineering</h2>
-        <p data-en="Get officially certified by Goorac Corporation and master the skills of the future." data-ta="Goorac Corporation-ஆல் சான்றளிக்கப்பட்டு, எதிர்காலத் திறன்களை வளர்த்துக்கொள்ளுங்கள்."></p>
-        <button id="google-login-btn" class="primary-btn">
-            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-            Continue with Google
-        </button>
+    <!-- 1. Landing / Login -->
+    <div id="login-screen" class="screen active-screen">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary); margin-bottom: 20px;">
+                <path d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+            </svg>
+            <h1 style="font-size: 2.5rem;">Master Prompt Engineering</h1>
+            <p>Become a certified AI communicator. Learn how to control ChatGPT, Claude, and Midjourney to get exactly what you want.</p>
+        </div>
+        
+        <div class="card">
+            <h3 style="text-align: center; margin-bottom: 20px;">Begin Your Journey</h3>
+            <button id="google-login-btn" class="btn" style="background: #0f172a;">
+                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                Sign in with Google
+            </button>
+        </div>
     </div>
 
-    <!-- 2. Profile Screen -->
+    <!-- 2. Profile Setup -->
     <div id="profile-screen" class="screen">
-        <h2>Complete Your Profile</h2>
-        <p>This name will appear on your final Goorac Certificate.</p>
-        <div class="input-group">
-            <label>Full Name</label>
-            <input type="text" id="prof-name" placeholder="Siva Manikandan M">
+        <div class="card">
+            <h2>Certificate Details</h2>
+            <p>How should your name appear on your Goorac Certificate?</p>
+            <div class="input-group">
+                <label>Full Legal Name</label>
+                <input type="text" id="prof-name" placeholder="e.g., Siva Manikandan M">
+            </div>
+            <div class="input-group">
+                <label>WhatsApp Number (For Support)</label>
+                <input type="tel" id="prof-wa" placeholder="+91 9876543210">
+            </div>
+            <div class="input-group">
+                <label>Highest Qualification</label>
+                <input type="text" id="prof-degree" placeholder="e.g., BBA Digital Marketing">
+            </div>
+            <button id="save-profile-btn" class="btn">Save & Continue</button>
         </div>
-        <div class="input-group">
-            <label>WhatsApp Number</label>
-            <input type="tel" id="prof-wa" placeholder="+91 9876543210">
-        </div>
-        <div class="input-group">
-            <label>College/Degree</label>
-            <input type="text" id="prof-degree" placeholder="BBA Digital Marketing">
-        </div>
-        <button id="save-profile-btn" class="primary-btn">Save & Continue</button>
     </div>
 
-    <!-- 3. Payment Screen -->
+    <!-- 3. Payment Wall -->
     <div id="payment-screen" class="screen">
         <h2>Unlock the Course</h2>
+        <p>You are one step away from accessing the 10 premium modules.</p>
         
-        <div class="perks-box">
-            <strong>What you get for ₹149:</strong>
-            <ul class="perks-list">
-                <li>10 In-depth Prompt Engineering Modules</li>
-                <li>Dual Language (English & Tamil)</li>
-                <li>Goorac Corporation Verified Certificate</li>
-                <li>Lifetime Dashboard Access</li>
+        <div class="card" style="border: 2px solid var(--primary); background: rgba(37,99,235,0.03);">
+            <h3 style="color: var(--primary);">What you get for ₹149:</h3>
+            <ul style="padding-left: 20px; margin-bottom: 20px; color: var(--text-main);">
+                <li style="margin-bottom: 8px;"><b>10 Deep-Dive Modules:</b> Real-world prompt frameworks.</li>
+                <li style="margin-bottom: 8px;"><b>Bilingual Support:</b> Switch between English and Tamil instantly.</li>
+                <li style="margin-bottom: 8px;"><b>Official Certification:</b> Downloadable Goorac PDF for your resume.</li>
             </ul>
-        </div>
 
-        <div style="text-align: center;">
-            <div class="qr-container">
-                <!-- Auto-generates QR code for your specific UPI ID and amount -->
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi%3A%2F%2Fpay%3Fpa%3Dsivamanihandan%40oksbi%26pn%3DGoorac%20Corporation%26am%3D149.00%26cu%3DINR" alt="UPI QR Code" width="200">
+            <div style="text-align: center; margin: 30px 0;">
+                <div style="background: white; padding: 15px; border-radius: 12px; display: inline-block; border: 1px solid var(--border-color);">
+                    <!-- Auto-generates QR code -->
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi%3A%2F%2Fpay%3Fpa%3Dsivamanihandan%40oksbi%26pn%3DGoorac%20Corporation%26am%3D149.00%26cu%3DINR" alt="UPI QR Code" width="180">
+                </div>
+                <p style="margin-top: 15px; font-weight: bold; color: var(--text-main);">Scan to pay ₹149</p>
             </div>
-            <p>Scan to pay <b>₹149</b></p>
-            
-            <a href="upi://pay?pa=sivamanihandan@oksbi&pn=Goorac%20Corporation&am=149.00&cu=INR&tn=Prompt%20Engineering%20Course" class="success-btn" style="text-decoration:none; display:inline-block; margin-bottom: 20px;">
-                Open UPI App on Phone
-            </a>
-        </div>
 
-        <div class="input-group">
-            <label>Enter 12-Digit UPI Transaction ID (UTR)</label>
-            <input type="text" id="upi-input" placeholder="e.g. 312345678901">
+            <div class="input-group">
+                <label>Verify Payment: Enter your 12-Digit UTR Number</label>
+                <input type="text" id="upi-input" placeholder="e.g. 312345678901">
+            </div>
+            <button id="submit-payment-btn" class="btn">Submit Payment</button>
         </div>
-        <button id="submit-payment-btn" class="primary-btn">Submit Payment</button>
     </div>
 
-    <!-- 4. Dashboard Screen -->
+    <!-- 4. Dashboard -->
     <div id="dashboard-screen" class="screen">
-        <h2 data-en="Your Learning Modules" data-ta="உங்கள் கற்றல் தொகுதிகள்">Your Learning Modules</h2>
-        <ul class="module-list" id="module-list-container">
-            <!-- JavaScript will inject modules here -->
-        </ul>
-        <button id="start-quiz-btn" class="success-btn" style="display:none; margin-top:20px;">Take Final Quiz</button>
-    </div>
-
-    <!-- 5. Module Viewer Screen -->
-    <div id="module-viewer-screen" class="screen">
-        <button onclick="showScreen('dashboard-screen')" style="background:none; border:none; color:var(--primary-blue); font-weight:bold; cursor:pointer; padding: 0 0 20px 0;">← Back to Dashboard</button>
-        <h2 id="viewer-title">Module Title</h2>
-        <div id="viewer-content" style="font-size: 16px; line-height: 1.8; margin-bottom: 40px;"></div>
-        <button id="mark-complete-btn" class="primary-btn">Mark Complete & Next</button>
-    </div>
-
-    <!-- 6. Quiz Screen -->
-    <div id="quiz-screen" class="screen">
-        <h2>Final Certification Quiz</h2>
-        <p>Answer correctly to generate your certificate.</p>
-        <div id="quiz-container"></div>
-        <button id="submit-quiz-btn" class="primary-btn">Submit Answers</button>
-    </div>
-
-    <!-- 7. Certificate / WhatsApp Screen -->
-    <div id="cert-screen" class="screen">
-        <div id="cert-pdf-view" style="display:none;">
-            <div class="cert-container" id="printable-cert">
-                <h1 style="color:#1877f2; margin-bottom:5px;">Goorac Corporation</h1>
-                <h3 style="margin-top:0; color:#555;">Certificate of Completion</h3>
-                <p>This certifies that</p>
-                <h2 id="cert-name-display" style="font-size: 28px; border-bottom: 2px solid #ccc; padding-bottom: 10px; display: inline-block; min-width: 80%;">Name</h2>
-                <p>has successfully completed the <b>Prompt Engineering Masterclass</b>.</p>
+        <div class="progress-container">
+            <h2>Your Curriculum</h2>
+            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">
+                <span>Course Progress</span>
+                <span id="progress-text">0%</span>
             </div>
-            <button onclick="window.print()" class="primary-btn">Save PDF / Print</button>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-bar"></div>
+            </div>
         </div>
 
-        <div id="cert-whatsapp-view" style="display:none; text-align:center;">
-            <h2>🎉 You Passed!</h2>
-            <p>Your payment is currently being verified. Click below to send a screenshot of your payment on WhatsApp, and we will issue your certificate instantly!</p>
-            <button id="whatsapp-claim-btn" class="success-btn">Claim on WhatsApp</button>
+        <div id="module-list-container">
+            <!-- JS injects modules here -->
+        </div>
+        
+        <div id="quiz-unlock-banner" style="display:none; margin-top: 30px;">
+            <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
+                <h3 style="color: var(--success);">🎉 All Modules Completed!</h3>
+                <p style="color: #166534;">You are now ready to take the certification exam.</p>
+                <button id="start-quiz-btn" class="btn btn-success">Start Final Quiz</button>
+            </div>
         </div>
     </div>
 
-    <!-- MAIN FIREBASE AND APP LOGIC -->
+    <!-- 5. Rich Content Viewer -->
+    <div id="module-viewer-screen" class="screen">
+        <button onclick="showScreen('dashboard-screen')" style="background:none; border:none; color:var(--text-muted); font-weight:600; cursor:pointer; padding: 0 0 20px 0; display:flex; align-items:center; gap:5px;">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"></path></svg>
+            Back to Dashboard
+        </button>
+
+        <!-- Translation Toggle -->
+        <div class="lang-switch-bar">
+            <button class="lang-btn active" id="btn-en" onclick="setContentLang('en')">English</button>
+            <button class="lang-btn" id="btn-ta" onclick="setContentLang('ta')">தமிழ்</button>
+        </div>
+
+        <h1 id="viewer-title" style="color: var(--primary); font-size: 2rem;"></h1>
+        <div class="content-body" id="viewer-content" style="font-size: 1.1rem; margin-bottom: 40px; color: var(--text-main);"></div>
+        
+        <button id="mark-complete-btn" class="btn">Mark Completed & Continue</button>
+    </div>
+
+    <!-- 6. Styled Quiz -->
+    <div id="quiz-screen" class="screen">
+        <div style="margin-bottom: 30px;">
+            <h2 style="color: var(--primary);">Certification Exam</h2>
+            <p>You need 70% to pass and generate your certificate. Take your time.</p>
+        </div>
+        
+        <div id="quiz-container">
+            <!-- JS injects beautifully styled questions here -->
+        </div>
+        
+        <button id="submit-quiz-btn" class="btn" style="margin-top: 20px;">Submit Exam</button>
+    </div>
+
+    <!-- 7. Dynamic Certificate -->
+    <div id="cert-screen" class="screen" style="max-width: 800px;">
+        <div id="cert-pdf-view" style="display:none;">
+            <div class="certificate-wrapper" id="printable-cert">
+                <div class="cert-header">Goorac Corporation</div>
+                <div class="cert-sub">Certificate of Professional Completion</div>
+                <div class="cert-body">This document officially certifies that</div>
+                <div class="cert-name" id="cert-name-display">Student Name</div>
+                <div class="cert-body">
+                    has successfully completed the comprehensive curriculum and passed the final examination for the <b>Prompt Engineering Masterclass</b>.
+                </div>
+                <div style="margin-top: 50px; text-align: right; padding-right: 40px;">
+                    <div class="cert-signature">Goorac Admin</div>
+                    <div style="font-size: 0.8rem; color: #64748b; margin-top: 5px;">Director of Education</div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 15px; max-width: 400px; margin: 0 auto;">
+                <button onclick="window.print()" class="btn btn-success">Save PDF</button>
+                <button onclick="showScreen('dashboard-screen')" class="btn btn-outline">Dashboard</button>
+            </div>
+        </div>
+
+        <div id="cert-whatsapp-view" style="display:none; text-align:center;" class="card">
+            <h2>🎉 Exam Passed!</h2>
+            <p>We are currently verifying your ₹149 payment. Click below to send a screenshot of your payment on WhatsApp, and we will unlock your certificate instantly.</p>
+            <button id="whatsapp-claim-btn" class="btn btn-success" style="background: #25D366; margin-top: 20px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.161.453-.834.866-1.166.918-.332.053-.78.111-2.463-.586-2.02-2.39-2.05-2.439-2.296-2.766-.245-.328-.584-.874-.584-1.424 0-.55.286-.822.388-.936.103-.114.225-.143.3-.143s.149 0 .214.003c.066.002.155-.025.243.187.088.212.302.738.329.792.027.054.045.117.012.184-.033.066-.051.107-.101.167-.051.061-.108.132-.153.184-.049.057-.099.119-.044.214.056.095.247.406.528.658.362.326.669.426.764.478.094.053.15.045.207-.021.056-.066.242-.284.307-.382.066-.098.131-.082.219-.049.088.033.557.262.653.31.096.049.16.074.183.115.024.041.024.238-.137.691z"/></svg>
+                Claim via WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN APP LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
@@ -251,36 +349,133 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        // Application State
-        let currentLang = 'en';
-        let currentUserData = null; // Memory cache to save Firebase reads!
+        let contentLang = 'en';
+        let currentUserData = null; 
         let viewingModuleId = 1;
 
         // ==========================================
-        // COURSE DATA (Zero database reads required)
+        // DEEP-DIVE RICH HTML COURSE DATA
         // ==========================================
         const courseData = [
-            { id: 1, icon: "🧠", title_en: "Intro to LLMs", title_ta: "LLM-களின் அறிமுகம்", content_en: "Large Language Models (LLMs) like ChatGPT predict the next word based on vast training data. They don't 'think', they calculate probabilities.", content_ta: "ChatGPT போன்ற பெரிய மொழி மாதிரிகள் (LLMs) முந்தைய தரவுகளின் அடிப்படையில் அடுத்த வார்த்தையை கணிக்கின்றன. அவை 'சிந்திப்பதில்லை', நிகழ்தகவுகளை கணக்கிடுகின்றன." },
-            { id: 2, icon: "🏗️", title_en: "Anatomy of a Prompt", title_ta: "ஒரு Prompt-ன் அமைப்பு", content_en: "A perfect prompt needs: Role (Act as...), Context (Here is the situation...), Task (Do this...), and Format (Output as...).", content_ta: "ஒரு சரியான Prompt-க்கு தேவையானது: பாத்திரம் (Role), சூழல் (Context), பணி (Task), மற்றும் வடிவம் (Format)." },
-            { id: 3, icon: "🎯", title_en: "Few-Shot Prompting", title_ta: "Few-Shot Prompting", content_en: "Instead of just asking for an output, give the AI 2 or 3 examples of what 'good' looks like before asking it to do the task.", content_ta: "வெறும் பதிலை மட்டும் கேட்காமல், AI-க்கு 2 அல்லது 3 சரியான உதாரணங்களை முதலில் கொடுத்து, பிறகு பணியை செய்யச் சொல்வது." },
-            { id: 4, icon: "⛓️", title_en: "Chain of Thought", title_ta: "சிந்தனை சங்கிலி (CoT)", content_en: "By adding the phrase 'Let's think step-by-step', you force the AI to break down complex logic, dramatically reducing errors.", content_ta: "'படிப்படியாக சிந்திப்போம்' (Let's think step-by-step) என்ற வார்த்தையைச் சேர்ப்பதன் மூலம், AI-ஐ தர்க்கரீதியாக சிந்திக்க வைத்து பிழைகளை குறைக்கலாம்." },
-            { id: 5, icon: "🎭", title_en: "Role & Persona", title_ta: "பாத்திரம் & ஆளுமை", content_en: "Telling an AI to 'Act as a Senior Developer' changes its vocabulary, tone, and the depth of the code it provides.", content_ta: "AI-ஐ 'ஒரு சீனியர் டெவலப்பராக செயல்படு' என சொல்வது அதன் வார்த்தைகள் மற்றும் பதிலின் ஆழத்தை மாற்றும்." },
-            { id: 6, icon: "📊", title_en: "Data Extraction", title_ta: "தரவு பிரித்தெடுத்தல்", content_en: "You can prompt AI to read messy text and output perfectly formatted JSON, CSV, or Markdown tables for your applications.", content_ta: "முறையற்ற உரை (text)-ஐ கொடுத்து, அதிலிருந்து JSON, CSV அல்லது Markdown அட்டவணையாக தரவை சரியாக பிரித்தெடுக்க AI-ஐ பயன்படுத்தலாம்." },
-            { id: 7, icon: "🚫", title_en: "Guardrails & Limits", title_ta: "வரம்புகள் மற்றும் தடைகள்", content_en: "Negative prompting is crucial. Tell the AI explicitly what NOT to do (e.g., 'Do not invent facts, reply I don't know if unsure').", content_ta: "AI என்ன செய்யக்கூடாது என்பதை தெளிவாக சொல்ல வேண்டும் (உதாரணம்: 'தெரியவில்லை என்றால் பொய்களை உருவாக்காதே, தெரியாது என சொல்')." },
-            { id: 8, icon: "⚙️", title_en: "Temperature & Parameters", title_ta: "வெப்பநிலை & அளவுருக்கள்", content_en: "Temperature controls creativity. 0.0 is robotic and factual. 1.0 is highly creative and unpredictable.", content_ta: "Temperature படைப்பாற்றலை கட்டுப்படுத்துகிறது. 0.0 என்பது துல்லியமானது. 1.0 என்பது மிகவும் படைப்பாற்றல் மிக்கது." },
-            { id: 9, icon: "🛡️", title_en: "Prompt Injection", title_ta: "Prompt Injection", content_en: "Hackers can manipulate AI chatbots by feeding them hidden instructions. Learn to sanitize user inputs to protect your AI.", content_ta: "ஹேக்கர்கள் AI-க்கு மறைமுக கட்டளைகளை கொடுத்து தவறாக பயன்படுத்தலாம். இதை தடுக்க உள்ளீடுகளை (inputs) பாதுகாப்பாக கையாள வேண்டும்." },
-            { id: 10, icon: "🚀", title_en: "Real-world Pipelines", title_ta: "நடைமுறை பயன்பாடுகள்", content_en: "Chaining prompts together: AI 1 reads the email -> AI 2 extracts the sentiment -> AI 3 drafts a reply based on the sentiment.", content_ta: "பல Prompt-களை இணைத்தல்: AI 1 மின்னஞ்சலை படிக்கும் -> AI 2 மனநிலையை அறியும் -> AI 3 அதற்கேற்ப பதிலை எழுதும்." }
-        ];
-
-        const quizData = [
-            { q: "What does adding 'Think step-by-step' do?", opts: ["Makes it type faster", "Reduces logic errors", "Uses more colors"], ans: 1 },
-            { q: "What temperature setting is best for coding/facts?", opts: ["0.0", "0.7", "1.0"], ans: 0 },
-            { q: "Providing 3 examples before asking a task is called:", opts: ["Zero-shot", "Few-shot", "Hot-shot"], ans: 1 }
-            // For brevity in code, a 3-question quiz to represent the flow
+            { 
+                id: 1, icon: "🧠", 
+                title_en: "Foundation: How AI Thinks", 
+                title_ta: "அடிப்படைகள்: AI எவ்வாறு சிந்திக்கிறது", 
+                content_en: `
+                    <p>Large Language Models (LLMs) like ChatGPT are not humans. They don't have memories, feelings, or a true understanding of logic. They are advanced <b>Prediction Engines</b>.</p>
+                    <h3>The Concept of Tokens</h3>
+                    <p>AI doesn't read words; it reads "tokens". A token can be a full word, a syllable, or just a letter. When you give AI a prompt, it mathematically calculates what the most likely next token should be based on billions of pages of internet data it was trained on.</p>
+                    <div class="prompt-box">
+                        <span class="label">Mental Model</span>
+                        Think of AI as the world's most advanced autocomplete on your phone. If you type "I am going to the...", your phone suggests "Store". AI does this, but for entire paragraphs of code or essays.
+                    </div>
+                `,
+                content_ta: `
+                    <p>ChatGPT போன்ற Large Language Models (LLMs) மனிதர்கள் அல்ல. அவற்றுக்கு நினைவாற்றல், உணர்வுகள் அல்லது தர்க்கம் குறித்த உண்மையான புரிதல் இல்லை. அவை மேம்பட்ட <b>கணிப்பு இயந்திரங்கள் (Prediction Engines)</b> ஆகும்.</p>
+                    <h3>Tokens என்ற கருத்துரு</h3>
+                    <p>AI வார்த்தைகளை படிப்பதில்லை; அது "tokens"-களை படிக்கிறது. ஒரு token என்பது ஒரு வார்த்தையாகவோ, எழுத்துக்களாகவோ இருக்கலாம். நீங்கள் AI-க்கு ஒரு prompt கொடுக்கும்போது, அது பயிற்சி பெற்ற கோடிக்கணக்கான இணைய தரவுகளின் அடிப்படையில் அடுத்த token என்னவாக இருக்கும் என்பதை கணிதவியல் ரீதியாக கணக்கிடுகிறது.</p>
+                    <div class="prompt-box">
+                        <span class="label">Mental Model</span>
+                        AI-ஐ உங்கள் போனில் உள்ள autocomplete-இன் மிக மேம்பட்ட வடிவமாக நினைத்துக் கொள்ளுங்கள். "I am going to the..." என்று நீங்கள் டைப் செய்தால், உங்கள் போன் "Store" என்று பரிந்துரைக்கும். AI இதையே முழு கட்டுரைகளுக்கும் செய்கிறது.
+                    </div>
+                `
+            },
+            { 
+                id: 2, icon: "🏗️", 
+                title_en: "The ACT Framework", 
+                title_ta: "ACT கட்டமைப்பு", 
+                content_en: `
+                    <p>A bad prompt produces a bad, generic response. To get professional results, you must use the <b>ACT Framework</b>.</p>
+                    <ul>
+                        <li><b>A - Act as:</b> Give the AI a persona (e.g., Act as a senior marketing expert).</li>
+                        <li><b>C - Context:</b> Explain the background (e.g., I am selling software to dentists).</li>
+                        <li><b>T - Task:</b> Tell it exactly what to do and how to format it (e.g., Write 3 Facebook ad headlines).</li>
+                    </ul>
+                    <div class="prompt-box bad">
+                        <span class="label">Bad Prompt (Too Generic)</span>
+                        Write some ads for my dental software.
+                    </div>
+                    <div class="prompt-box">
+                        <span class="label">Pro Prompt (Using ACT)</span>
+                        Act as a senior B2B copywriter. I am launching a new scheduling software specifically for busy dental clinics. Write 3 short, punchy Facebook ad headlines targeting dental clinic owners.
+                    </div>
+                `,
+                content_ta: `
+                    <p>ஒரு சாதாரண prompt சாதாரணமான பதிலையே உருவாக்கும். தொழில்முறை முடிவுகளைப் பெற, நீங்கள் <b>ACT கட்டமைப்பைப்</b> பயன்படுத்த வேண்டும்.</p>
+                    <ul>
+                        <li><b>A - Act as (பாத்திரம்):</b> AI-க்கு ஒரு பாத்திரத்தை கொடுங்கள் (உதாரணம்: சீனியர் மார்க்கெட்டிங் நிபுணராக செயல்படு).</li>
+                        <li><b>C - Context (சூழல்):</b> பின்னணியை விளக்குங்கள் (உதாரணம்: நான் பல் மருத்துவர்களுக்கு சாஃப்ட்வேர் விற்கிறேன்).</li>
+                        <li><b>T - Task (பணி):</b> அது என்ன செய்ய வேண்டும் என்பதை தெளிவாகச் சொல்லுங்கள் (உதாரணம்: 3 பேஸ்புக் விளம்பர தலைப்புகளை எழுது).</li>
+                    </ul>
+                    <div class="prompt-box bad">
+                        <span class="label">தவறான Prompt</span>
+                        எனது சாஃப்ட்வேருக்கு சில விளம்பரங்களை எழுது.
+                    </div>
+                    <div class="prompt-box">
+                        <span class="label">Pro Prompt (ACT-ஐ பயன்படுத்தி)</span>
+                        ஒரு சீனியர் B2B காப்பீரைட்டராக செயல்படு. பல் மருத்துவமனைகளுக்கான புதிய scheduling சாஃப்ட்வேரை அறிமுகப்படுத்துகிறேன். பல் மருத்துவமனை உரிமையாளர்களை குறிவைத்து 3 சுருக்கமான பேஸ்புக் விளம்பர தலைப்புகளை எழுது.
+                    </div>
+                `
+            },
+            { 
+                id: 3, icon: "🎯", 
+                title_en: "Few-Shot Prompting", 
+                title_ta: "Few-Shot Prompting", 
+                content_en: `
+                    <p>Sometimes explaining what you want is harder than just <i>showing</i> what you want. <b>Few-Shot Prompting</b> involves giving the AI 2 or 3 completed examples before asking it to do the actual task.</p>
+                    <h3>Why this works:</h3>
+                    <p>AI is brilliant at pattern recognition. By providing examples, you bypass the need to explain the tone, length, or structure—the AI simply copies the pattern you provided.</p>
+                    <div class="prompt-box">
+                        <span class="label">Example of Few-Shot Formatting</span>
+                        Convert the product features into benefits.<br><br>
+                        Feature: Waterproof<br>
+                        Benefit: Never worry about rain damaging your phone.<br><br>
+                        Feature: 24hr Battery<br>
+                        Benefit: Leave your charger at home.<br><br>
+                        Feature: 5G Ready<br>
+                        Benefit: [AI WILL FILL THIS IN]
+                    </div>
+                `,
+                content_ta: `
+                    <p>சில நேரங்களில் உங்களுக்கு என்ன வேண்டும் என்பதை விளக்குவதை விட, <i>உதாரணங்களை காட்டுவது</i> எளிது. <b>Few-Shot Prompting</b> என்பது AI-க்கு உண்மையான பணியை கொடுப்பதற்கு முன் 2 அல்லது 3 சரியான உதாரணங்களை வழங்குவதாகும்.</p>
+                    <h3>இது ஏன் வேலை செய்கிறது:</h3>
+                    <p>AI வடிவங்களை (patterns) அடையாளம் காண்பதில் மிகச் சிறந்தது. உதாரணங்களை வழங்குவதன் மூலம், தொனி, நீளம் அல்லது அமைப்பை நீங்கள் விளக்க வேண்டியதில்லை—AI நீங்கள் வழங்கிய வடிவத்தை அப்படியே பின்பற்றும்.</p>
+                    <div class="prompt-box">
+                        <span class="label">Few-Shot உதாரணம்</span>
+                        தயாரிப்பு அம்சங்களை நன்மைகளாக மாற்று.<br><br>
+                        அம்சம்: Waterproof<br>
+                        நன்மை: மழையில் போன் நனைந்துவிடும் என்ற கவலை வேண்டாம்.<br><br>
+                        அம்சம்: 24hr Battery<br>
+                        நன்மை: சார்ஜரை வீட்டிலேயே வைத்துவிட்டு செல்லுங்கள்.<br><br>
+                        அம்சம்: 5G Ready<br>
+                        நன்மை: [AI இதை நிரப்பும்]
+                    </div>
+                `
+            },
+            // The remaining modules are structured similarly but kept concise here for code brevity. 
+            // In a real database, you would expand these exactly like modules 1-3.
+            { id: 4, icon: "⛓️", title_en: "Chain of Thought (CoT)", title_ta: "சிந்தனை சங்கிலி (CoT)", content_en: "<p>By adding the magic phrase <b>'Let's think step-by-step'</b> to the end of any math or logic prompt, you force the AI to break down its reasoning. This reduces AI hallucinations by over 50% on complex tasks.</p>", content_ta: "<p>எந்தவொரு கணித அல்லது தர்க்க prompt-இன் முடிவிலும் <b>'படிப்படியாக சிந்திப்போம் (Let's think step-by-step)'</b> என்ற மாய வார்த்தையைச் சேர்ப்பதன் மூலம், AI-ஐ அதன் காரணங்களை உடைக்க கட்டாயப்படுத்துகிறீர்கள். இது பிழைகளை பெருமளவு குறைக்கும்.</p>" },
+            { id: 5, icon: "📊", title_en: "Data Extraction & JSON", title_ta: "தரவு பிரித்தெடுத்தல்", content_en: "<p>AI is incredible at reading messy text (like a transcript) and outputting it into a perfectly formatted JSON array or CSV table. Always specify the exact keys you want in the JSON output.</p>", content_ta: "<p>முறையற்ற உரையை (உதாரணமாக, ஒரு உரையாடல்) படித்து, அதை கச்சிதமான JSON அல்லது CSV அட்டவணையாக மாற்றுவதில் AI மிகச் சிறந்தது.</p>" },
+            { id: 6, icon: "🚫", title_en: "Negative Prompting", title_ta: "எதிர்மறை Prompting", content_en: "<p>Often, telling AI what <i>not</i> to do is more important than what to do. Use phrases like: <b>'Do not use jargon. Do not hallucinate facts. If you do not know the answer, reply exactly with: I don't know.'</b></p>", content_ta: "<p>பெரும்பாலும், AI என்ன செய்ய <i>கூடாது</i> என்று சொல்வது மிகவும் முக்கியம். 'கடினமான வார்த்தைகளை பயன்படுத்தாதே. தெரியவில்லை என்றால் தெரியாது என்று சொல்' போன்ற வாக்கியங்களை பயன்படுத்தவும்.</p>" },
+            { id: 7, icon: "⚙️", title_en: "System Parameters", title_ta: "அமைப்பு அளவுருக்கள்", content_en: "<p>If you are using APIs, you can adjust the <b>Temperature</b>. A temperature of 0.0 makes the AI highly robotic and factual (perfect for code). A temperature of 0.8 makes it highly creative and unpredictable (perfect for poetry).</p>", content_ta: "<p>API-களை பயன்படுத்தினால், <b>Temperature</b>-ஐ மாற்றலாம். 0.0 என்பது AI-ஐ துல்லியமாக்கும் (கோடிங்-க்கு சிறந்தது). 0.8 என்பது படைப்பாற்றலை அதிகரிக்கும் (கவிதைகளுக்கு சிறந்தது).</p>" },
+            { id: 8, icon: "🛡️", title_en: "Prompt Injection", title_ta: "Prompt Injection பாதுகாப்பு", content_en: "<p>Prompt injection is a security vulnerability where users type hidden commands to make your AI break its rules. Always sanitize user inputs and use strict delimiters like ``` to separate instructions from user data.</p>", content_ta: "<p>Prompt injection என்பது AI-ஐ அதன் விதிகளை மீறச் செய்யும் ஒரு பாதுகாப்பு குறைபாடு ஆகும். பயனர் உள்ளீடுகளை எப்போதும் பாதுகாப்பாக கையாள வேண்டும்.</p>" },
+            { id: 9, icon: "🤖", title_en: "Meta-Prompting", title_ta: "Meta-Prompting", content_en: "<p>You can ask the AI to write prompts for you. Ask: <b>'I want to generate images of futuristic cities. Write 5 highly detailed midjourney prompts for me.'</b></p>", content_ta: "<p>உங்களுக்கான prompt-களை எழுத AI-யிடமே கேட்கலாம். 'எதிர்கால நகரங்களின் படங்களை உருவாக்க எனக்கு 5 மிட்ஜர்னி prompt-களை எழுது' என்று கேட்கவும்.</p>" },
+            { id: 10, icon: "🚀", title_en: "Building AI Pipelines", title_ta: "நடைமுறை பயன்பாடுகள்", content_en: "<p>The ultimate goal is chaining: Prompt 1 summarizes an email -> Passes it to Prompt 2 -> Prompt 2 identifies the emotion -> Passes to Prompt 3 -> Prompt 3 drafts a polite reply.</p>", content_ta: "<p>இறுதி இலக்கு பல prompt-களை இணைப்பது: Prompt 1 மின்னஞ்சலை சுருக்கும் -> Prompt 2 உணர்வை அறியும் -> Prompt 3 பதிலை எழுதும்.</p>" }
         ];
 
         // ==========================================
-        // UI HELPERS
+        // QUIZ DATA (Interactive format)
+        // ==========================================
+        const quizData = [
+            { q: "According to the ACT Framework, what does the 'A' stand for?", opts: ["Action", "Act as (Persona)", "Algorithm", "Analyze"], ans: 1 },
+            { q: "What is 'Few-Shot Prompting'?", opts: ["Asking the AI to be brief", "Providing 2-3 examples before asking the task", "Using a low temperature setting", "Generating 3 images at once"], ans: 1 },
+            { q: "Which phrase drastically reduces AI logic errors in complex math?", opts: ["Format as JSON", "Do not hallucinate", "Let's think step-by-step", "Act as a mathematician"], ans: 2 },
+            { q: "What does a Temperature setting of 0.0 do?", opts: ["Makes the AI highly creative", "Shuts the AI down", "Makes the AI factual, robotic, and consistent", "Deletes the prompt context"], ans: 2 },
+            { q: "What is Prompt Injection?", opts: ["Uploading code to the AI", "A security flaw where users bypass AI rules", "Feeding the AI a massive PDF file", "Using Python to write prompts"], ans: 1 }
+        ]; // Real quiz would have 10, kept to 5 for snippet length
+
+        // ==========================================
+        // UI ROUTING & HELPERS
         // ==========================================
         window.showScreen = (screenId) => {
             document.querySelectorAll('.screen').forEach(el => el.classList.remove('active-screen'));
@@ -288,28 +483,25 @@
             window.scrollTo(0,0);
         };
 
-        window.toggleLanguage = () => {
-            currentLang = currentLang === 'en' ? 'ta' : 'en';
-            // Update UI elements with data-en/ta attributes
-            document.querySelectorAll('[data-en]').forEach(el => {
-                el.innerText = currentLang === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-ta');
-            });
-            // Re-render dashboard or module if active
-            if(document.getElementById('dashboard-screen').classList.contains('active-screen')) renderDashboard();
-            if(document.getElementById('module-viewer-screen').classList.contains('active-screen')) loadModule(viewingModuleId);
+        window.setContentLang = (lang) => {
+            contentLang = lang;
+            document.getElementById('btn-en').className = `lang-btn ${lang === 'en' ? 'active' : ''}`;
+            document.getElementById('btn-ta').className = `lang-btn ${lang === 'ta' ? 'active' : ''}`;
+            
+            // Re-render the content
+            const mod = courseData.find(m => m.id === viewingModuleId);
+            document.getElementById('viewer-title').innerText = `${mod.id}. ${lang === 'en' ? mod.title_en : mod.title_ta}`;
+            document.getElementById('viewer-content').innerHTML = lang === 'en' ? mod.content_en : mod.content_ta;
         };
 
         // ==========================================
-        // AUTHENTICATION & ROUTING LOGIC
+        // AUTHENTICATION LOGIC (Optimized 1-Read)
         // ==========================================
         document.getElementById('google-login-btn').onclick = () => signInWithPopup(auth, provider);
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Highly Optimized: Only read from Firebase once on load
-                const docRef = doc(db, "users", user.uid);
-                const docSnap = await getDoc(docRef);
-                
+                const docSnap = await getDoc(doc(db, "users", user.uid));
                 if (docSnap.exists()) {
                     currentUserData = docSnap.data();
                     routeUser();
@@ -334,17 +526,16 @@
         }
 
         // ==========================================
-        // PROFILE & PAYMENT SAVING
+        // FORM SUBMISSIONS
         // ==========================================
         document.getElementById('save-profile-btn').onclick = async () => {
             const name = document.getElementById('prof-name').value;
             const wa = document.getElementById('prof-wa').value;
-            const deg = document.getElementById('prof-degree').value;
-            if(!name || !wa) return alert("Name and WhatsApp are required");
+            if(!name || !wa) return alert("Name and WhatsApp are required for certification.");
 
             currentUserData.fullName = name;
             currentUserData.whatsappNumber = wa;
-            currentUserData.collegeDegree = deg;
+            currentUserData.collegeDegree = document.getElementById('prof-degree').value || "N/A";
             
             await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
             routeUser();
@@ -352,70 +543,84 @@
 
         document.getElementById('submit-payment-btn').onclick = async () => {
             const upiId = document.getElementById('upi-input').value;
-            if(upiId.length < 10) return alert("Please enter a valid UPI UTR Number");
+            if(upiId.length < 10) return alert("Please enter a valid 12-digit UTR Number");
 
             currentUserData.upiTransactionId = upiId;
-            currentUserData.paymentStatus = 'pending_check'; // Optimistic unlock
+            currentUserData.paymentStatus = 'pending_check'; 
             
             await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
             routeUser();
         };
 
         // ==========================================
-        // COURSE & MODULE LOGIC
+        // DASHBOARD & MODULE ENGINE
         // ==========================================
         function renderDashboard() {
             const container = document.getElementById('module-list-container');
             container.innerHTML = '';
-            let allComplete = currentUserData.currentModule > 10;
+            
+            // Progress Bar Logic
+            let progressMod = currentUserData.currentModule;
+            if(progressMod > 10) progressMod = 10;
+            const percentage = ((progressMod - 1) / 10) * 100;
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').innerText = percentage + '%';
 
             courseData.forEach(mod => {
+                const isCompleted = mod.id < currentUserData.currentModule;
                 const isUnlocked = mod.id <= currentUserData.currentModule;
-                const title = currentLang === 'en' ? mod.title_en : mod.title_ta;
                 
+                let statusBadge = "🔒 Locked";
+                if(isUnlocked) statusBadge = "📖 Read Now";
+                if(isCompleted) statusBadge = "✅ Completed";
+
                 container.innerHTML += `
-                    <li class="module-item ${isUnlocked ? '' : 'locked'}" onclick="${isUnlocked ? `loadModule(${mod.id})` : ''}">
-                        <div class="module-icon">${mod.icon}</div>
-                        <div class="module-info">
-                            <h3 class="module-title">${mod.id}. ${title}</h3>
-                            <div class="module-status">${isUnlocked ? '🔓 Unlocked' : '🔒 Locked'}</div>
+                    <div class="module-item ${isUnlocked ? '' : 'locked'} ${isCompleted ? 'completed' : ''}" onclick="${isUnlocked ? `loadModule(${mod.id})` : ''}">
+                        <div class="mod-icon">${mod.icon}</div>
+                        <div class="mod-details">
+                            <div class="mod-title">Module ${mod.id}: ${mod.title_en}</div>
+                            <div class="mod-status">${statusBadge}</div>
                         </div>
-                    </li>
+                    </div>
                 `;
             });
 
-            if (allComplete) document.getElementById('start-quiz-btn').style.display = 'block';
+            document.getElementById('quiz-unlock-banner').style.display = currentUserData.currentModule > 10 ? 'block' : 'none';
         }
 
         window.loadModule = (id) => {
             viewingModuleId = id;
-            const mod = courseData.find(m => m.id === id);
-            document.getElementById('viewer-title').innerText = `${mod.id}. ${currentLang === 'en' ? mod.title_en : mod.title_ta}`;
-            document.getElementById('viewer-content').innerText = currentLang === 'en' ? mod.content_en : mod.content_ta;
+            setContentLang(contentLang); // Hydrates the view
             
-            // Only show "Mark Complete" if it's the module they are currently working on
-            document.getElementById('mark-complete-btn').style.display = (id === currentUserData.currentModule) ? 'block' : 'none';
+            const btn = document.getElementById('mark-complete-btn');
+            if(id === currentUserData.currentModule) {
+                btn.style.display = 'flex';
+                btn.innerText = id === 10 ? "Finish Course & Go to Quiz" : "Mark Completed & Continue";
+            } else {
+                btn.style.display = 'none';
+            }
+            
             showScreen('module-viewer-screen');
         }
 
         document.getElementById('mark-complete-btn').onclick = async () => {
             currentUserData.currentModule += 1;
-            // Write to Firebase in background to keep UI snappy
             setDoc(doc(db, "users", auth.currentUser.uid), { currentModule: currentUserData.currentModule }, { merge: true });
             routeUser();
         };
 
         // ==========================================
-        // QUIZ & CERTIFICATE LOGIC
+        // MODERN QUIZ ENGINE
         // ==========================================
         document.getElementById('start-quiz-btn').onclick = () => {
             const qc = document.getElementById('quiz-container');
             qc.innerHTML = quizData.map((q, i) => `
-                <div style="margin-bottom:20px; background:var(--card-bg); padding:15px; border-radius:8px;">
-                    <p style="font-weight:bold;">${i+1}. ${q.q}</p>
+                <div class="quiz-question">
+                    <h3>${i+1}. ${q.q}</h3>
                     ${q.opts.map((opt, oIdx) => `
-                        <label style="display:block; margin:8px 0;">
-                            <input type="radio" name="q${i}" value="${oIdx}"> ${opt}
+                        <label class="quiz-option">
+                            <input type="radio" name="q${i}" value="${oIdx}">
+                            ${opt}
                         </label>
                     `).join('')}
                 </div>
@@ -430,15 +635,19 @@
                 if(selected && parseInt(selected.value) === q.ans) score++;
             });
 
-            if (score >= Math.floor(quizData.length * 0.7)) {
+            const passMark = Math.floor(quizData.length * 0.7);
+            if (score >= passMark) {
                 currentUserData.hasPassedQuiz = true;
                 await setDoc(doc(db, "users", auth.currentUser.uid), { hasPassedQuiz: true }, { merge: true });
                 routeUser();
             } else {
-                alert(`You scored ${score}/${quizData.length}. You need 70% to pass. Try again!`);
+                alert(`You scored ${score} out of ${quizData.length}. You need ${passMark} to pass. Please review the modules and try again!`);
             }
         };
 
+        // ==========================================
+        // CERTIFICATE HANDOFF
+        // ==========================================
         function showCertificate() {
             if (currentUserData.paymentStatus === 'paid') {
                 document.getElementById('cert-pdf-view').style.display = 'block';
@@ -451,8 +660,8 @@
         }
 
         document.getElementById('whatsapp-claim-btn').onclick = () => {
-            const msg = `Hi! I passed the Prompt Engineering Quiz. My name is ${currentUserData.fullName} and my UPI ID was ${currentUserData.upiTransactionId}. Please verify and send my certificate!`;
-            window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`, '_blank');
+            const msg = `Hi Goorac Admin! I passed the Prompt Engineering Exam. My name is ${currentUserData.fullName} and my payment UTR is ${currentUserData.upiTransactionId}. Please unlock my certificate!`;
+            window.open(`[https://wa.me/919876543210?text=$](https://wa.me/919876543210?text=$){encodeURIComponent(msg)}`, '_blank');
         };
 
     </script>
