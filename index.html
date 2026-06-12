@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Goorac Learn | Advanced Prompt Engineering</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
-    <!-- PDF Generation Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         /* Premium SaaS & App Theme Variables */
@@ -163,7 +162,7 @@
         .quiz-option input[type="radio"] { display: none; }
         .quiz-option:has(input:checked) { border-color: var(--primary); background: rgba(37,99,235,0.05); color: var(--primary); }
 
-        /* FIXED PIXEL A4 Certificate Styling (Prevents mobile squish and PDF overlap) */
+        /* Multi-Color A4 Certificate Styling */
         .cert-scroll-container {
             width: 100%;
             overflow-x: auto;
@@ -178,40 +177,38 @@
         .certificate-wrapper {
             background: #ffffff;
             background-image: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            border: 12px solid #0f172a;
-            padding: 40px 60px; 
+            border: 0px solid transparent; /* Removed dark border for professional edge-to-edge PDF */
+            padding: 4% 6%; 
             text-align: center;
-            border-radius: 8px; 
-            box-shadow: var(--shadow-lg); 
+            border-radius: 0px; /* Removed radius for clean print */
+            box-shadow: none; /* Removed shadow for clean print */
             color: #0f172a;
             margin: 0 auto;
             position: relative; 
             overflow: hidden;
-            width: 1056px !important;
-            height: 746px !important;
-            min-width: 1056px !important; 
-            max-width: 1056px !important; 
+            width: 100%;
+            min-width: 900px; /* Forces exact A4 aspect rendering preventing squish on mobile */
+            max-width: 1122px; 
+            aspect-ratio: 1.414; 
             display: flex; flex-direction: column; justify-content: space-between;
             box-sizing: border-box;
-            flex-shrink: 0;
         }
-        
         .certificate-wrapper::before {
             content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
-            border: 2px solid #d4af37; /* Gold inner border */
+            border: 0px solid transparent; /* Removed gold inner border as explicitly requested */
             pointer-events: none; z-index: 1;
         }
         .certificate-wrapper::after {
             content: 'GOORAC'; position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 140px; color: rgba(0,0,0,0.03); font-weight: 900;
+            font-size: clamp(60px, 15vw, 180px); color: rgba(0,0,0,0.03); font-weight: 900;
             pointer-events: none; z-index: 0;
         }
         .cert-content { z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1;}
-        .cert-header { font-family: 'Playfair Display', serif; font-size: 46px; color: #1e293b; margin-bottom: 0; font-weight: 800;}
-        .cert-sub { font-size: 14px; color: #d4af37; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 25px; font-weight: bold; }
-        .cert-name { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 700; border-bottom: 2px solid #d4af37; padding-bottom: 8px; margin: 0 auto 15px; display: inline-block; min-width: 600px; color: #2563eb; line-height: 1.2;}
-        .cert-body { font-size: 17px; color: #475569; margin-bottom: 10px; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.5;}
+        .cert-header { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4.5vw, 3.2rem); color: #1e293b; margin-bottom: 0; font-weight: 800;}
+        .cert-sub { font-size: clamp(0.7rem, 1.5vw, 1.1rem); color: #d4af37; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; font-weight: bold; }
+        .cert-name { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4.5vw, 3rem); font-weight: 700; border-bottom: 2px solid #d4af37; padding-bottom: 8px; margin: 0 auto 15px; display: inline-block; min-width: 60%; color: #2563eb; line-height: 1.2;}
+        .cert-body { font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #475569; margin-bottom: 10px; max-width: 85%; margin-left: auto; margin-right: auto; line-height: 1.5;}
         
         .multi-color-sig {
             background: linear-gradient(45deg, #2563eb, #d946ef, #ea580c);
@@ -221,12 +218,12 @@
             font-weight: 800;
         }
 
-        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; z-index: 2; position: relative; margin-top: 10px;}
+        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; z-index: 2; position: relative; margin-top: auto;}
         .cert-qr-container { text-align: center; }
-        .cert-qr { width: 85px; height: 85px; border: 3px solid #fff; box-shadow: var(--shadow-md); border-radius: 6px; background: white;}
-        .cert-badge { width: 95px; height: 95px; background: radial-gradient(circle, #ffd700, #d4af37); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 11px; border: 2px dashed white; line-height: 1.2;}
+        .cert-qr { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); border: 3px solid #fff; box-shadow: var(--shadow-md); border-radius: 6px; background: white;}
+        .cert-badge { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); background: radial-gradient(circle, #ffd700, #d4af37); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: clamp(0.5rem, 1vw, 0.75rem); border: 2px dashed white; line-height: 1.2;}
         .cert-signature-block { text-align: center; }
-        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: 32px; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 250px; }
+        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.2rem, 3vw, 2.2rem); border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 150px; }
 
         /* Print formatting fallback */
         @media print {
@@ -238,7 +235,7 @@
             .cert-scroll-container { border: none; background: transparent; padding: 0; overflow: visible; }
             .certificate-wrapper { 
                 width: 297mm !important; height: 210mm !important; 
-                margin: 0 !important; border: 15px solid #0f172a !important; 
+                margin: 0 !important; border: 0px solid transparent !important; 
                 max-width: none !important; min-width: 0 !important; aspect-ratio: auto !important;
                 -webkit-print-color-adjust: exact !important; 
                 print-color-adjust: exact !important; 
@@ -251,16 +248,13 @@
 </head>
 <body>
 
-    <!-- Toast Notification -->
     <div id="toast">Message</div>
 
-    <!-- Header -->
     <div class="top-nav">
         <div class="brand">Goorac <span style="color:var(--text-main)">Learn</span></div>
         <div id="nav-profile" style="display:none; align-items: center; gap: 8px;"></div>
     </div>
 
-    <!-- 1. Landing -->
     <div id="login-screen" class="screen active-screen">
         <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80" alt="AI Core" style="width:100%; height:180px; object-fit:cover; border-radius: var(--radius-xl); margin-bottom: 24px;">
         <h1 style="font-size: 2.2rem;">Master Prompt Engineering</h1>
@@ -272,7 +266,6 @@
         </button>
     </div>
 
-    <!-- 2. Profile -->
     <div id="profile-screen" class="screen">
         <h2>Certificate Setup</h2>
         <p>Enter your details exactly as they should appear on your final diploma.</p>
@@ -289,7 +282,6 @@
         </div>
     </div>
 
-    <!-- 3. Payment -->
     <div id="payment-screen" class="screen">
         <h2>Unlock 25 Modules</h2>
         <p>Get lifetime access and your verified certificate for just ₹149.</p>
@@ -308,7 +300,6 @@
         </div>
     </div>
 
-    <!-- 4. Dashboard -->
     <div id="dashboard-screen" class="screen">
         <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600;">
             <span>Course Progress</span>
@@ -319,8 +310,7 @@
         </div>
 
         <div id="module-list-container">
-            <!-- JS injects 25 modules here -->
-        </div>
+            </div>
         
         <div id="quiz-unlock-banner" style="display:none; margin-top: 30px;">
             <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
@@ -331,7 +321,6 @@
         </div>
     </div>
 
-    <!-- 5. Viewer -->
     <div id="module-viewer-screen" class="screen">
         <button onclick="goBack()" style="background:none; border:none; color:var(--text-muted); font-weight:600; cursor:pointer; padding: 0 0 20px 0; display:flex; align-items:center; gap:5px; font-size: 1rem;">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"></path></svg> Back
@@ -349,7 +338,6 @@
         <button id="mark-complete-btn" class="btn">Mark Completed & Next</button>
     </div>
 
-    <!-- 6. Quiz -->
     <div id="quiz-screen" class="screen">
         <h2>Certification Exam</h2>
         <p>Answer 10 questions. You need 70% (7/10) to pass.</p>
@@ -357,18 +345,16 @@
         <button id="submit-quiz-btn" class="btn">Submit Exam</button>
     </div>
 
-    <!-- 7. Multi-Color Digital Certificate -->
     <div id="cert-screen" class="screen" style="max-width: 100%;">
         <div id="cert-pdf-view" style="display:none; width: 100%;">
             
             <div class="cert-scroll-container">
                 <div class="certificate-wrapper" id="printable-cert">
                     <div class="cert-content">
-                        <!-- Logo with graceful fallback so it doesn't show broken icon -->
-                        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 75px; height: 75px; object-fit: contain; margin-bottom: 5px; border-radius: 50%; box-shadow: var(--shadow-sm); border: 2px solid white;">
+                        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 55px; height: 55px; object-fit: contain; margin-bottom: 5px; border-radius: 50%; box-shadow: var(--shadow-md);">
                         
                         <div class="cert-header">Goorac Learn</div>
-                        <div style="font-size: 16px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">from Goorac Corporation</div>
+                        <div style="font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">from Goorac Corporation</div>
                         <div class="cert-sub">Certificate of Professional Mastery</div>
                         <div class="cert-body">This document officially certifies that</div>
                         
@@ -376,40 +362,36 @@
                         
                         <div class="cert-body" style="margin-bottom: 15px;">
                             has successfully completed all 25 advanced modules and passed the comprehensive final examination for the<br>
-                            <span style="font-size: 26px; font-weight: 800; color: #0f172a; display: inline-block; margin-top: 5px;">Prompt Engineering Masterclass</span>
+                            <span style="font-size: 1.3em; font-weight: 800; color: #0f172a; display: inline-block; margin-top: 8px;">Prompt Engineering Masterclass</span>
                         </div>
                         
-                        <div class="cert-date" id="cert-date-display">Date of Issue</div>
+                        <div class="cert-date" id="cert-date-display" style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #475569; font-size: 0.95rem; background: #f1f5f9; padding: 6px 16px; border-radius: 20px; border: 1px solid #cbd5e1;">Date of Issue</div>
                         
-                        <!-- Valid With Section -->
-                        <div style="margin-top: 15px; border-top: 2px dashed #e2e8f0; padding-top: 15px; width: 100%; max-width: 600px;">
-                            <div style="font-size: 13px; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;">Valid & Recognized By</div>
-                            <div style="display: flex; justify-content: center; align-items: center; gap: 30px;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" crossorigin="anonymous" style="height: 24px; object-fit: contain;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" alt="Microsoft" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" crossorigin="anonymous" style="height: 24px; object-fit: contain;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/0/07/Zoho_Corporation_logo.svg" alt="Zoho" crossorigin="anonymous" style="height: 20px; object-fit: contain;">
+                        <div style="margin-top: 15px; border-top: 2px dashed #e2e8f0; padding-top: 10px; width: 100%; max-width: 600px;">
+                            <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Valid & Recognized By</div>
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 25px;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" alt="Microsoft" crossorigin="anonymous" style="height: 20px; object-fit: contain;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/0/07/Zoho_Corporation_logo.svg" alt="Zoho" crossorigin="anonymous" style="height: 18px; object-fit: contain;">
                             </div>
                         </div>
 
                     </div>
                     
                     <div class="cert-footer">
-                        <!-- Dynamic QR Block -->
                         <div class="cert-qr-container">
                             <img id="cert-qr-img" class="cert-qr" src="" alt="Verified QR" crossorigin="anonymous">
-                            <div style="font-size: 11px; color: #16a34a; margin-top: 5px; font-weight: 800; letter-spacing: 1px;">✓ VERIFIED</div>
+                            <div style="font-size: clamp(0.5rem, 1vw, 0.75rem); color: #16a34a; margin-top: 5px; font-weight: 800; letter-spacing: 1px;">✓ VERIFIED</div>
                         </div>
                         
-                        <!-- Official Stamp -->
                         <div class="cert-badge">
                             OFFICIAL<br>CERTIFIED
                         </div>
 
-                        <!-- Digital Signature -->
                         <div class="cert-signature-block">
                             <div class="cert-signature multi-color-sig">Dr. Jonathan Reynolds</div>
-                            <div style="font-size: 14px; color: #64748b; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Director of Education</div>
+                            <div style="font-size: clamp(0.6rem, 1.2vw, 0.9rem); color: #64748b; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Director of Education</div>
                         </div>
                     </div>
                 </div>
@@ -428,7 +410,6 @@
         </div>
     </div>
 
-    <!-- APP LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
@@ -541,7 +522,7 @@
                 content_ta: `<p>பதிலை கொடுப்பதற்கு முன் அதன் <i>தர்க்கத்தை விளக்க</i> AI-ஐ கட்டாயப்படுத்துங்கள்.</p>`
             },
             { 
-                id: 5, icon: "🚫", img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80",
+                id: 5, icon: "🚫", img: "https://images.unsplash.com/photo-1496332274352-78d10b00539b?w=800&q=80",
                 title_en: "5. Negative Prompting", title_ta: "5. எதிர்மறை Prompting", 
                 content_en: `<p>Explicitly tell it what <b>NOT</b> to do. This is crucial for avoiding repetitive, dry corporate jargon.</p>
                 ${generateCodeBox('Guardrail', 'Do not use words like "synergy" or "innovative". If you don\'t know the answer, reply "I don\'t know".')}`,
@@ -578,7 +559,7 @@
                 content_ta: `<p>உங்களுக்கான prompt-களை எழுத <i>AI-யிடமே கேட்கவும்</i>.</p>` 
             },
             { 
-                id: 11, icon: "📝", img: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=800&q=80", 
+                id: 11, icon: "📝", img: "https://images.unsplash.com/photo-1555421689-491a97ff2040?w=800&q=80", 
                 title_en: "11. Tone & Voice Matching", title_ta: "11. தொனி பொருத்துதல்", 
                 content_en: `<p>Provide a <b>sample of your writing</b> and explicitly ask the AI to analyze and <i>mimic the exact tone, cadence, and vocabulary</i>.</p>`, 
                 content_ta: `<p>உங்கள் எழுத்தின் <b>ஒரு பகுதியை</b> கொடுத்து, அதே <i>பாணியிலும், தொனியிலும்</i> எழுதச் சொல்லுங்கள்.</p>` 
@@ -895,14 +876,11 @@
             }
         }
 
-        // --- UPGRADED HTML2PDF DOWNLOAD LOGIC (No Cropping on Mobile) ---
+        // --- NEW HTML2PDF DOWNLOAD LOGIC ---
         document.getElementById('download-pdf-btn').onclick = () => {
             const btn = document.getElementById('download-pdf-btn');
             const originalText = btn.innerText;
             btn.innerText = "Generating PDF...";
-            
-            // Scroll to top immediately to prevent html2canvas window bounds clipping
-            window.scrollTo(0,0);
             
             const element = document.getElementById('printable-cert');
             const fileName = currentUserData.fullName ? `${currentUserData.fullName.replace(/\s+/g, '_')}_Goorac_Certificate.pdf` : 'Goorac_Certificate.pdf';
@@ -911,15 +889,7 @@
                 margin:       0,
                 filename:     fileName,
                 image:        { type: 'jpeg', quality: 1 },
-                html2canvas:  { 
-                    scale: 2, 
-                    useCORS: true, 
-                    scrollX: 0, 
-                    scrollY: 0,
-                    // Forces the canvas to render the absolute pixel width, preventing mobile cropping
-                    windowWidth: element.scrollWidth,
-                    windowHeight: element.scrollHeight
-                },
+                html2canvas:  { scale: 2, useCORS: true, allowTaint: true, scrollY: 0, scrollX: 0, windowWidth: 1122 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
             };
             
@@ -929,7 +899,7 @@
             }).catch(err => {
                 console.error("PDF generation error: ", err);
                 btn.innerText = originalText;
-                showToast("Error generating PDF. Attempting fallback...");
+                showToast("Error generating PDF");
             });
         };
 
