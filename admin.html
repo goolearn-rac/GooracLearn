@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Goorac | Admin Dashboard</title>
+    <title>Quantum | Admin Dashboard</title>
     <style>
         /* Modern SaaS Theme Variables */
         :root {
@@ -89,13 +89,15 @@
         .stat-title { color: var(--text-muted); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
         .stat-value { font-size: 2rem; font-weight: 700; color: var(--text-main); }
 
-        /* Toolbar (Search) */
+        /* Toolbar (Search & Filters) */
         .toolbar {
-            display: flex; justify-content: space-between; gap: 15px; margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;
         }
-        .search-wrapper { position: relative; flex: 1; max-width: 400px; }
+        .search-wrapper { position: relative; flex: 1; min-width: 250px; max-width: 400px; }
         .search-wrapper svg { position: absolute; left: 12px; top: 14px; color: var(--text-muted); width: 18px; height: 18px; }
         .search-wrapper input { padding-left: 40px; margin-bottom: 0; }
+        
+        .filter-controls { display: flex; gap: 10px; flex-wrap: wrap; }
 
         /* Table Design */
         .table-card {
@@ -131,6 +133,20 @@
         .btn-icon:hover { background: var(--danger); color: white; }
         .btn-icon svg { width: 18px; height: 18px; }
 
+        /* WhatsApp Buttons */
+        .btn-wa {
+            background: #25D366; color: white; padding: 4px 10px; border-radius: 4px; 
+            text-decoration: none; font-size: 0.75rem; font-weight: bold; margin-left: 10px;
+            display: inline-flex; align-items: center; gap: 4px; transition: 0.2s; border: none;
+        }
+        .btn-wa:hover { background: #1da851; color: white; }
+        .btn-wa-full {
+            width: 100%; padding: 12px; background: #25D366; color: white; border: none;
+            border-radius: var(--radius-md); font-weight: 600; cursor: pointer; transition: 0.2s;
+            margin-top: 10px; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-wa-full:hover { background: #1da851; }
+
         /* Pagination */
         .pagination { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: var(--surface-color); border-top: 1px solid var(--border-color); }
         .page-info { font-size: 0.875rem; color: var(--text-muted); }
@@ -153,6 +169,7 @@
         .mobile-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .mobile-card-name { font-weight: 700; font-size: 1.05rem; color: var(--text-main); }
         .mobile-card-wa { font-family: monospace; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px;}
+        .mobile-card-date { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px; }
         .mobile-card-status { display: flex; gap: 8px; align-items: center;}
 
         /* Mobile User Details Modal */
@@ -198,31 +215,30 @@
             .header { margin-bottom: 20px; }
             .stats-grid { grid-template-columns: 1fr; gap: 12px; }
             #admin-screen { padding: 15px; }
+            .filter-controls { width: 100%; }
+            .filter-controls .input-field { flex: 1; }
         }
 
     </style>
 </head>
 <body>
 
-    <!-- 1. Sleek Login Screen -->
     <div id="login-screen">
         <div class="login-card">
-            <h2>Goorac <span class="header-brand">Admin</span></h2>
+            <h2>Quantum <span class="header-brand">Admin</span></h2>
             <p>Enter your security PIN to access the dashboard</p>
             <input type="password" id="admin-pin" class="input-field" placeholder="••••" onkeypress="if(event.key === 'Enter') checkPin()">
             <button class="btn-primary" onclick="checkPin()">Access Dashboard</button>
         </div>
     </div>
 
-    <!-- 2. Professional Admin Dashboard -->
     <div id="admin-screen">
         
         <div class="header">
-            <h1>Goorac <span class="header-brand">Learn</span></h1>
+            <h1>Quantum <span class="header-brand">Learn</span></h1>
             <button class="btn-page" onclick="location.reload()">Log Out</button>
         </div>
 
-        <!-- KPI Stat Cards -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-title">Total Students</div>
@@ -238,7 +254,6 @@
             </div>
         </div>
 
-        <!-- Toolbar -->
         <div class="toolbar">
             <div class="search-wrapper">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -246,16 +261,23 @@
                 </svg>
                 <input type="text" id="search-input" class="input-field" placeholder="Search by Name, WhatsApp, or UTR..." onkeyup="handleSearch()">
             </div>
+            
+            <div class="filter-controls">
+                <input type="date" id="date-filter" class="input-field" style="width: auto; margin-bottom: 0;" onchange="handleSearch()" title="Filter by Created Date">
+                <select id="sort-select" class="input-field" style="width: auto; margin-bottom: 0;" onchange="handleSearch()">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                </select>
+            </div>
         </div>
 
-        <!-- Main Data Table & Mobile List -->
         <div class="table-card">
-            <!-- Desktop View -->
             <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
                             <th>Student Name</th>
+                            <th>Date Joined</th>
                             <th>WhatsApp Number</th>
                             <th>Course Progress</th>
                             <th>Quiz</th>
@@ -265,17 +287,13 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <!-- Javascript injects desktop rows here -->
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
 
-            <!-- Mobile View (NEW) -->
             <div class="mobile-list" id="mobile-list">
-                <!-- Javascript injects mobile cards here -->
-            </div>
+                </div>
             
-            <!-- Pagination Controls -->
             <div class="pagination">
                 <div class="page-info" id="page-info">Showing 0 of 0 users</div>
                 <div class="page-controls">
@@ -286,7 +304,6 @@
         </div>
     </div>
 
-    <!-- Mobile Native Modal Overlay (NEW) -->
     <div class="modal-overlay" id="modal-overlay" onclick="closeUserModal(true)"></div>
     <div class="user-modal" id="user-modal">
         <div class="modal-header">
@@ -323,13 +340,17 @@
             </select>
         </div>
 
+        <a href="#" class="btn-wa-full" id="modal-wa-btn" target="_blank">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c-.003 1.396.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c.003-3.625 2.952-6.574 6.577-6.574a6.59 6.59 0 0 1 4.645 1.928 6.587 6.587 0 0 1 1.92 4.651c-.003 3.626-2.95 6.575-6.575 6.575zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+            </svg>
+            Chat on WhatsApp
+        </a>
         <button class="btn-danger-full" id="modal-delete-btn">Delete User Forever</button>
     </div>
 
-    <!-- Firebase & Logic Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-        // Added deleteDoc import for the user deletion functionality
         import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -364,21 +385,25 @@
 
         // Fetch Data (Reads Firebase exactly ONCE)
         async function fetchData() {
-            document.getElementById('table-body').innerHTML = "<tr><td colspan='7' style='text-align:center; padding: 40px;'>Loading database securely...</td></tr>";
+            document.getElementById('table-body').innerHTML = "<tr><td colspan='8' style='text-align:center; padding: 40px;'>Loading database securely...</td></tr>";
             
             try {
                 const querySnapshot = await getDocs(collection(db, "users"));
                 allUsers = [];
+                let fallbackIndex = 0;
 
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     data.uid = doc.id; 
+                    data._addedIndex = fallbackIndex++;
+                    // Normalize timestamp for sorting (fallback to index if no timestamp exists)
+                    data._createdAt = data.createdAt ? (data.createdAt.toMillis ? data.createdAt.toMillis() : new Date(data.createdAt).getTime()) : data._addedIndex;
                     allUsers.push(data);
                 });
 
                 filteredUsers = [...allUsers];
                 updateKPIs();
-                renderTable();
+                handleSearch(); // Automatically applies initial "Newest First" sort
             } catch (error) {
                 alert("Error fetching data. Check your Firebase rules.");
                 console.error(error);
@@ -400,16 +425,42 @@
             document.getElementById('stat-paid').innerText = paidCount;
         }
 
-        // Search Engine (Instant Client-Side)
+        // Search & Advanced Filter Engine
         window.handleSearch = () => {
             const query = document.getElementById('search-input').value.toLowerCase();
+            const sortOrder = document.getElementById('sort-select').value;
+            const dateFilter = document.getElementById('date-filter').value;
+            
             currentPage = 1; 
             
-            filteredUsers = allUsers.filter(user => 
-                (user.fullName && user.fullName.toLowerCase().includes(query)) || 
-                (user.whatsappNumber && user.whatsappNumber.includes(query)) ||
-                (user.upiTransactionId && user.upiTransactionId.includes(query))
-            );
+            filteredUsers = allUsers.filter(user => {
+                const matchesSearch = (user.fullName && user.fullName.toLowerCase().includes(query)) || 
+                                      (user.whatsappNumber && user.whatsappNumber.includes(query)) ||
+                                      (user.upiTransactionId && user.upiTransactionId.includes(query));
+                
+                let matchesDate = true;
+                if (dateFilter) {
+                    // Check if timestamp exists and is > 10000 to ignore the fallback indexing logic for date checks
+                    if (user._createdAt > 10000) {
+                        const userDate = new Date(user._createdAt).toISOString().split('T')[0];
+                        matchesDate = (userDate === dateFilter);
+                    } else {
+                        matchesDate = false; // Cannot match a specific date if no real timestamp exists
+                    }
+                }
+                
+                return matchesSearch && matchesDate;
+            });
+
+            // Apply Sorting
+            filteredUsers.sort((a, b) => {
+                if (sortOrder === 'newest') {
+                    return b._createdAt - a._createdAt;
+                } else {
+                    return a._createdAt - b._createdAt;
+                }
+            });
+
             renderTable();
         };
 
@@ -480,6 +531,16 @@
             const user = allUsers.find(u => u.uid === uid);
             if(!user) return;
             
+            // Format WhatsApp Link
+            const cleanWa = user.whatsappNumber ? user.whatsappNumber.replace(/[^\d+]/g, '') : '';
+            const waBtn = document.getElementById('modal-wa-btn');
+            if (cleanWa) {
+                waBtn.style.display = 'flex';
+                waBtn.href = `https://wa.me/${cleanWa}`;
+            } else {
+                waBtn.style.display = 'none';
+            }
+
             // Populate Modal Fields
             document.getElementById('modal-name').innerHTML = user.fullName || "<em>No Profile</em>";
             document.getElementById('modal-wa').innerText = user.whatsappNumber || "N/A";
@@ -532,7 +593,7 @@
             const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
             if(paginatedUsers.length === 0) {
-                const emptyMsg = `<tr><td colspan="7" style="text-align:center; padding:40px; color:var(--text-muted);">No users found</td></tr>`;
+                const emptyMsg = `<tr><td colspan="8" style="text-align:center; padding:40px; color:var(--text-muted);">No users found</td></tr>`;
                 tbody.innerHTML = emptyMsg;
                 mobileList.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-muted);">No users found</div>`;
             }
@@ -544,6 +605,14 @@
                 const quiz = user.hasPassedQuiz ? `<span class="badge bg-success">Passed</span>` : `<span class="badge bg-neutral">Pending</span>`;
                 const upi = user.upiTransactionId || "—";
                 
+                // Format Date for Display
+                const dateObj = user._createdAt > 10000 ? new Date(user._createdAt) : null;
+                const formattedDate = dateObj ? dateObj.toLocaleDateString() : "—";
+                
+                // Format WhatsApp Link Desktop
+                const cleanWa = user.whatsappNumber ? user.whatsappNumber.replace(/[^\d+]/g, '') : '';
+                const waButtonHTML = cleanWa ? `<a href="https://wa.me/${cleanWa}" target="_blank" class="btn-wa">Chat</a>` : '';
+
                 // Set initial class for the dropdown
                 let selectClass = "status-select bg-neutral";
                 let friendlyStatus = "Unpaid";
@@ -554,7 +623,8 @@
                 tbody.innerHTML += `
                     <tr>
                         <td style="font-weight: 500;">${name}</td>
-                        <td style="font-family: monospace;">${wa}</td>
+                        <td style="color: var(--text-muted); font-size: 0.85rem;">${formattedDate}</td>
+                        <td style="font-family: monospace;">${wa} ${waButtonHTML}</td>
                         <td>${progress}</td>
                         <td>${quiz}</td>
                         <td style="font-family: monospace; color: var(--text-muted);">${upi}</td>
@@ -582,6 +652,7 @@
                             <div class="mobile-card-name">${name}</div>
                             ${quiz}
                         </div>
+                        <div class="mobile-card-date">Joined: ${formattedDate}</div>
                         <div class="mobile-card-wa">📲 ${wa}</div>
                         <div class="mobile-card-status">
                             <span class="badge ${selectClass.replace('status-select ', '')}">${friendlyStatus}</span>
