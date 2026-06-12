@@ -63,6 +63,15 @@
         .active-screen { display: block; animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes slideIn { from { opacity: 0; transform: translateX(15px); } to { opacity: 1; transform: translateX(0); } }
 
+        /* Splash Screen Specifics */
+        #splash-screen.active-screen { display: flex; flex-direction: column; }
+        .spinner { 
+            width: 40px; height: 40px; border: 4px solid var(--border-color); 
+            border-top-color: var(--primary); border-radius: 50%; 
+            animation: spin 1s linear infinite; margin-top: 20px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
         /* Shared UI Components */
         h1, h2, h3 { font-weight: 700; margin-bottom: 12px; line-height: 1.2; letter-spacing: -0.5px; }
         p { margin-bottom: 20px; color: var(--text-muted); font-size: 1.05rem; }
@@ -177,17 +186,17 @@
         .certificate-wrapper {
             background: #ffffff;
             background-image: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            border: 0px solid transparent; /* Removed dark border for professional edge-to-edge PDF */
-            padding: 4% 6%; 
+            border: 0px solid transparent; 
+            padding: 50px 60px; /* Increased explicit pixel padding to prevent border overlap entirely */
             text-align: center;
-            border-radius: 0px; /* Removed radius for clean print */
-            box-shadow: none; /* Removed shadow for clean print */
+            border-radius: 0px; 
+            box-shadow: none; 
             color: #0f172a;
             margin: 0 auto;
             position: relative; 
             overflow: hidden;
             width: 100%;
-            min-width: 900px; /* Forces exact A4 aspect rendering preventing squish on mobile */
+            min-width: 900px; 
             max-width: 1122px; 
             aspect-ratio: 1.414; 
             display: flex; flex-direction: column; justify-content: space-between;
@@ -204,7 +213,7 @@
             font-size: clamp(60px, 15vw, 180px); color: rgba(0,0,0,0.03); font-weight: 900;
             pointer-events: none; z-index: 0;
         }
-        .cert-content { z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1;}
+        .cert-content { z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding-top: 15px;}
         .cert-header { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4.5vw, 3.2rem); color: #1e293b; margin-bottom: 0; font-weight: 800;}
         .cert-sub { font-size: clamp(0.7rem, 1.5vw, 1.1rem); color: #d4af37; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; font-weight: bold; }
         .cert-name { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4.5vw, 3rem); font-weight: 700; border-bottom: 2px solid #d4af37; padding-bottom: 8px; margin: 0 auto 15px; display: inline-block; min-width: 60%; color: #2563eb; line-height: 1.2;}
@@ -216,7 +225,7 @@
             font-weight: 800;
         }
 
-        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; z-index: 2; position: relative; margin-top: auto;}
+        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; z-index: 2; position: relative; margin-top: auto; padding-bottom: 15px;}
         .cert-qr-container { text-align: center; }
         .cert-qr { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); border: 3px solid #fff; box-shadow: var(--shadow-md); border-radius: 6px; background: white;}
         .cert-badge { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); background: radial-gradient(circle, #ffd700, #d4af37); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: clamp(0.5rem, 1vw, 0.75rem); border: 2px dashed white; line-height: 1.2;}
@@ -239,6 +248,8 @@
                 print-color-adjust: exact !important; 
                 box-shadow: none !important;
             }
+            .cert-content { padding-top: 0 !important; }
+            .cert-footer { padding-bottom: 0 !important; }
             .btn { display: none !important; }
             .top-nav { display: none !important; }
         }
@@ -253,7 +264,14 @@
         <div id="nav-profile" style="display:none; align-items: center; gap: 8px;"></div>
     </div>
 
-    <div id="login-screen" class="screen active-screen">
+    <div id="splash-screen" class="screen active-screen" style="justify-content: center; align-items: center; text-align: center;">
+        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 20px; border-radius: 50%; box-shadow: var(--shadow-md);">
+        <h1 style="color: var(--primary); margin-bottom: 8px; font-size: 2rem;">Goorac Learn</h1>
+        <p style="color: var(--text-muted); font-weight: 500; font-size: 1rem;">Initializing professional workspace...</p>
+        <div class="spinner"></div>
+    </div>
+
+    <div id="login-screen" class="screen">
         <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80" alt="AI Core" style="width:100%; height:180px; object-fit:cover; border-radius: var(--radius-xl); margin-bottom: 24px;">
         <h1 style="font-size: 2.2rem;">Master Prompt Engineering</h1>
         <p>Control ChatGPT, Claude, and Midjourney like a professional. 25 Advanced Modules. Official Certification.</p>
@@ -909,7 +927,7 @@
 
         // Added try-catch to prevent silent crash on initial file:// load
         try {
-            history.replaceState({ screen: 'login-screen' }, '', '#login-screen');
+            history.replaceState({ screen: 'splash-screen' }, '', '#splash-screen');
         } catch(e) {
             console.warn("History API prevented (often caused by local file:// paths):", e);
         }
