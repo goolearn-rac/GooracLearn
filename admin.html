@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Goorac | Admin Dashboard</title>
     <style>
         /* Modern SaaS Theme Variables */
@@ -139,6 +139,67 @@
         .btn-page:hover:not(:disabled) { background: var(--bg-color); border-color: var(--text-muted); }
         .btn-page:disabled { opacity: 0.5; cursor: not-allowed; }
 
+        /* ========================================= */
+        /* NEW ADVANCED MOBILE ARCHITECTURE          */
+        /* ========================================= */
+        
+        .mobile-list { display: none; }
+        .mobile-card {
+            background: var(--surface-color); border-radius: var(--radius-lg); padding: 16px; 
+            margin-bottom: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); 
+            cursor: pointer; transition: transform 0.2s, background 0.2s;
+        }
+        .mobile-card:active { transform: scale(0.98); background: var(--bg-color); }
+        .mobile-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .mobile-card-name { font-weight: 700; font-size: 1.05rem; color: var(--text-main); }
+        .mobile-card-wa { font-family: monospace; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px;}
+        .mobile-card-status { display: flex; gap: 8px; align-items: center;}
+
+        /* Mobile User Details Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); 
+            z-index: 999; display: none; opacity: 0; transition: opacity 0.3s;
+        }
+        .modal-overlay.active { display: block; opacity: 1; }
+        
+        .user-modal {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -45%);
+            width: 90%; max-width: 500px; background: var(--surface-color);
+            border-radius: var(--radius-xl); padding: 24px; z-index: 1000;
+            box-shadow: var(--shadow-lg); display: none; flex-direction: column; gap: 20px;
+            opacity: 0; transition: opacity 0.3s, transform 0.3s;
+        }
+        .user-modal.active { display: flex; opacity: 1; transform: translate(-50%, -50%); }
+        
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; }
+        .modal-title { font-size: 1.25rem; font-weight: 700; color: var(--text-main); }
+        .modal-close-btn { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+        
+        .modal-detail-row { display: flex; flex-direction: column; gap: 4px; }
+        .modal-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.05em; }
+        .modal-value { font-size: 1rem; color: var(--text-main); font-weight: 500; }
+        .modal-value-mono { font-family: monospace; color: var(--primary); font-size: 1.1rem; font-weight: 600;}
+        
+        .btn-danger-full { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--danger); color: var(--danger); border-radius: var(--radius-md); font-weight: 600; cursor: pointer; transition: 0.2s; margin-top: 10px;}
+        .btn-danger-full:hover { background: var(--danger); color: white; }
+
+        @media (max-width: 768px) {
+            .table-responsive { display: none; } /* Hide heavy desktop table */
+            .mobile-list { display: block; } /* Show sleek mobile cards */
+            
+            /* Native App Modal Experience */
+            .user-modal { 
+                width: 100%; height: 100%; top: 0; left: 0; transform: translateY(100%); 
+                border-radius: 0; padding: 20px 20px 80px 20px; overflow-y: auto; 
+                justify-content: flex-start;
+            }
+            .user-modal.active { transform: translateY(0); }
+            .header { margin-bottom: 20px; }
+            .stats-grid { grid-template-columns: 1fr; gap: 12px; }
+            #admin-screen { padding: 15px; }
+        }
+
     </style>
 </head>
 <body>
@@ -187,8 +248,9 @@
             </div>
         </div>
 
-        <!-- Main Data Table -->
+        <!-- Main Data Table & Mobile List -->
         <div class="table-card">
+            <!-- Desktop View -->
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -203,9 +265,14 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <!-- Javascript injects rows here -->
+                        <!-- Javascript injects desktop rows here -->
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Mobile View (NEW) -->
+            <div class="mobile-list" id="mobile-list">
+                <!-- Javascript injects mobile cards here -->
             </div>
             
             <!-- Pagination Controls -->
@@ -217,6 +284,46 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Mobile Native Modal Overlay (NEW) -->
+    <div class="modal-overlay" id="modal-overlay" onclick="closeUserModal(true)"></div>
+    <div class="user-modal" id="user-modal">
+        <div class="modal-header">
+            <div class="modal-title" id="modal-name">Student Name</div>
+            <button class="modal-close-btn" onclick="closeUserModal(true)">×</button>
+        </div>
+        
+        <div class="modal-detail-row">
+            <span class="modal-label">WhatsApp Number</span>
+            <span class="modal-value modal-value-mono" id="modal-wa">N/A</span>
+        </div>
+        <div class="modal-detail-row">
+            <span class="modal-label">UPI Transaction ID (UTR)</span>
+            <span class="modal-value modal-value-mono" id="modal-utr" style="color: var(--text-main);">N/A</span>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="modal-detail-row">
+                <span class="modal-label">Course Progress</span>
+                <span class="modal-value" id="modal-progress">0/10</span>
+            </div>
+            <div class="modal-detail-row">
+                <span class="modal-label">Final Quiz</span>
+                <span id="modal-quiz">Pending</span>
+            </div>
+        </div>
+
+        <div class="modal-detail-row" style="margin-top: 10px;">
+            <span class="modal-label" style="margin-bottom: 8px;">Payment Status</span>
+            <select id="modal-payment-select" class="status-select bg-neutral" style="width: 100%; padding: 12px; font-size: 1rem;">
+                <option value="none">Unpaid</option>
+                <option value="pending_check">Pending Review</option>
+                <option value="paid">Paid (Verified)</option>
+            </select>
+        </div>
+
+        <button class="btn-danger-full" id="modal-delete-btn">Delete User Forever</button>
     </div>
 
     <!-- Firebase & Logic Script -->
@@ -324,9 +431,10 @@
                 const userIndex = allUsers.findIndex(u => u.uid === uid);
                 if (userIndex > -1) allUsers[userIndex].paymentStatus = newStatus;
                 
-                // Re-calculate styling & KPIs
+                // Re-calculate styling, KPIs, and refresh tables so mobile & desktop sync
                 updateSelectStyle(selectElement, newStatus);
                 updateKPIs();
+                renderTable(); 
                 
             } catch (error) {
                 alert("Database update failed.");
@@ -365,17 +473,68 @@
             }
         };
 
-        // Table Rendering Engine
+        // ==========================================
+        // NEW: MOBILE MODAL ENGINE & HISTORY API
+        // ==========================================
+        window.openUserModal = (uid) => {
+            const user = allUsers.find(u => u.uid === uid);
+            if(!user) return;
+            
+            // Populate Modal Fields
+            document.getElementById('modal-name').innerHTML = user.fullName || "<em>No Profile</em>";
+            document.getElementById('modal-wa').innerText = user.whatsappNumber || "N/A";
+            document.getElementById('modal-progress').innerHTML = user.currentModule ? `<b>${user.currentModule}</b> / 10` : "Not Started";
+            document.getElementById('modal-quiz').innerHTML = user.hasPassedQuiz ? `<span class="badge bg-success">Passed</span>` : `<span class="badge bg-neutral">Pending</span>`;
+            document.getElementById('modal-utr').innerText = user.upiTransactionId || "No UTR Entered";
+            
+            // Setup Modal Payment Toggle
+            const selectEl = document.getElementById('modal-payment-select');
+            selectEl.value = user.paymentStatus || 'none';
+            updateSelectStyle(selectEl, user.paymentStatus || 'none');
+            selectEl.onchange = () => updatePayment(uid, selectEl);
+
+            // Setup Modal Delete Button
+            const delBtn = document.getElementById('modal-delete-btn');
+            delBtn.onclick = () => { closeUserModal(true); deleteUser(uid, user.fullName || 'User'); };
+
+            // Show Modal
+            document.getElementById('modal-overlay').classList.add('active');
+            document.getElementById('user-modal').classList.add('active');
+            
+            // Push History State so mobile back button works!
+            history.pushState({ modalOpen: true, uid: uid }, '', '#user-' + uid);
+        };
+
+        window.closeUserModal = (triggerHistoryBack = false) => {
+            document.getElementById('modal-overlay').classList.remove('active');
+            document.getElementById('user-modal').classList.remove('active');
+            if(triggerHistoryBack) history.back();
+        };
+
+        // Listen for Mobile Back Button
+        window.addEventListener('popstate', (e) => {
+            if (!e.state || !e.state.modalOpen) {
+                // If back button pressed, and state is gone, close modal smoothly
+                closeUserModal(false);
+            }
+        });
+
+        // Table Rendering Engine (Now renders Desktop AND Mobile views)
         function renderTable() {
             const tbody = document.getElementById('table-body');
+            const mobileList = document.getElementById('mobile-list');
+            
             tbody.innerHTML = '';
+            mobileList.innerHTML = '';
 
             const startIndex = (currentPage - 1) * rowsPerPage;
             const endIndex = startIndex + rowsPerPage;
             const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
             if(paginatedUsers.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:40px; color:var(--text-muted);">No users found</td></tr>`;
+                const emptyMsg = `<tr><td colspan="7" style="text-align:center; padding:40px; color:var(--text-muted);">No users found</td></tr>`;
+                tbody.innerHTML = emptyMsg;
+                mobileList.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-muted);">No users found</div>`;
             }
 
             paginatedUsers.forEach(user => {
@@ -387,9 +546,11 @@
                 
                 // Set initial class for the dropdown
                 let selectClass = "status-select bg-neutral";
-                if(user.paymentStatus === 'paid') selectClass = "status-select bg-success";
-                if(user.paymentStatus === 'pending_check') selectClass = "status-select bg-warning";
+                let friendlyStatus = "Unpaid";
+                if(user.paymentStatus === 'paid') { selectClass = "status-select bg-success"; friendlyStatus = "Paid"; }
+                if(user.paymentStatus === 'pending_check') { selectClass = "status-select bg-warning"; friendlyStatus = "Pending"; }
 
+                // 1. Inject Desktop Row
                 tbody.innerHTML += `
                     <tr>
                         <td style="font-weight: 500;">${name}</td>
@@ -412,6 +573,21 @@
                             </button>
                         </td>
                     </tr>
+                `;
+
+                // 2. Inject Mobile Card (NEW)
+                mobileList.innerHTML += `
+                    <div class="mobile-card" onclick="openUserModal('${user.uid}')">
+                        <div class="mobile-card-header">
+                            <div class="mobile-card-name">${name}</div>
+                            ${quiz}
+                        </div>
+                        <div class="mobile-card-wa">📲 ${wa}</div>
+                        <div class="mobile-card-status">
+                            <span class="badge ${selectClass.replace('status-select ', '')}">${friendlyStatus}</span>
+                            <span class="badge bg-neutral">Mod: ${user.currentModule || 0}/10</span>
+                        </div>
+                    </div>
                 `;
             });
 
