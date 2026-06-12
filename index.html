@@ -53,7 +53,7 @@
             background-color: var(--surface-color); border-bottom: 1px solid var(--border-color);
             padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm);
-            backdrop-filter: blur(10px); background-color: rgba(var(--surface-color), 0.9);
+            backdrop-filter: blur(10px); background-color: rgba(255, 255, 255, 0.9);
         }
         .brand { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
 
@@ -382,9 +382,9 @@
 
     <!-- APP LOGIC -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDeXk6z_5mYQZi_xIsQsN935KxuIBxAM3w",
@@ -427,7 +427,13 @@
             document.querySelectorAll('.screen').forEach(el => el.classList.remove('active-screen'));
             document.getElementById(screenId).classList.add('active-screen');
             window.scrollTo(0,0);
-            if(pushHistory) history.pushState({ screen: screenId }, '', '#' + screenId);
+            if(pushHistory) {
+                try {
+                    history.pushState({ screen: screenId }, '', '#' + screenId);
+                } catch (error) {
+                    console.warn("History API block caught. Routing continued.");
+                }
+            }
         };
 
         window.goBack = () => { history.back(); };
@@ -810,7 +816,11 @@
         };
 
         // Initialize state replacement for first load
-        history.replaceState({ screen: 'login-screen' }, '', '#login-screen');
+        try {
+            history.replaceState({ screen: 'login-screen' }, '', '#login-screen');
+        } catch (error) {
+            console.warn("Local history state replace blocked.");
+        }
     </script>
 </body>
 </html>
