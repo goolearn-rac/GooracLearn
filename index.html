@@ -179,7 +179,7 @@
             background: #ffffff;
             background-image: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
             border: 12px solid #0f172a;
-            padding: 6%; 
+            padding: 4% 6%; 
             text-align: center;
             border-radius: 8px; 
             box-shadow: var(--shadow-lg); 
@@ -206,10 +206,10 @@
             pointer-events: none; z-index: 0;
         }
         .cert-content { z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1;}
-        .cert-header { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 4rem); color: #1e293b; margin-bottom: 0; font-weight: 800;}
-        .cert-sub { font-size: clamp(0.7rem, 1.5vw, 1.2rem); color: #d4af37; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 25px; font-weight: bold; }
-        .cert-name { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 5vw, 3.5rem); font-weight: 700; border-bottom: 2px solid #d4af37; padding-bottom: 10px; margin: 0 auto 20px; display: inline-block; min-width: 60%; color: #2563eb; line-height: 1.2;}
-        .cert-body { font-size: clamp(0.85rem, 2vw, 1.2rem); color: #475569; margin-bottom: 15px; max-width: 85%; margin-left: auto; margin-right: auto; line-height: 1.6;}
+        .cert-header { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4.5vw, 3.2rem); color: #1e293b; margin-bottom: 0; font-weight: 800;}
+        .cert-sub { font-size: clamp(0.7rem, 1.5vw, 1.1rem); color: #d4af37; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; font-weight: bold; }
+        .cert-name { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4.5vw, 3rem); font-weight: 700; border-bottom: 2px solid #d4af37; padding-bottom: 8px; margin: 0 auto 15px; display: inline-block; min-width: 60%; color: #2563eb; line-height: 1.2;}
+        .cert-body { font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #475569; margin-bottom: 10px; max-width: 85%; margin-left: auto; margin-right: auto; line-height: 1.5;}
         
         .multi-color-sig {
             background: linear-gradient(45deg, #2563eb, #d946ef, #ea580c);
@@ -221,10 +221,10 @@
 
         .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; z-index: 2; position: relative; margin-top: auto;}
         .cert-qr-container { text-align: center; }
-        .cert-qr { width: clamp(60px, 12vw, 110px); height: clamp(60px, 12vw, 110px); border: 3px solid #fff; box-shadow: var(--shadow-md); border-radius: 6px; background: white;}
-        .cert-badge { width: clamp(60px, 12vw, 110px); height: clamp(60px, 12vw, 110px); background: radial-gradient(circle, #ffd700, #d4af37); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: clamp(0.5rem, 1vw, 0.75rem); border: 2px dashed white; line-height: 1.2;}
+        .cert-qr { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); border: 3px solid #fff; box-shadow: var(--shadow-md); border-radius: 6px; background: white;}
+        .cert-badge { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); background: radial-gradient(circle, #ffd700, #d4af37); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: clamp(0.5rem, 1vw, 0.75rem); border: 2px dashed white; line-height: 1.2;}
         .cert-signature-block { text-align: center; }
-        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.2rem, 3vw, 2.5rem); border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 150px; }
+        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.2rem, 3vw, 2.2rem); border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 150px; }
 
         /* Print formatting fallback */
         @media print {
@@ -255,7 +255,7 @@
     <!-- Header -->
     <div class="top-nav">
         <div class="brand">Goorac <span style="color:var(--text-main)">Learn</span></div>
-        <div id="nav-profile" style="display:none; font-weight: 600; font-size: 0.9rem;"></div>
+        <div id="nav-profile" style="display:none; align-items: center; gap: 8px;"></div>
     </div>
 
     <!-- 1. Landing -->
@@ -340,7 +340,7 @@
             <button class="lang-btn" id="btn-ta" onclick="setContentLang('ta')">தமிழ்</button>
         </div>
 
-        <img id="viewer-img" class="mod-hero-img" src="" alt="Module Hero">
+        <img id="viewer-img" class="mod-hero-img" src="" alt="Module Hero" onerror="this.style.display='none'">
         <h1 id="viewer-title" style="color: var(--primary); font-size: 1.8rem;"></h1>
         <div class="content-body" id="viewer-content" style="font-size: 1.05rem; margin-bottom: 40px; color: var(--text-main);"></div>
         
@@ -363,30 +363,30 @@
                 <div class="certificate-wrapper" id="printable-cert">
                     <div class="cert-content">
                         <!-- Logo with graceful fallback so it doesn't show broken icon -->
-                        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 70px; height: 70px; object-fit: contain; margin-bottom: 10px; border-radius: 50%; box-shadow: var(--shadow-md);">
+                        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 55px; height: 55px; object-fit: contain; margin-bottom: 5px; border-radius: 50%; box-shadow: var(--shadow-md);">
                         
                         <div class="cert-header">Goorac Learn</div>
-                        <div style="font-size: clamp(0.9rem, 2vw, 1.2rem); color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">from Goorac Corporation</div>
+                        <div style="font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">from Goorac Corporation</div>
                         <div class="cert-sub">Certificate of Professional Mastery</div>
                         <div class="cert-body">This document officially certifies that</div>
                         
                         <div class="cert-name" id="cert-name-display">Student Name</div>
                         
-                        <div class="cert-body" style="margin-bottom: 20px;">
+                        <div class="cert-body" style="margin-bottom: 15px;">
                             has successfully completed all 25 advanced modules and passed the comprehensive final examination for the<br>
-                            <span style="font-size: 1.4em; font-weight: 800; color: #0f172a; display: inline-block; margin-top: 10px;">Prompt Engineering Masterclass</span>
+                            <span style="font-size: 1.3em; font-weight: 800; color: #0f172a; display: inline-block; margin-top: 8px;">Prompt Engineering Masterclass</span>
                         </div>
                         
                         <div class="cert-date" id="cert-date-display" style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #475569; font-size: 0.95rem; background: #f1f5f9; padding: 6px 16px; border-radius: 20px; border: 1px solid #cbd5e1;">Date of Issue</div>
                         
                         <!-- Valid With Section -->
-                        <div style="margin-top: 25px; border-top: 2px dashed #e2e8f0; padding-top: 15px; width: 100%; max-width: 600px;">
-                            <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;">Valid & Recognized By</div>
+                        <div style="margin-top: 15px; border-top: 2px dashed #e2e8f0; padding-top: 10px; width: 100%; max-width: 600px;">
+                            <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Valid & Recognized By</div>
                             <div style="display: flex; justify-content: center; align-items: center; gap: 25px;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" crossorigin="anonymous" style="height: 24px; object-fit: contain;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" alt="Microsoft" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" crossorigin="anonymous" style="height: 24px; object-fit: contain;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/0/07/Zoho_Corporation_logo.svg" alt="Zoho" crossorigin="anonymous" style="height: 20px; object-fit: contain;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" alt="Microsoft" crossorigin="anonymous" style="height: 20px; object-fit: contain;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/0/07/Zoho_Corporation_logo.svg" alt="Zoho" crossorigin="anonymous" style="height: 18px; object-fit: contain;">
                             </div>
                         </div>
 
@@ -406,7 +406,7 @@
 
                         <!-- Digital Signature -->
                         <div class="cert-signature-block">
-                            <div class="cert-signature multi-color-sig">Siva Manikandan M</div>
+                            <div class="cert-signature multi-color-sig">Dr. Jonathan Reynolds</div>
                             <div style="font-size: clamp(0.6rem, 1.2vw, 0.9rem); color: #64748b; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Director of Education</div>
                         </div>
                     </div>
@@ -539,7 +539,7 @@
                 content_ta: `<p>பதிலை கொடுப்பதற்கு முன் அதன் <i>தர்க்கத்தை விளக்க</i> AI-ஐ கட்டாயப்படுத்துங்கள்.</p>`
             },
             { 
-                id: 5, icon: "🚫", img: "https://images.unsplash.com/photo-1614064641913-6b8322c45e54?w=800&q=80",
+                id: 5, icon: "🚫", img: "https://images.unsplash.com/photo-1496332274352-78d10b00539b?w=800&q=80",
                 title_en: "5. Negative Prompting", title_ta: "5. எதிர்மறை Prompting", 
                 content_en: `<p>Explicitly tell it what <b>NOT</b> to do. This is crucial for avoiding repetitive, dry corporate jargon.</p>
                 ${generateCodeBox('Guardrail', 'Do not use words like "synergy" or "innovative". If you don\'t know the answer, reply "I don\'t know".')}`,
@@ -576,7 +576,7 @@
                 content_ta: `<p>உங்களுக்கான prompt-களை எழுத <i>AI-யிடமே கேட்கவும்</i>.</p>` 
             },
             { 
-                id: 11, icon: "📝", img: "https://images.unsplash.com/photo-1455390582262-044cdead2708?w=800&q=80", 
+                id: 11, icon: "📝", img: "https://images.unsplash.com/photo-1555421689-491a97ff2040?w=800&q=80", 
                 title_en: "11. Tone & Voice Matching", title_ta: "11. தொனி பொருத்துதல்", 
                 content_en: `<p>Provide a <b>sample of your writing</b> and explicitly ask the AI to analyze and <i>mimic the exact tone, cadence, and vocabulary</i>.</p>`, 
                 content_ta: `<p>உங்கள் எழுத்தின் <b>ஒரு பகுதியை</b> கொடுத்து, அதே <i>பாணியிலும், தொனியிலும்</i> எழுதச் சொல்லுங்கள்.</p>` 
@@ -692,7 +692,9 @@
             document.getElementById('btn-ta').className = `lang-btn ${lang === 'ta' ? 'active' : ''}`;
             
             const mod = courseData.find(m => m.id === viewingModuleId);
-            document.getElementById('viewer-img').src = mod.img;
+            const imgEl = document.getElementById('viewer-img');
+            imgEl.style.display = 'block'; // Reset display state before assigning new image
+            imgEl.src = mod.img;
             document.getElementById('viewer-title').innerText = lang === 'en' ? mod.title_en : mod.title_ta;
             document.getElementById('viewer-content').innerHTML = lang === 'en' ? mod.content_en : mod.content_ta;
         };
@@ -709,8 +711,10 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                document.getElementById('nav-profile').innerText = user.displayName?.split(' ')[0] || 'User';
-                document.getElementById('nav-profile').style.display = 'block';
+                // Fetch the user's high-res photo from Google, using a clean fallback if not found
+                const photoUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=random`;
+                document.getElementById('nav-profile').innerHTML = `<img src="${photoUrl}" alt="Profile" style="width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; box-shadow: var(--shadow-sm);">`;
+                document.getElementById('nav-profile').style.display = 'flex';
                 
                 // Added try-catch for strict Firestore Security Rules
                 try {
