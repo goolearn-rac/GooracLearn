@@ -6,6 +6,8 @@
     <title>Goorac Learn | Advanced Prompt Engineering</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Official Razorpay Checkout Library -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
         /* Premium SaaS & App Theme Variables - Updated to Emerald/Teal and Midnight Blue */
         :root {
@@ -97,7 +99,8 @@
             border-radius: var(--radius-lg); padding: 16px; width: 100%; font-size: 1rem;
             font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 10px;
         }
-        .btn:active { transform: scale(0.98); } /* Mobile tap feedback */
+        .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none !important; }
+        .btn:active:not(:disabled) { transform: scale(0.98); } /* Mobile tap feedback */
         .btn-success { background-color: var(--success); }
         .btn-outline { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
 
@@ -300,20 +303,29 @@
     </div>
 
     <div id="payment-screen" class="screen">
-        <h2>Unlock 25 Modules</h2>
-        <p>Get lifetime access to our highly expanded curriculum and your verified certificate for just ₹149.</p>
+        <h2 style="font-size: 2.2rem; margin-bottom: 10px;">Unlock Premium Access</h2>
+        <p>Get lifetime access to our 25 advanced modules, exclusive frameworks, and your verified official certificate.</p>
         
-        <div class="card" style="text-align: center; border: 2px solid var(--primary);">
-            <div style="background: white; padding: 15px; border-radius: 12px; display: inline-block; border: 1px solid var(--border-color); margin-bottom: 15px;">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi%3A%2F%2Fpay%3Fpa%3Dsivamanihandan%40oksbi%26pn%3DQuantum%20Corporation%26am%3D149.00%26cu%3DINR" alt="UPI QR Code" width="180">
+        <div class="card" style="text-align: center; border: 2px solid var(--primary); padding: 30px 20px;">
+            <div style="background: var(--success-bg); padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:10px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <h3 style="color: var(--primary); margin-bottom: 5px;">Secure One-Time Payment</h3>
+                <p style="color: var(--text-main); font-weight: 800; font-size: 2rem; margin:0;">₹149.00</p>
             </div>
-            <p style="font-weight: 700; color: var(--text-main); font-size: 1.2rem;">Scan to pay ₹149</p>
             
-            <div class="input-group" style="text-align: left; margin-top: 30px;">
-                <label>Enter 12-Digit UTR / Transaction ID</label>
-                <input type="number" id="upi-input" placeholder="e.g. 312345678901">
+            <ul style="text-align: left; margin-bottom: 30px; list-style: none; padding: 0; font-size: 1.05rem;">
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Full 25-Module Masterclass</li>
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Verified Professional Certificate</li>
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Lifetime Access & Updates</li>
+            </ul>
+            
+            <button id="pay-razorpay-btn" class="btn" style="font-size: 1.1rem; padding: 18px;">
+                Pay Securely with Razorpay
+            </button>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                100% Encrypted & Safe
             </div>
-            <button id="submit-payment-btn" class="btn">Verify & Unlock</button>
         </div>
     </div>
 
@@ -418,12 +430,6 @@
                 <button id="download-pdf-btn" class="btn btn-success">Download High-Res PDF</button>
                 <button onclick="showScreen('dashboard-screen')" class="btn btn-outline">Back to Dashboard</button>
             </div>
-        </div>
-
-        <div id="cert-whatsapp-view" style="display:none; text-align:center;" class="card">
-            <h2>🎉 You Passed!</h2>
-            <p>We are verifying your ₹149 payment. Click below to send a screenshot on WhatsApp to unlock your PDF instantly.</p>
-            <button id="whatsapp-claim-btn" class="btn btn-success" style="background: #25D366; margin-top: 20px;">Claim via WhatsApp</button>
         </div>
     </div>
 
@@ -1142,7 +1148,7 @@
                     <p>Tell the AI exactly what emotion to evoke. "Optimize this copy to evoke a sense of urgency and Fear Of Missing Out (FOMO)" or "Make the reader feel relieved and safe."</p>
                     ${generateCodeBox('Copywriting Framework Prompt', 'Write a LinkedIn post selling our new PWA development service.\n\nStrictly use the PAS (Problem-Agitate-Solution) framework.\n\nProblem: E-commerce stores losing mobile customers due to slow load times.\nAgitate: Focus on how much money they are burning on ads just for users to bounce.\nSolution: Our lightweight PWAs.\n\nKeep it punchy. No emojis.')}`, 
                 content_ta: `
-                    <p>AI-யிடம் "ஒரு விளம்பரம் எழுது" என்று கேட்டால், அது சாதாரணமாக "எங்கள் செயலியை வாங்குங்கள், இது வேகமானது!" என்று எழுதும். ஆனால் மனித மனம் கதைகள் மற்றும் உணர்ச்சிகளுக்கே அதிகம் ஈர்க்கப்படும். எனவே, உளவியல் ரீதியான மார்க்கெட்டிங் கட்டமைப்புகளைப் பயன்படுத்த AI-ஐக் கட்டாயப்படுத்த வேண்டும்.</p>
+                    <p>AI-யிடம் "ஒரு விளம்பரம் எழுது" என்று கேட்டால், சாதாரணமாக "எங்கள் செயலியை வாங்குங்கள், இது வேகமானது!" என்று எழுதும். ஆனால் மனித மனம் கதைகள் மற்றும் உணர்ச்சிகளுக்கே அதிகம் ஈர்க்கப்படும். எனவே, உளவியல் ரீதியான மார்க்கெட்டிங் கட்டமைப்புகளைப் பயன்படுத்த AI-ஐக் கட்டாயப்படுத்த வேண்டும்.</p>
                     <h3>உளவியல் கட்டமைப்புகள்</h3>
                     <p>சாதாரணமாக எழுதச் சொல்வதற்குப் பதிலாக, இந்த மார்க்கெட்டிங் தத்துவங்களைப் பயன்படுத்துங்கள்:</p>
                     <ul>
@@ -1240,13 +1246,12 @@
             
             const mod = courseData.find(m => m.id === viewingModuleId);
             const imgEl = document.getElementById('viewer-img');
-            imgEl.style.display = 'block'; // Reset display state before assigning new image
+            imgEl.style.display = 'block'; 
             imgEl.src = mod.img;
             document.getElementById('viewer-title').innerText = lang === 'en' ? mod.title_en : mod.title_ta;
             document.getElementById('viewer-content').innerHTML = lang === 'en' ? mod.content_en : mod.content_ta;
         };
 
-        // FIXED ERROR HANDLING ON CLICK
         document.getElementById('primary-auth-btn').onclick = async () => {
             try {
                 await signInWithPopup(auth, provider);
@@ -1258,23 +1263,27 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Fetch the user's high-res photo from Google, using a clean fallback if not found
                 const photoUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=random`;
                 document.getElementById('nav-profile').innerHTML = `<img src="${photoUrl}" alt="Profile" style="width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; box-shadow: var(--shadow-sm);">`;
                 document.getElementById('nav-profile').style.display = 'flex';
                 
-                // Added try-catch for strict Firestore Security Rules
                 try {
                     const docSnap = await getDoc(doc(db, "users", user.uid));
                     if (docSnap.exists()) {
                         currentUserData = docSnap.data();
+                        
+                        // Strict data upgrade for users coming from old 'pending_check' logic to new explicit 'none' / 'paid' logic
+                        if (currentUserData.paymentStatus === 'pending_check') {
+                            currentUserData.paymentStatus = 'none';
+                        }
+                        
                         routeUser(true);
                     } else {
                         currentUserData = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
                         showScreen('profile-screen', true);
                     }
                 } catch (error) {
-                    console.error("Firestore read error (Likely strict security rules on missing doc):", error);
+                    console.error("Firestore read error:", error);
                     currentUserData = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
                     showScreen('profile-screen', true);
                 }
@@ -1286,7 +1295,10 @@
 
         function routeUser(pushHistory = true) {
             if (!currentUserData.fullName) return showScreen('profile-screen', pushHistory);
-            if (currentUserData.paymentStatus === 'none') return showScreen('payment-screen', pushHistory);
+            
+            // Strict binary gating logic (none -> payment screen | paid -> dashboard)
+            if (currentUserData.paymentStatus !== 'paid') return showScreen('payment-screen', pushHistory);
+            
             if (currentUserData.hasPassedQuiz) {
                 showCertificate();
                 return showScreen('cert-screen', pushHistory);
@@ -1313,18 +1325,80 @@
             routeUser(true);
         };
 
-        document.getElementById('submit-payment-btn').onclick = async () => {
-            const upiId = document.getElementById('upi-input').value;
-            if(upiId.length < 10) return showToast("Enter a valid 12-digit UTR");
+        // --- NEW PROFESSIONAL RAZORPAY CHECKOUT LOGIC ---
+        document.getElementById('pay-razorpay-btn').onclick = async () => {
+            const user = auth.currentUser;
+            if (!user) return showToast("Please sign in first.");
 
-            currentUserData.upiTransactionId = upiId;
-            currentUserData.paymentStatus = 'pending_check'; 
+            const btn = document.getElementById('pay-razorpay-btn');
+            const originalText = btn.innerText;
             
+            btn.innerText = "Initializing Secure Gateway...";
+            btn.disabled = true;
+
             try {
-                await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
-            } catch(e) { console.error("Payment save error:", e); }
-            
-            routeUser(true);
+                // 1. Tell your backend to create a Razorpay Order
+                const response = await fetch('https://goolearn-payment.hf.space/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: user.uid })
+                });
+                
+                if (!response.ok) throw new Error("Order creation failed on backend");
+                const orderData = await response.json();
+
+                // 2. Configure Razorpay Checkout Modal
+                const options = {
+                    "key": "rzp_live_T1HpoAe39yK0FV", 
+                    "amount": orderData.amount, 
+                    "currency": "INR",
+                    "name": "Goorac Learn",
+                    "description": "Unlock 25 Advanced Modules & Official Certification",
+                    "order_id": orderData.id, 
+                    "handler": async function (response) {
+                        showToast("Payment Successful! Unlocking curriculum...");
+                        
+                        // Set local state optimistically to redirect the user seamlessly while the webhook secures the backend
+                        currentUserData.paymentStatus = 'paid';
+                        
+                        // Fallback synchronization in case the webhook is delayed by network lag
+                        try {
+                            await setDoc(doc(db, "users", user.uid), { paymentStatus: 'paid' }, { merge: true });
+                        } catch(e) { console.warn("Local sync skipped, relying fully on webhook."); }
+                        
+                        routeUser(true);
+                    },
+                    "prefill": {
+                        "name": currentUserData.fullName || "",
+                        "contact": currentUserData.whatsappNumber || ""
+                    },
+                    "theme": { 
+                        "color": "#059669" 
+                    },
+                    "modal": {
+                        "ondismiss": function(){
+                            btn.innerText = originalText;
+                            btn.disabled = false;
+                        }
+                    }
+                };
+
+                const rzp = new window.Razorpay(options);
+                
+                rzp.on('payment.failed', function (response){
+                    showToast("Payment Failed: " + response.error.description);
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                });
+                
+                rzp.open();
+
+            } catch (error) {
+                console.error("Payment initiation failed:", error);
+                showToast("Could not connect to payment gateway. Try again.");
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
         };
 
         function renderDashboard() {
@@ -1420,7 +1494,6 @@
         function showCertificate() {
             if (currentUserData.paymentStatus === 'paid') {
                 document.getElementById('cert-pdf-view').style.display = 'block';
-                document.getElementById('cert-whatsapp-view').style.display = 'none';
                 
                 // Inject the student's name into the certificate dynamically
                 document.getElementById('cert-name-display').innerText = currentUserData.fullName;
@@ -1433,10 +1506,6 @@
                 // Dynamic QR Code encoding name, verified status, date, and issuer details
                 const encodedData = encodeURIComponent(`VERIFIED CREDENTIAL\nName: ${currentUserData.fullName}\nCourse: Prompt Engineering Masterclass\nIssuer: Goorac Learn (Goorac Corporation)\nDate: ${formattedDate}\nStatus: VERIFIED`);
                 document.getElementById('cert-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedData}`;
-
-            } else {
-                document.getElementById('cert-pdf-view').style.display = 'none';
-                document.getElementById('cert-whatsapp-view').style.display = 'block';
             }
         }
 
@@ -1453,7 +1522,6 @@
                 margin:       0,
                 filename:     fileName,
                 image:        { type: 'jpeg', quality: 1 },
-                /* Increased scale to 3 for ultra-crisp resolution */
                 html2canvas:  { scale: 3, useCORS: true, allowTaint: true, scrollY: 0, scrollX: 0, windowWidth: 1122 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
             };
@@ -1468,12 +1536,6 @@
             });
         };
 
-        document.getElementById('whatsapp-claim-btn').onclick = () => {
-            const msg = `Hi Admin! I passed the 25-module Exam. My name is ${currentUserData.fullName} and my UTR is ${currentUserData.upiTransactionId}. Please verify my payment.`;
-            window.open(`https://wa.me/919443042733?text=${encodeURIComponent(msg)}`, '_blank');
-        };
-
-        // Added try-catch to prevent silent crash on initial file:// load
         try {
             history.replaceState({ screen: 'splash-screen' }, '', '#splash-screen');
         } catch(e) {
