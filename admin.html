@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Quantum | Admin Dashboard</title>
+    <title>Goorac | Admin Dashboard</title>
     <style>
-        /* Modern SaaS Theme Variables */
+        /* Premium SaaS & App Theme Variables - Synced to Emerald/Teal Theme Profile */
         :root {
             --bg-color: #f8fafc;
             --surface-color: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border-color: #e2e8f0;
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
+            --primary: #059669; /* Emerald Green */
+            --primary-hover: #047857;
             --danger: #ef4444;
             --danger-hover: #dc2626;
             --success-bg: #dcfce7;
@@ -26,16 +26,17 @@
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             --radius-md: 0.5rem;
             --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
         }
 
         /* Dark Mode Support */
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #0f172a;
-                --surface-color: #1e293b;
+                --bg-color: #020617; /* Deep Midnight Blue */
+                --surface-color: #0f172a;
                 --text-main: #f8fafc;
                 --text-muted: #94a3b8;
-                --border-color: #334155;
+                --border-color: #1e293b;
                 --success-bg: #064e3b;
                 --success-text: #34d399;
                 --warning-bg: #713f12;
@@ -60,12 +61,18 @@
         }
         .login-card h2 { margin-bottom: 8px; font-weight: 700; color: var(--text-main); }
         .login-card p { color: var(--text-muted); margin-bottom: 24px; font-size: 0.9rem; }
+        
         .input-field {
             width: 100%; padding: 12px 16px; border: 1px solid var(--border-color);
             border-radius: var(--radius-md); background: var(--bg-color); color: var(--text-main);
             font-size: 1rem; transition: all 0.2s; outline: none; margin-bottom: 20px;
         }
-        .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); }
+        
+        .error-message {
+            color: var(--danger); font-size: 0.85rem; font-weight: 500; margin-top: -12px; margin-bottom: 16px; text-align: left; display: none;
+        }
+
         .btn-primary {
             width: 100%; padding: 12px; background: var(--primary); color: white;
             border: none; border-radius: var(--radius-md); font-size: 1rem; font-weight: 600;
@@ -120,7 +127,7 @@
         .status-select {
             padding: 6px 30px 6px 12px; border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; cursor: pointer;
             border: 1px solid transparent; appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
             background-repeat: no-repeat; background-position: right 8px center; background-size: 14px;
         }
         .status-select:focus { outline: none; border-color: var(--primary); }
@@ -155,10 +162,7 @@
         .btn-page:hover:not(:disabled) { background: var(--bg-color); border-color: var(--text-muted); }
         .btn-page:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* ========================================= */
-        /* ADVANCED MOBILE ARCHITECTURE              */
-        /* ========================================= */
-        
+        /* Mobile List Architecture */
         .mobile-list { display: none; }
         .mobile-card {
             background: var(--surface-color); border-radius: var(--radius-lg); padding: 16px; 
@@ -202,10 +206,9 @@
         .btn-danger-full:hover { background: var(--danger); color: white; }
 
         @media (max-width: 768px) {
-            .table-responsive { display: none; } /* Hide heavy desktop table */
-            .mobile-list { display: block; } /* Show sleek mobile cards */
+            .table-responsive { display: none; } 
+            .mobile-list { display: block; } 
             
-            /* Native App Modal Experience */
             .user-modal { 
                 width: 100%; height: 100%; top: 0; left: 0; transform: translateY(100%); 
                 border-radius: 0; padding: 20px 20px 80px 20px; overflow-y: auto; 
@@ -218,16 +221,16 @@
             .filter-controls { width: 100%; }
             .filter-controls .input-field { flex: 1; }
         }
-
     </style>
 </head>
 <body>
 
     <div id="login-screen">
         <div class="login-card">
-            <h2>Quantum <span class="header-brand">Admin</span></h2>
+            <h2>Goorac <span class="header-brand">Admin</span></h2>
             <p>Enter your security PIN to access the dashboard</p>
-            <input type="password" id="admin-pin" class="input-field" placeholder="••••" onkeypress="if(event.key === 'Enter') checkPin()">
+            <input type="password" id="admin-pin" class="input-field" placeholder="••••" inputmode="numeric" pattern="[0-9]*" onkeypress="if(event.key === 'Enter') checkPin()">
+            <div id="login-error" class="error-message">Incorrect Security PIN</div>
             <button class="btn-primary" onclick="checkPin()">Access Dashboard</button>
         </div>
     </div>
@@ -235,7 +238,7 @@
     <div id="admin-screen">
         
         <div class="header">
-            <h1>Quantum <span class="header-brand">Learn</span></h1>
+            <h1>Goorac <span class="header-brand">Learn</span></h1>
             <button class="btn-page" onclick="location.reload()">Log Out</button>
         </div>
 
@@ -322,7 +325,7 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
             <div class="modal-detail-row">
                 <span class="modal-label">Course Progress</span>
-                <span class="modal-value" id="modal-progress">0/10</span>
+                <span class="modal-value" id="modal-progress">0/25</span>
             </div>
             <div class="modal-detail-row">
                 <span class="modal-label">Final Quiz</span>
@@ -370,19 +373,24 @@
         let currentPage = 1;
         const rowsPerPage = 10;
 
-        // Login System
+        // Secure On-Screen Security PIN Login Flow
         window.checkPin = () => {
-            const pin = document.getElementById('admin-pin').value;
-            if (pin === '2502') {
+            const pinInput = document.getElementById('admin-pin');
+            const errorEl = document.getElementById('login-error');
+            
+            if (pinInput.value === '2502') {
+                errorEl.style.display = 'none';
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('admin-screen').style.display = 'block';
                 fetchData();
             } else {
-                alert("Incorrect Security PIN");
+                errorEl.style.display = 'block';
+                pinInput.value = '';
+                pinInput.focus();
             }
         };
 
-        // Fetch Data (Reads Firebase exactly ONCE)
+        // Fetch Data from Firestore Core Cluster
         async function fetchData() {
             document.getElementById('table-body').innerHTML = "<tr><td colspan='8' style='text-align:center; padding: 40px;'>Loading database securely...</td></tr>";
             
@@ -395,21 +403,20 @@
                     const data = doc.data();
                     data.uid = doc.id; 
                     data._addedIndex = fallbackIndex++;
-                    // Normalize timestamp for sorting (fallback to index if no timestamp exists)
                     data._createdAt = data.createdAt ? (data.createdAt.toMillis ? data.createdAt.toMillis() : new Date(data.createdAt).getTime()) : data._addedIndex;
                     allUsers.push(data);
                 });
 
                 filteredUsers = [...allUsers];
                 updateKPIs();
-                handleSearch(); // Automatically applies initial "Newest First" sort
+                handleSearch();
             } catch (error) {
-                alert("Error fetching data. Check your Firebase rules.");
-                console.error(error);
+                console.error("Database access initialization failure: ", error);
+                document.getElementById('table-body').innerHTML = "<tr><td colspan='8' style='text-align:center; padding: 40px; color: var(--danger);'>Error loading data. Verify firestore security perimeter policy rules configurations.</td></tr>";
             }
         }
 
-        // Update Top Stat Cards
+        // Update Summary Cards Metrics
         function updateKPIs() {
             let pendingCount = 0;
             let paidCount = 0;
@@ -424,7 +431,7 @@
             document.getElementById('stat-paid').innerText = paidCount;
         }
 
-        // Search & Advanced Filter Engine
+        // Search Engine & Real-time Client Filtering Parameters
         window.handleSearch = () => {
             const query = document.getElementById('search-input').value.toLowerCase();
             const sortOrder = document.getElementById('sort-select').value;
@@ -432,13 +439,11 @@
             currentPage = 1; 
             
             filteredUsers = allUsers.filter(user => {
-                const matchesSearch = (user.fullName && user.fullName.toLowerCase().includes(query)) || 
-                                      (user.whatsappNumber && user.whatsappNumber.includes(query)) ||
-                                      (user.upiTransactionId && user.upiTransactionId.includes(query));
-                return matchesSearch;
+                return (user.fullName && user.fullName.toLowerCase().includes(query)) || 
+                       (user.whatsappNumber && user.whatsappNumber.includes(query)) ||
+                       (user.upiTransactionId && user.upiTransactionId.includes(query));
             });
 
-            // Apply Sorting (Defaults to newest first seamlessly)
             filteredUsers.sort((a, b) => {
                 if (sortOrder === 'oldest') {
                     return a._createdAt - b._createdAt;
@@ -450,13 +455,13 @@
             renderTable();
         };
 
-        // Pagination
+        // Table List Pagination Offset Toggles
         window.changePage = (direction) => {
             currentPage += direction;
             renderTable();
         };
 
-        // Update Payment Status
+        // Write Operations To Update Status Values On Database State Core
         window.updatePayment = async (uid, selectElement) => {
             const newStatus = selectElement.value;
             selectElement.disabled = true; 
@@ -464,60 +469,50 @@
             try {
                 await updateDoc(doc(db, "users", uid), { paymentStatus: newStatus });
                 
-                // Update Local Memory
                 const userIndex = allUsers.findIndex(u => u.uid === uid);
                 if (userIndex > -1) allUsers[userIndex].paymentStatus = newStatus;
                 
-                // Re-calculate styling, KPIs, and refresh tables so mobile & desktop sync
                 updateSelectStyle(selectElement, newStatus);
                 updateKPIs();
                 renderTable(); 
                 
             } catch (error) {
-                alert("Database update failed.");
+                alert("Database transactional state compilation failure.");
                 console.error(error);
             } finally {
                 selectElement.disabled = false;
             }
         };
 
-        // Helper to colorize select dropdowns dynamically
+        // Status Elements Color Palette Synthesizer
         function updateSelectStyle(el, status) {
             if(status === 'paid') { el.className = "status-select bg-success"; }
             else if(status === 'pending_check') { el.className = "status-select bg-warning"; }
             else { el.className = "status-select bg-neutral"; }
         }
 
-        // Delete User Functionality
+        // System Mutator For Complete Row Record Excision
         window.deleteUser = async (uid, name) => {
             const confirmed = confirm(`WARNING: Are you sure you want to completely delete "${name}"? \n\nThis will remove their profile, progress, and payment record forever. This cannot be undone.`);
             
             if (confirmed) {
                 try {
-                    // Delete from Firebase
                     await deleteDoc(doc(db, "users", uid));
-                    
-                    // Remove from Local Cache
                     allUsers = allUsers.filter(u => u.uid !== uid);
-                    
-                    // Re-filter and re-render
                     handleSearch(); 
                     updateKPIs();
                 } catch (error) {
-                    alert("Failed to delete user. Check permissions.");
+                    alert("Destructive transaction write execution denied. System access credentials violation error.");
                     console.error(error);
                 }
             }
         };
 
-        // ==========================================
-        // MOBILE MODAL ENGINE & HISTORY API
-        // ==========================================
+        // Mobile Application Modal Window Controller Pipelines
         window.openUserModal = (uid) => {
             const user = allUsers.find(u => u.uid === uid);
             if(!user) return;
             
-            // Format WhatsApp Link
             const cleanWa = user.whatsappNumber ? user.whatsappNumber.replace(/[^\d+]/g, '') : '';
             const waBtn = document.getElementById('modal-wa-btn');
             if (cleanWa) {
@@ -527,28 +522,28 @@
                 waBtn.style.display = 'none';
             }
 
-            // Populate Modal Fields
             document.getElementById('modal-name').innerHTML = user.fullName || "<em>No Profile</em>";
             document.getElementById('modal-wa').innerText = user.whatsappNumber || "N/A";
-            document.getElementById('modal-progress').innerHTML = user.currentModule ? `<b>${user.currentModule}</b> / 10` : "Not Started";
+            
+            // Fixed course tracking constraint to 25 modules max capacity scale threshold mapping rules
+            let currentModVal = user.currentModule || 0;
+            if(currentModVal > 25) currentModVal = 25;
+            document.getElementById('modal-progress').innerHTML = user.currentModule ? `<b>${currentModVal}</b> / 25` : "Not Started";
+            
             document.getElementById('modal-quiz').innerHTML = user.hasPassedQuiz ? `<span class="badge bg-success">Passed</span>` : `<span class="badge bg-neutral">Pending</span>`;
             document.getElementById('modal-utr').innerText = user.upiTransactionId || "No UTR Entered";
             
-            // Setup Modal Payment Toggle
             const selectEl = document.getElementById('modal-payment-select');
             selectEl.value = user.paymentStatus || 'none';
             updateSelectStyle(selectEl, user.paymentStatus || 'none');
             selectEl.onchange = () => updatePayment(uid, selectEl);
 
-            // Setup Modal Delete Button
             const delBtn = document.getElementById('modal-delete-btn');
             delBtn.onclick = () => { closeUserModal(true); deleteUser(uid, user.fullName || 'User'); };
 
-            // Show Modal
             document.getElementById('modal-overlay').classList.add('active');
             document.getElementById('user-modal').classList.add('active');
             
-            // Push History State so mobile back button works!
             history.pushState({ modalOpen: true, uid: uid }, '', '#user-' + uid);
         };
 
@@ -558,15 +553,13 @@
             if(triggerHistoryBack) history.back();
         };
 
-        // Listen for Mobile Back Button
         window.addEventListener('popstate', (e) => {
             if (!e.state || !e.state.modalOpen) {
-                // If back button pressed, and state is gone, close modal smoothly
                 closeUserModal(false);
             }
         });
 
-        // Table Rendering Engine (Renders Desktop AND Mobile views)
+        // Dynamic Dual Matrix Interface View Renderer
         function renderTable() {
             const tbody = document.getElementById('table-body');
             const mobileList = document.getElementById('mobile-list');
@@ -579,33 +572,34 @@
             const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
             if(paginatedUsers.length === 0) {
-                const emptyMsg = `<tr><td colspan="8" style="text-align:center; padding:40px; color:var(--text-muted);">No users found</td></tr>`;
-                tbody.innerHTML = emptyMsg;
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:40px; color:var(--text-muted);">No users found</td></tr>`;
                 mobileList.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-muted);">No users found</div>`;
             }
 
             paginatedUsers.forEach(user => {
                 const name = user.fullName || "<em style='color:var(--text-muted)'>No Profile</em>";
                 const wa = user.whatsappNumber || "—";
-                const progress = user.currentModule ? `<b>${user.currentModule}</b> / 10` : "Not Started";
+                
+                // Fixed module calculation scaling metrics rules to maximum payload index structure size 25
+                let currentModVal = user.currentModule || 0;
+                if(currentModVal > 25) currentModVal = 25;
+                const progress = user.currentModule ? `<b>${currentModVal}</b> / 25` : "Not Started";
+                
                 const quiz = user.hasPassedQuiz ? `<span class="badge bg-success">Passed</span>` : `<span class="badge bg-neutral">Pending</span>`;
                 const upi = user.upiTransactionId || "—";
                 
-                // Format Date for Display
                 const dateObj = user._createdAt > 10000 ? new Date(user._createdAt) : null;
                 const formattedDate = dateObj ? dateObj.toLocaleDateString() : "—";
                 
-                // Format WhatsApp Link Desktop
                 const cleanWa = user.whatsappNumber ? user.whatsappNumber.replace(/[^\d+]/g, '') : '';
                 const waButtonHTML = cleanWa ? `<a href="https://wa.me/${cleanWa}" target="_blank" class="btn-wa">Chat</a>` : '';
 
-                // Set initial class for the dropdown
                 let selectClass = "status-select bg-neutral";
                 let friendlyStatus = "Unpaid";
                 if(user.paymentStatus === 'paid') { selectClass = "status-select bg-success"; friendlyStatus = "Paid"; }
                 if(user.paymentStatus === 'pending_check') { selectClass = "status-select bg-warning"; friendlyStatus = "Pending"; }
 
-                // 1. Inject Desktop Row
+                // Desktop Matrix Assembly Pipeline
                 tbody.innerHTML += `
                     <tr>
                         <td style="font-weight: 500;">${name}</td>
@@ -631,7 +625,7 @@
                     </tr>
                 `;
 
-                // 2. Inject Mobile Card
+                // Mobile Cards Stack Integration Loop
                 mobileList.innerHTML += `
                     <div class="mobile-card" onclick="openUserModal('${user.uid}')">
                         <div class="mobile-card-header">
@@ -642,13 +636,12 @@
                         <div class="mobile-card-wa">📲 ${wa}</div>
                         <div class="mobile-card-status">
                             <span class="badge ${selectClass.replace('status-select ', '')}">${friendlyStatus}</span>
-                            <span class="badge bg-neutral">Mod: ${user.currentModule || 0}/10</span>
+                            <span class="badge bg-neutral">Mod: ${currentModVal}/25</span>
                         </div>
                     </div>
                 `;
             });
 
-            // Update Pagination UI
             document.getElementById('page-info').innerText = `Showing ${filteredUsers.length > 0 ? startIndex + 1 : 0} to ${Math.min(endIndex, filteredUsers.length)} of ${filteredUsers.length} users`;
             document.getElementById('prev-btn').disabled = currentPage === 1;
             document.getElementById('next-btn').disabled = endIndex >= filteredUsers.length;
