@@ -1,0 +1,24 @@
+# Use the official lightweight Node.js LTS image
+FROM node:20-slim
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy dependency structures
+COPY package*.json ./
+
+# Fix: Use npm install with the modern production flag to prevent lockfile crashes
+RUN npm install --omit=dev
+
+# Copy the remaining application source files
+COPY . .
+
+# Hugging Face Spaces dynamically routes traffic through port 7860
+EXPOSE 7860
+
+# Force standard production environment variables
+ENV NODE_ENV=production
+ENV PORT=7860
+
+# Execute the start script defined in package.json
+CMD ["npm", "start"]
