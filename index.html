@@ -205,9 +205,72 @@
         }
         .chrome-btn:hover { background-color: #3367D6; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4); }
         .chrome-btn svg { width: 22px; height: 22px; }
+
+        /* --- NEW: IG/Browser Top Banner Styles --- */
+        #igBrowserBanner {
+            display: none;
+            background-color: #4285F4;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 0.95rem;
+            position: sticky;
+            top: 0;
+            z-index: 1001; /* Above modal overlays if any */
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            box-shadow: var(--shadow-md);
+        }
+        #igBrowserBanner.active {
+            display: flex;
+            animation: slideDown 0.3s ease-out forwards;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+        .banner-text { flex-grow: 1; text-align: left; }
+        .banner-btn {
+            background: white;
+            color: #4285F4;
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.2s;
+        }
+        .banner-btn:hover { background: #f8fafc; }
+        .dismiss-banner {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.5rem;
+            line-height: 1;
+            opacity: 0.8;
+            padding: 0 5px;
+            transition: opacity 0.2s;
+        }
+        .dismiss-banner:hover { opacity: 1; }
+
+        @media (max-width: 600px) {
+            #igBrowserBanner { flex-direction: column; gap: 10px; text-align: center; }
+            .banner-text { text-align: center; }
+            .dismiss-banner { position: absolute; top: 10px; right: 10px; }
+        }
     </style>
 </head>
 <body>
+
+    <!-- NEW: Top Banner for IG Browser -->
+    <div id="igBrowserBanner">
+        <span class="banner-text"><strong>Action Required:</strong> Instagram's browser restricts enrollment. Open in Chrome for the best experience.</span>
+        <button onclick="forceOpenChrome()" class="banner-btn">Open in Chrome</button>
+        <button onclick="dismissBanner()" class="dismiss-banner">&times;</button>
+    </div>
 
     <header class="hero container">
         <img src="icon.png" alt="Goorac Logo" class="hero-logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23059669\'/><text x=\'50\' y=\'65\' font-size=\'50\' font-family=\'sans-serif\' font-weight=\'bold\' fill=\'white\' text-anchor=\'middle\'>G</text></svg>'">
@@ -450,6 +513,11 @@
             }
         }
 
+        // --- NEW: Dismiss banner logic ---
+        function dismissBanner() {
+            document.getElementById('igBrowserBanner').classList.remove('active');
+        }
+
         // --- ADDED: Instagram Detection & Auto-Redirect Logic ---
         function isInstagramBrowser() {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
@@ -477,12 +545,25 @@
         // Check on load
         window.addEventListener('load', function() {
             if (isInstagramBrowser()) {
+                // NEW: Show top banner instead of the intrusive modal
+                document.getElementById('igBrowserBanner').classList.add('active');
+
+                // NEW: Intercept clicks on the enroll buttons strictly requiring them to open Chrome
+                const enrollBtns = document.querySelectorAll('a.btn');
+                enrollBtns.forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault(); // Stop standard link behavior
+                        forceOpenChrome();  // Force open in Chrome instead
+                    });
+                });
+
+                // --- ORIGINAL MODAL LOGIC (Commented out as requested instead of removed) ---
                 // Show the modal
-                openModal('igBrowserModal');
+                // openModal('igBrowserModal');
                 
                 // Try automatically redirecting after 1.5 seconds (fulfills your "auto redirect" requirement)
                 // Note: IG occasionally blocks auto-redirects, which is why the modal is there as a fallback!
-                setTimeout(forceOpenChrome, 1500); 
+                // setTimeout(forceOpenChrome, 1500); 
             }
         });
     </script>
