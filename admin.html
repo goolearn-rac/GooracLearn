@@ -81,7 +81,7 @@
         .btn-primary:hover { background: var(--primary-hover); }
 
         /* Dashboard Layout */
-        #admin-screen { display: none; padding: 30px 20px; max-width: 1280px; margin: 0 auto; }
+        #admin-screen { display: none; padding: 30px 20px; max-width: 1400px; margin: 0 auto; }
         
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .header h1 { font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
@@ -114,7 +114,7 @@
         .table-responsive { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap; }
         th { background: var(--bg-color); padding: 16px 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; border-bottom: 1px solid var(--border-color); }
-        td { padding: 16px 20px; font-size: 0.9rem; border-bottom: 1px solid var(--border-color); color: var(--text-main); vertical-align: middle; }
+        td { padding: 16px 20px; font-size: 0.9rem; border-bottom: 1px solid var(--border-color); color: var(--text-main); vertical-align: top; }
         tr:last-child td { border-bottom: none; }
         tr:hover { background: var(--bg-color); }
 
@@ -126,7 +126,7 @@
 
         .status-select {
             padding: 6px 30px 6px 12px; border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; cursor: pointer;
-            border: 1px solid transparent; appearance: none;
+            border: 1px solid transparent; appearance: none; width: 100px;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
             background-repeat: no-repeat; background-position: right 8px center; background-size: 14px;
         }
@@ -174,7 +174,7 @@
         .mobile-card-name { font-weight: 700; font-size: 1.05rem; color: var(--text-main); }
         .mobile-card-wa { font-family: monospace; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px;}
         .mobile-card-date { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px; }
-        .mobile-card-status { display: flex; gap: 8px; align-items: center;}
+        .mobile-card-status { display: flex; gap: 8px; align-items: center; flex-wrap: wrap;}
 
         /* Mobile User Details Modal */
         .modal-overlay {
@@ -189,7 +189,7 @@
             width: 90%; max-width: 500px; background: var(--surface-color);
             border-radius: var(--radius-xl); padding: 24px; z-index: 1000;
             box-shadow: var(--shadow-lg); display: none; flex-direction: column; gap: 20px;
-            opacity: 0; transition: opacity 0.3s, transform 0.3s;
+            opacity: 0; transition: opacity 0.3s, transform 0.3s; max-height: 90vh; overflow-y: auto;
         }
         .user-modal.active { display: flex; opacity: 1; transform: translate(-50%, -50%); }
         
@@ -248,11 +248,11 @@
                 <div class="stat-value" id="stat-total">0</div>
             </div>
             <div class="stat-card">
-                <div class="stat-title">Pending Verifications</div>
-                <div class="stat-value" id="stat-pending" style="color: var(--warning-text);">0</div>
+                <div class="stat-title">Active Course Enrollments</div>
+                <div class="stat-value" id="stat-enrollments" style="color: var(--primary);">0</div>
             </div>
             <div class="stat-card">
-                <div class="stat-title">Fully Paid & Enrolled</div>
+                <div class="stat-title">Fully Paid Courses</div>
                 <div class="stat-value" id="stat-paid" style="color: var(--success-text);">0</div>
             </div>
         </div>
@@ -280,10 +280,11 @@
                         <tr>
                             <th>Student Name</th>
                             <th>Date Joined</th>
-                            <th>WhatsApp Number</th>
-                            <th>Course Progress</th>
+                            <th>WhatsApp</th>
+                            <th>Enrolled Courses</th>
+                            <th>Progress</th>
                             <th>Quiz</th>
-                            <th>UPI Transaction ID</th>
+                            <th>UPI UTR</th>
                             <th>Payment Status</th>
                             <th style="text-align: center;">Actions</th>
                         </tr>
@@ -306,6 +307,7 @@
         </div>
     </div>
 
+    <!-- Modals -->
     <div class="modal-overlay" id="modal-overlay" onclick="closeUserModal(true)"></div>
     <div class="user-modal" id="user-modal">
         <div class="modal-header">
@@ -322,24 +324,9 @@
             <span class="modal-value modal-value-mono" id="modal-utr" style="color: var(--text-main);">N/A</span>
         </div>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div class="modal-detail-row">
-                <span class="modal-label">Course Progress</span>
-                <span class="modal-value" id="modal-progress">0/25</span>
-            </div>
-            <div class="modal-detail-row">
-                <span class="modal-label">Final Quiz</span>
-                <span id="modal-quiz">Pending</span>
-            </div>
-        </div>
-
-        <div class="modal-detail-row" style="margin-top: 10px;">
-            <span class="modal-label" style="margin-bottom: 8px;">Payment Status</span>
-            <select id="modal-payment-select" class="status-select bg-neutral" style="width: 100%; padding: 12px; font-size: 1rem;">
-                <option value="none">Unpaid</option>
-                <option value="pending_check">Pending Review</option>
-                <option value="paid">Paid (Verified)</option>
-            </select>
+        <!-- Dynamic Courses Container for Mobile Modal -->
+        <div id="modal-courses-container" style="margin-top: 10px;">
+            <!-- Courses will be injected here -->
         </div>
 
         <a href="#" class="btn-wa-full" id="modal-wa-btn" target="_blank">
@@ -392,18 +379,43 @@
 
         // Fetch Data from Firestore Core Cluster
         async function fetchData() {
-            document.getElementById('table-body').innerHTML = "<tr><td colspan='8' style='text-align:center; padding: 40px;'>Loading database securely...</td></tr>";
+            document.getElementById('table-body').innerHTML = "<tr><td colspan='9' style='text-align:center; padding: 40px;'>Loading database securely...</td></tr>";
             
             try {
                 const querySnapshot = await getDocs(collection(db, "users"));
                 allUsers = [];
                 let fallbackIndex = 0;
 
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    data.uid = doc.id; 
+                querySnapshot.forEach((docSnap) => {
+                    let data = docSnap.data();
+                    data.uid = docSnap.id; 
                     data._addedIndex = fallbackIndex++;
-                    data._createdAt = data.createdAt ? (data.createdAt.toMillis ? data.createdAt.toMillis() : new Date(data.createdAt).getTime()) : data._addedIndex;
+                    
+                    // JUST-IN-TIME (JIT) Normalizer for Admin Dashboard
+                    // If a user has legacy flat data, we invisibly format it as nested so the dashboard won't crash
+                    if (!data.courses && data.paymentStatus !== undefined) {
+                        data.courses = {
+                            "prompt-engineering": {
+                                paymentStatus: data.paymentStatus === 'paid' ? 'paid' : 'none',
+                                currentModule: data.currentModule || 1,
+                                hasPassedQuiz: data.hasPassedQuiz || false
+                            }
+                        };
+                    } else if (!data.courses) {
+                        data.courses = {};
+                    }
+
+                    // ROBUST TIMESTAMP FIX: Safely parse Date if missing or broken
+                    let rawTs = data.createdAt || data.timestamp || null;
+                    if (rawTs) {
+                        let millis = rawTs.toMillis ? rawTs.toMillis() : new Date(rawTs).getTime();
+                        data._sortTime = millis;
+                        data._displayDate = new Date(millis).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                    } else {
+                        data._sortTime = data._addedIndex;
+                        data._displayDate = "Not Recorded";
+                    }
+
                     allUsers.push(data);
                 });
 
@@ -412,23 +424,27 @@
                 handleSearch();
             } catch (error) {
                 console.error("Database access initialization failure: ", error);
-                document.getElementById('table-body').innerHTML = "<tr><td colspan='8' style='text-align:center; padding: 40px; color: var(--danger);'>Error loading data. Verify firestore security perimeter policy rules configurations.</td></tr>";
+                document.getElementById('table-body').innerHTML = "<tr><td colspan='9' style='text-align:center; padding: 40px; color: var(--danger);'>Error loading data. Verify firestore security perimeter policy rules configurations.</td></tr>";
             }
         }
 
         // Update Summary Cards Metrics
         function updateKPIs() {
-            let pendingCount = 0;
-            let paidCount = 0;
+            let totalEnrollments = 0;
+            let totalPaid = 0;
 
             allUsers.forEach(u => {
-                if (u.paymentStatus === 'pending_check') pendingCount++;
-                if (u.paymentStatus === 'paid') paidCount++;
+                if (u.courses) {
+                    Object.values(u.courses).forEach(course => {
+                        totalEnrollments++;
+                        if (course.paymentStatus === 'paid') totalPaid++;
+                    });
+                }
             });
 
             document.getElementById('stat-total').innerText = allUsers.length;
-            document.getElementById('stat-pending').innerText = pendingCount;
-            document.getElementById('stat-paid').innerText = paidCount;
+            document.getElementById('stat-enrollments').innerText = totalEnrollments;
+            document.getElementById('stat-paid').innerText = totalPaid;
         }
 
         // Search Engine & Real-time Client Filtering Parameters
@@ -446,9 +462,9 @@
 
             filteredUsers.sort((a, b) => {
                 if (sortOrder === 'oldest') {
-                    return a._createdAt - b._createdAt;
+                    return a._sortTime - b._sortTime;
                 } else {
-                    return b._createdAt - a._createdAt;
+                    return b._sortTime - a._sortTime;
                 }
             });
 
@@ -461,20 +477,26 @@
             renderTable();
         };
 
-        // Write Operations To Update Status Values On Database State Core
-        window.updatePayment = async (uid, selectElement) => {
+        // ADVANCED MULTI-COURSE DB WRITE OPERATION
+        window.updatePayment = async (uid, courseId, selectElement) => {
             const newStatus = selectElement.value;
             selectElement.disabled = true; 
 
             try {
-                await updateDoc(doc(db, "users", uid), { paymentStatus: newStatus });
+                // Using dot notation to safely target ONLY the specific course ID without overwriting everything else
+                await updateDoc(doc(db, "users", uid), { 
+                    [`courses.${courseId}.paymentStatus`]: newStatus 
+                });
                 
+                // Update Local UI State cache instantly
                 const userIndex = allUsers.findIndex(u => u.uid === uid);
-                if (userIndex > -1) allUsers[userIndex].paymentStatus = newStatus;
+                if (userIndex > -1 && allUsers[userIndex].courses[courseId]) {
+                    allUsers[userIndex].courses[courseId].paymentStatus = newStatus;
+                }
                 
                 updateSelectStyle(selectElement, newStatus);
                 updateKPIs();
-                renderTable(); 
+                // Note: Not calling renderTable() completely so the user's dropdown select focus is not lost
                 
             } catch (error) {
                 alert("Database transactional state compilation failure.");
@@ -487,13 +509,12 @@
         // Status Elements Color Palette Synthesizer
         function updateSelectStyle(el, status) {
             if(status === 'paid') { el.className = "status-select bg-success"; }
-            else if(status === 'pending_check') { el.className = "status-select bg-warning"; }
             else { el.className = "status-select bg-neutral"; }
         }
 
         // System Mutator For Complete Row Record Excision
         window.deleteUser = async (uid, name) => {
-            const confirmed = confirm(`WARNING: Are you sure you want to completely delete "${name}"? \n\nThis will remove their profile, progress, and payment record forever. This cannot be undone.`);
+            const confirmed = confirm(`WARNING: Are you sure you want to completely delete "${name}"? \n\nThis will remove their profile, progress, and all course payment records forever. This cannot be undone.`);
             
             if (confirmed) {
                 try {
@@ -524,19 +545,42 @@
 
             document.getElementById('modal-name').innerHTML = user.fullName || "<em>No Profile</em>";
             document.getElementById('modal-wa').innerText = user.whatsappNumber || "N/A";
-            
-            // Fixed course tracking constraint to 25 modules max capacity scale threshold mapping rules
-            let currentModVal = user.currentModule || 0;
-            if(currentModVal > 25) currentModVal = 25;
-            document.getElementById('modal-progress').innerHTML = user.currentModule ? `<b>${currentModVal}</b> / 25` : "Not Started";
-            
-            document.getElementById('modal-quiz').innerHTML = user.hasPassedQuiz ? `<span class="badge bg-success">Passed</span>` : `<span class="badge bg-neutral">Pending</span>`;
             document.getElementById('modal-utr').innerText = user.upiTransactionId || "No UTR Entered";
             
-            const selectEl = document.getElementById('modal-payment-select');
-            selectEl.value = user.paymentStatus || 'none';
-            updateSelectStyle(selectEl, user.paymentStatus || 'none');
-            selectEl.onchange = () => updatePayment(uid, selectEl);
+            // Generate Dynamic Course List for Modal View
+            let coursesDetailHTML = '';
+            if (user.courses && Object.keys(user.courses).length > 0) {
+                Object.keys(user.courses).forEach(courseId => {
+                    const course = user.courses[courseId];
+                    const courseName = courseId.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()); // Formats "prompt-engineering" to "Prompt Engineering"
+                    
+                    let currentModVal = course.currentModule || 0;
+                    if(currentModVal > 25) currentModVal = 25;
+                    
+                    let selectClass = course.paymentStatus === 'paid' ? "status-select bg-success" : "status-select bg-neutral";
+                    
+                    coursesDetailHTML += `
+                        <div style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; margin-bottom: 10px;">
+                            <div style="font-weight: 700; color: var(--primary); margin-bottom: 12px; font-size: 1.1rem;">${courseName}</div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+                                <div><span class="modal-label">Progress</span><br><span class="modal-value"><b>${currentModVal}</b> / 25</span></div>
+                                <div><span class="modal-label">Quiz</span><br>${course.hasPassedQuiz ? '<span class="badge bg-success">Passed</span>' : '<span class="badge bg-neutral">Pending</span>'}</div>
+                            </div>
+                            <div>
+                                <span class="modal-label" style="display:block; margin-bottom: 6px;">Payment Status</span>
+                                <select class="${selectClass}" style="width: 100%; padding: 10px; font-size: 1rem;" onchange="updatePayment('${user.uid}', '${courseId}', this)">
+                                    <option value="none" ${course.paymentStatus !== 'paid' ? 'selected' : ''}>Unpaid</option>
+                                    <option value="paid" ${course.paymentStatus === 'paid' ? 'selected' : ''}>Paid</option>
+                                </select>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                 coursesDetailHTML = "<div style='color: var(--text-muted); font-size: 0.9rem;'>No enrolled courses found.</div>";
+            }
+            
+            document.getElementById('modal-courses-container').innerHTML = coursesDetailHTML;
 
             const delBtn = document.getElementById('modal-delete-btn');
             delBtn.onclick = () => { closeUserModal(true); deleteUser(uid, user.fullName || 'User'); };
@@ -559,7 +603,7 @@
             }
         });
 
-        // Dynamic Dual Matrix Interface View Renderer
+        // Dynamic Multi-Dimensional Matrix Interface View Renderer
         function renderTable() {
             const tbody = document.getElementById('table-body');
             const mobileList = document.getElementById('mobile-list');
@@ -572,49 +616,75 @@
             const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
             if(paginatedUsers.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:40px; color:var(--text-muted);">No users found</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:40px; color:var(--text-muted);">No users found matching current filters</td></tr>`;
                 mobileList.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-muted);">No users found</div>`;
             }
 
             paginatedUsers.forEach(user => {
-                const name = user.fullName || "<em style='color:var(--text-muted)'>No Profile</em>";
+                const name = user.fullName || "<em style='color:var(--text-muted)'>No Profile Setup</em>";
                 const wa = user.whatsappNumber || "—";
-                
-                // Fixed module calculation scaling metrics rules to maximum payload index structure size 25
-                let currentModVal = user.currentModule || 0;
-                if(currentModVal > 25) currentModVal = 25;
-                const progress = user.currentModule ? `<b>${currentModVal}</b> / 25` : "Not Started";
-                
-                const quiz = user.hasPassedQuiz ? `<span class="badge bg-success">Passed</span>` : `<span class="badge bg-neutral">Pending</span>`;
                 const upi = user.upiTransactionId || "—";
-                
-                const dateObj = user._createdAt > 10000 ? new Date(user._createdAt) : null;
-                const formattedDate = dateObj ? dateObj.toLocaleDateString() : "—";
                 
                 const cleanWa = user.whatsappNumber ? user.whatsappNumber.replace(/[^\d+]/g, '') : '';
                 const waButtonHTML = cleanWa ? `<a href="https://wa.me/${cleanWa}" target="_blank" class="btn-wa">Chat</a>` : '';
 
-                let selectClass = "status-select bg-neutral";
-                let friendlyStatus = "Unpaid";
-                if(user.paymentStatus === 'paid') { selectClass = "status-select bg-success"; friendlyStatus = "Paid"; }
-                if(user.paymentStatus === 'pending_check') { selectClass = "status-select bg-warning"; friendlyStatus = "Pending"; }
+                // STACKED UI GENERATOR FOR MULTIPLE COURSES
+                let coursesHTML = '';
+                let progressHTML = '';
+                let quizHTML = '';
+                let paymentHTML = '';
+                let mobileCoursesHTML = '';
+
+                if (user.courses && Object.keys(user.courses).length > 0) {
+                    Object.keys(user.courses).forEach(courseId => {
+                        const course = user.courses[courseId];
+                        const courseName = courseId.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        
+                        let currentModVal = course.currentModule || 0;
+                        if(currentModVal > 25) currentModVal = 25;
+                        
+                        // Desktop Stack Rows
+                        coursesHTML += `<div style="margin-bottom: 12px; font-weight: 600; color: var(--primary); font-size: 0.85rem;">${courseName}</div>`;
+                        progressHTML += `<div style="margin-bottom: 12px; font-size: 0.85rem;"><b>${currentModVal}</b> / 25</div>`;
+                        quizHTML += `<div style="margin-bottom: 12px;">${course.hasPassedQuiz ? '<span class="badge bg-success">Passed</span>' : '<span class="badge bg-neutral">Pending</span>'}</div>`;
+                        
+                        let selectClass = course.paymentStatus === 'paid' ? "status-select bg-success" : "status-select bg-neutral";
+                        
+                        // The Dropdown has been heavily restricted to just two states
+                        paymentHTML += `
+                            <div style="margin-bottom: 12px;">
+                                <select class="${selectClass}" onchange="updatePayment('${user.uid}', '${courseId}', this)">
+                                    <option value="none" ${course.paymentStatus !== 'paid' ? 'selected' : ''}>Unpaid</option>
+                                    <option value="paid" ${course.paymentStatus === 'paid' ? 'selected' : ''}>Paid</option>
+                                </select>
+                            </div>
+                        `;
+
+                        // Mobile Condensed Badge
+                        let mobileColor = course.paymentStatus === 'paid' ? 'bg-success' : 'bg-neutral';
+                        let mobileStatusName = course.paymentStatus === 'paid' ? 'PAID' : 'UNPAID';
+                        let shortCName = courseId.split('-')[0].toUpperCase(); // Just "PROMPT" or "PYTHON"
+                        mobileCoursesHTML += `<span class="badge ${mobileColor}" style="margin-right: 4px; margin-bottom: 4px;">${shortCName}: ${mobileStatusName}</span>`;
+                    });
+                } else {
+                    coursesHTML = "<span style='color:var(--text-muted)'>None</span>";
+                    progressHTML = "—";
+                    quizHTML = "—";
+                    paymentHTML = "—";
+                    mobileCoursesHTML = "<span class='badge bg-neutral'>No Courses</span>";
+                }
 
                 // Desktop Matrix Assembly Pipeline
                 tbody.innerHTML += `
                     <tr>
                         <td style="font-weight: 500;">${name}</td>
-                        <td style="color: var(--text-muted); font-size: 0.85rem;">${formattedDate}</td>
+                        <td style="color: var(--text-muted); font-size: 0.85rem;">${user._displayDate}</td>
                         <td style="font-family: monospace;">${wa} ${waButtonHTML}</td>
-                        <td>${progress}</td>
-                        <td>${quiz}</td>
+                        <td>${coursesHTML}</td>
+                        <td>${progressHTML}</td>
+                        <td>${quizHTML}</td>
                         <td style="font-family: monospace; color: var(--text-muted);">${upi}</td>
-                        <td>
-                            <select class="${selectClass}" onchange="updatePayment('${user.uid}', this)">
-                                <option value="none" ${user.paymentStatus === 'none' ? 'selected' : ''}>Unpaid</option>
-                                <option value="pending_check" ${user.paymentStatus === 'pending_check' ? 'selected' : ''}>Pending Review</option>
-                                <option value="paid" ${user.paymentStatus === 'paid' ? 'selected' : ''}>Paid (Verified)</option>
-                            </select>
-                        </td>
+                        <td>${paymentHTML}</td>
                         <td style="text-align: center;">
                             <button class="btn-icon" title="Delete User" onclick="deleteUser('${user.uid}', '${user.fullName || 'User'}')">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -630,13 +700,11 @@
                     <div class="mobile-card" onclick="openUserModal('${user.uid}')">
                         <div class="mobile-card-header">
                             <div class="mobile-card-name">${name}</div>
-                            ${quiz}
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">${user._displayDate}</div>
                         </div>
-                        <div class="mobile-card-date">Joined: ${formattedDate}</div>
                         <div class="mobile-card-wa">📲 ${wa}</div>
                         <div class="mobile-card-status">
-                            <span class="badge ${selectClass.replace('status-select ', '')}">${friendlyStatus}</span>
-                            <span class="badge bg-neutral">Mod: ${currentModVal}/25</span>
+                            ${mobileCoursesHTML}
                         </div>
                     </div>
                 `;
