@@ -80,7 +80,7 @@
         .profile-img {
             width: 80px; height: 80px; border-radius: 50%; object-fit: cover;
             border: 3px solid var(--primary); box-shadow: var(--shadow-sm);
-            background: var(--bg-color);
+            background: var(--bg-color); transition: opacity 0.3s ease;
         }
 
         .profile-info { flex: 1; }
@@ -95,6 +95,28 @@
         }
         .edit-btn:hover, .edit-btn:active { background: var(--primary); color: white; border-color: var(--primary); }
 
+        /* CSS Skeleton Loading System */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        .skeleton {
+            background: #e2e8f0;
+            background-image: linear-gradient(90deg, #e2e8f0 0px, #f1f5f9 40px, #e2e8f0 80px);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite linear;
+            color: transparent !important;
+            border-color: transparent !important;
+        }
+        @media (prefers-color-scheme: dark) {
+            .skeleton {
+                background: #1e293b;
+                background-image: linear-gradient(90deg, #1e293b 0px, #334155 40px, #1e293b 80px);
+            }
+        }
+        .skeleton-text { height: 24px; width: 60%; border-radius: 4px; margin-bottom: 8px; }
+        .skeleton-text-short { width: 40%; height: 16px; }
+
         /* Section Titles */
         .section-title { font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px; letter-spacing: -0.5px; }
 
@@ -102,9 +124,10 @@
         .course-card {
             background: var(--surface-color); border-radius: var(--radius-lg); padding: 20px;
             margin-bottom: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);
-            transition: transform 0.2s; cursor: pointer; display: flex; flex-direction: column; gap: 12px;
+            transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; display: flex; flex-direction: column; gap: 12px;
         }
         .course-card:active { transform: scale(0.98); background: var(--bg-color); }
+        .course-card:hover { box-shadow: var(--shadow-md); border-color: var(--primary); }
         
         .course-header { display: flex; justify-content: space-between; align-items: flex-start; }
         .course-title { font-weight: 700; font-size: 1.1rem; color: var(--text-main); }
@@ -197,17 +220,18 @@
                 <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
             </button>
             <div class="profile-img-wrapper">
-                <img id="user-photo" class="profile-img" src="" alt="Profile Picture">
+                <!-- Using a 1x1 transparent base64 GIF to prevent the broken image icon before load -->
+                <img id="user-photo" class="profile-img skeleton" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Profile Picture">
             </div>
             <div class="profile-info">
-                <div class="profile-name" id="user-name">Loading...</div>
-                <div class="profile-wa" id="user-wa">Fetching data...</div>
+                <div class="profile-name skeleton skeleton-text" id="user-name">Loading...</div>
+                <div class="profile-wa skeleton skeleton-text skeleton-text-short" id="user-wa">Loading...</div>
             </div>
         </div>
 
         <h3 class="section-title">Your Enrolled Courses</h3>
         <div id="courses-container">
-            <!-- Courses injected here -->
+            <!-- Courses injected here dynamically -->
         </div>
 
         <div style="margin-top: 40px; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
@@ -264,6 +288,11 @@
             setTimeout(() => t.classList.remove('show'), 3000);
         };
 
+        // Custom professional interaction for course clicks instead of a hard redirect
+        window.viewCourseDetails = (courseId) => {
+            showToast(`Status verified. Access your modules via the main workspace.`);
+        };
+
         // Authentication State Listener
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -271,7 +300,11 @@
                 
                 // Construct Google Profile Pic or fallback avatar
                 const photoUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=059669&color=fff&size=128`;
-                document.getElementById('user-photo').src = photoUrl;
+                
+                const imgEl = document.getElementById('user-photo');
+                imgEl.src = photoUrl;
+                // Wait for image to naturally load before dropping the skeleton class
+                imgEl.onload = () => imgEl.classList.remove('skeleton');
 
                 try {
                     const docSnap = await getDoc(doc(db, "users", user.uid));
@@ -307,9 +340,14 @@
         });
 
         function renderProfileUI() {
-            // Setup Profile Headers
-            document.getElementById('user-name').innerText = currentUserData.fullName || "Name Not Set";
-            document.getElementById('user-wa').innerText = currentUserData.whatsappNumber ? `📲 ${currentUserData.whatsappNumber}` : "WhatsApp Not Linked";
+            // Setup Profile Headers & Remove Skeletons
+            const nameEl = document.getElementById('user-name');
+            nameEl.innerText = currentUserData.fullName || "Name Not Set";
+            nameEl.classList.remove('skeleton', 'skeleton-text');
+
+            const waEl = document.getElementById('user-wa');
+            waEl.innerText = currentUserData.whatsappNumber ? `📲 ${currentUserData.whatsappNumber}` : "WhatsApp Not Linked";
+            waEl.classList.remove('skeleton', 'skeleton-text', 'skeleton-text-short');
             
             // Prefill Edit Modal Inputs
             document.getElementById('edit-name').value = currentUserData.fullName || "";
@@ -335,7 +373,7 @@
                     const passedText = course.hasPassedQuiz ? '<span style="color:var(--success);font-weight:700;">Certified</span>' : 'In Progress';
 
                     container.innerHTML += `
-                        <div class="course-card" onclick="window.location.href='index.html'">
+                        <div class="course-card" onclick="viewCourseDetails('${courseId}')">
                             <div class="course-header">
                                 <div class="course-title">${formattedTitle}</div>
                                 <div class="badge ${badgeClass}">${badgeText}</div>
