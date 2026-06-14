@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Goorac Learn | Student Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Premium SaaS & App Theme Variables */
+        :root {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #059669; /* Emerald Green */
+            --primary-hover: #047857;
+            --border-color: #e2e8f0;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --warning: #f59e0b;
+            --warning-bg: #fef3c7;
+            --locked-bg: #f1f5f9;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #020617; 
+                --surface-color: #0f172a;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --border-color: #1e293b;
+                --locked-bg: #0b1120;
+                --success-bg: #064e3b;
+                --warning-bg: #78350f;
+            }
+        }
+
+        /* Global Reset */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: var(--bg-color); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; line-height: 1.6;
+            -webkit-font-smoothing: antialiased; overflow-x: hidden; min-height: 100vh;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background-color: var(--surface-color); border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px); background-color: rgba(var(--surface-color), 0.9);
+        }
+        .brand { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; cursor: pointer; }
+
+        /* Screen Setup */
+        .screen { padding: 30px 20px 80px 20px; max-width: 640px; margin: 0 auto; width: 100%; }
+
+        .btn-back {
+            background: none; border: none; color: var(--text-muted); font-weight: 600; 
+            cursor: pointer; padding: 0 0 20px 0; display: flex; align-items: center; gap: 5px; font-size: 1rem;
+        }
+
+        /* Profile Header Card */
+        .profile-card {
+            background: var(--surface-color); border-radius: var(--radius-xl);
+            border: 1px solid var(--border-color); padding: 24px;
+            box-shadow: var(--shadow-md); margin-bottom: 30px; position: relative;
+            display: flex; align-items: center; gap: 20px;
+        }
+
+        .profile-img-wrapper {
+            position: relative;
+        }
+        .profile-img {
+            width: 80px; height: 80px; border-radius: 50%; object-fit: cover;
+            border: 3px solid var(--primary); box-shadow: var(--shadow-sm);
+            background: var(--bg-color);
+        }
+
+        .profile-info { flex: 1; }
+        .profile-name { font-size: 1.4rem; font-weight: 800; color: var(--text-main); line-height: 1.2; margin-bottom: 4px; }
+        .profile-wa { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--text-muted); }
+
+        .edit-btn {
+            position: absolute; top: 20px; right: 20px; background: var(--bg-color); 
+            border: 1px solid var(--border-color); color: var(--text-muted); 
+            border-radius: 50%; width: 36px; height: 36px; display: flex; 
+            align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;
+        }
+        .edit-btn:hover, .edit-btn:active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Section Titles */
+        .section-title { font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px; letter-spacing: -0.5px; }
+
+        /* Dynamic Course Cards */
+        .course-card {
+            background: var(--surface-color); border-radius: var(--radius-lg); padding: 20px;
+            margin-bottom: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);
+            transition: transform 0.2s; cursor: pointer; display: flex; flex-direction: column; gap: 12px;
+        }
+        .course-card:active { transform: scale(0.98); background: var(--bg-color); }
+        
+        .course-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .course-title { font-weight: 700; font-size: 1.1rem; color: var(--text-main); }
+        
+        .badge { padding: 4px 10px; border-radius: 30px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge-paid { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .badge-unpaid { background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.2); }
+        
+        .course-stats { display: flex; gap: 20px; font-size: 0.85rem; color: var(--text-muted); }
+        .stat-item { display: flex; align-items: center; gap: 6px; }
+        .stat-icon { color: var(--primary); }
+
+        /* Empty State */
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); background: var(--surface-color); border-radius: var(--radius-lg); border: 1px dashed var(--border-color); }
+
+        /* Modals & Inputs */
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main); }
+        .input-group input {
+            width: 100%; padding: 14px; border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); background-color: var(--bg-color); 
+            color: var(--text-main); font-size: 1rem; transition: 0.2s; outline: none;
+        }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); }
+
+        .btn {
+            background-color: var(--primary); color: white; border: none;
+            border-radius: var(--radius-lg); padding: 16px; width: 100%; font-size: 1rem;
+            font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn:active { transform: scale(0.98); }
+
+        /* Modal Architecture */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); 
+            z-index: 999; display: none; opacity: 0; transition: opacity 0.3s;
+        }
+        .modal-overlay.active { display: block; opacity: 1; }
+        
+        .user-modal {
+            position: fixed; bottom: 0; left: 0; width: 100%; 
+            background: var(--surface-color); border-radius: 24px 24px 0 0; 
+            padding: 30px 24px 50px 24px; z-index: 1000; box-shadow: var(--shadow-lg); 
+            display: flex; flex-direction: column; 
+            transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @media (min-width: 768px) {
+            .user-modal {
+                top: 50%; left: 50%; bottom: auto; transform: translate(-50%, -45%);
+                width: 90%; max-width: 450px; border-radius: var(--radius-xl); padding-bottom: 30px;
+                opacity: 0; transition: opacity 0.3s, transform 0.3s;
+            }
+            .user-modal.active { transform: translate(-50%, -50%); opacity: 1; }
+        }
+        .user-modal.active { transform: translateY(0); }
+        
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .modal-title { font-size: 1.25rem; font-weight: 700; color: var(--text-main); }
+        .modal-close-btn { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+
+        /* Toast */
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
+            text-align: center; border-radius: 30px; padding: 16px 24px;
+            position: fixed; z-index: 2000; left: 50%; bottom: 30px; transform: translateX(-50%);
+            font-size: 15px; font-weight: 500; box-shadow: var(--shadow-lg);
+            opacity: 0; transition: opacity 0.3s, bottom 0.3s;
+        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+    </style>
+</head>
+<body>
+
+    <div id="toast">Message</div>
+
+    <div class="top-nav">
+        <div class="brand" onclick="window.location.href='index.html'">Goorac <span style="color:var(--text-main)">Learn</span></div>
+        <button onclick="logout()" style="background:none; border:none; color:var(--text-muted); font-weight:600; cursor:pointer; font-size: 0.9rem;">Sign Out</button>
+    </div>
+
+    <div class="screen" id="main-screen">
+        <button class="btn-back" onclick="window.location.href='index.html'">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg> 
+            Back to Workspace
+        </button>
+
+        <div class="profile-card">
+            <button class="edit-btn" onclick="openEditModal()" aria-label="Edit Profile">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+            </button>
+            <div class="profile-img-wrapper">
+                <img id="user-photo" class="profile-img" src="" alt="Profile Picture">
+            </div>
+            <div class="profile-info">
+                <div class="profile-name" id="user-name">Loading...</div>
+                <div class="profile-wa" id="user-wa">Fetching data...</div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Your Enrolled Courses</h3>
+        <div id="courses-container">
+            <!-- Courses injected here -->
+        </div>
+
+        <div style="margin-top: 40px; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
+            Account Secured via Google Firebase Auth<br>
+            User ID: <span id="user-uid-display" style="font-family: monospace;">...</span>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal-overlay" id="modal-overlay" onclick="closeEditModal()"></div>
+    <div class="user-modal" id="edit-modal">
+        <div class="modal-header">
+            <div class="modal-title">Edit Profile details</div>
+            <button class="modal-close-btn" onclick="closeEditModal()">×</button>
+        </div>
+        
+        <div class="input-group">
+            <label>Full Legal Name (For Certificates)</label>
+            <input type="text" id="edit-name" placeholder="E.g., Jane Smith">
+        </div>
+        <div class="input-group">
+            <label>WhatsApp Number</label>
+            <input type="tel" id="edit-wa" placeholder="+91 9876543210">
+        </div>
+        
+        <button class="btn" onclick="saveProfile()" style="margin-top: 10px;">Save Changes</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDeXk6z_5mYQZi_xIsQsN935KxuIBxAM3w",
+            authDomain: "gooraclearn.firebaseapp.com",
+            projectId: "gooraclearn",
+            storageBucket: "gooraclearn.firebasestorage.app",
+            messagingSenderId: "221459932053",
+            appId: "1:221459932053:web:af713811da7edd113e0c9c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUserData = null;
+        let isModalOpen = false;
+
+        window.showToast = (msg) => {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        };
+
+        // Authentication State Listener
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                document.getElementById('user-uid-display').innerText = user.uid;
+                
+                // Construct Google Profile Pic or fallback avatar
+                const photoUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=059669&color=fff&size=128`;
+                document.getElementById('user-photo').src = photoUrl;
+
+                try {
+                    const docSnap = await getDoc(doc(db, "users", user.uid));
+                    if (docSnap.exists()) {
+                        currentUserData = docSnap.data();
+                        
+                        // JIT Normalizer just in case
+                        if (!currentUserData.courses && currentUserData.paymentStatus !== undefined) {
+                            currentUserData.courses = {
+                                "prompt-engineering": {
+                                    paymentStatus: currentUserData.paymentStatus === 'paid' ? 'paid' : 'none',
+                                    currentModule: currentUserData.currentModule || 1,
+                                    hasPassedQuiz: currentUserData.hasPassedQuiz || false
+                                }
+                            };
+                        } else if (!currentUserData.courses) {
+                            currentUserData.courses = {};
+                        }
+
+                        renderProfileUI();
+                    } else {
+                        // Account exists in Auth but empty in Firestore (Never initialized profile)
+                        window.location.href = 'index.html'; 
+                    }
+                } catch (error) {
+                    console.error("Firestore read error:", error);
+                    showToast("Failed to load profile data.");
+                }
+            } else {
+                // Not logged in -> Kick out
+                window.location.href = 'index.html';
+            }
+        });
+
+        function renderProfileUI() {
+            // Setup Profile Headers
+            document.getElementById('user-name').innerText = currentUserData.fullName || "Name Not Set";
+            document.getElementById('user-wa').innerText = currentUserData.whatsappNumber ? `📲 ${currentUserData.whatsappNumber}` : "WhatsApp Not Linked";
+            
+            // Prefill Edit Modal Inputs
+            document.getElementById('edit-name').value = currentUserData.fullName || "";
+            document.getElementById('edit-wa').value = currentUserData.whatsappNumber || "";
+
+            // Render Dynamic Courses
+            const container = document.getElementById('courses-container');
+            container.innerHTML = '';
+
+            if (currentUserData.courses && Object.keys(currentUserData.courses).length > 0) {
+                Object.keys(currentUserData.courses).forEach(courseId => {
+                    const course = currentUserData.courses[courseId];
+                    // Format "prompt-engineering" to "Prompt Engineering"
+                    const formattedTitle = courseId.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    
+                    let currentModVal = course.currentModule || 0;
+                    if(currentModVal > 25) currentModVal = 25;
+                    
+                    const isPaid = course.paymentStatus === 'paid';
+                    const badgeClass = isPaid ? 'badge-paid' : 'badge-unpaid';
+                    const badgeText = isPaid ? 'PAID ACCESS' : 'PAYMENT PENDING';
+
+                    const passedText = course.hasPassedQuiz ? '<span style="color:var(--success);font-weight:700;">Certified</span>' : 'In Progress';
+
+                    container.innerHTML += `
+                        <div class="course-card" onclick="window.location.href='index.html'">
+                            <div class="course-header">
+                                <div class="course-title">${formattedTitle}</div>
+                                <div class="badge ${badgeClass}">${badgeText}</div>
+                            </div>
+                            <div class="course-stats">
+                                <div class="stat-item">
+                                    <svg class="stat-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                    Module ${currentModVal} / 25
+                                </div>
+                                <div class="stat-item">
+                                    <svg class="stat-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    ${passedText}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin-bottom: 15px; color: var(--text-muted);"><path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                        <p style="margin-bottom: 15px;">You haven't enrolled in any courses yet.</p>
+                        <button onclick="window.location.href='index.html'" class="btn" style="width: auto; margin: 0 auto; padding: 10px 20px;">Browse Courses</button>
+                    </div>`;
+            }
+        }
+
+        // ==========================================
+        // PROFILE EDIT MODAL WITH HARDWARE BACK-BUTTON FIX
+        // ==========================================
+        window.openEditModal = () => {
+            document.getElementById('modal-overlay').classList.add('active');
+            document.getElementById('edit-modal').classList.add('active');
+            
+            isModalOpen = true;
+            try {
+                history.pushState({ modalOpen: true }, '', '#edit');
+            } catch(e) { console.warn("History pushstate failure", e); }
+        };
+
+        window.closeEditModal = () => {
+            document.getElementById('modal-overlay').classList.remove('active');
+            document.getElementById('edit-modal').classList.remove('active');
+            
+            if (isModalOpen) {
+                isModalOpen = false;
+                try { history.back(); } catch(e) {}
+            }
+        };
+
+        window.addEventListener('popstate', (e) => {
+            if (isModalOpen) {
+                isModalOpen = false;
+                document.getElementById('modal-overlay').classList.remove('active');
+                document.getElementById('edit-modal').classList.remove('active');
+            }
+        });
+
+        window.saveProfile = async () => {
+            const newName = document.getElementById('edit-name').value.trim();
+            const newWa = document.getElementById('edit-wa').value.trim();
+
+            if(!newName || !newWa) {
+                return showToast("Name and WhatsApp are required!");
+            }
+
+            currentUserData.fullName = newName;
+            currentUserData.whatsappNumber = newWa;
+            
+            try {
+                // Securely push only name and number to avoid wiping courses map
+                await setDoc(doc(db, "users", auth.currentUser.uid), {
+                    fullName: newName,
+                    whatsappNumber: newWa
+                }, { merge: true });
+                
+                renderProfileUI();
+                closeEditModal();
+                showToast("Profile Updated Successfully!");
+                
+            } catch(e) { 
+                console.error("Profile save error:", e); 
+                showToast("Error saving profile data.");
+            }
+        };
+
+        window.logout = async () => {
+            try {
+                await signOut(auth);
+                window.location.href = 'index.html';
+            } catch(error) {
+                console.error("Sign out error", error);
+            }
+        };
+
+    </script>
+</body>
+</html>
