@@ -43,16 +43,19 @@
 
         /* Global Reset & Smooth Scrolling */
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; overflow-x: hidden; -ms-overflow-style: none; scrollbar-width: none; }
+        html::-webkit-scrollbar { display: none; width: 0; height: 0; }
         body { 
             background-color: var(--bg-color); color: var(--text-main); 
             font-family: 'Inter', sans-serif; line-height: 1.6;
             -webkit-font-smoothing: antialiased; overflow-x: hidden; min-height: 100vh;
+            -ms-overflow-style: none; scrollbar-width: none;
         }
+        body::-webkit-scrollbar { display: none; width: 0; height: 0; }
 
-        /* Smooth Entrance Animations */
+        /* Smooth Entrance Animations (Toned down for professional look) */
         @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
         }
         @keyframes fadeIn {
@@ -66,10 +69,10 @@
             padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm);
             backdrop-filter: blur(10px); background-color: rgba(var(--surface-color), 0.9);
-            animation: fadeIn 0.5s ease-out forwards;
+            animation: fadeIn 0.3s ease-out forwards;
         }
         .brand { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; cursor: pointer; transition: transform 0.2s ease; }
-        .brand:active { transform: scale(0.95); }
+        .brand:active { transform: scale(0.98); }
 
         /* Screen Setup */
         .screen { padding: 30px 20px 80px 20px; max-width: 640px; margin: 0 auto; width: 100%; }
@@ -78,9 +81,9 @@
             background: none; border: none; color: var(--text-muted); font-weight: 600; 
             cursor: pointer; padding: 0 0 20px 0; display: flex; align-items: center; gap: 5px; font-size: 1rem;
             transition: color 0.2s ease, transform 0.2s ease;
-            animation: fadeSlideUp 0.4s ease-out forwards;
+            animation: fadeIn 0.3s ease-out forwards;
         }
-        .btn-back:hover { color: var(--primary); transform: translateX(-3px); }
+        .btn-back:hover { color: var(--primary); transform: translateX(0px); }
 
         /* Profile Header Card */
         .profile-card {
@@ -88,10 +91,10 @@
             border: 1px solid var(--border-color); padding: 24px;
             box-shadow: var(--shadow-md); margin-bottom: 30px; position: relative;
             display: flex; align-items: center; gap: 20px;
-            animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            animation: fadeSlideUp 0.3s ease-out forwards;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
         }
-        .profile-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+        .profile-card:hover { box-shadow: var(--shadow-md); transform: translateY(0px); }
 
         .profile-img-wrapper {
             position: relative;
@@ -99,12 +102,12 @@
         .profile-img {
             width: 80px; height: 80px; border-radius: 50%; object-fit: cover;
             border: 3px solid var(--primary); box-shadow: var(--shadow-sm);
-            background: var(--bg-color); transition: opacity 0.4s ease, transform 0.3s ease;
+            background: var(--bg-color); transition: opacity 0.3s ease, transform 0.2s ease;
         }
-        .profile-img:hover { transform: scale(1.05) rotate(3deg); }
+        .profile-img:hover { transform: scale(1.02) rotate(0deg); }
 
         .profile-info { flex: 1; }
-        .profile-name { font-size: 1.4rem; font-weight: 800; color: var(--text-main); line-height: 1.2; margin-bottom: 4px; transition: color 0.3s ease; }
+        .profile-name { font-size: 1.4rem; font-weight: 800; color: var(--text-main); line-height: 1.2; margin-bottom: 4px; transition: color 0.2s ease; }
         .profile-wa { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--text-muted); }
 
         .edit-btn {
@@ -112,9 +115,9 @@
             border: 1px solid var(--border-color); color: var(--text-muted); 
             border-radius: 50%; width: 36px; height: 36px; display: flex; 
             align-items: center; justify-content: center; cursor: pointer; 
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.2s ease;
         }
-        .edit-btn:hover, .edit-btn:active { background: var(--primary); color: white; border-color: var(--primary); transform: scale(1.1) rotate(10deg); }
+        .edit-btn:hover, .edit-btn:active { background: var(--primary); color: white; border-color: var(--primary); transform: scale(1.05) rotate(0deg); }
 
         /* CSS Skeleton Loading System */
         @keyframes shimmer {
@@ -139,34 +142,34 @@
         .skeleton-text-short { width: 40%; height: 16px; }
 
         /* Section Titles */
-        .section-title { font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px; letter-spacing: -0.5px; animation: fadeSlideUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.1s; }
+        .section-title { font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px; letter-spacing: -0.5px; animation: fadeIn 0.3s ease-out forwards; opacity: 0; animation-delay: 0.05s; }
 
         /* Dynamic Course Cards */
         .course-card {
             background: var(--surface-color); border-radius: var(--radius-lg); padding: 20px;
             margin-bottom: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease; 
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; 
             cursor: pointer; display: flex; flex-direction: column; gap: 12px;
-            animation: fadeSlideUp 0.5s ease-out forwards; opacity: 0; animation-delay: 0.2s;
+            animation: fadeSlideUp 0.3s ease-out forwards; opacity: 0; animation-delay: 0.1s;
         }
-        .course-card:active { transform: scale(0.96); background: var(--bg-color); }
-        .course-card:hover { box-shadow: var(--shadow-lg); border-color: var(--primary); transform: translateY(-4px); }
+        .course-card:active { transform: scale(0.98); background: var(--bg-color); }
+        .course-card:hover { box-shadow: var(--shadow-md); border-color: var(--primary); transform: translateY(-1px); }
         
         .course-header { display: flex; justify-content: space-between; align-items: flex-start; }
         .course-title { font-weight: 700; font-size: 1.1rem; color: var(--text-main); transition: color 0.2s ease; }
         .course-card:hover .course-title { color: var(--primary); }
         
-        .badge { padding: 4px 10px; border-radius: 30px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s ease; }
+        .badge { padding: 4px 10px; border-radius: 30px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s ease; }
         .badge-paid { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
         .badge-unpaid { background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.2); }
         
         .course-stats { display: flex; gap: 20px; font-size: 0.85rem; color: var(--text-muted); }
         .stat-item { display: flex; align-items: center; gap: 6px; }
-        .stat-icon { color: var(--primary); transition: transform 0.3s ease; }
-        .course-card:hover .stat-icon { transform: scale(1.1); }
+        .stat-icon { color: var(--primary); transition: transform 0.2s ease; }
+        .course-card:hover .stat-icon { transform: scale(1.0); }
 
         /* Empty State */
-        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); background: var(--surface-color); border-radius: var(--radius-lg); border: 1px dashed var(--border-color); animation: fadeIn 0.5s ease-out forwards; }
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); background: var(--surface-color); border-radius: var(--radius-lg); border: 1px dashed var(--border-color); animation: fadeIn 0.3s ease-out forwards; }
 
         /* Modals & Inputs */
         .input-group { margin-bottom: 20px; }
@@ -174,24 +177,24 @@
         .input-group input {
             width: 100%; padding: 14px; border: 1px solid var(--border-color);
             border-radius: var(--radius-lg); background-color: var(--bg-color); 
-            color: var(--text-main); font-size: 1rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); outline: none;
+            color: var(--text-main); font-size: 1rem; transition: all 0.2s ease; outline: none;
         }
-        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15); transform: translateY(-1px); }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15); transform: translateY(0px); }
         .input-group input:focus + label { color: var(--primary); }
 
         .btn {
             background-color: var(--primary); color: white; border: none;
             border-radius: var(--radius-lg); padding: 16px; width: 100%; font-size: 1rem;
-            font-weight: 600; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; justify-content: center; align-items: center; gap: 10px;
+            font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; justify-content: center; align-items: center; gap: 10px;
         }
-        .btn:hover { background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: var(--shadow-md); }
-        .btn:active { transform: scale(0.96) translateY(0); box-shadow: var(--shadow-sm); }
+        .btn:hover { background-color: var(--primary-hover); transform: translateY(0px); box-shadow: var(--shadow-sm); }
+        .btn:active { transform: scale(0.98) translateY(0); box-shadow: none; }
 
         /* Modal Architecture */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); 
-            z-index: 999; display: none; opacity: 0; transition: opacity 0.4s ease;
+            z-index: 999; display: none; opacity: 0; transition: opacity 0.3s ease;
         }
         .modal-overlay.active { display: block; opacity: 1; }
         
@@ -200,13 +203,13 @@
             background: var(--surface-color); border-radius: 24px 24px 0 0; 
             padding: 30px 24px 50px 24px; z-index: 1000; box-shadow: var(--shadow-lg); 
             display: flex; flex-direction: column; 
-            transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(100%); transition: transform 0.3s ease;
         }
         @media (min-width: 768px) {
             .user-modal {
                 top: 50%; left: 50%; bottom: auto; transform: translate(-50%, -40%);
                 width: 90%; max-width: 450px; border-radius: var(--radius-xl); padding-bottom: 30px;
-                opacity: 0; transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                opacity: 0; transition: opacity 0.2s ease, transform 0.3s ease;
             }
             .user-modal.active { transform: translate(-50%, -50%); opacity: 1; }
         }
@@ -214,8 +217,8 @@
         
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
         .modal-title { font-size: 1.25rem; font-weight: 700; color: var(--text-main); }
-        .modal-close-btn { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; transition: transform 0.2s ease, color 0.2s ease; }
-        .modal-close-btn:hover { color: var(--text-main); transform: rotate(90deg); }
+        .modal-close-btn { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; transition: color 0.2s ease, transform 0.2s ease; }
+        .modal-close-btn:hover { color: var(--text-main); transform: rotate(0deg); }
 
         /* Toast */
         #toast {
@@ -223,7 +226,7 @@
             text-align: center; border-radius: 30px; padding: 16px 24px;
             position: fixed; z-index: 2000; left: 50%; bottom: 20px; transform: translateX(-50%) translateY(20px);
             font-size: 15px; font-weight: 500; box-shadow: var(--shadow-lg);
-            opacity: 0; transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease;
         }
         #toast.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(-30px); }
 
@@ -237,8 +240,8 @@
             font-size: 0.85rem;
             font-weight: 500;
             opacity: 0;
-            animation: fadeIn 0.8s ease-out forwards;
-            animation-delay: 0.4s;
+            animation: fadeIn 0.5s ease-out forwards;
+            animation-delay: 0.2s;
         }
         .hood-footer-brand {
             color: var(--primary);
@@ -248,7 +251,7 @@
             transition: transform 0.2s ease;
         }
         .hood-footer-brand:hover {
-            transform: scale(1.05);
+            transform: scale(1.02);
         }
     </style>
 </head>
@@ -423,7 +426,7 @@
 
                     const passedText = course.hasPassedQuiz ? '<span style="color:var(--success);font-weight:700;">Certified</span>' : 'In Progress';
                     
-                    const animationDelay = 0.2 + (index * 0.1); // Staggered delay logic
+                    const animationDelay = 0.05 + (index * 0.05); // Staggered delay logic reduced for cleaner load
 
                     container.innerHTML += `
                         <div class="course-card" onclick="viewCourseDetails('${courseId}')" style="animation-delay: ${animationDelay}s;">
