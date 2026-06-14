@@ -5,33 +5,19 @@ service cloud.firestore {
     // ----------------------------------------------------------------------
     // GLOBAL SECURE FUNCTIONS
     // ----------------------------------------------------------------------
-    
-    // 1. Super Admin Authentication
     function isAdmin() {
       return request.auth != null && request.auth.uid == 'y6BDbmERJLbY4nBgh2R1JexGsxH2';
     }
 
-    // 2. Document Owner Authentication
     function isOwner(userId) {
       return request.auth != null && request.auth.uid == userId;
     }
 
-    // 3. Dynamic Course Payment Security (The Vault)
-    // Ensures users can never manually mark ANY course as 'paid' via frontend hacks.
-    function isPaymentStatusSecure(oldData, newData) {
-      // Safely fetch the courses map (defaults to empty map if it doesn't exist yet)
-      let oldCourses = oldData.get('courses', {});
-      let newCourses = newData.get('courses', {});
-      
-      // Loop through EVERY course ID the frontend is trying to save (python, prompt-engineering, java, etc.)
-      return newCourses.keys().all(courseId => 
-        
-        // SCENARIO A: Existing Course -> Payment status must strictly match what is already in the database
-        (courseId in oldCourses && newCourses[courseId].paymentStatus == oldCourses[courseId].paymentStatus) 
-        
-        || 
-        
-        // SCENARIO B: Brand New Course -> Payment status MUST be strictly initialized to 'none'
+    // This function safely checks a specific course to ensure payment status isn't hacked.
+    // It is written in pure CEL (No 'let' or loops)
+    function isCourseSecure(courseId, oldCourses, newCourses) {
+      return !(courseId in newCourses) || (
+        (courseId in oldCourses && newCourses[courseId].paymentStatus == oldCourses[courseId].paymentStatus) ||
         (!(courseId in oldCourses) && newCourses[courseId].paymentStatus == 'none')
       );
     }
@@ -40,39 +26,42 @@ service cloud.firestore {
     // COLLECTION-SPECIFIC RULES
     // ----------------------------------------------------------------------
 
-    // 1. USERS COLLECTION (Profiles, Multi-Course Progress, Payments)
     match /users/{userId} {
-      
-      // Read: Admin sees all, Users see their own data
       allow read: if isAdmin() || isOwner(userId);
       
-      // Create: Initial account setup. 
-      // Restricts schema to exactly what the frontend uses and enforces safe defaults.
+      // CREATE: Checks the payload when a brand new user signs up
       allow create: if isOwner(userId) &&
         request.resource.data.keys().hasOnly(['fullName', 'whatsappNumber', 'courses']) &&
-        isPaymentStatusSecure({}, request.resource.data);
+        (
+          !('courses' in request.resource.data) || 
+          (
+            isCourseSecure('prompt-engineering', {}, request.resource.data.courses) &&
+            isCourseSecure('python', {}, request.resource.data.courses)
+            // Add new courses here for Create if needed in the future
+          )
+        );
       
-      // Update: Continuous progress tracking.
-      // Protects against injection of undocumented fields AND runs 'The Vault' logic.
+      // UPDATE: Runs every time they complete a module
       allow update: if isAdmin() || (
         isOwner(userId) && 
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['fullName', 'whatsappNumber', 'courses']) &&
-        isPaymentStatusSecure(resource.data, request.resource.data)
+        
+        // WE CHECK EACH COURSE MANUALLY (This replaces the broken loop)
+        isCourseSecure('prompt-engineering', resource.data.get('courses', {}), request.resource.data.get('courses', {})) &&
+        isCourseSecure('python', resource.data.get('courses', {}), request.resource.data.get('courses', {}))
+        
+        // 🚀 WHEN YOU ADD JAVA, JUST ADD THIS LINE BELOW:
+        // && isCourseSecure('java', resource.data.get('courses', {}), request.resource.data.get('courses', {}))
       );
       
-      // Delete: Only Admin can delete an account
       allow delete: if isAdmin();
     }
 
-    // 2. COURSE CONTENT & CURRICULUM
-    // Strictly read-only for students, writable only by the Super Admin
     match /courses/{document=**} {
       allow read: if request.auth != null; 
       allow write: if isAdmin();           
     }
 
-    // 3. GLOBAL FALLBACK & ADMIN OVERRIDE
-    // Secures all other undocumented collections automatically
     match /{document=**} {
       allow read, write: if isAdmin();
     }
