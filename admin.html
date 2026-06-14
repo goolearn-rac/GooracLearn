@@ -11,7 +11,6 @@
             --surface-color: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --border-color: #e2e8f0;
             --primary: #059669; /* Emerald Green */
             --primary-hover: #047857;
             --danger: #ef4444;
@@ -228,10 +227,11 @@
     <div id="login-screen">
         <div class="login-card">
             <h2>Goorac <span class="header-brand">Admin</span></h2>
-            <p>Enter your security PIN to access the dashboard</p>
-            <input type="password" id="admin-pin" class="input-field" placeholder="••••" inputmode="numeric" pattern="[0-9]*" onkeypress="if(event.key === 'Enter') checkPin()">
-            <div id="login-error" class="error-message">Incorrect Security PIN</div>
-            <button class="btn-primary" onclick="checkPin()">Access Dashboard</button>
+            <p>Enter administrative email and password for authentication</p>
+            <input type="email" id="admin-email" class="input-field" placeholder="Admin Email" style="margin-bottom: 12px;">
+            <input type="password" id="admin-password" class="input-field" placeholder="Admin Password" onkeypress="if(event.key === 'Enter') handleAdminLogin()">
+            <div id="login-error" class="error-message">Invalid administrative login credentials.</div>
+            <button class="btn-primary" onclick="handleAdminLogin()">Secure Session Login</button>
         </div>
     </div>
 
@@ -239,7 +239,7 @@
         
         <div class="header">
             <h1>Goorac <span class="header-brand">Learn</span></h1>
-            <button class="btn-page" onclick="location.reload()">Log Out</button>
+            <button class="btn-page" onclick="handleAdminLogout()">Log Out</button>
         </div>
 
         <div class="stats-grid">
@@ -337,9 +337,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-        import { getAuth } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
         import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, query, limit, where } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-        import { getAuth as getAdminAuth } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js"; // Alias for readability if needed
 
         const firebaseConfig = {
             apiKey: "AIzaSyDeXk6z_5mYQZi_xIsQsN935KxuIBxAM3w",
@@ -351,6 +350,7 @@
         };
 
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
 
         // State Management
@@ -363,20 +363,43 @@
         let searchDebounceTimer;
         let lastSearchTerm = "";
 
-        // Secure On-Screen Security PIN Login Flow
-        window.checkPin = () => {
-            const pinInput = document.getElementById('admin-pin');
-            const errorEl = document.getElementById('login-error');
-            
-            if (pinInput.value === '2502') {
-                errorEl.style.display = 'none';
+        // Track Auth State securely to auto-route active admin sessions
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.uid === 'y6BDbmERJLbY4nBgh2R1JexGsxH2') {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('admin-screen').style.display = 'block';
                 fetchData();
             } else {
+                document.getElementById('admin-screen').style.display = 'none';
+                document.getElementById('login-screen').style.display = 'flex';
+            }
+        });
+
+        // Secure Firebase Authentication Session Login Flow
+        window.handleAdminLogin = async () => {
+            const emailInput = document.getElementById('admin-email');
+            const passwordInput = document.getElementById('admin-password');
+            const errorEl = document.getElementById('login-error');
+            
+            errorEl.style.display = 'none';
+
+            try {
+                await signInWithEmailAndPassword(auth, emailInput.value.trim(), passwordInput.value);
+            } catch (error) {
+                console.error("Admin Authentication Failure:", error.message);
                 errorEl.style.display = 'block';
-                pinInput.value = '';
-                pinInput.focus();
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        };
+
+        // Secure Admin Session Logout
+        window.handleAdminLogout = async () => {
+            try {
+                await signOut(auth);
+                location.reload();
+            } catch (error) {
+                console.error("Signout Failure:", error);
             }
         };
 
