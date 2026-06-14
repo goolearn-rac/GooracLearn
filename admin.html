@@ -263,7 +263,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                <input type="text" id="search-input" class="input-field" placeholder="Search by Name, WhatsApp, or UTR..." onkeyup="handleSearch()">
+                <input type="text" id="search-input" class="input-field" placeholder="Search by Name or WhatsApp..." onkeyup="handleSearch()">
             </div>
             
             <div class="filter-controls">
@@ -284,8 +284,7 @@
                             <th>WhatsApp</th>
                             <th>Enrolled Courses</th>
                             <th>Progress</th>
-                            <th>Quiz</th>
-                            <th>UPI UTR</th>
+                            <th>Certification</th>
                             <th>Payment Status</th>
                             <th style="text-align: center;">Actions</th>
                         </tr>
@@ -318,10 +317,6 @@
         <div class="modal-detail-row">
             <span class="modal-label">WhatsApp Number</span>
             <span class="modal-value modal-value-mono" id="modal-wa">N/A</span>
-        </div>
-        <div class="modal-detail-row">
-            <span class="modal-label">UPI Transaction ID (UTR)</span>
-            <span class="modal-value modal-value-mono" id="modal-utr" style="color: var(--text-main);">N/A</span>
         </div>
         
         <div id="modal-courses-container" style="margin-top: 10px;">
@@ -416,7 +411,7 @@
 
         // Fetch Data from Firestore Core Cluster (Optimized to Minimize Reads)
         async function fetchData(searchQuery = "") {
-            document.getElementById('table-body').innerHTML = "<tr><td colspan='9' style='text-align:center; padding: 40px;'>Loading database securely...</td></tr>";
+            document.getElementById('table-body').innerHTML = "<tr><td colspan='8' style='text-align:center; padding: 40px;'>Loading database securely...</td></tr>";
             
             try {
                 allUsers = [];
@@ -472,7 +467,6 @@
                 } else {
                     // Search State: Launch specific, limited queries to prevent unbridled read overhead
                     const qPhone = query(collection(db, "users"), where("whatsappNumber", "==", searchQuery), limit(10));
-                    const qUtr = query(collection(db, "users"), where("upiTransactionId", "==", searchQuery), limit(10));
                     
                     // Standard and Capitalized Prefix Search block
                     const capSearch = searchQuery.charAt(0).toUpperCase() + searchQuery.slice(1);
@@ -480,12 +474,11 @@
                     const qNameCap = query(collection(db, "users"), where("fullName", ">=", capSearch), where("fullName", "<=", capSearch + '\uf8ff'), limit(20));
 
                     // Execute queries in parallel
-                    const [snapPhone, snapUtr, snapName, snapNameCap] = await Promise.all([
-                        getDocs(qPhone), getDocs(qUtr), getDocs(qName), getDocs(qNameCap)
+                    const [snapPhone, snapName, snapNameCap] = await Promise.all([
+                        getDocs(qPhone), getDocs(qName), getDocs(qNameCap)
                     ]);
 
                     snapPhone.forEach(processDoc);
-                    snapUtr.forEach(processDoc);
                     snapName.forEach(processDoc);
                     snapNameCap.forEach(processDoc);
                 }
@@ -494,7 +487,7 @@
                 applyLocalFilterAndSort(); // Triggers UI rendering
             } catch (error) {
                 console.error("Database access initialization failure: ", error);
-                document.getElementById('table-body').innerHTML = "<tr><td colspan='9' style='text-align:center; padding: 40px; color: var(--danger);'>Error loading data. Verify firestore security perimeter policy rules configurations.</td></tr>";
+                document.getElementById('table-body').innerHTML = "<tr><td colspan='8' style='text-align:center; padding: 40px; color: var(--danger);'>Error loading data. Verify firestore security perimeter policy rules configurations.</td></tr>";
             }
         }
 
@@ -543,8 +536,7 @@
             
             filteredUsers = allUsers.filter(user => {
                 return (user.fullName && user.fullName.toLowerCase().includes(query)) || 
-                       (user.whatsappNumber && user.whatsappNumber.includes(query)) ||
-                       (user.upiTransactionId && user.upiTransactionId.includes(query));
+                       (user.whatsappNumber && user.whatsappNumber.includes(query));
             });
 
             filteredUsers.sort((a, b) => {
@@ -634,7 +626,6 @@
 
             document.getElementById('modal-name').innerHTML = user.fullName || "<em>No Profile</em>";
             document.getElementById('modal-wa').innerText = user.whatsappNumber || "N/A";
-            document.getElementById('modal-utr').innerText = user.upiTransactionId || "No UTR Entered";
             
             // Generate Dynamic Course List for Modal View
             let coursesDetailHTML = '';
@@ -646,6 +637,7 @@
                     let currentModVal = course.currentModule || 0;
                     if(currentModVal > 25) currentModVal = 25;
                     
+                    let isCertified = course.hasPassedQuiz === true || course.hasPassedQuiz === "true";
                     let selectClass = course.paymentStatus === 'paid' ? "status-select bg-success" : "status-select bg-neutral";
                     
                     coursesDetailHTML += `
@@ -653,7 +645,7 @@
                             <div style="font-weight: 700; color: var(--primary); margin-bottom: 12px; font-size: 1.1rem;">${courseName}</div>
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
                                 <div><span class="modal-label">Progress</span><br><span class="modal-value"><b>${currentModVal}</b> / 25</span></div>
-                                <div><span class="modal-label">Quiz</span><br>${course.hasPassedQuiz ? '<span class="badge bg-success">Passed</span>' : '<span class="badge bg-neutral">Pending</span>'}</div>
+                                <div><span class="modal-label">Certification</span><br>${isCertified ? '<span class="badge bg-success">🏆 Certified</span>' : '<span class="badge bg-neutral">Pending</span>'}</div>
                             </div>
                             <div>
                                 <span class="modal-label" style="display:block; margin-bottom: 6px;">Payment Status</span>
@@ -718,14 +710,13 @@
             const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
             if(paginatedUsers.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:40px; color:var(--text-muted);">No users found matching current filters</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:40px; color:var(--text-muted);">No users found matching current filters</td></tr>`;
                 mobileList.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-muted);">No users found</div>`;
             }
 
             paginatedUsers.forEach(user => {
                 const name = user.fullName || "<em style='color:var(--text-muted)'>No Profile Setup</em>";
                 const wa = user.whatsappNumber || "—";
-                const upi = user.upiTransactionId || "—";
                 
                 const cleanWa = user.whatsappNumber ? user.whatsappNumber.replace(/[^\d+]/g, '') : '';
                 const waButtonHTML = cleanWa ? `<a href="https://wa.me/${cleanWa}" target="_blank" class="btn-wa">Chat</a>` : '';
@@ -745,10 +736,12 @@
                         let currentModVal = course.currentModule || 0;
                         if(currentModVal > 25) currentModVal = 25;
                         
+                        let isCertified = course.hasPassedQuiz === true || course.hasPassedQuiz === "true";
+                        
                         // Desktop Stack Rows
                         coursesHTML += `<div style="margin-bottom: 12px; font-weight: 600; color: var(--primary); font-size: 0.85rem;">${courseName}</div>`;
                         progressHTML += `<div style="margin-bottom: 12px; font-size: 0.85rem;"><b>${currentModVal}</b> / 25</div>`;
-                        quizHTML += `<div style="margin-bottom: 12px;">${course.hasPassedQuiz ? '<span class="badge bg-success">Passed</span>' : '<span class="badge bg-neutral">Pending</span>'}</div>`;
+                        quizHTML += `<div style="margin-bottom: 12px;">${isCertified ? '<span class="badge bg-success">🏆 Certified</span>' : '<span class="badge bg-neutral">Pending</span>'}</div>`;
                         
                         let selectClass = course.paymentStatus === 'paid' ? "status-select bg-success" : "status-select bg-neutral";
                         
@@ -785,7 +778,6 @@
                         <td>${coursesHTML}</td>
                         <td>${progressHTML}</td>
                         <td>${quizHTML}</td>
-                        <td style="font-family: monospace; color: var(--text-muted);">${upi}</td>
                         <td>${paymentHTML}</td>
                         <td style="text-align: center;">
                             <button class="btn-icon" title="Delete User" onclick="deleteUser('${user.uid}', '${user.fullName || 'User'}')">
