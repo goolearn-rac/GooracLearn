@@ -244,15 +244,15 @@
 
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-title">Total Students</div>
+                <div class="stat-title">Loaded Students</div>
                 <div class="stat-value" id="stat-total">0</div>
             </div>
             <div class="stat-card">
-                <div class="stat-title">Active Course Enrollments</div>
+                <div class="stat-title">Visible Enrollments</div>
                 <div class="stat-value" id="stat-enrollments" style="color: var(--primary);">0</div>
             </div>
             <div class="stat-card">
-                <div class="stat-title">Fully Paid Courses</div>
+                <div class="stat-title">Visible Paid Courses</div>
                 <div class="stat-value" id="stat-paid" style="color: var(--success-text);">0</div>
             </div>
         </div>
@@ -307,7 +307,6 @@
         </div>
     </div>
 
-    <!-- Modals -->
     <div class="modal-overlay" id="modal-overlay" onclick="closeUserModal()"></div>
     <div class="user-modal" id="user-modal">
         <div class="modal-header">
@@ -324,10 +323,8 @@
             <span class="modal-value modal-value-mono" id="modal-utr" style="color: var(--text-main);">N/A</span>
         </div>
         
-        <!-- Dynamic Courses Container for Mobile Modal -->
         <div id="modal-courses-container" style="margin-top: 10px;">
-            <!-- Courses will be injected here -->
-        </div>
+            </div>
 
         <a href="#" class="btn-wa-full" id="modal-wa-btn" target="_blank">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
@@ -341,7 +338,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
         import { getAuth } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, query, limit, where } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
         import { getAuth as getAdminAuth } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js"; // Alias for readability if needed
 
         const firebaseConfig = {
@@ -362,6 +359,9 @@
         let currentPage = 1;
         const rowsPerPage = 10;
         let isModalOpen = false;
+        
+        let searchDebounceTimer;
+        let lastSearchTerm = "";
 
         // Secure On-Screen Security PIN Login Flow
         window.checkPin = () => {
@@ -380,22 +380,25 @@
             }
         };
 
-        // Fetch Data from Firestore Core Cluster
-        async function fetchData() {
+        // Fetch Data from Firestore Core Cluster (Optimized to Minimize Reads)
+        async function fetchData(searchQuery = "") {
             document.getElementById('table-body').innerHTML = "<tr><td colspan='9' style='text-align:center; padding: 40px;'>Loading database securely...</td></tr>";
             
             try {
-                const querySnapshot = await getDocs(collection(db, "users"));
                 allUsers = [];
                 let fallbackIndex = 0;
+                let uniqueIds = new Set();
 
-                querySnapshot.forEach((docSnap) => {
+                // Helper to process and format incoming document streams securely
+                const processDoc = (docSnap) => {
+                    if (uniqueIds.has(docSnap.id)) return;
+                    uniqueIds.add(docSnap.id);
+
                     let data = docSnap.data();
                     data.uid = docSnap.id; 
                     data._addedIndex = fallbackIndex++;
                     
                     // JUST-IN-TIME (JIT) Normalizer for Admin Dashboard
-                    // If a user has legacy flat data, we invisibly format it as nested so the dashboard won't crash
                     if (!data.courses && data.paymentStatus !== undefined) {
                         data.courses = {
                             "prompt-engineering": {
@@ -408,30 +411,53 @@
                         data.courses = {};
                     }
 
-                    // ROBUST TIMESTAMP FIX: Safe parsing strategy using Firebase Auth metadata fallback
+                    // ROBUST TIMESTAMP FIX
                     let rawTs = data.createdAt || data.timestamp || null;
                     if (rawTs) {
-                        // Standard Firestore timestamp evaluation
                         let millis = rawTs.toMillis ? rawTs.toMillis() : new Date(rawTs).getTime();
                         data._sortTime = millis;
                         data._displayDate = new Date(millis).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
                     } else if (data.metadata && data.metadata.creationTime) {
-                        // Firebase Auth internal metadata fallback integration
                         let millis = new Date(data.metadata.creationTime).getTime();
                         data._sortTime = millis;
                         data._displayDate = new Date(millis).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
                     } else {
-                        // Final safety net structure
                         data._sortTime = data._addedIndex;
                         data._displayDate = "—";
                     }
 
                     allUsers.push(data);
-                });
+                };
 
-                filteredUsers = [...allUsers];
+                // Routing traffic to avoid mass collection downloading
+                if (!searchQuery) {
+                    // Default State: Limit initial pull to top 50 recent records
+                    const defaultQ = query(collection(db, "users"), limit(50));
+                    const querySnapshot = await getDocs(defaultQ);
+                    querySnapshot.forEach(processDoc);
+                } else {
+                    // Search State: Launch specific, limited queries to prevent unbridled read overhead
+                    const qPhone = query(collection(db, "users"), where("whatsappNumber", "==", searchQuery), limit(10));
+                    const qUtr = query(collection(db, "users"), where("upiTransactionId", "==", searchQuery), limit(10));
+                    
+                    // Standard and Capitalized Prefix Search block
+                    const capSearch = searchQuery.charAt(0).toUpperCase() + searchQuery.slice(1);
+                    const qName = query(collection(db, "users"), where("fullName", ">=", searchQuery), where("fullName", "<=", searchQuery + '\uf8ff'), limit(20));
+                    const qNameCap = query(collection(db, "users"), where("fullName", ">=", capSearch), where("fullName", "<=", capSearch + '\uf8ff'), limit(20));
+
+                    // Execute queries in parallel
+                    const [snapPhone, snapUtr, snapName, snapNameCap] = await Promise.all([
+                        getDocs(qPhone), getDocs(qUtr), getDocs(qName), getDocs(qNameCap)
+                    ]);
+
+                    snapPhone.forEach(processDoc);
+                    snapUtr.forEach(processDoc);
+                    snapName.forEach(processDoc);
+                    snapNameCap.forEach(processDoc);
+                }
+
                 updateKPIs();
-                handleSearch();
+                applyLocalFilterAndSort(); // Triggers UI rendering
             } catch (error) {
                 console.error("Database access initialization failure: ", error);
                 document.getElementById('table-body').innerHTML = "<tr><td colspan='9' style='text-align:center; padding: 40px; color: var(--danger);'>Error loading data. Verify firestore security perimeter policy rules configurations.</td></tr>";
@@ -457,12 +483,29 @@
             document.getElementById('stat-paid').innerText = totalPaid;
         }
 
-        // Search Engine & Real-time Client Filtering Parameters
+        // Search Engine Interceptor & Real-time Debouncer
         window.handleSearch = () => {
+            const queryTerm = document.getElementById('search-input').value.trim();
+            
+            // If they just changed the sort dropdown but didn't type anything new, don't refetch
+            if (queryTerm === lastSearchTerm) {
+                applyLocalFilterAndSort();
+                return;
+            }
+
+            // Prevent spamming the database with a 600ms debounce
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(() => {
+                lastSearchTerm = queryTerm;
+                currentPage = 1;
+                fetchData(queryTerm);
+            }, 600);
+        };
+
+        // Processes the UI layer rendering without triggering a database fetch
+        function applyLocalFilterAndSort() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const sortOrder = document.getElementById('sort-select').value;
-            
-            currentPage = 1; 
             
             filteredUsers = allUsers.filter(user => {
                 return (user.fullName && user.fullName.toLowerCase().includes(query)) || 
@@ -479,7 +522,7 @@
             });
 
             renderTable();
-        };
+        }
 
         // Table List Pagination Offset Toggles
         window.changePage = (direction) => {
@@ -530,7 +573,7 @@
                 try {
                     await deleteDoc(doc(db, "users", uid));
                     allUsers = allUsers.filter(u => u.uid !== uid);
-                    handleSearch(); 
+                    applyLocalFilterAndSort(); 
                     updateKPIs();
                 } catch (error) {
                     alert("Destructive transaction write execution denied. System access credentials violation error.");
