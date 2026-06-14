@@ -193,6 +193,18 @@
         .modal-body ul { margin-left: 20px; margin-bottom: 16px; }
         .modal-body li { margin-bottom: 8px; }
         .modal-body strong { color: var(--text-main); }
+        
+        /* --- ADDED: IG/Browser Detection Modal Styles --- */
+        #igBrowserModal .modal-content { max-width: 400px; text-align: center; padding: 40px 24px; align-items: center;}
+        .browser-icon { width: 56px; height: 56px; margin-bottom: 20px; color: #4285F4; background: rgba(66, 133, 244, 0.1); padding: 12px; border-radius: 50%;}
+        .chrome-btn {
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            background-color: #4285F4; color: white; border: none; border-radius: var(--radius-lg);
+            padding: 16px 24px; font-weight: 700; font-size: 1.05rem; cursor: pointer; text-decoration: none;
+            margin-top: 24px; width: 100%; transition: all 0.2s; box-shadow: 0 4px 14px 0 rgba(66, 133, 244, 0.39);
+        }
+        .chrome-btn:hover { background-color: #3367D6; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4); }
+        .chrome-btn svg { width: 22px; height: 22px; }
     </style>
 </head>
 <body>
@@ -394,6 +406,26 @@
         </div>
     </div>
 
+    <div id="igBrowserModal" class="modal-overlay">
+        <div class="modal-content">
+            <svg class="browser-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 10a3 3 0 106 0m-6 0a3 3 0 116 0m-6 0H3m15 0h-3m-6 4v5m0-5v-5" />
+            </svg>
+            <h2 style="font-size: 1.4rem; margin-bottom: 8px; color: var(--text-main);">For the Best Experience</h2>
+            <p style="font-size: 1rem; color: var(--text-muted); margin-bottom: 24px;">Instagram's built-in browser might restrict enrollment. Please open this page in Google Chrome.</p>
+            <button onclick="forceOpenChrome()" class="chrome-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.844 5.372a.5.5 0 0 1-.397.608l-1.92.384a.5.5 0 1 1-.192-.98l1.32-.264-1.28-1.28A6.97 6.97 0 0 0 8 1.018a6.97 6.97 0 0 0-4.938 2.052L4.01 4.02l.264 1.32a.5.5 0 0 1-.98.192l-.384-1.92a.5.5 0 0 1 .608-.608l1.92.384 1.28-1.28A8.02 8.02 0 0 1 8 0c2.21 0 4.21.896 5.662 2.348l1.28 1.28 1.28-1.28a.5.5 0 0 1 .808.536l-1.12 5.6a.5.5 0 0 1-.58.39l-5.6-1.12a.5.5 0 0 1 .192-.98l1.32.264-1.28-1.28A6.97 6.97 0 0 0 8 1.018a6.97 6.97 0 0 0-4.938 2.052l1.28 1.28.264-1.32a.5.5 0 1 1 .98.192l-.384 1.92a.5.5 0 0 1-.608.608l-1.92-.384a.5.5 0 1 1 .192-.98l1.32-.264 1.28-1.28A8.02 8.02 0 0 1 8 0a8.02 8.02 0 0 1 5.662 2.348z"/>
+                </svg>
+                Open in Chrome
+            </button>
+            <p style="font-size: 0.85rem; margin-top: 20px; margin-bottom: 0; color: var(--text-muted);">
+                Or tap the <strong>3 dots</strong> (top right) and select<br><strong>"Open in system browser"</strong>
+            </p>
+        </div>
+    </div>
+
     <script>
         // Automatically set the current copyright year
         document.getElementById('year').textContent = new Date().getFullYear();
@@ -411,11 +443,48 @@
 
         // Close modal when clicking outside the modal content
         window.onclick = function(event) {
-            if (event.target.classList.contains('modal-overlay')) {
+            // Note: Preventing click-outside for IG modal so they don't accidentally close it
+            if (event.target.classList.contains('modal-overlay') && event.target.id !== 'igBrowserModal') {
                 event.target.classList.remove('active');
                 document.body.style.overflow = '';
             }
         }
+
+        // --- ADDED: Instagram Detection & Auto-Redirect Logic ---
+        function isInstagramBrowser() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            return (ua.indexOf('Instagram') > -1);
+        }
+
+        function forceOpenChrome() {
+            const currentUrl = window.location.href;
+            const isAndroid = /android/i.test(navigator.userAgent);
+            const isIOS = /ipad|iphone|ipod/i.test(navigator.userAgent);
+
+            if (isAndroid) {
+                // Uses Android Intent to force open Chrome
+                const intentUrl = `intent://${window.location.host}${window.location.pathname}${window.location.search}#Intent;scheme=https;package=com.android.chrome;end;`;
+                window.location.href = intentUrl;
+            } else if (isIOS) {
+                // Uses googlechrome:// scheme for iOS devices
+                const iosUrl = currentUrl.replace(/^https?:\/\//i, 'googlechrome://');
+                window.location.href = iosUrl;
+            } else {
+                window.open(currentUrl, '_blank');
+            }
+        }
+
+        // Check on load
+        window.addEventListener('load', function() {
+            if (isInstagramBrowser()) {
+                // Show the modal
+                openModal('igBrowserModal');
+                
+                // Try automatically redirecting after 1.5 seconds (fulfills your "auto redirect" requirement)
+                // Note: IG occasionally blocks auto-redirects, which is why the modal is there as a fallback!
+                setTimeout(forceOpenChrome, 1500); 
+            }
+        });
     </script>
 </body>
 </html>
