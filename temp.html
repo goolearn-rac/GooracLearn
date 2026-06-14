@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Migration Tool | Goorac</title>
+    <style>
+        body { font-family: 'Courier New', monospace; background: #0f172a; color: #f8fafc; padding: 40px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; background: #1e293b; padding: 30px; border-radius: 12px; border: 1px solid #334155; }
+        h1 { color: #10b981; margin-top: 0; }
+        p { color: #94a3b8; }
+        .btn { background: #059669; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 20px; }
+        .btn:disabled { background: #475569; cursor: not-allowed; }
+        #log-window { background: #020617; border: 1px solid #334155; padding: 15px; height: 300px; overflow-y: auto; margin-top: 20px; border-radius: 6px; font-size: 14px; }
+        .log-entry { margin-bottom: 5px; border-bottom: 1px dashed #334155; padding-bottom: 5px; }
+        .success { color: #10b981; }
+        .skip { color: #eab308; }
+        .error { color: #ef4444; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>V2 Database Migration Tool</h1>
+        <p>This script will migrate all legacy single-course users into the new multi-course JSON schema.</p>
+        <p><strong>Warning:</strong> Ensure no users are actively making payments while this runs.</p>
+        
+        <button id="login-btn" class="btn">1. Admin Auth Login</button>
+        <button id="migrate-btn" class="btn" disabled>2. Start Database Migration</button>
+
+        <div id="log-window">
+            <div class="log-entry">System ready. Waiting for Admin Login...</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, deleteField } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+        // Your exact Goorac Learn Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDeXk6z_5mYQZi_xIsQsN935KxuIBxAM3w",
+            authDomain: "gooraclearn.firebaseapp.com",
+            projectId: "gooraclearn",
+            storageBucket: "gooraclearn.firebasestorage.app",
+            messagingSenderId: "221459932053",
+            appId: "1:221459932053:web:af713811da7edd113e0c9c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        const logWindow = document.getElementById('log-window');
+        const loginBtn = document.getElementById('login-btn');
+        const migrateBtn = document.getElementById('migrate-btn');
+
+        function addLog(message, type = '') {
+            const div = document.createElement('div');
+            div.className = `log-entry ${type}`;
+            div.innerText = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logWindow.appendChild(div);
+            logWindow.scrollTop = logWindow.scrollHeight;
+        }
+
+        // STEP 1: AUTHENTICATE (Required if your Firestore rules block unauthenticated reads/writes)
+        loginBtn.onclick = async () => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (err) {
+                addLog("Login failed: " + err.message, "error");
+            }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                addLog(`Authenticated as: ${user.email}`, "success");
+                loginBtn.disabled = true;
+                migrateBtn.disabled = false;
+            }
+        });
+
+        // STEP 2: THE BULK MIGRATION SCRIPT
+        migrateBtn.onclick = async () => {
+            migrateBtn.disabled = true;
+            addLog("Fetching all users from Firestore...", "skip");
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "users"));
+                const totalUsers = querySnapshot.size;
+                addLog(`Found ${totalUsers} total users in database.`);
+
+                let migratedCount = 0;
+                let skippedCount = 0;
+
+                for (const document of querySnapshot.docs) {
+                    const data = document.data();
+                    const userId = document.id;
+
+                    // CHECK IF MIGRATION IS NEEDED
+                    // Target: Users who have the old root-level paymentStatus but no 'courses' object
+                    if (data.paymentStatus !== undefined && !data.courses) {
+                        
+                        // 1. Build the new format
+                        const newCourseData = {
+                            "prompt-engineering": {
+                                paymentStatus: data.paymentStatus === 'paid' ? 'paid' : 'none',
+                                currentModule: data.currentModule || 1,
+                                hasPassedQuiz: data.hasPassedQuiz || false
+                            }
+                        };
+
+                        // 2. Prepare the update payload (Inject new data, strictly delete old root keys)
+                        const userRef = doc(db, "users", userId);
+                        await updateDoc(userRef, {
+                            courses: newCourseData,
+                            paymentStatus: deleteField(),
+                            currentModule: deleteField(),
+                            hasPassedQuiz: deleteField()
+                        });
+
+                        migratedCount++;
+                        addLog(`Migrated UID: ${userId} (${data.fullName || 'No Name'})`, "success");
+
+                    } else {
+                        // User is either a brand new user or was already migrated
+                        skippedCount++;
+                        addLog(`Skipped UID: ${userId} (Already on V2 schema or empty)`, "skip");
+                    }
+                }
+
+                addLog(`=========================================`, "success");
+                addLog(`MIGRATION COMPLETE!`, "success");
+                addLog(`Total Migrated: ${migratedCount}`, "success");
+                addLog(`Total Skipped: ${skippedCount}`, "skip");
+
+            } catch (error) {
+                addLog(`FATAL ERROR: ${error.message}`, "error");
+                console.error(error);
+                migrateBtn.disabled = false;
+            }
+        };
+    </script>
+</body>
+</html>
