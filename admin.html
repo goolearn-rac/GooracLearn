@@ -308,11 +308,11 @@
     </div>
 
     <!-- Modals -->
-    <div class="modal-overlay" id="modal-overlay" onclick="closeUserModal(true)"></div>
+    <div class="modal-overlay" id="modal-overlay" onclick="closeUserModal()"></div>
     <div class="user-modal" id="user-modal">
         <div class="modal-header">
             <div class="modal-title" id="modal-name">Student Name</div>
-            <button class="modal-close-btn" onclick="closeUserModal(true)">×</button>
+            <button class="modal-close-btn" onclick="closeUserModal()">×</button>
         </div>
         
         <div class="modal-detail-row">
@@ -340,7 +340,9 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
         import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+        import { getAuth as getAdminAuth } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js"; // Alias for readability if needed
 
         const firebaseConfig = {
             apiKey: "AIzaSyDeXk6z_5mYQZi_xIsQsN935KxuIBxAM3w",
@@ -359,6 +361,7 @@
         let filteredUsers = [];
         let currentPage = 1;
         const rowsPerPage = 10;
+        let isModalOpen = false;
 
         // Secure On-Screen Security PIN Login Flow
         window.checkPin = () => {
@@ -405,15 +408,22 @@
                         data.courses = {};
                     }
 
-                    // ROBUST TIMESTAMP FIX: Safely parse Date if missing or broken
+                    // ROBUST TIMESTAMP FIX: Safe parsing strategy using Firebase Auth metadata fallback
                     let rawTs = data.createdAt || data.timestamp || null;
                     if (rawTs) {
+                        // Standard Firestore timestamp evaluation
                         let millis = rawTs.toMillis ? rawTs.toMillis() : new Date(rawTs).getTime();
                         data._sortTime = millis;
                         data._displayDate = new Date(millis).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                    } else if (data.metadata && data.metadata.creationTime) {
+                        // Firebase Auth internal metadata fallback integration
+                        let millis = new Date(data.metadata.creationTime).getTime();
+                        data._sortTime = millis;
+                        data._displayDate = new Date(millis).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
                     } else {
+                        // Final safety net structure
                         data._sortTime = data._addedIndex;
-                        data._displayDate = "Not Recorded";
+                        data._displayDate = "—";
                     }
 
                     allUsers.push(data);
@@ -529,7 +539,9 @@
             }
         };
 
-        // Mobile Application Modal Window Controller Pipelines
+        // ==========================================
+        // ROBUST MOBILE MODAL ROUTING CONTROLLER
+        // ==========================================
         window.openUserModal = (uid) => {
             const user = allUsers.find(u => u.uid === uid);
             if(!user) return;
@@ -583,23 +595,36 @@
             document.getElementById('modal-courses-container').innerHTML = coursesDetailHTML;
 
             const delBtn = document.getElementById('modal-delete-btn');
-            delBtn.onclick = () => { closeUserModal(true); deleteUser(uid, user.fullName || 'User'); };
+            delBtn.onclick = () => { closeUserModal(); deleteUser(uid, user.fullName || 'User'); };
 
             document.getElementById('modal-overlay').classList.add('active');
             document.getElementById('user-modal').classList.add('active');
             
-            history.pushState({ modalOpen: true, uid: uid }, '', '#user-' + uid);
+            // STRICT HARDWARE BACK BUTTON INTERCEPTOR
+            isModalOpen = true;
+            try {
+                history.pushState({ modalOpen: true }, '', '#viewUser');
+            } catch(e) { console.warn("History pushstate failure", e); }
         };
 
-        window.closeUserModal = (triggerHistoryBack = false) => {
+        window.closeUserModal = () => {
             document.getElementById('modal-overlay').classList.remove('active');
             document.getElementById('user-modal').classList.remove('active');
-            if(triggerHistoryBack) history.back();
+            if (isModalOpen) {
+                isModalOpen = false;
+                try {
+                    history.back(); // Programmatically clear the dummy state to keep history clean
+                } catch(e) {}
+            }
         };
 
+        // Listens explicitly for the physical phone back button
         window.addEventListener('popstate', (e) => {
-            if (!e.state || !e.state.modalOpen) {
-                closeUserModal(false);
+            if (isModalOpen) {
+                // If they press the back button while the modal is open, we simply close the modal
+                isModalOpen = false;
+                document.getElementById('modal-overlay').classList.remove('active');
+                document.getElementById('user-modal').classList.remove('active');
             }
         });
 
