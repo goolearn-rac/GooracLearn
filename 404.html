@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Page Not Found | Goorac Learn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Exact Theme Match System from index.html */
+        :root {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #059669; /* Emerald Green */
+            --primary-hover: #047857;
+            --border-color: #e2e8f0;
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #020617; /* Deep Midnight Blue */
+                --surface-color: #0f172a;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --border-color: #1e293b;
+            }
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            font-family: 'Inter', sans-serif; 
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Navigation Match */
+        .top-nav {
+            background-color: var(--surface-color); 
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            position: sticky; 
+            top: 0; 
+            z-index: 100;
+        }
+        .brand { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+
+        /* Error Container */
+        .error-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            max-width: 480px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .error-card {
+            background: var(--surface-color); 
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-color); 
+            padding: 40px 24px;
+            box-shadow: var(--shadow-md); 
+            text-align: center;
+            width: 100%;
+            animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        .error-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 5rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 10px;
+            letter-spacing: -2px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background-color: var(--primary); 
+            color: white; 
+            border: none;
+            border-radius: var(--radius-lg); 
+            padding: 16px; 
+            width: 100%; 
+            font-size: 1rem;
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            display: inline-flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 10px;
+            text-decoration: none;
+        }
+        .btn:active { transform: scale(0.98); }
+
+        .btn-outline { 
+            background: transparent; 
+            color: var(--text-main); 
+            border: 1px solid var(--border-color); 
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Matching Top Nav Bar -->
+    <div class="top-nav">
+        <div class="brand">Goorac <span style="color:var(--text-main)">Learn</span></div>
+    </div>
+
+    <!-- Error Content Box -->
+    <div class="error-container">
+        <div class="error-card">
+            <div class="error-code">404</div>
+            <h1>Token Pattern Unrecognized</h1>
+            <p>The system context window could not find the module or branch path you are looking for.</p>
+            
+            <!-- Standard dynamic routing navigation action loops -->
+            <a href="index.html" class="btn">
+                <svg width="20" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Return to Workspace
+            </a>
+            
+            <button onclick="history.back()" class="btn btn-outline">
+                Go Back One Step
+            </button>
+        </div>
+    </div>
+
+</body>
+</html>
