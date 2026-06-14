@@ -6,7 +6,6 @@
     <title>Goorac Learn | Advanced Prompt Engineering</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- Official Razorpay Checkout Library -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
         /* Premium SaaS & App Theme Variables - Updated to Emerald/Teal and Midnight Blue */
@@ -269,7 +268,6 @@
 
     <div id="toast">Message</div>
 
-    <!-- Intelligent Navigation Redirection Links -->
     <div class="top-nav">
         <div class="brand" onclick="window.location.href='index.html'">Goorac <span style="color:var(--text-main)">Learn</span></div>
         <div id="nav-profile" style="display:none; align-items: center; gap: 8px; cursor: pointer;" onclick="window.location.href='profile.html'"></div>
@@ -359,7 +357,6 @@
             </div>
         </div>
 
-        <!-- NEW: Dedicated Certificate Access Banner for Post-Completion -->
         <div id="certificate-access-banner" style="display:none; margin-top: 30px;">
             <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
                 <h3 style="color: var(--success);">🏆 Masterclass Certified</h3>
@@ -370,7 +367,7 @@
     </div>
 
     <div id="module-viewer-screen" class="screen">
-        <button onclick="goBack()" style="background:none; border:none; color:var(--text-muted); font-weight:600; cursor:pointer; padding: 0 0 20px 0; display:flex; align-items:center; gap:5px; font-size: 1rem;">
+        <button onclick="goToDashboard()" style="background:none; border:none; color:var(--text-muted); font-weight:600; cursor:pointer; padding: 0 0 20px 0; display:flex; align-items:center; gap:5px; font-size: 1rem;">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"></path></svg> Back
         </button>
 
@@ -559,7 +556,7 @@
 
         window.goBack = () => { 
             window.stopTTS(); 
-            history.back(); 
+            goToDashboard(); // Modified to return directly to the dashboard, fixing back button modal loop
         };
         
         window.addEventListener('popstate', (e) => {
@@ -741,7 +738,7 @@
                 id: 5, icon: "🚫", img: "https://images.unsplash.com/photo-1507146426996-ef05306b995a?w=800&q=80",
                 title_en: "5. The Art of Negative Prompting", title_ta: "5. எதிர்மறை Prompting-இன் கலை", 
                 content_en: `
-                    <div style="background: rgba(5,150,105,0.05); padding: 15px; border-left: 4px solid var(--primary); border-radius: 8px; margin-bottom: 20px;"><strong>💡 Simple Analogy:</strong> Sometimes it's easier to tell a dog "Do NOT jump on the couch" rather than trying to explain all the places they ARE allowed to sit. Negative prompting gives the AI strict boundaries it cannot cross.</div>
+                    <div style="background: rgba(5,150,105,0.05); padding: 15px; border-left: 4px solid var(--primary); border-radius: 8px; margin-bottom: 20px;"><strong>💡 Simple Analogy:</strong> Sometimes it's easier to tell a dog "Do NOT jump on the couch" rather than trying to explain all the places they ARE allowed to sit. Negative prompting gives the AI strict boundaries it crossed.</div>
                     <p>Most users focus entirely on telling the AI what to do. However, in professional applications, telling the AI exactly what <b>NOT</b> to do is often more critical. This is known as Negative Prompting.</p>
                     <h3>Setting Firm Guardrails</h3>
                     <p>LLMs are trained on the entire internet, which includes a lot of cliché writing, corporate jargon, and overly polite robotic apologies (e.g., "As an AI language model..."). Negative prompting establishes strict guardrails to prevent these unwanted behaviors from polluting your output.</p>
@@ -1637,8 +1634,13 @@
                         }, { merge: true });
                     } catch(e) { console.error("Progress save error:", e); }
                     
-                    routeUser(true);
                     showToast("Module Completed!");
+                    if (id < 25) {
+                        loadModule(id + 1); // Fixes the issue where it wasn't loading the next module directly
+                        window.scrollTo(0,0);
+                    } else {
+                        routeUser(true);
+                    }
                 };
             } else if (id < currentUserData.courses[CURRENT_COURSE_ID].currentModule || currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
                 btn.style.display = 'flex';
@@ -1655,7 +1657,8 @@
             } else { 
                 btn.style.display = 'none'; 
             }
-            showScreen('module-viewer-screen', true);
+            const isAlreadyViewing = document.getElementById('module-viewer-screen').classList.contains('active-screen');
+            showScreen('module-viewer-screen', !isAlreadyViewing); // Fixes multiple back button history issues
         }
 
         // ==========================================
