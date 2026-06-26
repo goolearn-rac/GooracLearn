@@ -50,7 +50,7 @@ const razorpay = new Razorpay({
 // ==========================================
 const coursePrices = {
     "prompt-engineering": 14900, // ₹149.00
-    "python-mastery": 29900,     // ₹299.00 (Example for future)
+    "data-analytics": 14900,     // ₹149.00 (Example for future)
     "advanced-react": 49900,     // ₹499.00 (Example for future)
     "default": 14900             // Fallback safeguard
 };
