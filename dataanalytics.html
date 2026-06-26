@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Goorac Learn | Advanced Data Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        /* Premium SaaS & App Theme Variables - Updated to Analytics Deep Blue */
+        :root {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #2563eb; /* Deep Blue */
+            --primary-hover: #1d4ed8;
+            --border-color: #e2e8f0;
+            --success: #10b981;
+            --success-bg: #eff6ff;
+            --locked-bg: #f1f5f9;
+            --code-bg: #0f172a; /* Midnight Blue */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #020617; 
+                --surface-color: #0f172a;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --border-color: #1e293b;
+                --locked-bg: #0b1120;
+                --success-bg: #1e3a8a;
+                --code-bg: #000000;
+            }
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: var(--bg-color); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; line-height: 1.6;
+            -webkit-font-smoothing: antialiased; overflow-x: hidden;
+        }
+
+        .top-nav {
+            background-color: var(--surface-color); border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px); background-color: rgba(var(--surface-color), 0.9);
+        }
+        .brand { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; cursor: pointer; }
+
+        .screen { display: none; flex: 1; padding: 30px 20px 80px 20px; max-width: 640px; margin: 0 auto; width: 100%; min-height: 100vh;}
+        .active-screen { display: block; animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(15px); } to { opacity: 1; transform: translateX(0); } }
+
+        #splash-screen.active-screen { display: flex; flex-direction: column; }
+        .spinner { 
+            width: 40px; height: 40px; border: 4px solid var(--border-color); 
+            border-top-color: var(--primary); border-radius: 50%; 
+            animation: spin 1s linear infinite; margin-top: 20px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        h1, h2, h3 { font-weight: 700; margin-bottom: 12px; line-height: 1.2; letter-spacing: -0.5px; }
+        p { margin-bottom: 20px; color: var(--text-muted); font-size: 1.05rem; }
+        
+        .card {
+            background: var(--surface-color); border-radius: var(--radius-xl);
+            border: 1px solid var(--border-color); padding: 24px;
+            box-shadow: var(--shadow-md); margin-bottom: 24px;
+        }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main); }
+        .input-group input {
+            width: 100%; padding: 16px; border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); background-color: var(--bg-color); 
+            color: var(--text-main); font-size: 1rem; transition: 0.2s; outline: none;
+            appearance: none; 
+        }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+
+        .btn {
+            background-color: var(--primary); color: white; border: none;
+            border-radius: var(--radius-lg); padding: 16px; width: 100%; font-size: 1rem;
+            font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none !important; }
+        .btn:active:not(:disabled) { transform: scale(0.98); } 
+        .btn-success { background-color: var(--success); }
+        .btn-outline { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
+
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
+            text-align: center; border-radius: 30px; padding: 16px 24px;
+            position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%);
+            font-size: 15px; font-weight: 500; box-shadow: var(--shadow-lg);
+            opacity: 0; transition: opacity 0.3s, bottom 0.3s;
+        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
+        .progress-bar-bg { background: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px; margin-bottom: 10px;}
+        .progress-bar-fill { background: var(--primary); height: 100%; width: 0%; transition: width 0.8s ease-out; }
+
+        .module-item {
+            background-color: var(--surface-color); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; transition: 0.2s; box-shadow: var(--shadow-sm);
+        }
+        .module-item:active:not(.locked) { transform: scale(0.98); background: var(--bg-color); }
+        .module-item.locked { background-color: var(--locked-bg); opacity: 0.6; cursor: not-allowed; }
+        .module-item.completed { border-left: 4px solid var(--success); }
+        
+        .mod-icon { font-size: 24px; width: 44px; height: 44px; background: var(--bg-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
+        .mod-details { flex: 1; }
+        .mod-title { font-weight: 600; font-size: 1rem; color: var(--text-main); margin-bottom: 2px; }
+        .mod-status { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
+
+        .mod-hero-img { width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .content-body h3 { margin-top: 30px; margin-bottom: 15px; font-size: 1.25rem; color: var(--primary); border-bottom: 1px solid var(--border-color); padding-bottom: 5px;}
+        .content-body ul, .content-body ol { margin-bottom: 20px; padding-left: 20px; color: var(--text-muted); }
+        .content-body li { margin-bottom: 10px; }
+        .content-body mark { background-color: rgba(37, 99, 235, 0.2); padding: 2px 4px; border-radius: 4px; color: var(--primary); font-weight: 600; }
+        .content-body strong { color: var(--text-main); }
+        
+        .analogy-box {
+            background: rgba(37, 99, 235, 0.05); border-left: 4px solid var(--primary);
+            padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 24px 0; font-size: 1.05rem; color: var(--text-main);
+        }
+        
+        .code-wrapper {
+            position: relative; background: var(--code-bg); border-radius: var(--radius-lg);
+            margin: 24px 0; border: 1px solid var(--border-color); overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        .code-header {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.05); padding: 8px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .code-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; font-weight: 600;}
+        .copy-btn {
+            background: transparent; color: #cbd5e1; border: 1px solid #475569; border-radius: 4px;
+            padding: 4px 10px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; font-weight: 600;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .copy-btn.copied { background: var(--success); border-color: var(--success); color: white; }
+        .code-wrapper pre {
+            padding: 20px; margin: 0; overflow-x: auto; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem; color: #f8fafc; white-space: pre-wrap; line-height: 1.5;
+        }
+
+        .lang-switch-bar { display: flex; background: var(--locked-bg); padding: 4px; border-radius: 30px; width: fit-content; }
+        .lang-btn { background: transparent; border: none; padding: 8px 24px; border-radius: 20px; cursor: pointer; font-weight: 600; color: var(--text-muted); transition: 0.2s; }
+        .lang-btn.active { background: var(--surface-color); color: var(--primary); box-shadow: var(--shadow-sm); }
+
+        .quiz-question { margin-bottom: 40px; }
+        .quiz-option {
+            display: block; padding: 16px; border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg); margin-bottom: 12px; cursor: pointer;
+            transition: 0.2s; font-weight: 500; background: var(--surface-color);
+        }
+        .quiz-option input[type="radio"] { display: none; }
+        .quiz-option:has(input:checked) { border-color: var(--primary); background: rgba(37, 99, 235, 0.05); color: var(--primary); }
+
+        .cert-scroll-container {
+            width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px; border-radius: 12px; background: rgba(0,0,0,0.02);
+            padding: 10px; border: 1px solid var(--border-color);
+        }
+        
+        .certificate-wrapper {
+            background: #ffffff;
+            background-image: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            border: 0px solid transparent; 
+            padding: 50px 60px; 
+            text-align: center;
+            border-radius: 0px; 
+            box-shadow: none; 
+            color: #0f172a;
+            margin: 0 auto;
+            position: relative; 
+            overflow: hidden;
+            width: 100%;
+            min-width: 900px; 
+            max-width: 1122px; 
+            aspect-ratio: 1.414; 
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .certificate-wrapper::before {
+            content: ''; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 6px double #2563eb; 
+            pointer-events: none; z-index: 1;
+        }
+        .certificate-wrapper::after {
+            content: 'QUANTUM'; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: clamp(60px, 15vw, 180px); color: rgba(0,0,0,0.03); font-weight: 900;
+            pointer-events: none; z-index: 0;
+        }
+        .cert-content { z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding-top: 15px;}
+        .cert-header { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4.5vw, 3.2rem); color: #1e293b; margin-bottom: 0; font-weight: 800;}
+        .cert-sub { font-size: clamp(0.7rem, 1.5vw, 1.1rem); color: #2563eb; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; font-weight: bold; }
+        .cert-name { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4.5vw, 3rem); font-weight: 700; border-bottom: 2px solid #2563eb; padding-bottom: 8px; margin: 0 auto 15px; display: inline-block; min-width: 60%; color: #1d4ed8; line-height: 1.2;}
+        .cert-body { font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #475569; margin-bottom: 10px; max-width: 85%; margin-left: auto; margin-right: auto; line-height: 1.5;}
+        
+        .multi-color-sig { color: #1d4ed8; font-weight: 800; }
+
+        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; z-index: 2; position: relative; margin-top: auto; padding-bottom: 15px;}
+        .cert-qr-container { text-align: center; }
+        .cert-qr { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); border: 3px solid #fff; box-shadow: var(--shadow-md); border-radius: 6px; background: white;}
+        .cert-badge { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); background: radial-gradient(circle, #2563eb, #1d4ed8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: clamp(0.5rem, 1vw, 0.75rem); border: 2px dashed white; line-height: 1.2;}
+        .cert-signature-block { text-align: center; }
+        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.2rem, 3vw, 2.2rem); border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 150px; }
+
+        @media print {
+            @page { size: A4 landscape; margin: 0; }
+            body { background: white; margin: 0; }
+            body * { visibility: hidden; }
+            #cert-pdf-view, #cert-pdf-view * { visibility: visible; }
+            #cert-pdf-view { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh;}
+            .cert-scroll-container { border: none; background: transparent; padding: 0; overflow: visible; }
+            .certificate-wrapper { 
+                width: 297mm !important; height: 210mm !important; 
+                margin: 0 !important; border: 0px solid transparent !important; 
+                max-width: none !important; min-width: 0 !important; aspect-ratio: auto !important;
+                -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-shadow: none !important;
+            }
+            .cert-content { padding-top: 0 !important; }
+            .cert-footer { padding-bottom: 0 !important; }
+            .btn { display: none !important; }
+            .top-nav { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast">Message</div>
+
+    <div class="top-nav">
+        <div class="brand" onclick="window.location.href='index.html'">Goorac <span style="color:var(--text-main)">Learn</span></div>
+        <div id="nav-profile" style="display:none; align-items: center; gap: 8px; cursor: pointer;" onclick="window.location.href='profile.html'"></div>
+    </div>
+
+    <div id="splash-screen" class="screen active-screen" style="justify-content: center; align-items: center; text-align: center;">
+        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 20px; border-radius: 50%; box-shadow: var(--shadow-md);">
+        <h1 style="color: var(--primary); margin-bottom: 8px; font-size: 2rem;">Goorac Learn</h1>
+        <p style="color: var(--text-muted); font-weight: 500; font-size: 1rem;">Initializing analytics workspace...</p>
+        <div class="spinner"></div>
+    </div>
+
+    <div id="login-screen" class="screen">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Data Core" style="width:100%; height:180px; object-fit:cover; border-radius: var(--radius-xl); margin-bottom: 24px;">
+        <h1 style="font-size: 2.2rem;">Master Data Analytics</h1>
+        <p>Transform raw data into strategic business decisions. Learn SQL, Python (Pandas/NumPy), and Advanced Dashboards across 25 Modules. Get officially certified.</p>
+        
+        <button id="primary-auth-btn" class="btn" style="background: #0f172a; margin-top: 20px;">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Sign in with Google
+        </button>
+    </div>
+
+    <div id="profile-screen" class="screen">
+        <h2>Certificate Setup</h2>
+        <p>Enter your details exactly as they should appear on your final diploma.</p>
+        <div class="card">
+            <div class="input-group">
+                <label>Full Legal Name</label>
+                <input type="text" id="prof-name" placeholder="E.g., Jane Smith">
+            </div>
+            <div class="input-group">
+                <label>WhatsApp Number</label>
+                <input type="tel" id="prof-wa" placeholder="+91 9876543210">
+            </div>
+            <button id="save-profile-btn" class="btn">Continue</button>
+        </div>
+    </div>
+
+    <div id="payment-screen" class="screen">
+        <h2 style="font-size: 2.2rem; margin-bottom: 10px;">Unlock Premium Access</h2>
+        <p>Get lifetime access to our 25 advanced Data Analytics modules, SQL/Python scripts, and your verified official certificate.</p>
+        
+        <div class="card" style="text-align: center; border: 2px solid var(--primary); padding: 30px 20px;">
+            <div style="background: var(--success-bg); padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:10px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <h3 style="color: var(--primary); margin-bottom: 5px;">Secure One-Time Payment</h3>
+                <p style="color: var(--text-main); font-weight: 800; font-size: 2rem; margin:0;">₹149</p>
+            </div>
+            
+            <ul style="text-align: left; margin-bottom: 30px; list-style: none; padding: 0; font-size: 1.05rem;">
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Full 25-Module Masterclass</li>
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Verified Professional Certificate</li>
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Lifetime Access & Updates</li>
+            </ul>
+            
+            <button id="pay-razorpay-btn" class="btn" style="font-size: 1.1rem; padding: 18px;">
+                Pay Securely Now
+            </button>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                100% Encrypted & Safe
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard-screen" class="screen">
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600;">
+            <span>Course Progress</span>
+            <span id="progress-text" style="color: var(--primary);">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+        </div>
+        <div style="margin-top: -5px; margin-bottom: 30px; font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
+            Course: Data Analytics Masterclass
+        </div>
+
+        <div id="module-list-container"></div>
+        
+        <div id="quiz-unlock-banner" style="display:none; margin-top: 30px;">
+            <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
+                <h3 style="color: var(--success);">🎉 Curriculum Complete!</h3>
+                <p style="color: #064e3b; font-size: 0.95rem;">Take the final 10-question exam to earn your certificate.</p>
+                <button id="start-quiz-btn" class="btn btn-success">Start Final Exam</button>
+            </div>
+        </div>
+
+        <div id="certificate-access-banner" style="display:none; margin-top: 30px;">
+            <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
+                <h3 style="color: var(--success);">🏆 Masterclass Certified</h3>
+                <p style="color: #064e3b; font-size: 0.95rem;">You have successfully completed this course and earned your certificate.</p>
+                <button onclick="viewCertificate()" class="btn btn-success">View Certificate</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="module-viewer-screen" class="screen">
+        <button onclick="goToDashboard()" style="background:none; border:none; color:var(--text-muted); font-weight:600; cursor:pointer; padding: 0 0 20px 0; display:flex; align-items:center; gap:5px; font-size: 1rem;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"></path></svg> Back
+        </button>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
+            <div class="lang-switch-bar" style="margin-bottom: 0;">
+                <button class="lang-btn active" id="btn-en" onclick="setContentLang('en')">English</button>
+                <button class="lang-btn" id="btn-ta" onclick="setContentLang('ta')">தமிழ்</button>
+            </div>
+            
+            <button id="tts-btn" class="btn btn-outline" style="width: auto; padding: 8px 20px; border-radius: 20px; border-color: var(--primary); color: var(--primary); margin-top: 0; background: var(--success-bg);" onclick="toggleTTS()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5 10v4a2 2 0 002 2h2l4 4V4L9 8H7a2 2 0 00-2 2z"></path></svg>
+                <span id="tts-text">Listen</span>
+            </button>
+        </div>
+
+        <img id="viewer-img" class="mod-hero-img" src="" alt="Module Hero" onerror="this.style.display='none'">
+        <h1 id="viewer-title" style="color: var(--primary); font-size: 1.8rem;"></h1>
+        <div class="content-body" id="viewer-content" style="font-size: 1.05rem; margin-bottom: 40px; color: var(--text-main);"></div>
+        
+        <button id="mark-complete-btn" class="btn">Mark Completed & Next</button>
+    </div>
+
+    <div id="quiz-screen" class="screen">
+        <h2>Certification Exam</h2>
+        <p>Answer 10 questions. You need 70% (7/10) to pass.</p>
+        <div id="quiz-container"></div>
+        <button id="submit-quiz-btn" class="btn">Submit Exam</button>
+    </div>
+
+    <div id="cert-screen" class="screen" style="max-width: 100%;">
+        <div id="cert-pdf-view" style="display:none; width: 100%;">
+            
+            <div class="cert-scroll-container">
+                <div class="certificate-wrapper" id="printable-cert">
+                    <div class="cert-content">
+                        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 55px; height: 55px; object-fit: contain; margin-bottom: 5px; border-radius: 50%; box-shadow: var(--shadow-md);">
+                        
+                        <div class="cert-header">Goorac Learn</div>
+                        <div style="font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">from Goorac Corporation</div>
+                        <div class="cert-sub">Certificate of Professional Mastery</div>
+                        <div class="cert-body">This document officially certifies that</div>
+                        
+                        <div class="cert-name" id="cert-name-display">Student Name</div>
+                        
+                        <div class="cert-body" style="margin-bottom: 15px;">
+                            has successfully completed all 25 advanced modules and passed the comprehensive final examination for the<br>
+                            <span style="font-size: 1.3em; font-weight: 800; color: #0f172a; display: inline-block; margin-top: 8px;">Data Analytics Masterclass</span>
+                        </div>
+                        
+                        <div class="cert-date" id="cert-date-display" style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #475569; font-size: 0.95rem; background: #f1f5f9; padding: 6px 16px; border-radius: 20px; border: 1px solid #cbd5e1;">Date of Issue</div>
+                        
+                        <div style="margin-top: 15px; border-top: 2px dashed #e2e8f0; padding-top: 10px; width: 100%; max-width: 600px;">
+                            <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Valid & Recognized By</div>
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 25px;">
+                                <img src="images/google.png" alt="Google" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="images/microsoft.png" alt="Microsoft" crossorigin="anonymous" style="height: 20px; object-fit: contain;">
+                                <img src="images/amazon.png" alt="Amazon" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="images/zoho.png" alt="Zoho" crossorigin="anonymous" style="height: 18px; object-fit: contain;">
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="cert-footer">
+                        <div class="cert-qr-container">
+                            <img id="cert-qr-img" class="cert-qr" src="" alt="Verified QR" crossorigin="anonymous">
+                            <div style="font-size: clamp(0.5rem, 1vw, 0.75rem); color: #10b981; margin-top: 5px; font-weight: 800; letter-spacing: 1px;">✓ VERIFIED</div>
+                        </div>
+                        
+                        <div class="cert-badge">
+                            OFFICIAL<br>CERTIFIED
+                        </div>
+
+                        <div class="cert-signature-block">
+                            <div class="cert-signature multi-color-sig">Dr. Jonathan Reynolds</div>
+                            <div style="font-size: clamp(0.6rem, 1.2vw, 0.9rem); color: #64748b; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Director of Analytics</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; max-width: 400px; margin: 0 auto;">
+                <button id="download-pdf-btn" class="btn btn-success">Download High-Res PDF</button>
+                <button onclick="goToDashboard()" class="btn btn-outline">Back to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDeXk6z_5mYQZi_xIsQsN935KxuIBxAM3w",
+            authDomain: "gooraclearn.firebaseapp.com",
+            projectId: "gooraclearn",
+            storageBucket: "gooraclearn.firebasestorage.app",
+            messagingSenderId: "221459932053",
+            appId: "1:221459932053:web:af713811da7edd113e0c9c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        const CURRENT_COURSE_ID = "data-analytics";
+
+        let contentLang = 'en';
+        let currentUserData = null; 
+        let viewingModuleId = 1;
+        let isSpeaking = false; 
+
+        window.showToast = (msg) => {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        };
+
+        window.copyCode = (btn) => {
+            const codeText = btn.parentElement.parentElement.querySelector('pre').innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                btn.innerText = "Copied!";
+                btn.classList.add('copied');
+                setTimeout(() => { btn.innerText = "Copy"; btn.classList.remove('copied'); }, 2000);
+            });
+        };
+
+        window.stopTTS = () => {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            isSpeaking = false;
+            const ttsText = document.getElementById('tts-text');
+            if (ttsText) ttsText.innerText = "Listen";
+        };
+
+        window.toggleTTS = () => {
+            if (!window.speechSynthesis) return showToast("Audio playback not supported on this browser.");
+            
+            if (isSpeaking) {
+                window.stopTTS();
+                return;
+            }
+
+            const title = document.getElementById('viewer-title').innerText;
+            const contentNode = document.getElementById('viewer-content').cloneNode(true);
+            
+            contentNode.querySelectorAll('.copy-btn, .code-label').forEach(el => el.remove());
+            const contentText = contentNode.innerText;
+            
+            const fullText = title + ". " + contentText;
+            const utterance = new SpeechSynthesisUtterance(fullText);
+            
+            utterance.lang = contentLang === 'ta' ? 'ta-IN' : 'en-US';
+            utterance.rate = 0.90; 
+
+            utterance.onend = () => {
+                isSpeaking = false;
+                document.getElementById('tts-text').innerText = "Listen";
+            };
+
+            utterance.onerror = (e) => {
+                console.warn("TTS Processing Error", e);
+                window.stopTTS();
+            };
+
+            isSpeaking = true;
+            document.getElementById('tts-text').innerText = "Stop Playing";
+            window.speechSynthesis.speak(utterance);
+        };
+
+        window.showScreen = (screenId, pushHistory = true) => {
+            window.stopTTS(); 
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active-screen'));
+            document.getElementById(screenId).classList.add('active-screen');
+            window.scrollTo(0,0);
+            if(pushHistory) {
+                try {
+                    history.pushState({ screen: screenId }, '', '#' + screenId);
+                } catch(e) {
+                    console.warn("History API prevented:", e);
+                }
+            }
+        };
+
+        window.goBack = () => { 
+            window.stopTTS(); 
+            goToDashboard();
+        };
+        
+        window.addEventListener('popstate', (e) => {
+            window.stopTTS();
+            if(e.state && e.state.screen) showScreen(e.state.screen, false);
+            else if(currentUserData) routeUser(false);
+        });
+
+        window.goToDashboard = () => {
+            renderDashboard();
+            showScreen('dashboard-screen', true);
+        };
+
+        window.viewCertificate = () => {
+            showCertificate();
+            showScreen('cert-screen', true);
+        };
+
+        const generateCodeBox = (label, code) => `
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-label">${label}</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>${code}</code></pre>
+            </div>`;
+
+        const generatePromptAndOutput = (label, code, output) => `
+            <div class="code-wrapper" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom: 0; border-bottom: none;">
+                <div class="code-header">
+                    <span class="code-label">${label}</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>${code}</code></pre>
+            </div>
+            <div style="background: var(--code-bg); border: 1px solid var(--border-color); border-top: 1px dashed #334155; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 16px 20px; margin-bottom: 24px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #34d399; white-space: pre-wrap; box-shadow: var(--shadow-md);">
+                <div style="font-size: 0.7rem; text-transform: uppercase; color: #94a3b8; margin-bottom: 8px; font-weight: bold; letter-spacing: 1px;">Data Output Result</div>${output}</div>`;
+
+        // ==========================================
+        // 25 ADVANCED DATA ANALYTICS MODULES 
+        // ==========================================
+        const courseData = [
+            { 
+                id: 1, icon: "📊", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+                title_en: "1. Data Architecture & The Modern Data Stack (MDS)", title_ta: "1. டேட்டா கட்டமைப்பு (Data Architecture)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Imagine a water purification plant. Muddy river water (raw unstructured data) is pumped in, filtered through various tanks to remove rocks and bacteria (the ETL process), and clean drinking water (structured analytics tables) flows into your tap.</div>
+                    <p>Welcome to the foundation of professional Data Analytics. Before you can build beautiful dashboards or predict future sales, you must understand where data comes from and how it moves. The Modern Data Stack (MDS) refers to the entire lifecycle journey of data from a production database into a structured data warehouse.</p>
+                    <p>In enterprise environments, data doesn't just sit in one neat Excel file. It lives in chaotic JSON arrays from web APIs, messy CSVs from marketing tools, and massive relational databases. The process of moving this is called <b>ETL (Extract, Transform, Load)</b>.</p>
+                    <h3>The ETL Process Explained</h3>
+                    <p><b>Extract:</b> Pulling data from its raw source without altering it. If a customer clicks a button on your app, that raw click event is extracted.</p>
+                    <p><b>Transform:</b> This is where the magic happens. The data is cleaned, filtered, and formatted. Timestamps are standardized, null values are handled, and sensitive passwords are encrypted.</p>
+                    <p><b>Load:</b> The clean data is pushed into a Data Warehouse (like Snowflake, Google BigQuery, or Amazon Redshift) where analysts can query it without crashing the main application.</p>
+                    <ul>
+                        <li><b>Data Lakes:</b> Store massive amounts of raw, unstructured data (like raw video files or messy logs).</li>
+                        <li><b>Data Warehouses:</b> Store highly structured, clean data ready for immediate SQL querying.</li>
+                    </ul>
+                    <p>As an analyst, your primary playground is the Data Warehouse. Understanding this architecture ensures you know exactly why data might be delayed or structured a certain way.</p>
+                    ${generateCodeBox('ETL Conceptual Script', '# Python Pseudo-code for ETL\n\n# 1. EXTRACT\nraw_data = fetch_api_data("https://api.store.com/sales")\n\n# 2. TRANSFORM\nclean_data = []\nfor row in raw_data:\n    row["date"] = format_date(row["raw_date"])\n    row["revenue"] = float(row["amount"]) * 0.85 # Subtract tax\n    clean_data.append(row)\n\n# 3. LOAD\ndb.insert_into_warehouse("sales_clean", clean_data)')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு தண்ணீர் சுத்திகரிப்பு நிலையத்தை நினைத்துக்கொள்ளுங்கள். அழுக்கு நீர் (raw data) உள்ளே வந்து, பல தொட்டிகள் மூலம் சுத்திகரிக்கப்பட்டு (ETL), சுத்தமான குடிநீராக (analytics tables) உங்கள் குழாய்க்கு வருகிறது.</div>
+                    <p>டேட்டா அனலிடிக்ஸின் அடிப்படைக்கு வரவேற்கிறோம். டேஷ்போர்டுகளை உருவாக்குவதற்கு முன், தரவுகள் எங்கிருந்து வருகின்றன, அவை எவ்வாறு நகர்கின்றன என்பதைப் புரிந்து கொள்ள வேண்டும். நவீன டேட்டா கட்டமைப்பு (MDS) என்பது தரவுகளைச் சேகரித்து, சுத்தப்படுத்தி, சேமிக்கும் முழுப் பயணத்தையும் குறிக்கிறது.</p>
+                    <p>பெரிய நிறுவனங்களில், தரவுகள் ஒரு எக்செல் ஃபைலில் மட்டும் இருக்காது. அவை பலவிதமான மென்பொருட்களிலிருந்து குழப்பமான வடிவங்களில் வரும். இவற்றை நகர்த்தும் முறைக்கு <b>ETL (Extract, Transform, Load)</b> என்று பெயர்.</p>
+                    <h3>ETL செயல்முறை விளக்கம்</h3>
+                    <p><b>Extract (பிரித்தெடுத்தல்):</b> தரவுகளை அதன் மூலத்திலிருந்து நேரடியாகப் பெறுவது. ஒரு பயனர் ஆப்பில் பட்டனை அழுத்தினால், அந்தத் தகவல் பெறப்படும்.</p>
+                    <p><b>Transform (சுத்தப்படுத்துதல்):</b> இங்குதான் முக்கிய வேலை நடக்கிறது. விடுபட்ட தகவல்கள் சரிசெய்யப்படும், தேதிகள் ஒரே சீராக மாற்றப்படும், தேவையற்ற தரவுகள் நீக்கப்படும்.</p>
+                    <p><b>Load (ஏற்றுதல்):</b> சுத்தமான தரவுகள் Data Warehouse-இல் (BigQuery, Snowflake) சேமிக்கப்படும். இங்குதான் நீங்கள் SQL மூலம் தரவுகளை ஆராய்வீர்கள்.</p>
+                    <ul>
+                        <li><b>Data Lakes:</b> எந்த ஒரு கட்டமைப்பும் இல்லாத, சுத்தப்படுத்தப்படாத பெருமளவிலான தரவுகளைச் சேமிக்கும் இடம்.</li>
+                        <li><b>Data Warehouses:</b> பகுப்பாய்வுக்குத் தயாராக உள்ள, சுத்தமான தரவுகளைச் சேமிக்கும் இடம்.</li>
+                    </ul>
+                    <p>ஒரு அனலிஸ்டாக, Data Warehouse-இல்தான் நீங்கள் அதிகம் வேலை செய்வீர்கள். இந்த அமைப்பைப் புரிந்துகொள்வது மிகவும் அவசியமாகும்.</p>
+                    ${generateCodeBox('ETL Conceptual Script', '# பைதான் மூலம் ETL தர்க்கம்\n\n# 1. EXTRACT (பெறுதல்)\nraw_data = fetch_api_data("https://api.store.com/sales")\n\n# 2. TRANSFORM (சுத்தப்படுத்துதல்)\nclean_data = []\nfor row in raw_data:\n    row["date"] = format_date(row["raw_date"]) # தேதியை சரிசெய்தல்\n    row["revenue"] = float(row["amount"]) * 0.85 # வரியை நீக்குதல்\n    clean_data.append(row)\n\n# 3. LOAD (ஏற்றுதல்)\ndb.insert_into_warehouse("sales_clean", clean_data)')}`
+            },
+            { 
+                id: 2, icon: "📈", img: "https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&q=80",
+                title_en: "2. Advanced Spreadsheet Modeling", title_ta: "2. எக்செல் & ஸ்ப்ரெட்ஷீட் அட்வான்ஸ்டு", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Think of VLOOKUP like a phonebook. You know the person's name (the unique ID), and you scan down the list to find their phone number (the data). XLOOKUP is just a faster, smarter phonebook that doesn't break if you move columns around.</div>
+                    <p>Despite the rise of complex programming languages, spreadsheets remain the absolute backbone of business analytics. Executives love Excel. To be a professional analyst, you must move beyond basic SUM and AVERAGE functions and master dynamic arrays and complex lookups.</p>
+                    <p>The most common task in data preparation is combining data from two different sources. For example, you have a list of Order IDs in Sheet 1, and a list of Customer Names matching those IDs in Sheet 2.</p>
+                    <h3>The Power of XLOOKUP</h3>
+                    <p>For decades, VLOOKUP was the standard. However, it was rigid—it could only search from left to right, and if you inserted a new column, it broke. <b>XLOOKUP</b> solves this by allowing you to specify exactly which column to search and which column to return, regardless of their order.</p>
+                    <ul>
+                        <li><b>Exact Match Default:</b> Unlike VLOOKUP, XLOOKUP defaults to finding an exact match, preventing dangerous data mismatch errors.</li>
+                        <li><b>Built-in Error Handling:</b> You can include an "If Not Found" statement directly inside the formula, removing the need for messy IFERROR wrappers.</li>
+                    </ul>
+                    <h3>Dynamic Arrays: FILTER and UNIQUE</h3>
+                    <p>Modern spreadsheets utilize Dynamic Arrays that "spill" results into neighboring cells. <b>UNIQUE()</b> instantly extracts a list of distinct values from a massive column (e.g., getting a list of unique countries from 10,000 orders). <b>FILTER()</b> allows you to extract entire rows of data based on a condition without using the clunky manual filter tool.</p>
+                    <p>Mastering these functions allows you to build lightweight, automated dashboards directly in Excel or Google Sheets.</p>
+                    ${generatePromptAndOutput('Excel XLOOKUP Syntax', '=XLOOKUP(lookup_value, lookup_array, return_array, [if_not_found])\n\nExample:\n=XLOOKUP(A2, Customers!A:A, Customers!B:B, "Not Found")', 'Result:\nFinds the ID in A2 inside the Customers Sheet (Column A) and returns the matching Name from Column B. If the ID doesn\'t exist, it displays "Not Found" instead of an ugly #N/A error.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> VLOOKUP என்பது ஒரு தொலைபேசி புத்தகம் போன்றது. ஒருவரின் பெயர் (ID) தெரிந்தால், அதை வைத்து அவரின் எண்ணைக் (data) கண்டுபிடிக்கலாம். XLOOKUP என்பது இன்னும் வேகமான புத்தகம், இதில் வரிசைகளை (columns) மாற்றினாலும் பிழை ஏற்படாது.</div>
+                    <p>பைதான் (Python) போன்ற நவீன தொழில்நுட்பங்கள் வந்தாலும், பெரும்பாலான நிறுவனங்களில் எக்செல் (Excel) தான் இன்றும் அடிப்படையாகப் பயன்படுத்தப்படுகிறது. அடிப்படை ஃபார்முலாக்களைத் தாண்டி, தரவுகளை இணைக்கும் மற்றும் பிரிக்கும் மேம்பட்ட ஃபார்முலாக்களை நீங்கள் கற்க வேண்டும்.</p>
+                    <p>இரண்டு வெவ்வேறு ஷீட்களில் உள்ள தரவுகளை இணைப்பதே அனலிஸ்ட்களின் முக்கிய வேலையாகும். (எ.கா: ஒரு ஷீட்டில் Order ID இருக்கும், மற்றொரு ஷீட்டில் அந்த ID-க்கு உரிய வாடிக்கையாளர் பெயர் இருக்கும்).</p>
+                    <h3>XLOOKUP ஃபார்முலாவின் பயன்கள்</h3>
+                    <p>பல ஆண்டுகளாக VLOOKUP பயன்படுத்தப்பட்டது. ஆனால் அதில் பல குறைகள் இருந்தன. <b>XLOOKUP</b> அந்தச் சிக்கல்களைத் தீர்க்கிறது. இது இடது மற்றும் வலது என இருபுறமும் தேடும் திறன் கொண்டது.</p>
+                    <ul>
+                        <li><b>துல்லியமான தேடல்:</b> இது இயல்பாகவே துல்லியமான தரவை (Exact Match) மட்டுமே தேடி எடுக்கும், இதனால் பிழைகள் குறையும்.</li>
+                        <li><b>IFERROR தேவையில்லை:</b> தரவு கிடைக்கவில்லை என்றால் என்ன செய்ய வேண்டும் என்பதை ஃபார்முலாவிலேயே நேரடியாகக் குறிப்பிடலாம்.</li>
+                    </ul>
+                    <h3>FILTER மற்றும் UNIQUE ஃபார்முலாக்கள்</h3>
+                    <p><b>UNIQUE()</b> ஃபார்முலா, பல ஆயிரம் தரவுகளில் உள்ள தனித்துவமான பெயர்களை மட்டும் (எ.கா: வாடிக்கையாளர்களின் ஊர் பெயர்கள்) தனியாகப் பிரித்தெடுக்கும். <b>FILTER()</b> ஃபார்முலா மூலம், ஒரு குறிப்பிட்ட நிபந்தனைக்குட்பட்ட வரிகளை (Rows) மட்டும் எளிதாகப் பிரித்தெடுக்கலாம்.</p>
+                    <p>இந்த ஃபார்முலாக்களைக் கற்றுக்கொண்டால், எக்செல்லிலேயே மிகச் சிறந்த டேஷ்போர்டுகளை உருவாக்க முடியும்.</p>
+                    ${generatePromptAndOutput('Excel XLOOKUP Syntax', '=XLOOKUP(lookup_value, lookup_array, return_array, [if_not_found])\n\nஉதாரணம்:\n=XLOOKUP(A2, Customers!A:A, Customers!B:B, "Not Found")', 'விளைவு:\nA2-வில் உள்ள எண்ணை Customers ஷீட்டில் தேடி, அதற்கான பெயரைத் திருப்பித் தரும். அந்த எண் இல்லையென்றால் "#N/A" என்று வராமல் "Not Found" என்று அழகாகக் காட்டும்.')}`
+            },
+            { 
+                id: 3, icon: "🧮", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&q=80",
+                title_en: "3. Statistical Foundations", title_ta: "3. அடிப்படை புள்ளியியல் (Statistics)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If 9 people in a bar earn $30k a year, the average is $30k. If Elon Musk walks in, the average suddenly becomes $100 Million. The 'Mean' is easily tricked. The 'Median' (the middle person) remains $30k, telling you the real truth about the room.</div>
+                    <p>Data Analytics is fundamentally rooted in statistics. Without understanding basic statistical principles, you risk misinterpreting data and delivering disastrous recommendations to stakeholders.</p>
+                    <p>The foundation begins with <b>Measures of Central Tendency</b>. These metrics attempt to find the "center" of your dataset.</p>
+                    <h3>Mean, Median, and Mode</h3>
+                    <p>The <b>Mean</b> (Average) is calculated by adding all values and dividing by the count. While useful, it is highly sensitive to extreme outliers (as seen in the Elon Musk analogy).</p>
+                    <p>The <b>Median</b> is the exact middle value when the data is sorted. It is robust against outliers. Always check the median against the mean; if they are vastly different, your data is skewed.</p>
+                    <p>The <b>Mode</b> is simply the most frequently occurring value, highly useful for categorical data (e.g., finding the most popular shirt size sold).</p>
+                    <ul>
+                        <li><b>Variance:</b> Measures how far each number in the set is from the mean. High variance means the data is highly unpredictable and spread out.</li>
+                        <li><b>Standard Deviation:</b> The square root of the variance. It is easier to interpret because it is in the exact same unit as your data. If the mean age is 30, and the standard deviation is 5, you know most users are between 25 and 35.</li>
+                    </ul>
+                    <p>By understanding these metrics, you can quickly profile a dataset and identify anomalies before writing a single line of complex code.</p>
+                    ${generateCodeBox('Descriptive Statistics Logic', 'Dataset:\n\nMean: 210.2 (Highly misleading due to the outlier 1000)\nMedian: 14 (Accurate representation of the typical value)\n\nConclusion: When dealing with income, housing prices, or website time-on-page, ALWAYS use Median to report typical user behavior, as these metrics naturally have long tails and extreme outliers.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு கடையில் 9 பேர் தலா ₹30,000 சம்பாதிக்கிறார்கள். அம்பானி அங்கே வந்தால் சராசரி (Mean) பல கோடிகளாக மாறும். ஆனால் மையப்பகுதி (Median) மாறாது. இதுவே நிஜம். சராசரியை எளிதில் ஏமாற்றலாம்.</div>
+                    <p>டேட்டா அனலிடிக்ஸ் என்பது புள்ளியியலை (Statistics) அடிப்படையாகக் கொண்டது. இந்த அடிப்படைத் தத்துவங்களைப் புரிந்து கொள்ளாவிட்டால், நீங்கள் தரவுகளைத் தவறாகப் புரிந்துகொண்டு நிறுவனத்திற்குத் தவறான ஆலோசனைகளை வழங்க நேரிடும்.</p>
+                    <p>இதன் தொடக்கம் <b>மையப் போக்கு அளவைகள் (Measures of Central Tendency)</b> ஆகும். இவை உங்கள் தரவுகளின் மையப் புள்ளியைக் கண்டறிய உதவுகின்றன.</p>
+                    <h3>Mean, Median, மற்றும் Mode</h3>
+                    <p><b>சராசரி (Mean):</b> அனைத்து எண்களையும் கூட்டி, மொத்த எண்ணிக்கையால் வகுப்பது. இது பயனுள்ளது என்றாலும், மிகப்பெரிய எண்களால் (Outliers) இது எளிதில் திசைதிருப்பப்படும்.</p>
+                    <p><b>இடைநிலை (Median):</b> எண்களை வரிசைப்படுத்தும்போது நடுவில் இருக்கும் மதிப்பு. இது மிகப்பெரிய எண்களால் பாதிக்கப்படாது. Mean மற்றும் Median இடையே பெரிய வித்தியாசம் இருந்தால், உங்கள் தரவுகள் சீராக இல்லை என்று அர்த்தம்.</p>
+                    <p><b>முகடு (Mode):</b> தரவுகளில் எந்த மதிப்பு அதிக முறை வந்துள்ளதோ அதுவே Mode ஆகும் (எ.கா: எந்த அளவுள்ள சட்டை அதிகம் விற்பனையானது).</p>
+                    <ul>
+                        <li><b>Variance (மாறுபாடு):</b> தரவுகள் சராசரியிலிருந்து எவ்வளவு தூரம் விலகியுள்ளன என்பதைக் குறிக்கிறது.</li>
+                        <li><b>Standard Deviation (திட்ட விலக்கம்):</b> இது Variance-இன் வர்க்கமூலம் ஆகும். சராசரி வயது 30, திட்ட விலக்கம் 5 என்றால், பெரும்பாலான பயனர்கள் 25 முதல் 35 வயதுக்குட்பட்டவர்கள் என்பதை அறியலாம்.</li>
+                    </ul>
+                    <p>இந்த அளவீடுகளைப் புரிந்துகொள்வதன் மூலம், ஒரு டேட்டாவில் உள்ள குறைகளை நீங்கள் எளிதாகக் கண்டறியலாம்.</p>
+                    ${generateCodeBox('Descriptive Statistics Logic', 'டேட்டா:\n\nசராசரி (Mean): 210.2 (1000 என்ற எண்ணால் சராசரி தவறாகக் காட்டப்படுகிறது)\nஇடைநிலை (Median): 14 (இதுவே சரியான நிலை)\n\nமுடிவு: வருமானம், வீட்டின் விலை போன்றவற்றை ஆராயும்போது, எப்போதும் Median-ஐப் பயன்படுத்துவதே பாதுகாப்பானது.')}`
+            },
+            { 
+                id: 4, icon: "🔬", img: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80",
+                title_en: "4. Hypothesis Testing & Descriptive Analytics", title_ta: "4. கருதுகோள் சோதனை (Hypothesis)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Hypothesis testing is exactly like a criminal trial. The baseline assumption (Null Hypothesis) is "Innocent until proven guilty". To convict, you need overwhelming mathematical evidence (a p-value < 0.05) to reject innocence and declare guilt.</div>
+                    <p>As a Data Analyst, stakeholders will frequently ask you questions like: <i>"Did our new email campaign actually increase sales, or was it just a random good week?"</i> You cannot answer this with a simple "yes" or "no". You must use <b>Hypothesis Testing</b> to prove it mathematically.</p>
+                    <p>This process removes human bias and gut feelings from business decisions. We establish two competing statements:</p>
+                    <h3>The Null and Alternative Hypothesis</h3>
+                    <ul>
+                        <li><b>Null Hypothesis (H0):</b> The status quo. There is NO difference. The campaign did nothing. Any change seen is purely due to random chance.</li>
+                        <li><b>Alternative Hypothesis (H1):</b> The claim you are trying to prove. The campaign DID increase sales significantly.</li>
+                    </ul>
+                    <h3>The Almighty P-Value</h3>
+                    <p>To determine which hypothesis is true, we run a statistical test (like a T-test or Z-test) which outputs a <b>p-value</b>. The p-value is the probability that you would see these results purely by random chance if the Null Hypothesis were true.</p>
+                    <p>In business, the industry standard threshold is 0.05 (5%). If your p-value is less than 0.05, it means there is less than a 5% probability this happened by chance. Therefore, the result is <b>Statistically Significant</b>. You reject the Null Hypothesis and confidently tell your boss the campaign was a success.</p>
+                    ${generatePromptAndOutput('P-Value Interpretation Rule', 'Scenario: You run an A/B test on a new website button color. Red vs Green. Green gets 500 more clicks.\n\nStatistical Output:\nP-Value = 0.02', 'Decision:\nBecause 0.02 is LESS than 0.05, the result is statistically significant. We reject the Null Hypothesis. We can confidently deploy the Green button to all users, knowing the increase in clicks is mathematically real, not just a random fluke.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> இது ஒரு நீதிமன்ற விசாரணை போன்றது. 'குற்றம் நிரூபிக்கப்படும் வரை நிரபராதி' என்பது தான் அடிப்படை (Null Hypothesis). நீங்கள் போதுமான ஆதாரங்களை (p-value < 0.05) வைத்து மட்டுமே அவர் குற்றவாளி என நிரூபிக்க முடியும்.</div>
+                    <p>ஒரு அனலிஸ்டாக உங்களிடம், <i>"நமது புதிய விளம்பரத்தால் உண்மையிலேயே விற்பனை அதிகரித்ததா, அல்லது இது தற்செயலாக நடந்ததா?"</i> என்ற கேள்விகள் அடிக்கடி கேட்கப்படும். இதற்கு நீங்கள் <b>கருதுகோள் சோதனை (Hypothesis Testing)</b> மூலம் கணித பூர்வமாகப் பதிலளிக்க வேண்டும்.</p>
+                    <p>மனித உணர்வுகளையும், யூகங்களையும் தவிர்த்துவிட்டு, முடிவுகளைத் துல்லியமாக எடுக்க இது உதவுகிறது. இதற்காக நாம் இரண்டு நிலைகளை உருவாக்குகிறோம்:</p>
+                    <h3>இரண்டு வகையான கருதுகோள்கள்</h3>
+                    <ul>
+                        <li><b>Null Hypothesis (H0):</b> இது பழைய நிலை. அதாவது விளம்பரத்தால் எந்த மாற்றமும் நிகழவில்லை. விற்பனையில் ஏற்பட்ட மாற்றம் தற்செயலானது மட்டுமே.</li>
+                        <li><b>Alternative Hypothesis (H1):</b> இது நீங்கள் நிரூபிக்க நினைப்பது. அதாவது விளம்பரம் உண்மையிலேயே விற்பனையை அதிகரித்துள்ளது.</li>
+                    </ul>
+                    <h3>P-Value என்றால் என்ன?</h3>
+                    <p>எது உண்மை என்பதைக் கண்டறிய நாம் T-test அல்லது Z-test போன்ற கணிதச் சோதனைகளைச் செய்வோம். இது <b>p-value</b> என்ற விடையைத் தரும். இந்த மாற்றம் தற்செயலாக நடப்பதற்கான வாய்ப்பு எத்தனை சதவீதம் என்பதை இது குறிக்கிறது.</p>
+                    <p>பிசினஸ் உலகில், இதற்கான வரம்பு 0.05 (5%) ஆக வைக்கப்பட்டுள்ளது. உங்கள் p-value 0.05-ஐ விடக் குறைவாக இருந்தால், அந்த மாற்றம் தற்செயலானது அல்ல (உண்மையான மாற்றம்) என நிரூபிக்கப்படும். நீங்கள் தைரியமாக விளம்பரம் வெற்றிபெற்றது என முதலாளியிடம் கூறலாம்.</p>
+                    ${generatePromptAndOutput('P-Value Interpretation Rule', 'சூழல்: சிவப்பு பட்டனுக்கும், பச்சை பட்டனுக்கும் ஒரு சோதனை வைக்கிறீர்கள். பச்சை பட்டனுக்கு 500 கிளிக்குகள் அதிகம் கிடைக்கின்றன.\n\nகணித விடை:\nP-Value = 0.02', 'முடிவு:\n0.02 என்பது 0.05-ஐ விடக் குறைவு என்பதால், இந்த முடிவு தற்செயலானது அல்ல. இது புள்ளிவிவர ரீதியாக நிரூபிக்கப்பட்டுள்ளது (Statistically significant). நாம் தைரியமாகப் பச்சை பட்டனைப் பயன்படுத்தலாம்.')}`
+            },
+            { 
+                id: 5, icon: "🔍", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+                title_en: "5. Exploratory Data Analysis (EDA) Frameworks", title_ta: "5. தரவு ஆய்வு (EDA)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> EDA is like inspecting a used car before buying it. You don't just immediately drive it on the highway. You check under the hood for rust (null values), weird engine noises (outliers), and fake parts (duplicates) to ensure it won't crash.</div>
+                    <p>Before you build complex predictive models or executive dashboards, you must understand the raw material you are working with. <b>Exploratory Data Analysis (EDA)</b> is the critical first step in any data project. Skipping EDA is the number one reason why data pipelines fail in production.</p>
+                    <p>EDA is an investigative process where you use statistical summaries and basic visual tools to uncover hidden patterns, spot anomalies, and check assumptions.</p>
+                    <h3>The Core Pillars of EDA</h3>
+                    <ul>
+                        <li><b>Data Profiling:</b> Understanding the shape of your data. How many rows? How many columns? What are the data types (Integers, Strings, Datetimes)?</li>
+                        <li><b>Missing Value Treatment:</b> Real-world data is extremely messy. Columns will have blanks (Nulls/NaNs). You must decide whether to DROP those rows entirely (if there are few) or IMPUTE them (filling the blanks with the median value of the column).</li>
+                        <li><b>Outlier Detection:</b> Identifying extreme values that could skew your analysis. If one customer accidentally bought 10,000 laptops instead of 10, that outlier will ruin your average order value calculations.</li>
+                    </ul>
+                    <h3>Univariate vs Bivariate Analysis</h3>
+                    <p>In Univariate analysis, you examine one variable at a time (e.g., creating a histogram of customer ages to see the distribution). In Bivariate analysis, you examine the relationship between two variables (e.g., a scatter plot showing Ad Spend vs Sales to see if they are correlated).</p>
+                    <p>EDA guarantees that when you present your final findings, the underlying data is structurally sound and trustworthy.</p>
+                    ${generateCodeBox('Python EDA Action Plan', '# Standard Pandas commands for initial EDA\nimport pandas as pd\ndf = pd.read_csv("data.csv")\n\n# 1. Check shape and data types\nprint(df.info())\n\n# 2. Check for missing (null) values\nprint(df.isnull().sum())\n\n# 3. View statistical summary (Mean, Min, Max) to spot extreme outliers\nprint(df.describe())')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> EDA என்பது ஒரு பழைய காரை வாங்கும் முன் அதைச் சோதிப்பதைப் போன்றது. உடனடியாக அதை ஓட்டாமல், துருப்பிடித்த பகுதிகள் (Null values), தேவையற்ற சத்தங்கள் (Outliers) உள்ளதா எனச் சரிபார்ப்பது அவசியம்.</div>
+                    <p>டேஷ்போர்டுகளை உருவாக்குவதற்கு முன், நீங்கள் பயன்படுத்தும் தரவுகளை முழுமையாகப் புரிந்து கொள்ள வேண்டும். <b>Exploratory Data Analysis (EDA)</b> என்பது எந்தவொரு டேட்டா ப்ராஜெக்ட்டிலும் மிக முக்கியமான முதல் படியாகும். இதைத் தவிர்ப்பது மிகப்பெரிய பிழைகளை உருவாக்கும்.</p>
+                    <p>EDA என்பது, தரவுகளில் மறைந்துள்ள வடிவங்களைக் கண்டறியவும், பிழைகளைச் சுட்டிக்காட்டவும் பயன்படும் ஒரு விசாரணைச் செயல்முறையாகும்.</p>
+                    <h3>EDA-இன் முக்கிய தூண்கள்</h3>
+                    <ul>
+                        <li><b>டேட்டா விவரக்குறிப்பு:</b> தரவுகளில் எத்தனை வரிகள் உள்ளன? என்ன வகையான தரவுகள் (Numbers, Text, Date) உள்ளன என்பதை அறிதல்.</li>
+                        <li><b>விடுபட்ட தரவுகள் (Null Values):</b> உண்மையான தரவுகளில் பல இடங்கள் காலியாக இருக்கும். அவற்றை நீக்க வேண்டுமா அல்லது அந்த இடங்களை சராசரி மதிப்பைக் கொண்டு நிரப்ப வேண்டுமா (Imputation) என முடிவெடுக்க வேண்டும்.</li>
+                        <li><b>Outliers (அசாதாரண மதிப்புகள்):</b> ஒரு வாடிக்கையாளர் தவறுதலாக 1 பொருளுக்குப் பதிலாக 10,000 பொருட்கள் எனத் தட்டச்சு செய்திருந்தால், அது ஒட்டுமொத்த சராசரியையும் கெடுத்துவிடும். இதைச் சரிசெய்ய வேண்டும்.</li>
+                    </ul>
+                    <h3>Univariate vs Bivariate பகுப்பாய்வு</h3>
+                    <p>Univariate என்பது ஒரு நேரத்தில் ஒரு தரவை மட்டும் ஆராய்வது (எ.கா: வாடிக்கையாளர்களின் வயது). Bivariate என்பது இரண்டு தரவுகளுக்கு இடையிலான உறவை ஆராய்வது (எ.கா: விளம்பரச் செலவுக்கும், விற்பனைக்கும் உள்ள தொடர்பு).</p>
+                    <p>முடிவுகளை வெளியிடும் முன், தரவுகள் நம்பகமானவை என்பதை EDA உறுதி செய்கிறது.</p>
+                    ${generateCodeBox('Python EDA Action Plan', '# ஆரம்பகட்ட EDA-க்கான பைதான் (Pandas) கட்டளைகள்\nimport pandas as pd\ndf = pd.read_csv("data.csv")\n\n# 1. தரவுகளின் வகைகளைச் சரிபார்த்தல்\nprint(df.info())\n\n# 2. காலியாக உள்ள தரவுகளைக் கண்டறிதல்\nprint(df.isnull().sum())\n\n# 3. மிகப்பெரிய/மிகச்சிறிய எண்களை ஆராய்தல்\nprint(df.describe())')}`
+            },
+            { 
+                id: 6, icon: "🗄️", img: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=800&q=80",
+                title_en: "6. Relational Algebra & Advanced SELECT Logic", title_ta: "6. SQL: SELECT லாஜிக்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> SQL is exactly like ordering food at a strict restaurant. SELECT is what you want to eat. FROM is pointing to the menu. WHERE is your allergy constraint (e.g., no peanuts). The chef (database engine) follows this exact order.</div>
+                    <p>Structured Query Language (SQL) is the universal language of data. Regardless of what BI tool you use (Tableau, PowerBI, Looker), under the hood, they are all generating SQL to talk to the database. To be a top-tier analyst, you must master writing raw SQL.</p>
+                    <p>The foundation of SQL is the <b>SELECT</b> statement. But writing a query is not just about memorizing keywords; it is about understanding the <b>Logical Order of Execution</b>.</p>
+                    <h3>How the Engine Reads SQL</h3>
+                    <p>When you write a query, you write it in this order: SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY. However, the database engine processes it in a completely different order:</p>
+                    <ol>
+                        <li><b>FROM:</b> The engine first locates the table containing the data.</li>
+                        <li><b>WHERE:</b> It filters out rows that don't match your conditions, drastically reducing the dataset size.</li>
+                        <li><b>GROUP BY & HAVING:</b> It groups the remaining data and filters the grouped blocks.</li>
+                        <li><b>SELECT:</b> Only now does it actually pick the specific columns you asked for.</li>
+                        <li><b>ORDER BY:</b> Finally, it sorts the output for you to read.</li>
+                    </ol>
+                    <h3>Advanced Filtering Logic</h3>
+                    <p>Mastering the WHERE clause involves using operators like <code>IN</code> (to check a list of values), <code>BETWEEN</code> (for date ranges), and <code>LIKE</code> (using % wildcards for partial text matching, e.g., finding all emails ending in '@gmail.com').</p>
+                    ${generatePromptAndOutput('SQL Filter Example', 'SELECT customer_id, purchase_amount, signup_date\nFROM orders\nWHERE purchase_amount > 500\nAND status = \'Delivered\'\nAND email LIKE \'%@gmail.com\'\nORDER BY purchase_amount DESC;', 'customer_id | purchase_amount | signup_date\n104         | 1200.00         | 2025-10-01\n101         | 650.00          | 2025-11-15\n\n(Returns only delivered, high-value Gmail users, sorted highest to lowest)')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> SQL என்பது உணவகத்தில் ஆர்டர் செய்வது போன்றது. SELECT என்பது உங்களுக்கு வேண்டிய உணவு, FROM என்பது மெனு கார்டு, WHERE என்பது 'காரமில்லாமல் கொடுங்கள்' என்ற கட்டுப்பாடு. கணினி இந்த ஆர்டரை அப்படியே பின்பற்றும்.</div>
+                    <p>SQL (Structured Query Language) என்பது தரவுகளின் உலகளாவிய மொழியாகும். நீங்கள் Tableau அல்லது PowerBI பயன்படுத்தினாலும், அவை பின்னணியில் SQL-ஐத் தான் பயன்படுத்துகின்றன. சிறந்த அனலிஸ்டாக மாற, நீங்கள் SQL-ஐ ஆழமாகக் கற்க வேண்டும்.</p>
+                    <p>இதன் அடிப்படை <b>SELECT</b> கட்டளை ஆகும். ஆனால் வார்த்தைகளை மனப்பாடம் செய்வதை விட, கணினி இதை <b>எந்த வரிசையில் இயக்குகிறது (Order of Execution)</b> என்பதைப் புரிந்துகொள்வது முக்கியம்.</p>
+                    <h3>கணினி SQL-ஐ படிக்கும் முறை</h3>
+                    <p>நாம் SELECT, FROM, WHERE, GROUP BY என்ற வரிசையில்தான் குறியீட்டை எழுதுவோம். ஆனால் கணினி அதைப் படிக்கும் முறை வேறு:</p>
+                    <ol>
+                        <li><b>FROM:</b> முதலில் தரவுகள் எங்குள்ளது எனத் தேடும்.</li>
+                        <li><b>WHERE:</b> தேவையற்ற தரவுகளை வடிகட்டி, அளவைக் குறைக்கும்.</li>
+                        <li><b>GROUP BY & HAVING:</b> தரவுகளைத் தொகுத்து, அதிலும் சில கட்டுப்பாடுகளை விதிக்கும்.</li>
+                        <li><b>SELECT:</b> இப்போதுதான் நீங்கள் கேட்ட குறிப்பிட்ட Columns-ஐ எடுக்கும்.</li>
+                        <li><b>ORDER BY:</b> இறுதியாக, நீங்கள் படிப்பதற்காக வரிசைப்படுத்தும்.</li>
+                    </ol>
+                    <h3>மேம்பட்ட வடிகட்டுதல் (Filtering)</h3>
+                    <p>WHERE கட்டளையில் <code>IN</code> (பல மதிப்புகளைத் தேட), <code>BETWEEN</code> (தேதிகளைத் தேட), மற்றும் <code>LIKE</code> ('@gmail.com' என்று முடியும் ஈமெயில்களை மட்டும் தேட) போன்ற ஆப்பரேட்டர்களைப் பயன்படுத்த வேண்டும்.</p>
+                    ${generatePromptAndOutput('SQL Filter Example', 'SELECT customer_id, purchase_amount, signup_date\nFROM orders\nWHERE purchase_amount > 500\nAND status = \'Delivered\'\nAND email LIKE \'%@gmail.com\'\nORDER BY purchase_amount DESC;', 'customer_id | purchase_amount | signup_date\n104         | 1200.00         | 2025-10-01\n101         | 650.00          | 2025-11-15\n\n(500 ரூபாய்க்கு மேல் வாங்கிய, Gmail பயன்படுத்தும் வாடிக்கையாளர்களை மட்டும் இறங்கு வரிசையில் காட்டும்)')}`
+            },
+            { 
+                id: 7, icon: "🔗", img: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80",
+                title_en: "7. Complex Database Joins & Null Handling", title_ta: "7. SQL: டேட்டா இணைப்புகள் (Joins)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Think of two spreadsheets. Sheet A has Customer IDs and Names. Sheet B has Customer IDs and Purchase Amounts. A SQL JOIN is the glue that stitches these two sheets together side-by-side using the ID as the matching zipper.</div>
+                    <p>Relational databases are designed for efficiency. Instead of storing a customer's name, email, and address on every single order receipt (which wastes massive amounts of storage), databases store customer details in a 'Users' table and order details in an 'Orders' table. <b>JOINs</b> are the mathematical operations used to reconnect this data.</p>
+                    <p>Mastering the different types of JOINs is the most critical SQL skill you will learn.</p>
+                    <h3>The 4 Core Joins</h3>
+                    <ul>
+                        <li><b>INNER JOIN:</b> The most common. It acts like the center of a Venn diagram. It only returns rows where there is a match in BOTH tables. If a user never bought an order, they won't appear.</li>
+                        <li><b>LEFT JOIN:</b> Returns ALL rows from the left table (Users), and the matched rows from the right table (Orders). If a user hasn't ordered, their name still appears, but the order columns will say <code>NULL</code>. Excellent for finding inactive users!</li>
+                        <li><b>RIGHT JOIN:</b> The exact opposite of a Left Join. Rarely used in practice, as you can just flip the tables in a Left Join.</li>
+                        <li><b>FULL OUTER JOIN:</b> Returns everything from both tables, with NULLs wherever there isn't a match.</li>
+                    </ul>
+                    <h3>Handling NULL Values</h3>
+                    <p>When using a LEFT JOIN, you will inevitably generate NULL values. You must handle these using functions like <code>COALESCE()</code>, which replaces the NULL with a default value like '0' so your math formulas don't break.</p>
+                    ${generatePromptAndOutput('SQL LEFT JOIN with COALESCE', 'SELECT c.name, \n       COALESCE(o.purchase_amount, 0) as total_spent\nFROM customers c\nLEFT JOIN orders o \nON c.id = o.customer_id;', 'name  | total_spent\nJohn  | 150.00\nSarah | 0.00 (NULL was replaced by 0)\nMike  | 85.50')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> இரண்டு ஷீட்களை நினைத்துக்கொள்ளுங்கள். ஒன்றில் வாடிக்கையாளர் பெயரும், மற்றொன்றில் அவர்கள் வாங்கிய பில் தொகையும் உள்ளன. இந்த இரண்டையும் Customer ID என்ற ஒரு பொதுவான எண்ணை வைத்து இணைப்பதே SQL JOIN ஆகும்.</div>
+                    <p>டேட்டாபேஸ்களில் தரவுகள் தனித்தனி அட்டவணைகளில் (Tables) சேமிக்கப்படும். இதனால் மெமரி சேமிக்கப்படும். வாடிக்கையாளர் விவரங்கள் 'Users' அட்டவணையிலும், அவர்கள் வாங்கிய விவரங்கள் 'Orders' அட்டவணையிலும் இருக்கும். இவற்றை மீண்டும் இணைக்க <b>JOIN</b> பயன்படுகிறது.</p>
+                    <p>JOIN வகைகளைக் கற்றுக்கொள்வது SQL-இல் மிக முக்கியமான திறனாகும்.</p>
+                    <h3>4 முக்கிய JOIN வகைகள்</h3>
+                    <ul>
+                        <li><b>INNER JOIN:</b> இது இரண்டு அட்டவணைகளிலும் உள்ள பொதுவான தரவுகளை மட்டுமே எடுக்கும் (எ.கா: பொருளை வாங்கிய வாடிக்கையாளர்கள் மட்டும்).</li>
+                        <li><b>LEFT JOIN:</b> முதல் அட்டவணையில் உள்ள அனைவரையும் எடுக்கும். அவர்கள் பொருளை வாங்கவில்லை என்றாலும் அவர்களின் பெயரைக் காட்டும், ஆனால் பில் தொகை உள்ள இடத்தில் <code>NULL</code> (காலி) என்று காட்டும்.</li>
+                        <li><b>RIGHT JOIN:</b> இது LEFT JOIN-இன் நேர் எதிர். ஆனால் இது அதிகம் பயன்படுத்தப்படுவதில்லை.</li>
+                        <li><b>FULL OUTER JOIN:</b> இரண்டு அட்டவணைகளிலும் உள்ள அனைத்தையும் சேர்த்து மொத்தமாகக் காட்டும்.</li>
+                    </ul>
+                    <h3>NULL (காலி) மதிப்புகளைக் கையாளுதல்</h3>
+                    <p>LEFT JOIN பயன்படுத்தும்போது <code>NULL</code> மதிப்புகள் உருவாகும். இதைக் கையாள <code>COALESCE()</code> என்ற ஃபங்ஷனைப் பயன்படுத்தி, NULL-ஐ '0' என்று மாற்றலாம். இதனால் கணக்கீடுகளில் பிழை வராது.</p>
+                    ${generatePromptAndOutput('SQL LEFT JOIN with COALESCE', 'SELECT c.name, \n       COALESCE(o.purchase_amount, 0) as total_spent\nFROM customers c\nLEFT JOIN orders o \nON c.id = o.customer_id;', 'name  | total_spent\nJohn  | 150.00\nSarah | 0.00 (NULL மதிப்பு 0 ஆக மாற்றப்பட்டது)\nMike  | 85.50')}`
+            },
+            { 
+                id: 8, icon: "🧮", img: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800&q=80",
+                title_en: "8. Advanced Aggregations & Grouping Matrixes", title_ta: "8. SQL: தொகுத்தல் (Grouping)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If you have 10,000 messy receipts in a shoebox, GROUP BY is the act of sorting them into neat piles by 'Month'. Then, an Aggregation like SUM() is you sitting down with a calculator and adding up the total of each specific pile.</div>
+                    <p>Looking at raw, line-by-line database rows is useless for executives. They don't want to see 50,000 individual transactions; they want to see "Total Revenue per City". This requires summarizing data using <b>Aggregations and GROUP BY</b>.</p>
+                    <h3>The Big 5 Aggregations</h3>
+                    <p>SQL provides powerful built-in mathematical functions to compress data:</p>
+                    <ul>
+                        <li><b>SUM():</b> Adds up all numeric values.</li>
+                        <li><b>AVG():</b> Calculates the mean.</li>
+                        <li><b>COUNT():</b> Counts the number of rows. (Pro tip: <code>COUNT(DISTINCT user_id)</code> is vital for finding unique visitors, ignoring multiple visits by the same person).</li>
+                        <li><b>MIN() / MAX():</b> Finds the lowest or highest value (e.g., finding the date of the first order and most recent order).</li>
+                    </ul>
+                    <h3>The HAVING Clause: Filtering After Grouping</h3>
+                    <p>The most common beginner mistake is trying to use <code>WHERE</code> to filter an aggregated column. Remember the Order of Execution (Module 6)! <code>WHERE</code> happens <i>before</i> aggregation.</p>
+                    <p>If you want to group sales by city, and THEN only show cities with over $100,000 in sales, you must use the <b>HAVING</b> clause, which specifically filters data <i>after</i> the GROUP BY has compressed it.</p>
+                    ${generatePromptAndOutput('SQL GROUP BY & HAVING', 'SELECT department, \n       COUNT(employee_id) as total_staff, \n       AVG(salary) as avg_pay\nFROM employees\nGROUP BY department\nHAVING AVG(salary) > 80000\nORDER BY avg_pay DESC;', 'department  | total_staff | avg_pay\nEngineering | 45          | 95000.00\nFinance     | 12          | 85000.00\n\n(Marketing is excluded because their avg_pay was only 60k, filtered out by the HAVING clause).')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு பெட்டியில் 10,000 பில்கள் இருந்தால், அவற்றை 'மாதம்' வாரியாக தனித்தனி குவியலாகப் பிரிப்பதே GROUP BY. ஒவ்வொரு குவியலிலும் உள்ள மொத்தப் பணத்தைக் கால்குலேட்டரில் கணக்கிடுவது SUM() போன்ற Aggregation ஆகும்.</div>
+                    <p>நிறுவனத் தலைவர்களுக்கு பல லட்சம் வரிகளைக் கொண்ட தனித்தனி தரவுகள் தேவையில்லை. அவர்களுக்கு "ஒவ்வொரு நகரத்திலும் எவ்வளவு வருமானம்" என்ற சுருக்கமே தேவை. இதை உருவாக்க <b>Aggregations மற்றும் GROUP BY</b> பயன்படுகிறது.</p>
+                    <h3>5 முக்கிய Aggregations</h3>
+                    <p>தரவுகளைச் சுருக்க SQL சில கணித ஃபங்ஷன்களை வழங்குகிறது:</p>
+                    <ul>
+                        <li><b>SUM():</b> எண்களைக் கூட்டுகிறது.</li>
+                        <li><b>AVG():</b> சராசரியைக் கணக்கிடுகிறது.</li>
+                        <li><b>COUNT():</b> எத்தனை வரிகள் உள்ளன என எண்ணும். (<code>COUNT(DISTINCT user_id)</code> மூலம் தனித்துவமான வாடிக்கையாளர்களை மட்டும் எண்ணலாம்).</li>
+                        <li><b>MIN() / MAX():</b> மிகக்குறைந்த மற்றும் அதிகபட்ச மதிப்புகளைக் கண்டறியும்.</li>
+                    </ul>
+                    <h3>HAVING கட்டளை (குழுவாக்கிய பின் வடிகட்டுதல்)</h3>
+                    <p>தொடக்கநிலையாளர்கள் செய்யும் பொதுவான தவறு, சுருக்கப்பட்ட தரவுகளை வடிகட்ட <code>WHERE</code> கட்டளையைப் பயன்படுத்துவது. <code>WHERE</code> என்பது தரவுகளைச் சுருக்குவதற்கு <i>முன்பே</i> வேலை செய்யும்.</p>
+                    <p>தரவுகளை நகரங்கள் வாரியாகத் தொகுத்து, அதன்பிறகு 1 லட்சத்திற்கும் மேல் விற்பனையான நகரங்களை மட்டும் காட்ட வேண்டும் என்றால், <b>HAVING</b> கட்டளையைப் பயன்படுத்த வேண்டும்.</p>
+                    ${generatePromptAndOutput('SQL GROUP BY & HAVING', 'SELECT department, \n       COUNT(employee_id) as total_staff, \n       AVG(salary) as avg_pay\nFROM employees\nGROUP BY department\nHAVING AVG(salary) > 80000\nORDER BY avg_pay DESC;', 'department  | total_staff | avg_pay\nEngineering | 45          | 95000.00\nFinance     | 12          | 85000.00\n\n(சராசரி சம்பளம் 80,000-க்குக் குறைவாக உள்ள மற்ற துறைகள் HAVING கட்டளையால் நீக்கப்பட்டன).')}`
+            },
+            { 
+                id: 9, icon: "🪟", img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
+                title_en: "9. SQL Window Functions: Part 1 (Rankings)", title_ta: "9. SQL: விண்டோ ஃபங்ஷன்ஸ் (Window Functions)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A normal GROUP BY squashes 10 rows into 1 single summary row. A Window Function looks at the group, calculates the summary, but keeps all 10 original rows intact, just adding a new column next to them. You get to see the detail AND the total simultaneously.</div>
+                    <p>Window functions separate Junior Analysts from Senior Data Engineers. They allow you to perform complex calculations across a set of rows (a "window") that are related to the current row, without collapsing the dataset.</p>
+                    <h3>The OVER() Clause</h3>
+                    <p>The magic of a window function lies in the <code>OVER()</code> clause. It defines the boundary of the window. You can <code>PARTITION BY</code> (which resets the calculation for each category, like grouping) and <code>ORDER BY</code> (which determines the sequence of the calculation).</p>
+                    <h3>Ranking Functions</h3>
+                    <p>One of the most common business requests is finding the "Top N" of something per category (e.g., the top 3 highest-paid employees in *each* department, or the top 2 best-selling products in *each* country).</p>
+                    <ul>
+                        <li><b>ROW_NUMBER():</b> Assigns a unique sequential integer to rows. If there is a tie, it randomly picks one to be 1 and the other 2.</li>
+                        <li><b>RANK():</b> If there is a tie for 1st place, both get 1. The next row gets 3 (it skips 2).</li>
+                        <li><b>DENSE_RANK():</b> If there is a tie for 1st place, both get 1. The next row gets 2. (No gaps in ranking).</li>
+                    </ul>
+                    <p>To actually filter by these ranks, you must wrap the window function inside a CTE or Subquery (which we will cover in Module 11), because window functions are executed almost last by the database engine.</p>
+                    ${generatePromptAndOutput('SQL ROW_NUMBER Window', 'SELECT name, department, salary,\nROW_NUMBER() OVER(\n    PARTITION BY department \n    ORDER BY salary DESC\n) as salary_rank\nFROM employees;', 'name  | dept  | salary | salary_rank\nAlex  | Tech  | 100k   | 1\nBob   | Tech  | 90k    | 2\nSarah | Sales | 120k   | 1  <-- Notice rank resets for new dept\nMike  | Sales | 80k    | 2')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சாதாரணமாக GROUP BY பயன்படுத்தினால் பத்து வரிகள் ஒரு வரியாகச் சுருங்கிவிடும். ஆனால் Window Function தொகையைக் கணக்கிட்டாலும், பத்து வரிகளையும் அழிக்காமல் அப்படியே வைத்திருக்கும். ஒவ்வொரு வரியின் அருகிலும் புதிதாகப் பதிலைச் சேர்க்கும்.</div>
+                    <p>Window functions-ஐக் கற்றுக்கொள்வது உங்களை ஒரு சிறந்த டேட்டா இன்ஜினியராக மாற்றும். இது தரவுகளைச் சுருக்காமல், குறிப்பிட்ட வரிகளுக்கு இடையே சிக்கலான கணக்கீடுகளைச் செய்ய அனுமதிக்கிறது.</p>
+                    <h3>OVER() கட்டளை</h3>
+                    <p>Window function-இன் முக்கிய மந்திரமே <code>OVER()</code> கட்டளைதான். இது கணக்கீட்டின் எல்லையைத் தீர்மானிக்கிறது. <code>PARTITION BY</code> மூலம் ஒவ்வொரு பிரிவிற்கும் கணக்கீட்டைப் புதிதாகத் தொடங்கலாம். <code>ORDER BY</code> மூலம் எந்த வரிசையில் கணக்கிட வேண்டும் என்பதை அமைக்கலாம்.</p>
+                    <h3>ரேங்கிங் (Ranking Functions)</h3>
+                    <p>நிறுவனங்களில் "ஒவ்வொரு துறையிலும் அதிக சம்பளம் வாங்கும் முதல் 3 பேர் யார்?" போன்ற கேள்விகள் அடிக்கடி கேட்கப்படும். இதற்கு ரேங்கிங் பயன்படுகிறது.</p>
+                    <ul>
+                        <li><b>ROW_NUMBER():</b> ஒவ்வொரு வரிசைக்கும் 1, 2, 3 எனத் தனிப்பட்ட எண்ணைக் கொடுக்கும். ஒரே மதிப்பு இருந்தால் ஏதேனும் ஒன்றுக்கு 1, மற்றொன்றுக்கு 2 எனக் கொடுக்கும்.</li>
+                        <li><b>RANK():</b> இருவர் முதல் இடத்தைப் பிடித்தால், இருவருக்கும் 1 கொடுக்கும். அடுத்த நபருக்கு 3 கொடுக்கும் (2-ஐத் தவிர்த்துவிடும்).</li>
+                        <li><b>DENSE_RANK():</b> இருவர் முதல் இடத்தைப் பிடித்தால் இருவருக்கும் 1 கொடுக்கும். அடுத்த நபருக்கு 2 கொடுக்கும் (எண்களைத் தவிர்க்காது).</li>
+                    </ul>
+                    ${generatePromptAndOutput('SQL ROW_NUMBER Window', 'SELECT name, department, salary,\nROW_NUMBER() OVER(\n    PARTITION BY department \n    ORDER BY salary DESC\n) as salary_rank\nFROM employees;', 'name  | dept  | salary | salary_rank\nAlex  | Tech  | 100k   | 1\nBob   | Tech  | 90k    | 2\nSarah | Sales | 120k   | 1  <-- புதிய துறைக்கு ரேங்க் மீண்டும் 1-லிருந்து தொடங்கும்\nMike  | Sales | 80k    | 2')}`
+            },
+            { 
+                id: 10, icon: "⏳", img: "https://images.unsplash.com/photo-1507146426996-ef05306b995a?w=800&q=80",
+                title_en: "10. SQL Window Functions: Part 2 (Analytics & Delays)", title_ta: "10. SQL: லேக் மற்றும் லீட் (LAG/LEAD)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Imagine looking at your bank statement. LAG() is like a magic mirror that lets you look at yesterday's balance directly on today's row, making it incredibly easy to subtract the two and calculate your daily spending without losing your place.</div>
+                    <p>Beyond simple rankings, Window Functions unlock powerful time-series analytics directly inside your database, saving you from writing messy Python loops later.</p>
+                    <h3>Time-Shifting with LAG and LEAD</h3>
+                    <p>How do you calculate Month-over-Month (MoM) revenue growth? You need to subtract January's revenue from February's revenue. But SQL reads data row by row. It cannot naturally "remember" the previous row.</p>
+                    <p><b>LAG()</b> fetches data from a previous row in the partition. <b>LEAD()</b> fetches data from a subsequent row. By using LAG(), you can pull last month's revenue into a new column on the *current* month's row, allowing you to do simple math: <code>(Current - Previous) / Previous</code>.</p>
+                    <h3>Running Totals (Cumulative Sums)</h3>
+                    <p>You can also use standard aggregations as window functions. By combining <code>SUM()</code> with an <code>ORDER BY</code> inside the <code>OVER()</code> clause, you create a "Running Total". This is how dashboards show a line chart climbing upwards towards a yearly goal.</p>
+                    <p>The database calculates the sum from the "unbounded preceding" row up to the "current row".</p>
+                    ${generatePromptAndOutput('SQL LAG() for MoM Growth', 'SELECT month, revenue,\nLAG(revenue, 1) OVER(ORDER BY month) as prev_month,\nrevenue - LAG(revenue, 1) OVER(ORDER BY month) as growth\nFROM monthly_sales;', 'month | rev | prev_month | growth\nJan   | 100 | NULL       | NULL\nFeb   | 150 | 100        | +50\nMar   | 130 | 150        | -20\n\n(Notice January is NULL because there is no previous month to look at).')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> உங்கள் பேங்க் ஸ்டேட்மெண்டைப் பார்ப்பது போல. LAG() என்பது ஒரு மேஜிக் கண்ணாடி போலச் செயல்பட்டு, நேற்றைய பேலன்ஸை இன்றைய வரியிலேயே காட்டும். இதனால் இரண்டையும் எளிதாகக் கழித்து செலவைக் கணக்கிடலாம்.</div>
+                    <p>ரேங்கிங்கைத் தாண்டி, Window Functions மூலம் SQL-இலேயே கால அடிப்படையிலான பகுப்பாய்வுகளை (Time-series analytics) மிக எளிதாகச் செய்ய முடியும். பைத்தானில் கடினமான குறியீடுகளை எழுதுவதை இது தவிர்க்கும்.</p>
+                    <h3>LAG மற்றும் LEAD கட்டளைகள்</h3>
+                    <p>மாதாந்திர வருமான வளர்ச்சியை (MoM) எப்படிக் கணக்கிடுவீர்கள்? பிப்ரவரி மாத வருமானத்திலிருந்து ஜனவரி மாத வருமானத்தைக் கழிக்க வேண்டும். ஆனால் SQL தரவுகளை ஒவ்வொரு வரியாகவே படிக்கும், முந்தைய வரியை அதனால் நினைவில் கொள்ள முடியாது.</p>
+                    <p><b>LAG()</b> முந்தைய வரியிலிருந்து தரவைப் பெறும். <b>LEAD()</b> அடுத்த வரியிலிருந்து தரவைப் பெறும். LAG() மூலம் கடந்த மாத வருமானத்தை, இந்த மாத வரிசையிலேயே புதிய column-ஆகக் கொண்டுவரலாம். பிறகு இரண்டையும் எளிதாகக் கழித்துக் கணக்கிடலாம்.</p>
+                    <h3>தொடர் கூடுதல் (Running Totals)</h3>
+                    <p><code>SUM()</code> ஃபார்முலாவுடன் <code>ORDER BY</code>-ஐ இணைத்து "Running Total"-ஐ உருவாக்கலாம். டேஷ்போர்டுகளில் நிறுவனத்தின் ஆண்டு இலக்கை நோக்கி வரைபடம் மேலே ஏறுவது இப்படித்தான் கணக்கிடப்படுகிறது.</p>
+                    ${generatePromptAndOutput('SQL LAG() for MoM Growth', 'SELECT month, revenue,\nLAG(revenue, 1) OVER(ORDER BY month) as prev_month,\nrevenue - LAG(revenue, 1) OVER(ORDER BY month) as growth\nFROM monthly_sales;', 'month | rev | prev_month | growth\nJan   | 100 | NULL       | NULL\nFeb   | 150 | 100        | +50\nMar   | 130 | 150        | -20\n\n(ஜனவரிக்கு முந்தைய மாதம் இல்லாததால் அது NULL எனக் காட்டும்).')}`
+            },
+            { 
+                id: 11, icon: "⛓️", img: "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=800&q=80",
+                title_en: "11. Subqueries, Common Table Expressions (CTEs)", title_ta: "11. SQL: CTE மற்றும் சப்-குவரி", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A CTE is like writing a rough draft on a sticky note. You create a temporary mini-table, give it a name, stick it on your monitor, and then refer to it immediately in your main query to keep your final code clean and organized.</div>
+                    <p>As your SQL queries become more complex, combining multiple JOINs, aggregations, and window functions in a single SELECT block becomes a tangled, unreadable mess. This is where modular SQL comes in.</p>
+                    <h3>The Problem with Nested Subqueries</h3>
+                    <p>A subquery is a query nested inside another query (e.g., inside the WHERE clause). While functional, deeply nested subqueries are notoriously difficult for humans to read and debug because you have to read them from the inside-out.</p>
+                    <h3>The Elegance of CTEs</h3>
+                    <p>A <b>Common Table Expression (CTE)</b>, defined by the <code>WITH</code> clause, solves this by defining the temporary result set at the <i>top</i> of your script. It reads logically from top to bottom.</p>
+                    <ul>
+                        <li><b>Readability:</b> You can break a massive 100-line query into 3 or 4 small, named CTE blocks.</li>
+                        <li><b>Reusability:</b> Once defined at the top, you can reference the same CTE multiple times in your main query.</li>
+                        <li><b>Chaining:</b> You can create a second CTE that queries the first CTE, allowing for step-by-step data transformations that mimic a true data pipeline.</li>
+                    </ul>
+                    <p>In modern enterprise analytics, using CTEs over nested subqueries is a strict formatting requirement for code reviews.</p>
+                    ${generateCodeBox('SQL CTE Example', 'WITH HighSpenders AS (\n  -- CTE 1: Find big spenders\n  SELECT customer_id, SUM(amount) as total\n  FROM orders\n  GROUP BY customer_id\n  HAVING SUM(amount) > 5000\n)\n-- Main Query: Join the temporary CTE with the Users table\nSELECT u.name, u.email, hs.total\nFROM users u\nJOIN HighSpenders hs ON u.id = hs.customer_id;')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> CTE என்பது ஒரு தற்காலிகக் குறிப்பு எழுதுவது போன்றது. ஒரு சிறிய தற்காலிக டேபிளை உருவாக்கி, அதற்கு ஒரு பெயரிட்டு, அதைப் பிரதான குறியீட்டில் பயன்படுத்தி குழப்பத்தைத் தவிர்க்கலாம்.</div>
+                    <p>உங்கள் SQL குறியீடுகள் பெரிதாகும்போது, பல JOIN-கள் மற்றும் Aggregations-ஐ ஒரே SELECT கட்டளைக்குள் எழுதுவது பெரும் குழப்பத்தை ஏற்படுத்தும். இதைப் படித்துப் புரிந்துகொள்வது கடினம்.</p>
+                    <h3>சப்-குவரிகளின் (Subqueries) சிக்கல்</h3>
+                    <p>சப்-குவரி என்பது ஒரு குறியீட்டுக்குள் மற்றொரு குறியீட்டை எழுதுவது. இது வேலை செய்தாலும், உள்நோக்கிப் படிக்க வேண்டியிருப்பதால் பிழைகளைக் கண்டுபிடிப்பது மிகவும் சிரமம்.</p>
+                    <h3>CTE-இன் சிறப்பம்சங்கள்</h3>
+                    <p><b>Common Table Expression (CTE)</b> என்பது <code>WITH</code> கட்டளையைப் பயன்படுத்தி, தற்காலிக அட்டவணைகளை ஸ்கிரிப்ட்டின் <i>மேல் பகுதியில்</i> உருவாக்குவதாகும். இதனால் குறியீட்டை மேலிருந்து கீழாக எளிதாகப் படிக்க முடியும்.</p>
+                    <ul>
+                        <li><b>படிக்க எளிமை:</b> 100 வரிகள் கொண்ட பெரிய குறியீட்டை 3 அல்லது 4 சிறிய, பெயரிடப்பட்ட CTE தொகுதிகளாகப் பிரிக்கலாம்.</li>
+                        <li><b>மறுபயன்பாடு:</b> ஒருமுறை மேலே உருவாக்கிவிட்டால், பிரதான குறியீட்டில் அதை எத்தனை முறை வேண்டுமானாலும் பயன்படுத்தலாம்.</li>
+                        <li><b>தொடர்ச்சி:</b> ஒரு CTE-ஐ அடிப்படையாக வைத்து மற்றொரு CTE-ஐ உருவாக்கலாம். இது படிப்படியான தரவு மாற்றங்களுக்கு உதவும்.</li>
+                    </ul>
+                    <p>நவீன நிறுவனங்களில், சப்-குவரிகளுக்குப் பதிலாக CTE-களைப் பயன்படுத்துவதே சிறந்த முறையாகக் கருதப்படுகிறது.</p>
+                    ${generateCodeBox('SQL CTE Example', 'WITH HighSpenders AS (\n  -- தற்காலிக டேபிள்: அதிகம் செலவழித்தவர்கள்\n  SELECT customer_id, SUM(amount) as total\n  FROM orders\n  GROUP BY customer_id\n  HAVING SUM(amount) > 5000\n)\n-- பிரதான குறியீடு: தற்காலிக டேபிளை Users டேபிளுடன் இணைத்தல்\nSELECT u.name, u.email, hs.total\nFROM users u\nJOIN HighSpenders hs ON u.id = hs.customer_id;')}`
+            },
+            { 
+                id: 12, icon: "⚡", img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80",
+                title_en: "12. Query Performance Optimization & Indexing", title_ta: "12. SQL வேகம் & இண்டெக்ஸிங் (Indexing)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A Table Scan is like reading a 1000-page book word-for-word to find every mention of "Abraham Lincoln". An Index Scan is like flipping to the Glossary at the back of the book, finding "Lincoln", and turning exactly to pages 42 and 89. It takes milliseconds instead of hours.</div>
+                    <p>Writing SQL that returns the correct answer is only step one. Writing SQL that returns the answer in 2 seconds instead of 2 hours is what makes you an expert. <b>Query Optimization</b> is crucial because cloud databases (like BigQuery) charge money based on how much data your query processes.</p>
+                    <h3>The Enemy: Full Table Scans</h3>
+                    <p>When you use a <code>WHERE</code> clause on a column that isn't optimized, the database engine must read every single row on the hard drive to check the condition. If the table has 500 million rows, this causes massive lag and high server costs.</p>
+                    <h3>The Solution: Indexing</h3>
+                    <p>Database administrators create <b>Indexes</b> (B-Trees) on frequently searched columns (like User_ID or Email). An index is a sorted copy of just that column with pointers to the actual data row. When you query an indexed column, the engine uses an "Index Scan", skipping 99.9% of the table.</p>
+                    <h3>Golden Rules for Fast Queries</h3>
+                    <ul>
+                        <li><b>Avoid SELECT *:</b> Never pull all columns if you only need three. It wastes RAM and network bandwidth.</li>
+                        <li><b>Filter Early:</b> Put your most restrictive <code>WHERE</code> clauses as early as possible (e.g., inside a CTE) to shrink the dataset before joining it to massive tables.</li>
+                        <li><b>Avoid Functions on Indexed Columns:</b> Writing <code>WHERE YEAR(signup_date) = 2023</code> breaks the index because the engine has to run the YEAR() function on every row before checking. Instead, use <code>WHERE signup_date >= '2023-01-01' AND signup_date < '2024-01-01'</code> to keep the index intact.</li>
+                    </ul>
+                    ${generateCodeBox('Query Optimization Example', '-- BAD: Breaks index and pulls too much data\nSELECT * FROM transactions \nWHERE UPPER(status) = \'PAID\';\n\n-- GOOD: Uses index and limits payload\nSELECT id, amount, date FROM transactions \nWHERE status = \'paid\' OR status = \'PAID\';')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> Table Scan என்பது ஒரு 1000 பக்கப் புத்தகத்தில் "காந்தி" என்ற வார்த்தையைக் கண்டுபிடிக்கப் புத்தகம் முழுவதையும் வரி வரியாகப் படிப்பது. Index Scan என்பது புத்தகத்தின் பின்னால் உள்ள Index-ஐப் பார்த்து, காந்தி எந்தப் பக்கத்தில் உள்ளார் என நேரடியாக அந்தப் பக்கத்திற்குச் செல்வது. இது நேரத்தை மிச்சப்படுத்தும்.</div>
+                    <p>சரியான விடையைத் தரும் SQL-ஐ எழுதுவது முதல் படி மட்டுமே. 2 மணிநேரம் எடுக்கும் குறியீட்டை 2 வினாடிகளில் வேலை செய்ய வைப்பதே உங்களை ஒரு நிபுணராக்கும். <b>Query Optimization (வேகத்தை அதிகரித்தல்)</b> மிகவும் முக்கியமானது, ஏனெனில் BigQuery போன்ற கிளவுட் டேட்டாபேஸ்கள் நீங்கள் எவ்வளவு தரவைப் பயன்படுத்துகிறீர்களோ அதற்கேற்ப கட்டணம் வசூலிக்கும்.</p>
+                    <h3>எதிரி: Full Table Scans</h3>
+                    <p>நீங்கள் <code>WHERE</code> கட்டளையைப் பயன்படுத்தும்போது, டேட்டாபேஸ் ஹார்ட் டிரைவில் உள்ள ஒவ்வொரு வரியையும் படிக்க வேண்டி வந்தால் (Full Table Scan), அது பல மில்லியன் வரிகள் உள்ள டேபிளில் பெரிய தாமதத்தை ஏற்படுத்தும்.</p>
+                    <h3>தீர்வு: இண்டெக்ஸிங் (Indexing)</h3>
+                    <p>அடிக்கடி தேடப்படும் Columns-க்கு (எ.கா: User_ID) டேட்டாபேஸ் அட்மின்கள் <b>Indexes</b> உருவாக்குவார்கள். Index என்பது அந்த குறிப்பிட்ட Column-இன் வரிசைப்படுத்தப்பட்ட நகலாகும். இதனால் டேட்டாபேஸ் 99% தேவையற்ற வரிகளைத் தவிர்த்துவிட்டு நேரடியாக விடையைக் கண்டுபிடிக்கும் (Index Scan).</p>
+                    <h3>வேகமான குறியீட்டிற்கான விதிகள்</h3>
+                    <ul>
+                        <li><b>SELECT * தவிர்க்கவும்:</b> 3 columns மட்டுமே தேவைப்படும்போது அனைத்தையும் இழுக்காதீர்கள். இது டேட்டாவை வீணடிக்கும்.</li>
+                        <li><b>முன்பே வடிகட்டவும் (Filter Early):</b> பெரிய டேபிள்களை இணைக்கும் முன்பே, CTE-க்குள் தேவையற்ற தரவுகளை வடிகட்டிவிடுங்கள்.</li>
+                        <li><b>Index-ஐ உடைக்க வேண்டாம்:</b> <code>WHERE YEAR(date) = 2023</code> என்று எழுதினால் Index வேலை செய்யாது. அதற்குப் பதிலாக தேதிகளை நேரடியாகக் குறிப்பிடுங்கள்.</li>
+                    </ul>
+                    ${generateCodeBox('Query Optimization Example', '-- மோசமானது: Index-ஐ உடைத்து அதிக தரவை இழுக்கும்\nSELECT * FROM transactions \nWHERE UPPER(status) = \'PAID\';\n\n-- சிறந்தது: Index-ஐப் பயன்படுத்தித் தேவையானதை மட்டும் எடுக்கும்\nSELECT id, amount, date FROM transactions \nWHERE status = \'paid\' OR status = \'PAID\';')}`
+            },
+            { 
+                id: 13, icon: "🐍", img: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=80",
+                title_en: "13. Python Environment Control & Core Data Structures", title_ta: "13. பைதான் (Python) அறிமுகம்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If SQL is a heavy industrial crane designed to lift massive blocks of data out of a warehouse, Python is the Swiss Army Knife you use to slice, carve, loop, and chemically alter that data once it's on your desk.</div>
+                    <p>While SQL is perfect for retrieving data, it is clumsy for complex math, predictive modeling, or automating multi-step tasks. <b>Python</b> is the undisputed industry standard programming language for Data Analytics and Machine Learning.</p>
+                    <h3>The Jupyter Environment</h3>
+                    <p>Data analysts rarely write Python in standard text files (.py). We use <b>Jupyter Notebooks</b> (.ipynb). Notebooks allow you to run Python code in isolated chunks (cells), visualize charts immediately below the code, and keep your data loaded in RAM without re-running the entire script.</p>
+                    <h3>Core Data Structures</h3>
+                    <p>Before using advanced libraries, you must master Python's native structures:</p>
+                    <ul>
+                        <li><b>Lists <code>[ ]</code>:</b> Ordered, mutable arrays of data. E.g., a list of daily temperatures. Highly flexible but slow for massive math.</li>
+                        <li><b>Dictionaries <code>{ }</code>:</b> Key-Value pairs. E.g., <code>{"name": "John", "age": 30}</code>. This is the exact equivalent of JSON data, making it crucial for working with APIs.</li>
+                        <li><b>Tuples <code>( )</code>:</b> Immutable (unchangeable) lists. Used to protect data that should never be accidentally altered during your script.</li>
+                    </ul>
+                    <h3>List Comprehensions</h3>
+                    <p>Python's secret weapon for analysts is the List Comprehension. It allows you to write a <code>for-loop</code> and an <code>if-statement</code> in a single, highly performant line of code.</p>
+                    ${generatePromptAndOutput('Python List Comprehension', '# We have a list of sales with tax included. We want to extract just the base price for sales over 100.\n\nsales_with_tax =\n\n# Standard loop takes 4 lines. Comprehension takes 1 line:\nbase_prices = [round(x * 0.85) for x in sales_with_tax if x > 100]\n\nprint(base_prices)', '')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> SQL என்பது பெரிய டேட்டாபேஸிலிருந்து தரவுகளைத் தூக்கி வரும் ஒரு கிரேன் என்றால், பைதான் என்பது அந்தத் தரவுகளை வெட்டவும், மாற்றவும், ஆராயவும் பயன்படும் ஒரு கூர்மையான கத்தி போன்றது.</div>
+                    <p>தரவுகளைப் பெறுவதற்கு SQL சிறந்ததாக இருந்தாலும், சிக்கலான கணிதங்கள் மற்றும் ஆட்டோமேஷனுக்கு அது பொருந்தாது. டேட்டா அனலிடிக்ஸ் மற்றும் மெஷின் லேர்னிங்கிற்கு <b>பைதான் (Python)</b> தான் உலகின் முதன்மையான மொழியாகும்.</p>
+                    <h3>Jupyter Notebooks</h3>
+                    <p>அனலிஸ்ட்கள் சாதாரண ஃபைல்களில் பைதான் குறியீடுகளை எழுத மாட்டார்கள். அவர்கள் <b>Jupyter Notebooks</b> பயன்படுத்துவார்கள். இதில் குறியீடுகளைச் சிறு சிறு தொகுதிகளாக (cells) இயக்கி, வரைபடங்களை உடனுக்குடன் பார்க்கலாம்.</p>
+                    <h3>முக்கிய தரவு கட்டமைப்புகள் (Data Structures)</h3>
+                    <p>மேம்பட்ட லைப்ரரிகளைப் பயன்படுத்தும் முன், பைதானின் அடிப்படைகளைக் கற்க வேண்டும்:</p>
+                    <ul>
+                        <li><b>Lists <code>[ ]</code>:</b> வரிசைப்படுத்தப்பட்ட தரவுகள். இதை எளிதாக மாற்றலாம். ஆனால் பெரிய கணக்கீடுகளுக்கு வேகம் குறைவு.</li>
+                        <li><b>Dictionaries <code>{ }</code>:</b> Key-Value ஜோடிகள் (எ.கா: <code>{"name": "John", "age": 30}</code>). இது JSON தரவுக்குச் சமமானது, API-களுடன் வேலை செய்ய மிகவும் அவசியம்.</li>
+                        <li><b>Tuples <code>( )</code>:</b> மாற்ற முடியாத (Immutable) தரவுகள். ஸ்கிரிப்ட் இயங்கும்போது மாறக்கூடாத தரவுகளைப் பாதுகாக்கப் பயன்படுகிறது.</li>
+                    </ul>
+                    <h3>List Comprehensions</h3>
+                    <p>பைதானின் சிறப்பு ஆயுதம் இது. <code>for-loop</code> மற்றும் <code>if-statement</code> ஆகியவற்றை ஒரே வரியில், மிக வேகமாக எழுத இது உதவுகிறது.</p>
+                    ${generatePromptAndOutput('Python List Comprehension', '# வரி உட்பட உள்ள விற்பனைத் தொகையிலிருந்து, 100-க்கு மேல் உள்ளவற்றின் அடிப்படை விலையை மட்டும் எடுக்க வேண்டும்.\n\nsales_with_tax =\n\n# 4 வரி குறியீட்டை 1 வரியில் எழுதுதல்:\nbase_prices = [round(x * 0.85) for x in sales_with_tax if x > 100]\n\nprint(base_prices)', '')}`
+            },
+            { 
+                id: 14, icon: "🔢", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&q=80",
+                title_en: "14. Vectorized Arrays with NumPy", title_ta: "14. நம்பை (NumPy) மற்றும் வெக்டரைசேஷன்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Using a standard Python loop to multiply 1 million numbers is like a teacher grading 1 million exams one by one. NumPy "Vectorization" is like cloning the teacher 1 million times so they grade all the exams simultaneously in a split second.</div>
+                    <p>Standard Python lists are highly flexible, but they are incredibly slow for mathematical operations on massive datasets because Python has to check the data type of every single item, one by one, in a <code>for-loop</code>.</p>
+                    <p><b>NumPy (Numerical Python)</b> solves this. It is a library written in C (which is blazing fast) that allows Python to perform <b>Vectorization</b>.</p>
+                    <h3>The NumPy Ndarray</h3>
+                    <p>The core of NumPy is the <i>n-dimensional array</i> (ndarray). Unlike Python lists, NumPy arrays force every item to be the exact same data type (usually integers or floats). Because the computer knows every item is the same, it skips the slow checking process and performs math on the entire array simultaneously.</p>
+                    <h3>Broadcasting</h3>
+                    <p>NumPy allows for mathematical operations without writing loops. If you have an array of 10,000 prices and want to add 5 to all of them, you literally just write <code>array + 5</code>. NumPy "broadcasts" that +5 across all 10,000 elements instantly.</p>
+                    <ul>
+                        <li><b>Performance:</b> NumPy is often 50x to 100x faster than standard Python lists.</li>
+                        <li><b>Matrix Math:</b> Essential for advanced statistics and Machine Learning algorithms (like calculating dot products in neural networks).</li>
+                    </ul>
+                    ${generatePromptAndOutput('NumPy Speed & Broadcasting', 'import numpy as np\nimport time\n\n# Create 1 million numbers\npython_list = list(range(1000000))\nnumpy_array = np.arange(1000000)\n\n# The NumPy Way (Vectorization)\n# No loop required. Happens instantly.\nresult = numpy_array * 2\n\nprint(result[:5])', '[0 2 4 6 8]')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> 10 லட்சம் எண்களை பைதான் loop மூலம் பெருக்குவது, ஒரு ஆசிரியர் 10 லட்சம் தாள்களை ஒவ்வொன்றாகத் திருத்துவது போன்றது. NumPy என்பது அந்த ஆசிரியரை 10 லட்சம் முறை குளோன் (clone) செய்து, அனைத்துத் தாள்களையும் ஒரே நொடியில் திருத்துவது போல மிக வேகமானது.</div>
+                    <p>சாதாரண பைதான் Lists பயன்படுத்துவதற்கு எளிதானவை, ஆனால் பெரிய கணக்கீடுகளுக்கு அவை மிகவும் மெதுவானவை. ஏனெனில் பைதான் ஒவ்வொரு முறையும் தரவின் வகையைச் (Data type) சரிபார்த்துக்கொண்டே இருக்கும்.</p>
+                    <p><b>NumPy (Numerical Python)</b> இதற்கு ஒரு தீர்வாகும். இது C மொழியில் எழுதப்பட்ட ஒரு அதிவேக லைப்ரரி. இது <b>Vectorization</b> முறையில் செயல்படுகிறது.</p>
+                    <h3>NumPy Arrays (Ndarray)</h3>
+                    <p>NumPy-இன் அடிப்படை Ndarray ஆகும். பைதான் லிஸ்ட் போல இல்லாமல், இதில் உள்ள அனைத்துத் தரவுகளும் ஒரே வகையாக (எண்கள்) மட்டுமே இருக்க வேண்டும். இதனால் கணினி சரிபார்க்கும் நேரத்தை மிச்சப்படுத்தி, ஒரே நேரத்தில் ஒட்டுமொத்த Array-இலும் கணக்கீடுகளைச் செய்கிறது.</p>
+                    <h3>Broadcasting (பிராட்காஸ்டிங்)</h3>
+                    <p>Loop எழுதாமலேயே கணக்கீடுகளைச் செய்ய இது அனுமதிக்கிறது. 10,000 விலைகள் உள்ள ஒரு array-உடன் 5-ஐக் கூட்ட வேண்டும் என்றால், வெறுமனே <code>array + 5</code> என்று எழுதினால் போதும். NumPy அந்த 5-ஐ 10,000 எண்களுடனும் ஒரே நொடியில் கூட்டிவிடும்.</p>
+                    <ul>
+                        <li><b>வேகம்:</b> சாதாரண பைதானை விட NumPy 50 முதல் 100 மடங்கு வேகமானது.</li>
+                        <li><b>மெஷின் லேர்னிங்:</b> AI மற்றும் மெஷின் லேர்னிங் அல்காரிதம்களுக்கு இதுவே அடிப்படை.</li>
+                    </ul>
+                    ${generatePromptAndOutput('NumPy Speed & Broadcasting', 'import numpy as np\n\n# 10 லட்சம் எண்களை உருவாக்குதல்\nnumpy_array = np.arange(1000000)\n\n# NumPy முறை (Loop தேவையில்லை, உடனடியாக நடக்கும்)\nresult = numpy_array * 2\n\nprint(result[:5])', '[0 2 4 6 8]')}`
+            },
+            { 
+                id: 15, icon: "🐼", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80",
+                title_en: "15. Deep Pandas: Series & DataFrames", title_ta: "15. பாண்டாஸ் (Pandas) டேட்டாபிரேம்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A Pandas DataFrame is literally just an Excel spreadsheet powered by Python code instead of mouse clicks. It has rows, columns, and an index. But unlike Excel, it can hold 10 million rows without crashing your computer.</div>
+                    <p>While NumPy handles the raw math, <b>Pandas</b> is the ultimate tool for Data Analysis in Python. It is built on top of NumPy, meaning it inherits the blazing speed of vectorized arrays, but wraps them in a highly usable, Excel-like interface.</p>
+                    <h3>Series vs DataFrame</h3>
+                    <p>There are two core objects in Pandas you must understand:</p>
+                    <ul>
+                        <li><b>Series:</b> A single column of data. It is essentially a 1-dimensional NumPy array, but with an explicit index (row labels).</li>
+                        <li><b>DataFrame:</b> A 2-dimensional table made up of multiple Series (columns) glued together sharing the same index. This is your spreadsheet.</li>
+                    </ul>
+                    <h3>Data Ingestion and Exploration</h3>
+                    <p>Pandas can ingest data from almost anywhere: <code>read_csv()</code>, <code>read_excel()</code>, <code>read_json()</code>, or even <code>read_sql()</code> to pull directly from a database. Once loaded, you use specific methods to profile the dataset instantly.</p>
+                    <p>Methods like <code>df.head()</code> (show first 5 rows), <code>df.info()</code> (show data types and null counts), and <code>df.value_counts()</code> (show the frequency of unique values in a column) are your bread and butter for initial EDA.</p>
+                    ${generatePromptAndOutput('Pandas Data Ingestion', 'import pandas as pd\n\n# Load a CSV file into a DataFrame\ndf = pd.read_csv("users.csv")\n\n# Select a specific column (Series)\nages = df["Age"]\n\n# Filter the DataFrame using boolean indexing (just like WHERE in SQL)\npremium_users = df[df["Subscription"] == "Premium"]\n\nprint(premium_users.head(2))', '   ID      Name  Age Subscription\n0  101  Alice M.   28      Premium\n3  104    Bob T.   34      Premium')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> Pandas DataFrame என்பது பைதான் மூலம் இயங்கும் ஒரு அதிவேக எக்செல் ஷீட் ஆகும். இதில் rows மற்றும் columns இருக்கும். ஆனால் எக்செல் போல அல்லாமல், இது பல லட்சம் வரிகளைக் கொண்டிருந்தாலும் கம்ப்யூட்டரை ஹேங் (hang) செய்யாது.</div>
+                    <p>கணக்கீடுகளுக்கு NumPy பயன்படும் நிலையில், <b>Pandas</b> என்பது டேட்டா அனலிடிக்ஸின் முதன்மையான கருவியாகும். இது NumPy-இன் மீது கட்டமைக்கப்பட்டுள்ளது, எனவே அதன் வேகத்தையும் கொண்டுள்ளது, அதேசமயம் எக்செல் போன்ற எளிமையான அமைப்பையும் தருகிறது.</p>
+                    <h3>Series மற்றும் DataFrame</h3>
+                    <p>Pandas-இல் இரண்டு முக்கியக் கட்டமைப்புகள் உள்ளன:</p>
+                    <ul>
+                        <li><b>Series:</b> இது ஒரு Column மட்டுமே கொண்ட தரவு. இது ஒரு 1-பரிமாண Array ஆகும்.</li>
+                        <li><b>DataFrame:</b> இது பல Series-கள் (Columns) சேர்ந்த ஒரு முழுமையான அட்டவணை. இதுவே உங்களின் ஸ்ப்ரெட்ஷீட்.</li>
+                    </ul>
+                    <h3>தரவுகளை உள்ளிழுத்தல் (Ingestion)</h3>
+                    <p>Pandas மூலம் எந்த வகையான ஃபைல்களையும் உள்ளிழுக்கலாம்: <code>read_csv()</code>, <code>read_json()</code>, மற்றும் நேரடியாக டேட்டாபேஸிலிருந்து <code>read_sql()</code>.</p>
+                    <p>தரவுகளை ஏற்றிய பின், <code>df.head()</code> (முதல் 5 வரிகள்), <code>df.info()</code> (தரவு வகைகள்), மற்றும் <code>df.value_counts()</code> (ஒவ்வொரு மதிப்பும் எத்தனை முறை வந்துள்ளது) போன்ற கட்டளைகள் மூலம் தரவுகளை எளிதாக ஆராயலாம்.</p>
+                    ${generatePromptAndOutput('Pandas Data Ingestion', 'import pandas as pd\n\n# CSV ஃபைலை DataFrame-ஆக ஏற்றுதல்\ndf = pd.read_csv("users.csv")\n\n# ஒரு குறிப்பிட்ட Column-ஐ மட்டும் எடுத்தல்\nages = df["Age"]\n\n# SQL-இல் WHERE பயன்படுத்துவது போல வடிகட்டுதல்\npremium_users = df[df["Subscription"] == "Premium"]\n\nprint(premium_users.head(2))', '   ID      Name  Age Subscription\n0  101  Alice M.   28      Premium\n3  104    Bob T.   34      Premium')}`
+            },
+            { 
+                id: 16, icon: "🧼", img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&q=80",
+                title_en: "16. Advanced Data Cleaning & Transformations", title_ta: "16. பைதான்: தரவு சுத்திகரிப்பு (Cleaning)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Data from the real world is like a messy teenager's bedroom. Names have weird spaces, dates are formatted wrong, and prices have dollar signs attached making them impossible to add up. Pandas lets you scrub this clean with a few simple commands.</div>
+                    <p>80% of a Data Analyst's job is cleaning data. If you feed messy data into a visualization tool or a machine learning model, you get garbage out. Pandas provides incredibly powerful string and datetime manipulation tools.</p>
+                    <h3>String Manipulation (.str)</h3>
+                    <p>If a column contains prices like <code>"$1,200.50"</code>, it is technically a 'String' (text). You cannot do math on text. You must use the <code>.str</code> accessor to replace the dollar signs and commas, and then cast the column into a float (decimal number).</p>
+                    <h3>Handling Datetimes</h3>
+                    <p>Dates imported from CSVs are usually just dumb text strings (e.g., "15-Jan-2023"). By using <code>pd.to_datetime()</code>, you convert that text into a smart datetime object. Once converted, you can easily extract just the month, just the year, or calculate the exact number of days between two columns.</p>
+                    <h3>Treating Null Values</h3>
+                    <p>We discussed Nulls in EDA. In Pandas, you execute this using <code>df.dropna()</code> to delete rows with blanks, or <code>df.fillna()</code> to replace the blanks with a specific value (like 0 or the column mean).</p>
+                    ${generateCodeBox('Pandas Cleaning Script', '# 1. Clean String & Convert to Float\ndf["Price"] = df["Price"].str.replace("$", "").str.replace(",", "").astype(float)\n\n# 2. Fix Text Formatting (Title Case & Strip whitespace)\ndf["City"] = df["City"].str.strip().str.title()\n\n# 3. Convert to Datetime and extract the Year\ndf["Date"] = pd.to_datetime(df["Date"])\ndf["Year"] = df["Date"].dt.year\n\n# 4. Fill missing ages with the median\ndf["Age"].fillna(df["Age"].median(), inplace=True)')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> உண்மையான தரவுகள் எப்போதுமே குழப்பமாக இருக்கும். பெயர்களில் இடைவெளி இருக்கும், எண்களில் '$' குறி இருக்கும், தேதிகள் தவறான வடிவில் இருக்கும். இவற்றைச் சுத்தப்படுத்த Pandas உதவுகிறது.</div>
+                    <p>ஒரு டேட்டா அனலிஸ்ட்டின் 80% வேலை தரவுகளைச் சுத்தப்படுத்துவதுதான் (Data Cleaning). சுத்தமில்லாத தரவுகளை வைத்து வரைபடம் வரைந்தால் தவறான முடிவுகளே கிடைக்கும்.</p>
+                    <h3>வார்த்தைகளைச் சரிசெய்தல் (.str)</h3>
+                    <p>ஒரு Column-இல் <code>"$1,200"</code> என்று இருந்தால், கணினி அதை உரை (String) என்று நினைக்கும். உரையைக் கூட்டவோ கழிக்கவோ முடியாது. எனவே <code>.str.replace()</code> மூலம் அந்த '$' குறியீட்டை நீக்கிவிட்டு, அதை எண்ணாக (Float) மாற்ற வேண்டும்.</p>
+                    <h3>தேதிகளைக் கையாளுதல் (Datetimes)</h3>
+                    <p>CSV-இல் இருந்து வரும் தேதிகள் பெரும்பாலும் சாதாரண உரையாகவே இருக்கும். <code>pd.to_datetime()</code> மூலம் அதை உண்மையான தேதியாக மாற்றலாம். மாற்றிய பின், அதிலிருந்து மாதம், வருடம் ஆகியவற்றை மட்டும் எளிதாகப் பிரித்தெடுக்கலாம்.</p>
+                    <h3>விடுபட்ட தரவுகளை நிரப்புதல்</h3>
+                    <p>காலியாக உள்ள இடங்களை (Null values) நீக்க <code>df.dropna()</code> பயன்படுத்தலாம். அல்லது அந்த காலியிடங்களில் '0' அல்லது சராசரி மதிப்பைக் கொண்டு நிரப்ப <code>df.fillna()</code> பயன்படுத்தலாம்.</p>
+                    ${generateCodeBox('Pandas Cleaning Script', '# 1. $ குறியீட்டை நீக்கி எண்ணாக மாற்றுதல்\ndf["Price"] = df["Price"].str.replace("$", "").astype(float)\n\n# 2. பெயர்களில் உள்ள தேவையற்ற இடைவெளியை நீக்குதல்\ndf["City"] = df["City"].str.strip().str.title()\n\n# 3. தேதியாக மாற்றி வருடத்தை மட்டும் எடுத்தல்\ndf["Date"] = pd.to_datetime(df["Date"])\ndf["Year"] = df["Date"].dt.year\n\n# 4. காலியான வயதை சராசரி வயதைக் கொண்டு நிரப்புதல்\ndf["Age"].fillna(df["Age"].median(), inplace=True)')}`
+            },
+            { 
+                id: 17, icon: "🔄", img: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800&q=80",
+                title_en: "17. Aggregations, Merging & GroupBy Chaining", title_ta: "17. பைதான்: தரவுகளை இணைத்தல் (Merge)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If SQL is like writing a formal letter to request data from the basement, Pandas <code>merge</code> and <code>groupby</code> is like having all the papers directly on your desk and stapling them together yourself.</div>
+                    <p>Everything you learned in SQL (JOINs, GROUP BY, HAVING) can be executed natively in Python using Pandas. This is crucial when your data doesn't live in a neat SQL database (e.g., combining a CSV export from Shopify with a JSON export from Facebook Ads).</p>
+                    <h3>Merging DataFrames</h3>
+                    <p><code>pd.merge()</code> is the exact equivalent of a SQL JOIN. You specify the left DataFrame, the right DataFrame, the type of join (<code>how='left'</code>), and the column they share (<code>on='customer_id'</code>).</p>
+                    <h3>Advanced GroupBy</h3>
+                    <p>The <code>.groupby()</code> method in Pandas splits the data into groups. However, to make it useful, you must chain it with an aggregation method like <code>.agg()</code>. This allows you to apply different mathematical functions to different columns simultaneously.</p>
+                    <ul>
+                        <li><b>Custom Lambda Functions:</b> You aren't restricted to standard SUM and AVG. You can write custom lambda functions inside your groupby to calculate complex logic on the fly (e.g., finding the range between max and min price per city).</li>
+                    </ul>
+                    ${generateCodeBox('Pandas Merge & GroupBy', '# 1. Perform a LEFT JOIN\nmerged_df = pd.merge(customers_df, orders_df, on="customer_id", how="left")\n\n# 2. Group by City, and calculate different metrics for different columns\nsummary = merged_df.groupby("City").agg({\n    "order_amount": "sum",       # Total sales per city\n    "customer_id": "count",      # Number of orders\n    "rating": "mean"             # Average customer rating\n}).reset_index()\n\nprint(summary)')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> SQL என்பது அடித்தளத்தில் உள்ள ஆவணங்களை எடுத்துவரக் கடிதம் எழுதுவது போன்றது. Pandas <code>merge</code> என்பது அந்த ஆவணங்கள் அனைத்தும் உங்கள் மேசையிலேயே இருக்க, நீங்களே அவற்றை ஸ்டேப்ளர் (stapler) போட்டு இணைப்பது போன்றது.</div>
+                    <p>SQL-இல் நீங்கள் கற்ற (JOINs, GROUP BY) அனைத்தையும் பைதானிலும் செய்ய முடியும். உங்களின் தரவுகள் SQL டேட்டாபேஸில் இல்லாமல், CSV அல்லது JSON ஃபைல்களாக இருந்தால் இது மிகவும் பயன்படும்.</p>
+                    <h3>தரவுகளை இணைத்தல் (Merging)</h3>
+                    <p><code>pd.merge()</code> என்பது SQL JOIN-ஐப் போன்றதுதான். இடது அட்டவணை, வலது அட்டவணை, எந்த வகையான இணைப்பு (<code>how='left'</code>), மற்றும் எந்த ID மூலம் இணைக்க வேண்டும் (<code>on='customer_id'</code>) என்பதைக் குறிப்பிட வேண்டும்.</p>
+                    <h3>GroupBy மற்றும் Aggregation</h3>
+                    <p>Pandas-இல் <code>.groupby()</code> தரவுகளைக் குழுக்களாகப் பிரிக்கிறது. இதனுடன் <code>.agg()</code> கட்டளையைச் சேர்த்தால், வெவ்வேறு Columns-க்கு வெவ்வேறு கணிதங்களை ஒரே நேரத்தில் செய்ய முடியும்.</p>
+                    <ul>
+                        <li><b>Lambda ஃபங்ஷன்கள்:</b> சாதாரண SUM மற்றும் AVG மட்டுமின்றி, உங்கள் சொந்த லாஜிக்குகளையும் (Lambda) இந்த groupby-க்குள் பயன்படுத்தலாம்.</li>
+                    </ul>
+                    ${generateCodeBox('Pandas Merge & GroupBy', '# 1. LEFT JOIN மூலம் இணைத்தல்\nmerged_df = pd.merge(customers_df, orders_df, on="customer_id", how="left")\n\n# 2. நகரம் வாரியாகத் தொகுத்து, பல கணக்கீடுகளைச் செய்தல்\nsummary = merged_df.groupby("City").agg({\n    "order_amount": "sum",       # மொத்த விற்பனை\n    "customer_id": "count",      # ஆர்டர்களின் எண்ணிக்கை\n    "rating": "mean"             # சராசரி ரேட்டிங்\n}).reset_index()\n\nprint(summary)')}`
+            },
+            { 
+                id: 18, icon: "📅", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&q=80",
+                title_en: "18. Time-Series Data Profiling & Resampling", title_ta: "18. கால அடிப்படையிலான தரவு (Time-Series)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A heart monitor beeps every second. Reading every single beep is overwhelming. Resampling is like asking the machine to just give you the "average heart rate per minute" so you can actually read the chart.</div>
+                    <p>Time-Series analysis is a specialized branch of data analytics dealing with data indexed in time order (e.g., stock market prices, server logs, or daily website traffic). Pandas was originally created for finance, so its time-series capabilities are unmatched.</p>
+                    <h3>Setting the Datetime Index</h3>
+                    <p>For time-series magic to work in Pandas, you must set the date column as the actual Index of the DataFrame using <code>df.set_index('Date', inplace=True)</code>.</p>
+                    <h3>Resampling</h3>
+                    <p><code>.resample()</code> is like a specialized <code>groupby()</code> exclusively for time. If you have a sensor recording temperatures every 5 minutes (thousands of rows), you can resample it to <code>'D'</code> (Daily) and apply a <code>.mean()</code> to instantly get daily averages.</p>
+                    <h3>Rolling Windows (Moving Averages)</h3>
+                    <p>Stock market charts often show a "7-Day Moving Average" to smooth out the chaotic daily jumps and reveal the true trend. In Pandas, you use <code>.rolling(window=7).mean()</code>. This calculation slides down your data day by day, averaging the previous 7 days at every step.</p>
+                    ${generatePromptAndOutput('Pandas Resample & Rolling', '# Assuming "Date" is already set as the DataFrame index\n\n# Downsample hourly server hits to total Daily hits\ndaily_hits = df["server_requests"].resample("D").sum()\n\n# Calculate a 7-day rolling moving average to smooth the trend\nrolling_trend = daily_hits.rolling(window=7).mean()\n\nprint(rolling_trend.tail(3))', 'Date\n2025-10-15    15200.5\n2025-10-16    15450.2\n2025-10-17    15800.0\nName: server_requests, dtype: float64')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> இதய துடிப்பு மானிட்டர் ஒவ்வொரு நொடியும் சத்தமிடும். அத்தனை தரவுகளையும் பார்ப்பது கடினம். Resampling என்பது, "ஒரு நிமிடத்தின் சராசரி துடிப்பை மட்டும் காட்டு" என்று சொல்வது போன்றது. இதனால் வரைபடம் தெளிவாகப் புரியும்.</div>
+                    <p>பங்குச்சந்தை விலைகள், தினசரி வலைத்தளப் பார்வையாளர்கள் போன்ற கால அடிப்படையிலான தரவுகளை (Time-Series) ஆராய்வது அனலிடிக்ஸின் முக்கியப் பகுதியாகும். Pandas முதலில் நிதித்துறைக்காகவே (Finance) உருவாக்கப்பட்டது, எனவே இதில் Time-Series கருவிகள் மிகச் சிறப்பாக உள்ளன.</p>
+                    <h3>Datetime-ஐ Index ஆக மாற்றுதல்</h3>
+                    <p>Pandas-இல் Time-Series சரியாக வேலை செய்ய, தேதி உள்ள Column-ஐ DataFrame-இன் Index-ஆக மாற்ற வேண்டும்: <code>df.set_index('Date')</code>.</p>
+                    <h3>Resampling (மாற்றி அமைத்தல்)</h3>
+                    <p><code>.resample()</code> என்பது காலத்திற்கான பிரத்யேக <code>groupby()</code> ஆகும். ஒவ்வொரு 5 நிமிடத்திற்கும் பதிவான தரவுகளை, தினமும் (Daily - 'D') என்ற அடிப்படையில் சுருக்கி சராசரியைக் காண இது உதவுகிறது.</p>
+                    <h3>Moving Averages (நகரும் சராசரி)</h3>
+                    <p>பங்குச்சந்தை வரைபடங்களில் ஏற்ற இறக்கங்களைச் சீராக்க "7-நாள் நகரும் சராசரி" (Moving Average) பயன்படுத்தப்படும். Pandas-இல் <code>.rolling(window=7).mean()</code> மூலம் இதை மிக எளிதாகக் கணக்கிடலாம்.</p>
+                    ${generatePromptAndOutput('Pandas Resample & Rolling', '# "Date" ஏற்கனவே Index ஆக உள்ளதாகக் கருதுவோம்\n\n# மணிநேரத் தரவுகளை தினசரி மொத்தத் தரவாக மாற்றுதல் (Downsample)\ndaily_hits = df["server_requests"].resample("D").sum()\n\n# ட்ரெண்டை அறிய 7-நாள் நகரும் சராசரியைக் கணக்கிடுதல்\nrolling_trend = daily_hits.rolling(window=7).mean()\n\nprint(rolling_trend.tail(3))', 'Date\n2025-10-15    15200.5\n2025-10-16    15450.2\n2025-10-17    15800.0\nName: server_requests, dtype: float64')}`
+            },
+            { 
+                id: 19, icon: "🎨", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+                title_en: "19. Programmatic Data Visualization with Python", title_ta: "19. பைதான்: வரைபடங்கள் (Visualization)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A table of 1,000 numbers will put executives to sleep in a boardroom. A sharp line chart showing a massive dip in revenue highlighted in red wakes them up instantly. Visualization is the translation layer between math and human psychology.</div>
+                    <p>While BI tools like Tableau are great for interactive dashboards, Python allows for highly customized, programmatic, and statistically deep visualizations. The two core libraries are <b>Matplotlib</b> (the foundation) and <b>Seaborn</b> (the beautiful, statistical wrapper).</p>
+                    <h3>Choosing the Right Chart</h3>
+                    <ul>
+                        <li><b>Line Charts:</b> Exclusively for showing trends over time (Time-Series).</li>
+                        <li><b>Bar Charts:</b> For comparing categorical groups (e.g., Sales by Region).</li>
+                        <li><b>Scatter Plots:</b> For showing the correlation between two continuous variables (e.g., Marketing Spend vs Total Revenue).</li>
+                        <li><b>Histograms:</b> For showing the distribution and density of a single variable (e.g., creating buckets of User Ages to see where the bulk of your users sit).</li>
+                    </ul>
+                    <h3>Seaborn's Superpower: Heatmaps</h3>
+                    <p>When running machine learning or deep analysis, you need to know which variables are mathematically correlated. A Correlation Matrix calculates this, and a Seaborn Heatmap visualizes it instantly with color gradients, instantly revealing hidden relationships (e.g., noticing that 'Rainy Weather' highly correlates with 'Uber Surge Pricing').</p>
+                    ${generateCodeBox('Seaborn Scatter & Regression', 'import seaborn as sns\nimport matplotlib.pyplot as plt\n\n# Set professional theme\nsns.set_theme(style="whitegrid")\n\n# Create a scatter plot with a built-in linear regression trend line\nsns.regplot(data=df, x="ad_spend", y="revenue", scatter_kws={"alpha":0.5})\n\nplt.title("Impact of Ad Spend on Revenue")\nplt.xlabel("Ad Spend ($)")\nplt.ylabel("Revenue ($)")\nplt.show()')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> 1,000 எண்கள் உள்ள அட்டவணையைப் பார்த்தால் யாருக்கும் புரியாது. அதையே சிவப்பு நிறத்தில் ஒரு வரைபடமாக (Chart) காட்டினால் உடனே புரியும். வரைபடம் என்பது கணிதத்திற்கும் மனித மனதிற்கும் இடையிலான பாலமாகும்.</div>
+                    <p>Tableau போன்ற கருவிகள் டேஷ்போர்டுகளுக்குச் சிறந்தவை என்றாலும், பைதான் மூலம் துல்லியமான மற்றும் புள்ளிவிவர அடிப்படையிலான வரைபடங்களை உருவாக்கலாம். இதற்கு <b>Matplotlib</b> (அடிப்படை) மற்றும் <b>Seaborn</b> (அழகான புள்ளிவிவரக் கருவி) ஆகிய இரண்டு லைப்ரரிகள் பயன்படுகின்றன.</p>
+                    <h3>சரியான வரைபடத்தைத் தேர்ந்தெடுத்தல்</h3>
+                    <ul>
+                        <li><b>Line Charts:</b> காலப்போக்கில் ஏற்படும் மாற்றங்களைக் (Trends) காட்ட மட்டுமே பயன்படும்.</li>
+                        <li><b>Bar Charts:</b> வெவ்வேறு பிரிவுகளை ஒப்பிட (எ.கா: மண்டலம் வாரியாக விற்பனை).</li>
+                        <li><b>Scatter Plots:</b> இரண்டு எண்களுக்கு இடையிலான தொடர்பைக் காட்ட (எ.கா: விளம்பரச் செலவுக்கும் விற்பனைக்கும் உள்ள தொடர்பு).</li>
+                        <li><b>Histograms:</b> ஒரு குறிப்பிட்ட டேட்டா எவ்வாறு பரவியுள்ளது என்பதைக் காட்ட (எ.கா: வாடிக்கையாளர்களின் வயதுப் பரவல்).</li>
+                    </ul>
+                    <h3>Seaborn Heatmaps (வெப்பப் படங்கள்)</h3>
+                    <p>எந்தெந்தத் தரவுகள் ஒன்றுக்கொன்று தொடர்புடையவை (Correlated) என்பதைக் கண்டறிய Correlation Matrix பயன்படுகிறது. இதை Seaborn Heatmap மூலம் வண்ணங்களாகக் காட்டினால், மறைந்திருக்கும் தொடர்புகளை (எ.கா: 'மழை'க்கும் 'ஊபர் கட்டணம்' அதிகரிப்பதற்கும் உள்ள தொடர்பு) எளிதாகக் கண்டறியலாம்.</p>
+                    ${generateCodeBox('Seaborn Scatter & Regression', 'import seaborn as sns\nimport matplotlib.pyplot as plt\n\nsns.set_theme(style="whitegrid")\n\n# விளம்பரச் செலவுக்கும் வருமானத்திற்கும் உள்ள தொடர்பைக் காட்டும் Scatter Plot\nsns.regplot(data=df, x="ad_spend", y="revenue", scatter_kws={"alpha":0.5})\n\nplt.title("விளம்பரச் செலவு vs வருமானம்")\nplt.show()')}`
+            },
+            { 
+                id: 20, icon: "🏗️", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+                title_en: "20. BI Architecture & Relational Data Modeling", title_ta: "20. BI மாடலிங் (Star Schema)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A Star Schema puts the 'Fact' table (metrics like Sales and Quantity) in the center like a sun. It connects to 'Dimension' tables (context like Time, Product details, Store location) orbiting around it like planets. This makes querying lighting fast.</div>
+                    <p>Before you drag and drop charts in Tableau, Power BI, or Looker, you must build the underlying Data Model. If your model is a mess of tangled relationships, your dashboard will be incredibly slow and show inaccurate numbers.</p>
+                    <h3>Dimensional Modeling</h3>
+                    <p>The industry standard for Business Intelligence (BI) architecture is the <b>Star Schema</b>.</p>
+                    <ul>
+                        <li><b>Fact Tables:</b> These sit in the center. They contain the quantitative measurements (the numbers) of a business event. Examples: Order Amount, Discount Applied, Units Sold. They also contain the Foreign Keys to connect to Dimension tables.</li>
+                        <li><b>Dimension Tables:</b> These orbit the Fact table. They contain the descriptive attributes (the text) that give context to the numbers. Examples: Customer Name, Product Category, Store Region, Date hierarchies.</li>
+                    </ul>
+                    <h3>Cardinality & Cross-Filtering</h3>
+                    <p>When connecting tables in Power BI, you must define the cardinality. Most relationships should be <b>One-to-Many (1:*)</b>. One unique customer in the Dimension table can have Many orders in the Fact table. The cross-filter direction should almost always flow <i>from</i> the Dimension (the filter) <i>to</i> the Fact (the numbers). Bi-directional filters often cause massive calculation errors and should be avoided.</p>
+                    ${generateCodeBox('Data Modeling Best Practices', 'Rule 1: Never put descriptive text (like Product Category) directly in the Fact table. It wastes space. Use an Integer ID and link it to a Dimension table.\nRule 2: Always create a dedicated Calendar/Date Dimension table to handle complex time intelligence (YTD, MoM) easily in BI tools.\nRule 3: Keep it a Star. Avoid Snowflake schemas (Dimensions attached to other Dimensions) unless absolutely necessary, as they slow down rendering.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> Star Schema என்பது மையத்தில் 'Fact' டேபிளையும் (விற்பனை எண்கள்), அதைச் சுற்றி 'Dimension' டேபிள்களையும் (நேரம், பொருள், கடை விவரங்கள்) சூரியனையும் கோள்களையும் போல ஒரு நட்சத்திர வடிவில் அமைப்பதாகும். இது டேஷ்போர்டை வேகமாக இயங்கச் செய்யும்.</div>
+                    <p>Tableau அல்லது Power BI-இல் வரைபடங்களை உருவாக்கும் முன், தரவுகளுக்கு இடையிலான உறவை (Data Model) சரியாக அமைக்க வேண்டும். கட்டமைப்பு தவறாக இருந்தால், டேஷ்போர்டு மெதுவாக வேலை செய்யும், எண்கள் தவறாகக் காட்டும்.</p>
+                    <h3>பரிமாண மாடலிங் (Dimensional Modeling)</h3>
+                    <p>BI கட்டமைப்பிற்கான உலகளாவிய தரநிலை <b>Star Schema</b> ஆகும்.</p>
+                    <ul>
+                        <li><b>Fact டேபிள்கள்:</b> இவை மையத்தில் இருக்கும். இவை வணிக நிகழ்வின் அளவீடுகளைக் (எண்கள்) கொண்டிருக்கும். எ.கா: விற்பனைத் தொகை, விற்கப்பட்ட அளவு.</li>
+                        <li><b>Dimension டேபிள்கள்:</b> இவை எண்களுக்கான விளக்கங்களைக் (உரை) கொண்டிருக்கும். எ.கா: வாடிக்கையாளர் பெயர், பொருளின் வகை, இருப்பிடம்.</li>
+                    </ul>
+                    <h3>உறவுகள் (Relationships / Cardinality)</h3>
+                    <p>டேபிள்களை இணைக்கும்போது உறவை வரையறுக்க வேண்டும். பெரும்பாலும் <b>One-to-Many (1:*)</b> உறவே சரியானதாகும். அதாவது Dimension டேபிளில் உள்ள ஒரு (One) வாடிக்கையாளர், Fact டேபிளில் பல (Many) ஆர்டர்களைச் செய்திருக்கலாம். ஃபில்டர்கள் எப்போதும் Dimension-லிருந்து Fact-ஐ நோக்கியே பாய வேண்டும்.</p>
+                    ${generateCodeBox('Data Modeling Best Practices', 'விதி 1: பொருளின் பெயர் போன்ற உரைகளை Fact டேபிளில் நேரடியாக வைக்க வேண்டாம். அதற்குப் பதிலாக ஒரு ID-ஐ வைத்து Dimension டேபிளுடன் இணைக்கவும்.\nவிதி 2: கால அடிப்படையிலான கணக்கீடுகளுக்கு (YTD, MoM) எப்போதுமே தனி Calendar டேபிளை உருவாக்கவும்.\nவிதி 3: Star Schema-வையே பின்பற்றவும். Snowflake Schema-வைத் தவிர்க்கவும்.')}`
+            },
+            { 
+                id: 21, icon: "🖥️", img: "https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&q=80",
+                title_en: "21. Executive Dashboard Design & UX Frameworks", title_ta: "21. டேஷ்போர்டு டிசைன் (Dashboard UX)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A dashboard is exactly like a car's dashboard speedometer. It should not take 5 minutes of intense reading to figure out how fast you are going. It must be instantly scannable, prioritizing the most critical information at a glance.</div>
+                    <p>An analyst can write the most brilliant SQL and Python code in the world, but if the final dashboard is cluttered and confusing, the stakeholders will ignore it. <b>Dashboard UI/UX</b> is a critical skillset.</p>
+                    <h3>The F-Pattern and Visual Hierarchy</h3>
+                    <p>In Western cultures, human eyes scan screens in an 'F' pattern (Top-Left, across, then down). Therefore, your real estate is strictly prioritized:</p>
+                    <ul>
+                        <li><b>Top-Left to Top-Right:</b> High-level BANs (Big A** Numbers). Total Revenue, Total Users, YTD Growth.</li>
+                        <li><b>Middle Section:</b> Trend lines and primary charts answering the "Why" behind the BANs.</li>
+                        <li><b>Bottom Section:</b> Granular, row-level data tables for users who want to export or dig deep.</li>
+                    </ul>
+                    <h3>Cognitive Load & Chart Crimes</h3>
+                    <p>Avoid "Chart Crimes". Never use a 3D Pie Chart (humans cannot accurately judge 3D volume on a 2D screen, distorting the data). If you have more than 3 categories, use a Bar Chart instead of a Pie Chart.</p>
+                    <p>Remove chart junk: Gridlines, excessive borders, and heavy axis labels create cognitive load. Maximize the "Data-to-Ink ratio" (Edward Tufte's principle: use ink only to display data, erase everything else).</p>
+                    ${generateCodeBox('Dashboard UX Checklist', '1. The 5-Second Rule: Can a user understand the core message in 5 seconds?\n2. Color Consistency: Does Red ALWAYS mean bad? Don\'t use Red for "Company A" in one chart and Red for "Losses" in another.\n3. Alignment: Are charts aligned to a strict grid? Misalignment feels unprofessional.\n4. Interactivity: Are global date/region filters placed intuitively at the top/side?')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> டேஷ்போர்டு என்பது காரின் ஸ்பீடோமீட்டர் போன்றது. நீங்கள் எவ்வளவு வேகத்தில் செல்கிறீர்கள் என்பதைப் புரிந்துகொள்ள 5 நிமிடம் ஆகக் கூடாது. பார்த்த உடனே முக்கியத் தகவல்கள் புரிய வேண்டும்.</div>
+                    <p>ஒரு அனலிஸ்ட் எவ்வளவு சிறந்த குறியீடுகளை எழுதினாலும், இறுதி டேஷ்போர்டு குழப்பமாக இருந்தால் அது தோல்வியே. <b>டேஷ்போர்டு டிசைன் (UI/UX)</b> மிக முக்கியமான திறனாகும்.</p>
+                    <h3>F-வடிவ பார்வை (Visual Hierarchy)</h3>
+                    <p>மனிதக் கண்கள் திரையை 'F' வடிவத்தில்தான் (மேல்-இடது, பிறகு வலது, பிறகு கீழ்) ஸ்கேன் செய்யும். எனவே, தகவல்களை அதற்கேற்ப அடுக்க வேண்டும்:</p>
+                    <ul>
+                        <li><b>மேல்பகுதி (Top):</b> மிக முக்கியமான எண்கள் (BANs). மொத்த வருமானம், மொத்தப் பயனர்கள்.</li>
+                        <li><b>நடுப்பகுதி (Middle):</b> எண்களுக்கான காரணத்தை விளக்கும் முக்கிய வரைபடங்கள் (Trends).</li>
+                        <li><b>கீழ்ப்பகுதி (Bottom):</b> விரிவான தரவுகள் அடங்கிய அட்டவணைகள் (Tables).</li>
+                    </ul>
+                    <h3>தவிர்க்க வேண்டிய தவறுகள் (Chart Crimes)</h3>
+                    <p>3D Pie Chart-களைப் பயன்படுத்த வேண்டாம் (மனிதக் கண்கள் 3D அளவுகளைச் சரியாகக் கணிக்காது). 3-க்கும் மேற்பட்ட பிரிவுகள் இருந்தால் Bar Chart-ஐப் பயன்படுத்தவும்.</p>
+                    <p>தேவையற்ற கோடுகள் (Gridlines), அதிகப்படியான வண்ணங்களைத் தவிர்க்கவும். தரவுகளைக் காட்ட மட்டுமே நிறங்களைப் பயன்படுத்தவும் (Data-to-Ink ratio).</p>
+                    ${generateCodeBox('Dashboard UX Checklist', '1. 5-நொடி விதி: பார்த்த 5 நொடிகளில் டேஷ்போர்டின் நோக்கம் புரிகிறதா?\n2. நிற நிலைத்தன்மை: சிவப்பு என்றால் எப்போதுமே ஆபத்து/நஷ்டம் என்று மட்டும் இருக்க வேண்டும். நிறங்களை மாற்றக் கூடாது.\n3. சீரமைப்பு (Alignment): வரைபடங்கள் கட்டமைப்புடன் (grid) நேராக உள்ளதா?\n4. ஃபில்டர்கள்: தேதி/இடத்தைத் தேர்ந்தெடுக்கும் ஃபில்டர்கள் எளிதாக அணுகும்படி உள்ளதா?')}`
+            },
+            { 
+                id: 22, icon: "🗣️", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+                title_en: "22. Analytics Storytelling & Executive Reporting", title_ta: "22. டேட்டா மூலம் கதை சொல்லுதல்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Don't tell your boss "Conversion dropped 5%". That's just a raw fact. Tell them "Because our new checkout page takes 2 seconds longer to load on iPhones, we lost $50,000 this week. Here is how we fix it." That is Data Storytelling.</div>
+                    <p>The biggest gap between Junior and Senior analysts is communication. Executives do not care about how cool your Python script is or how complex your SQL join was. They care about business impact. <b>Data Storytelling</b> bridges the gap between raw analysis and strategic action.</p>
+                    <h3>The Insight Framework</h3>
+                    <p>Every presentation or report must follow a narrative arc, often replacing the "What" with the "So What?"</p>
+                    <ol>
+                        <li><b>The Context (The Hook):</b> Establish the baseline. "Historically, mobile sales account for 60% of our revenue."</li>
+                        <li><b>The Problem (The Conflict):</b> Introduce the anomaly your data found. "However, last week, mobile sales dropped by 15%."</li>
+                        <li><b>The Root Cause (The Climax):</b> Reveal the 'Why' using your deep dive analysis. "Our EDA showed this drop was isolated entirely to iOS users upgrading to the new app version, which has a bug."</li>
+                        <li><b>The Action (The Resolution):</b> Provide the recommendation. "We need the dev team to patch the iOS cart API immediately to recover the $50k weekly loss."</li>
+                    </ol>
+                    <h3>Slide Deck Principles</h3>
+                    <p>When presenting data, use declarative slide titles. Instead of a title saying "Q3 Revenue Stats", the title should be the conclusion itself: "Q3 Revenue Fell 10% Due to Supply Chain Delays in August". Force the audience to read the insight before they even look at the chart.</p>
+                    ${generateCodeBox('The "So What?" Rule', 'Amateur Insight: "Bounce rate on the landing page is 75%."\n\nProfessional Insight: "75% of users are leaving the landing page without clicking. Because our CAC (Cost to Acquire) is $10, we are burning $7.50 for every $10 spent on ads. We must redesign the hero banner to match the ad copy."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> முதலாளியிடம் "விற்பனை 5% குறைந்தது" என்று சொல்லாதீர்கள். "புதிய ஆப் அப்டேட்டிற்குப் பிறகு ஐபோன்களில் வேகம் குறைந்ததால், இந்த வாரம் ₹5 லட்சம் நஷ்டம். இதை இப்படிச் சரிசெய்யலாம்" என்று தீர்வாகக் கூறுங்கள். இதுவே Data Storytelling.</div>
+                    <p>ஜூனியர் மற்றும் சீனியர் அனலிஸ்ட்களுக்கு இடையிலான மிகப்பெரிய வேறுபாடு அவர்களின் தகவல் தொடர்புத் திறன்தான். நீங்கள் எவ்வளவு சிறந்த SQL எழுதினீர்கள் என்பது மேலாளர்களுக்குத் தேவையில்லை. பிசினஸில் என்ன தாக்கம் ஏற்பட்டது என்பதே அவர்களுக்குத் தேவை. <b>Data Storytelling</b> என்பது வெறும் எண்களைக் கதையாகவும் தீர்வாகவும் மாற்றுவதாகும்.</p>
+                    <h3>திசை காட்டும் கட்டமைப்பு (Insight Framework)</h3>
+                    <p>ஒவ்வொரு ரிப்போர்ட்டும் "என்ன நடந்தது" என்பதை விட "அதனால் என்ன" (So What?) என்ற கேள்வியைப் பூர்த்தி செய்ய வேண்டும்.</p>
+                    <ol>
+                        <li><b>சூழல்:</b> "பொதுவாக மொபைல் மூலம் 60% வருமானம் வரும்."</li>
+                        <li><b>பிரச்சனை:</b> "ஆனால், கடந்த வாரம் அது 15% குறைந்தது."</li>
+                        <li><b>காரணம் (ஆய்வு):</b> "புதிய ஐஓஎஸ் (iOS) அப்டேட்டில் உள்ள சாஃப்ட்வேர் பிழையே (bug) இதற்குக் காரணம்."</li>
+                        <li><b>தீர்வு:</b> "அந்தப் பிழையை உடனே சரிசெய்தால் நஷ்டத்தைத் தடுக்கலாம்."</li>
+                    </ol>
+                    <h3>ரிப்போர்ட் விதிகள்</h3>
+                    <p>ஸ்லைடுகளில் (Slides) "Q3 வருமான அறிக்கை" என்று தலைப்பு வைப்பதைத் தவிர்க்கவும். முடிவையே தலைப்பாக வையுங்கள்: "ஆகஸ்ட் மாத தாமதத்தால் Q3 வருமானம் 10% குறைந்தது". இது வரைபடத்தைப் பார்க்கும் முன்பே செய்தியைப் புரிய வைக்கும்.</p>
+                    ${generateCodeBox('The "So What?" Rule', 'சாதாரண ரிப்போர்ட்: "இணையதளத்தை விட்டு வெளியேறுவோர் விகிதம் (Bounce rate) 75% ஆக உள்ளது."\n\nசிறந்த ரிப்போர்ட்: "75% பேர் இணையதளத்தில் எதையும் வாங்காமல் வெளியேறுகிறார்கள். ஒருவரை உள்ளே கொண்டுவர ₹100 செலவாகிறது என்றால், அதில் ₹75 வீணாகிறது. முதல் பக்க வடிவமைப்பை நாம் உடனே மாற்ற வேண்டும்."')}`
+            },
+            { 
+                id: 23, icon: "📉", img: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80",
+                title_en: "23. Direct Business Metrics: Cohorts & Churn Tracking", title_ta: "23. பிசினஸ் மெட்ரிக்ஸ் (CAC & LTV)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A Cohort is just a group of people who share a common characteristic, like a graduating high school class (The Class of '99). "Users who signed up in January" is a cohort. We track them over time to see when they eventually stop using the app (Churn).</div>
+                    <p>Data analysts must speak the language of business. The two most critical metrics in modern SaaS (Software as a Service) and E-commerce companies are <b>CAC</b> and <b>LTV</b>. If you understand these, you understand profitability.</p>
+                    <h3>CAC and LTV</h3>
+                    <ul>
+                        <li><b>Customer Acquisition Cost (CAC):</b> How much marketing money you spent to get one new customer. (Total Marketing Spend / New Customers).</li>
+                        <li><b>Lifetime Value (LTV):</b> The total net profit a company makes from a customer over their entire relationship.</li>
+                    </ul>
+                    <p><b>The Golden Ratio:</b> A healthy business needs an LTV to CAC ratio of at least 3:1. (If you spend $10 to get a user, they must spend at least $30 over their lifetime). If CAC > LTV, the company is burning money and will go bankrupt.</p>
+                    <h3>Cohort Analysis & Churn</h3>
+                    <p><b>Churn Rate</b> is the percentage of users who stop paying/using your service. To analyze this deeply, we build a <b>Retention Cohort Grid</b>. Instead of looking at all users globally, we group them by the month they joined (the Cohort). We then track them month by month.</p>
+                    <p>If the January Cohort has 80% retention in Month 1, but crashes to 10% in Month 2, it tells us the onboarding experience is great, but the core product lacks long-term value (stickiness).</p>
+                    ${generatePromptAndOutput('Business Metric Formulas', 'CAC = (Total Sales & Marketing Expenses) / (Number of New Customers Acquired)\n\nLTV = Average Order Value (AOV) x Purchase Frequency x Customer Lifespan\n\nChurn Rate = (Lost Customers during Period) / (Total Customers at Start of Period) * 100', 'Example:\nStart Month with 1000 users. Lose 50 users.\nChurn Rate = (50 / 1000) * 100 = 5% Churn.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> கோஹார்ட் (Cohort) என்பது ஒரே பண்பைப் பகிர்ந்துகொள்ளும் ஒரு குழு. "ஜனவரியில் ஆப்பை டவுன்லோட் செய்தவர்கள்" ஒரு கோஹார்ட். இவர்கள் எப்போது ஆப்பை நீக்குகிறார்கள் (Churn) என்பதைக் காலப்போக்கில் கண்காணிப்பதே கோஹார்ட் அனாலிசிஸ்.</div>
+                    <p>டேட்டா அனலிஸ்ட்கள் பிசினஸ் மொழியைப் பேச வேண்டும். நவீன மென்பொருள் மற்றும் ஈ-காமர்ஸ் நிறுவனங்களில் <b>CAC</b> மற்றும் <b>LTV</b> ஆகியவையே லாபத்தைத் தீர்மானிக்கும் மிக முக்கிய அளவீடுகளாகும்.</p>
+                    <h3>CAC மற்றும் LTV</h3>
+                    <ul>
+                        <li><b>Customer Acquisition Cost (CAC):</b> ஒரு புதிய வாடிக்கையாளரைப் பிடிக்கச் செய்யப்படும் மார்க்கெட்டிங் செலவு.</li>
+                        <li><b>Lifetime Value (LTV):</b> ஒரு வாடிக்கையாளர் தன் வாழ்நாளில் நிறுவனத்திற்குக் கொடுக்கும் மொத்த லாபம்.</li>
+                    </ul>
+                    <p><b>தங்க விதி:</b> LTV மற்றும் CAC விகிதம் 3:1 ஆக இருக்க வேண்டும். (வாடிக்கையாளரைப் பிடிக்க ₹100 செலவானால், அவரிடமிருந்து ₹300 லாபம் வர வேண்டும்). செலவு அதிகமாக இருந்தால் நிறுவனம் திவாலாகும்.</p>
+                    <h3>கோஹார்ட் அனாலிசிஸ் & வாடிக்கையாளர் இழப்பு (Churn)</h3>
+                    <p><b>Churn Rate</b> என்பது சேவையை விட்டு விலகும் வாடிக்கையாளர்களின் சதவீதம். இதை ஆராய <b>Retention Cohort Grid</b> பயன்படுகிறது. அனைத்துப் பயனர்களையும் மொத்தமாகப் பார்க்காமல், குறிப்பிட்ட மாதத்தில் வந்தவர்களைத் தனியாகப் பிரித்து (Cohort) கண்காணிக்க வேண்டும்.</p>
+                    <p>ஜனவரியில் வந்தவர்கள் முதல் மாதம் ஆப்பைப் பயன்படுத்திவிட்டு, 2-வது மாதமே 90% பேர் ஆப்பை நீக்கிவிட்டால், உங்கள் ஆப்பில் நீண்டகாலப் பயன் இல்லை என்பதை இது உணர்த்தும்.</p>
+                    ${generatePromptAndOutput('Business Metric Formulas', 'CAC = மொத்த மார்க்கெட்டிங் செலவு / புதிய வாடிக்கையாளர்களின் எண்ணிக்கை\n\nLTV = ஒரு ஆர்டரின் சராசரி லாபம் x எத்தனை முறை வாங்குகிறார் x வாடிக்கையாளரின் வாழ்நாள்\n\nChurn Rate = (விலகிய வாடிக்கையாளர்கள் / தொடக்கத்தில் இருந்த மொத்த வாடிக்கையாளர்கள்) * 100', 'உதாரணம்:\nமாதத் தொடக்கத்தில் 1000 பயனர்கள். அதில் 50 பேர் விலகினர்.\nChurn Rate = (50 / 1000) * 100 = 5% இழப்பு.')}`
+            },
+            { 
+                id: 24, icon: "🧪", img: "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=800&q=80",
+                title_en: "24. Enterprise A/B Testing & Conversion Experimentation", title_ta: "24. A/B டெஸ்டிங் (A/B Testing)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> You show a Red Checkout Button to 50% of your users (Group A) and a Green Checkout Button to the other 50% (Group B). Whichever group buys more items reveals the winner. That is A/B testing in its simplest form.</div>
+                    <p>Companies like Google and Amazon don't guess what their users want; they test it. <b>A/B Testing (Split Testing)</b> is the gold standard for optimizing conversion rates based on empirical data rather than executive opinions.</p>
+                    <h3>The Rules of Experimentation</h3>
+                    <p>Running an A/B test is highly scientific. If done incorrectly, you will make false assumptions that damage the business.</p>
+                    <ul>
+                        <li><b>Isolate Variables:</b> You can only test ONE thing at a time. If you change the button color AND the headline text, you won't know which change caused the increase in sales.</li>
+                        <li><b>Sample Size:</b> You must calculate the required sample size <i>before</i> running the test. If you stop the test after only 10 clicks just because Green is winning, that is a statistical illusion (Variance). You must wait until statistical significance is reached.</li>
+                        <li><b>Full Week Cycles:</b> User behavior changes on weekends. Always run tests for full 7-day increments (e.g., 7, 14, or 21 days) to capture the complete weekly lifecycle.</li>
+                    </ul>
+                    <h3>Validating with Hypothesis Testing</h3>
+                    <p>This brings us back to Module 4. Once the A/B test concludes, you use a T-test to calculate the p-value. If the Green button generated 2% more sales, but the p-value is 0.40, the test failed. The 2% lift was just random noise. If the p-value is 0.01, the Green button is statistically proven superior.</p>
+                    ${generateCodeBox('A/B Testing Checklist', '1. Define the Metric: What exactly are we measuring? (e.g., Click-Through Rate).\n2. Calculate Sample Size: Use an online calculator based on your current baseline traffic.\n3. Split Traffic: Use a tool like Optimizely or Google Optimize to split traffic 50/50 randomly.\n4. Run the Test: Do not peek early! Let it run the full required duration.\n5. Analyze: Run a statistical significance test (Z-test for proportions).')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> 50% பயனர்களுக்குச் சிவப்பு பட்டனையும் (Group A), மீதமுள்ள 50% பயனர்களுக்குப் பச்சை பட்டனையும் (Group B) காட்டுவது. எந்தக் குழுவில் அதிக விற்பனை நடக்கிறதோ அந்தப் பட்டனே சிறந்தது. இதுவே A/B Testing.</div>
+                    <p>கூகுள் மற்றும் அமேசான் போன்ற நிறுவனங்கள் பயனர்களுக்கு என்ன பிடிக்கும் என்று யூகிப்பதில்லை; அவர்கள் சோதித்துப் பார்ப்பார்கள். <b>A/B Testing (Split Testing)</b> என்பது மேலாளர்களின் யூகங்களுக்குப் பதிலாக, தரவுகளின் அடிப்படையில் முடிவெடுக்கும் மிகச் சிறந்த முறையாகும்.</p>
+                    <h3>சோதனைக்கான முக்கிய விதிகள்</h3>
+                    <p>A/B Testing என்பது அறிவியல்பூர்வமானது. இதைத் தவறாகச் செய்தால் நிறுவனத்திற்கு நஷ்டம் ஏற்படும்.</p>
+                    <ul>
+                        <li><b>ஒரு நேரத்தில் ஒரு மாற்றம்:</b> பட்டன் நிறத்தையும் மாற்றி, தலைப்பையும் மாற்றினால், எதனால் விற்பனை அதிகரித்தது என்று கண்டுபிடிக்க முடியாது. ஒரு மாற்றத்தை மட்டுமே சோதிக்க வேண்டும்.</li>
+                        <li><b>பயனர்களின் எண்ணிக்கை (Sample Size):</b> சோதனையைத் தொடங்கும் முன்பே எத்தனை பேரிடம் இதைக் காட்ட வேண்டும் என்பதைக் கணக்கிட வேண்டும். 10 பேரில் 6 பேர் பச்சை பட்டனை அழுத்தியவுடன் சோதனையை நிறுத்தக் கூடாது.</li>
+                        <li><b>முழு வாரச் சுழற்சி:</b> வார இறுதி நாட்களில் மக்களின் மனநிலை மாறும். எனவே சோதனையை முழுமையாக 7, 14, அல்லது 21 நாட்கள் தொடர்ந்து நடத்த வேண்டும்.</li>
+                    </ul>
+                    <h3>முடிவுகளை உறுதி செய்தல்</h3>
+                    <p>சோதனை முடிந்ததும், 4-வது தொகுதியில் படித்த Hypothesis Testing-ஐப் பயன்படுத்த வேண்டும். பச்சை பட்டன் 2% அதிக விற்பனையைத் தந்தாலும், p-value 0.05-ஐ விட அதிகமாக இருந்தால், அந்த வெற்றி தற்செயலானது எனப் பொருள்.</p>
+                    ${generateCodeBox('A/B Testing Checklist', '1. இலக்கை வரையறு: எதை அளக்கப் போகிறோம்? (எ.கா: Click-Through Rate).\n2. Sample Size: தற்போதைய ட்ராஃபிக்கை வைத்து எத்தனை பேரிடம் சோதிக்க வேண்டும் எனக் கணக்கிடு.\n3. பிரித்தல்: பயனர்களைச் சமமாக (50/50) பிரிக்கவும்.\n4. சோதனை: முன்கூட்டியே முடிவெடுக்காமல் முழு நாட்களும் சோதனையைத் தொடரவும்.\n5. பகுப்பாய்வு: கணிதரீதியாக p-value மூலம் முடிவை உறுதி செய்யவும்.')}`
+            },
+            { 
+                id: 25, icon: "🚀", img: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=80",
+                title_en: "25. Applied Predictive Analytics & Portfolio Building", title_ta: "25. முன்கணிப்பு & போர்ட்ஃபோலியோ உருவாக்கம்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If you notice that for every $100 you spend on ads, sales go up by exactly $300, you can draw a straight line on a graph. Linear regression uses that historical line to predict the future: "If we spend $500 next month, we will make $1,500."</div>
+                    <p>We conclude the masterclass with the bridge between Data Analytics and Data Science: <b>Predictive Analytics</b>. While normal analytics looks at the past (What happened?), predictive analytics looks at the future (What will happen?).</p>
+                    <h3>Linear Regression</h3>
+                    <p>The foundation of predictive modeling is Linear Regression. It mathematically determines the relationship between an Independent Variable (like Ad Spend) and a Dependent Variable (like Revenue). By fitting a "line of best fit" through historical scatter plot data, you can plug in future Ad Spend numbers to predict future Revenue.</p>
+                    <p>In Python, this is executed using the <code>Scikit-Learn</code> library. You split your data into "Training Data" (to teach the math) and "Testing Data" (to see if the math accurately predicts outcomes it hasn't seen yet).</p>
+                    <h3>Building Your Professional Portfolio</h3>
+                    <p>To land a job in Data Analytics, a certificate isn't enough. You must build a public portfolio (on GitHub or personal website) demonstrating your skills. A strong portfolio requires 3 specific projects:</p>
+                    <ol>
+                        <li><b>The Data Cleaning Project (Python/Pandas):</b> Find a heavily corrupted, messy dataset on Kaggle. Document step-by-step how you cleaned the strings, handled nulls, and merged tables.</li>
+                        <li><b>The Complex Query Project (SQL):</b> Showcase your ability to use CTEs, Window Functions, and Joins to answer complex business questions from a relational database.</li>
+                        <li><b>The Executive Dashboard (Tableau/PowerBI):</b> Build a visually stunning, uncluttered dashboard following the UX principles from Module 21. Deploy it publicly using Tableau Public.</li>
+                    </ol>
+                    <p>Always frame your portfolio projects around <b>Business Value</b>. Don't just say "I built a chart." Say "I built a dashboard that identified a 15% churn risk, leading to a targeted retention campaign."</p>
+                    ${generateCodeBox('Linear Regression Core Formula', 'Mathematical Model:\nY = mX + b\n\nY = The Dependent Variable (e.g., Predicted Sales)\nX = The Independent Variable (e.g., Ad Spend)\nm = The Slope (The multiplier effect)\nb = The Y-Intercept (Baseline sales with 0 ad spend)')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> விளம்பரத்திற்கு ₹100 செலவழித்தால் ₹300 லாபம் கிடைக்கிறது என்றால், இதை வைத்து ஒரு நேர்கோடு வரையலாம். இதை வைத்து எதிர்காலத்தைக் கணிக்கலாம்: "அடுத்த மாதம் ₹500 செலவழித்தால் ₹1,500 லாபம் கிடைக்கும்". இதுவே Linear Regression.</div>
+                    <p>கடந்த காலத்தை ஆராய்வது அனலிடிக்ஸ் (என்ன நடந்தது?). எதிர்காலத்தைக் கணிப்பது டேட்டா சயின்ஸ் (என்ன நடக்கும்?). இந்த மாஸ்டர்கிளாஸின் இறுதிப் பகுதியாக இந்த <b>முன்கணிப்பு (Predictive Analytics)</b> அமைகிறது.</p>
+                    <h3>Linear Regression (நேரியல் பின்னடைவு)</h3>
+                    <p>கடந்த காலத் தரவுகளைப் பயன்படுத்தி எதிர்காலத்தைக் கணிக்கும் அடிப்படை மாடல் இதுவாகும். விளம்பரச் செலவுக்கும் (Independent Variable) விற்பனைக்கும் (Dependent Variable) உள்ள உறவைக் கணித பூர்வமாக இது கணக்கிடுகிறது.</p>
+                    <p>பைதானில் <code>Scikit-Learn</code> என்ற லைப்ரரியைப் பயன்படுத்தி இதை உருவாக்கலாம். தரவுகளை "Training Data" (பயிற்றுவிப்பது) மற்றும் "Testing Data" (சோதிப்பது) என இரண்டாகப் பிரித்து இந்த மாடல் உருவாக்கப்படும்.</p>
+                    <h3>உங்கள் போர்ட்ஃபோலியோவை உருவாக்குதல் (Portfolio)</h3>
+                    <p>டேட்டா அனலிடிக்ஸ் துறையில் வேலை கிடைக்க சான்றிதழ் மட்டும் போதாது. உங்கள் திறமையைக் காட்டும் GitHub போர்ட்ஃபோலியோ அவசியம். அதில் 3 முக்கிய ப்ராஜெக்ட்கள் இருக்க வேண்டும்:</p>
+                    <ol>
+                        <li><b>சுத்திகரிப்பு ப்ராஜெக்ட் (Pandas):</b> மிகவும் குழப்பமான தரவுகளை இணையத்திலிருந்து எடுத்து, அதை எப்படிச் சுத்தப்படுத்தினீர்கள் (Data Cleaning) என்பதை விளக்க வேண்டும்.</li>
+                        <li><b>சிக்கலான SQL குவரி:</b> CTE மற்றும் Window Functions-ஐப் பயன்படுத்தி கடினமான பிசினஸ் கேள்விகளுக்குப் பதில் காணும் SQL ப்ராஜெக்ட்.</li>
+                        <li><b>டேஷ்போர்டு (Tableau/PowerBI):</b> சிறந்த UI/UX விதிகளுடன் உருவாக்கப்பட்ட ஒரு தொழில்முறை டேஷ்போர்டு.</li>
+                    </ol>
+                    <p>எப்போதுமே உங்கள் ப்ராஜெக்ட்களை வெறும் தொழில்நுட்பமாக இல்லாமல், <b>பிசினஸ் மதிப்பாக (Business Value)</b> விவரிக்கவும்.</p>
+                    ${generateCodeBox('Linear Regression Core Formula', 'கணித சூத்திரம்:\nY = mX + b\n\nY = கணிக்கப்படும் விடை (எ.கா: விற்பனை)\nX = நாம் கொடுக்கும் உள்ளீடு (எ.கா: விளம்பரச் செலவு)\nm = தாக்கம் (Multiplier effect)\nb = அடிப்படை மதிப்பு (விளம்பரமே இல்லாவிட்டாலும் நடக்கும் விற்பனை)')}`
+            }
+        ];
+
+        // ==========================================
+        // 10-QUESTION QUIZ (DATA ANALYTICS)
+        // ==========================================
+        const quizData = [
+            { q: "Which SQL clause is executed FIRST by the database engine?", opts: ["SELECT", "WHERE", "FROM", "GROUP BY"], ans: 2 },
+            { q: "What is the primary function of the SQL window function LAG()?", opts: ["To delay query execution", "To fetch data from a previous row", "To drop indexes", "To sort alphabetically"], ans: 1 },
+            { q: "In database design, a Star Schema consists of what two core table types?", opts: ["Primary and Foreign", "Fact and Dimension", "Parent and Child", "Static and Dynamic"], ans: 1 },
+            { q: "Which Python library is primarily optimized for fast vectorized numerical operations?", opts: ["Pandas", "Matplotlib", "NumPy", "Seaborn"], ans: 2 },
+            { q: "In Pandas, what is the best method to combine two DataFrames based on a shared key?", opts: ["pd.concat()", "df.append()", "pd.merge()", "df.split()"], ans: 2 },
+            { q: "What analytics error occurs when you mistakenly assume a relationship between two variables when none exists?", opts: ["Type I Error (False Positive)", "Type II Error (False Negative)", "Variance Bias", "Data Slicing"], ans: 0 },
+            { q: "If a metric dataset has a very long tail stretching out to the extreme right, it is considered:", opts: ["Normally distributed", "Negatively skewed", "Positively skewed", "Bimodal"], ans: 2 },
+            { q: "In an A/B test, what does a p-value of 0.03 generally indicate?", opts: ["The test failed", "There is a 3% probability the result was random chance", "0% statistical significance", "Sample size too small"], ans: 1 },
+            { q: "Which chart is best suited for evaluating the exact distribution frequency of a single continuous variable?", opts: ["Pie Chart", "Line Graphic", "Scatter Plot", "Histogram"], ans: 3 },
+            { q: "What metric is calculated by dividing total marketing costs by the number of new customers acquired?", opts: ["LTV", "ROI", "CAC", "Churn Rate"], ans: 2 }
+        ];
+
+        // ==========================================
+        // UI & ROUTING
+        // ==========================================
+        window.setContentLang = (lang) => {
+            window.stopTTS(); 
+            contentLang = lang;
+            document.getElementById('btn-en').className = `lang-btn ${lang === 'en' ? 'active' : ''}`;
+            document.getElementById('btn-ta').className = `lang-btn ${lang === 'ta' ? 'active' : ''}`;
+            
+            const mod = courseData.find(m => m.id === viewingModuleId);
+            const imgEl = document.getElementById('viewer-img');
+            imgEl.style.display = 'block'; 
+            imgEl.src = mod.img;
+            document.getElementById('viewer-title').innerText = lang === 'en' ? mod.title_en : mod.title_ta;
+            document.getElementById('viewer-content').innerHTML = lang === 'en' ? mod.content_en : mod.content_ta;
+        };
+
+        document.getElementById('primary-auth-btn').onclick = async () => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch(error) {
+                console.error("Login Error:", error);
+                showToast("Sign In Failed: " + error.message);
+            }
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const photoUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=random`;
+                document.getElementById('nav-profile').innerHTML = `<img src="${photoUrl}" alt="Profile" style="width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; box-shadow: var(--shadow-sm);">`;
+                document.getElementById('nav-profile').style.display = 'flex';
+                
+                try {
+                    const docSnap = await getDoc(doc(db, "users", user.uid));
+                    if (docSnap.exists()) {
+                        currentUserData = docSnap.data();
+                        
+                        if (!currentUserData.courses) currentUserData.courses = {};
+                        if (!currentUserData.courses[CURRENT_COURSE_ID]) {
+                            currentUserData.courses[CURRENT_COURSE_ID] = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
+                        }
+                        
+                        routeUser(true);
+                    } else {
+                        currentUserData = { 
+                            fullName: "",
+                            whatsappNumber: "",
+                            courses: {
+                                [CURRENT_COURSE_ID]: { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false }
+                            }
+                        };
+                        showScreen('profile-screen', true);
+                    }
+                } catch (error) {
+                    console.error("Firestore read error:", error);
+                    currentUserData = { courses: { [CURRENT_COURSE_ID]: { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false } } };
+                    showScreen('profile-screen', true);
+                }
+            } else {
+                document.getElementById('nav-profile').style.display = 'none';
+                showScreen('login-screen', true);
+            }
+        });
+
+        function routeUser(pushHistory = true) {
+            if (!currentUserData.fullName) return showScreen('profile-screen', pushHistory);
+            if (currentUserData.courses[CURRENT_COURSE_ID].paymentStatus !== 'paid') return showScreen('payment-screen', pushHistory);
+            
+            if (currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                showCertificate();
+                return showScreen('cert-screen', pushHistory);
+            }
+            
+            renderDashboard();
+            showScreen('dashboard-screen', pushHistory);
+        }
+
+        // ==========================================
+        // FORMS & PROGRESS
+        // ==========================================
+        document.getElementById('save-profile-btn').onclick = async () => {
+            const name = document.getElementById('prof-name').value;
+            const wa = document.getElementById('prof-wa').value;
+            if(!name || !wa) return showToast("Name and WhatsApp required!");
+
+            currentUserData.fullName = name;
+            currentUserData.whatsappNumber = wa;
+            
+            if (!currentUserData.courses) currentUserData.courses = {};
+            if (!currentUserData.courses[CURRENT_COURSE_ID]) {
+                currentUserData.courses[CURRENT_COURSE_ID] = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
+            }
+            
+            try {
+                await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
+            } catch(e) { console.error("Profile save error:", e); }
+            
+            routeUser(true);
+        };
+
+        document.getElementById('pay-razorpay-btn').onclick = async () => {
+            const user = auth.currentUser;
+            if (!user) return showToast("Please sign in first.");
+
+            const btn = document.getElementById('pay-razorpay-btn');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "Initializing Secure Gateway...";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('https://goolearn-payment.hf.space/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        userId: user.uid,
+                        courseId: CURRENT_COURSE_ID 
+                    })
+                });
+                
+                if (!response.ok) throw new Error("Order creation failed on backend");
+                const orderData = await response.json();
+
+                const options = {
+                    "key": "rzp_live_T1HpoAe39yK0FV", 
+                    "amount": orderData.amount, 
+                    "currency": "INR",
+                    "name": "Goorac Learn",
+                    "description": "Unlock Data Analytics Masterclass",
+                    "order_id": orderData.id, 
+                    "handler": async function (response) {
+                        showToast("Payment Successful! Unlocking curriculum...");
+                        
+                        currentUserData.courses[CURRENT_COURSE_ID].paymentStatus = 'paid';
+                        
+                        try {
+                            await setDoc(doc(db, "users", user.uid), { 
+                                courses: {
+                                    [CURRENT_COURSE_ID]: { paymentStatus: 'paid' }
+                                }
+                            }, { merge: true });
+                        } catch(e) { console.warn("Local sync skipped, relying fully on webhook."); }
+                        
+                        routeUser(true);
+                    },
+                    "prefill": {
+                        "name": currentUserData.fullName || "",
+                        "contact": currentUserData.whatsappNumber || ""
+                    },
+                    "theme": { 
+                        "color": "#2563eb" 
+                    },
+                    "modal": {
+                        "ondismiss": function(){
+                            btn.innerText = originalText;
+                            btn.disabled = false;
+                        }
+                    }
+                };
+
+                const rzp = new window.Razorpay(options);
+                
+                rzp.on('payment.failed', function (response){
+                    showToast("Payment Failed: " + response.error.description);
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                });
+                
+                rzp.open();
+
+            } catch (error) {
+                console.error("Payment initiation failed:", error);
+                showToast("Could not connect to payment gateway. Try again.");
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        };
+
+        function renderDashboard() {
+            const container = document.getElementById('module-list-container');
+            container.innerHTML = '';
+            
+            let progressMod = currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+            if(progressMod > 25) progressMod = 25;
+            const percentage = Math.round(((progressMod - 1) / 25) * 100);
+            
+            if (currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                document.getElementById('progress-bar').style.width = '100%';
+                document.getElementById('progress-text').innerText = '100% - Certified';
+            } else {
+                document.getElementById('progress-bar').style.width = percentage + '%';
+                document.getElementById('progress-text').innerText = percentage + '%';
+            }
+
+            courseData.forEach(mod => {
+                const isCompleted = mod.id < currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+                const isUnlocked = mod.id <= currentUserData.courses[CURRENT_COURSE_ID].currentModule || currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz;
+                
+                container.innerHTML += `
+                    <div class="module-item ${isUnlocked ? '' : 'locked'} ${isCompleted ? 'completed' : ''}" onclick="${isUnlocked ? `loadModule(${mod.id})` : ''}">
+                        <div class="mod-icon">${mod.icon}</div>
+                        <div class="mod-details">
+                            <div class="mod-title">${mod.title_en}</div>
+                            <div class="mod-status">${isCompleted ? '✅ Completed' : (isUnlocked ? '📖 Ready' : '🔒 Locked')}</div>
+                        </div>
+                    </div>`;
+            });
+
+            if (currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                document.getElementById('quiz-unlock-banner').style.display = 'none';
+                document.getElementById('certificate-access-banner').style.display = 'block';
+            } else if (currentUserData.courses[CURRENT_COURSE_ID].currentModule > 25) {
+                document.getElementById('quiz-unlock-banner').style.display = 'block';
+                document.getElementById('certificate-access-banner').style.display = 'none';
+            } else {
+                document.getElementById('quiz-unlock-banner').style.display = 'none';
+                document.getElementById('certificate-access-banner').style.display = 'none';
+            }
+        }
+
+        window.loadModule = (id) => {
+            viewingModuleId = id;
+            setContentLang(contentLang);
+            const btn = document.getElementById('mark-complete-btn');
+            
+            if (id === currentUserData.courses[CURRENT_COURSE_ID].currentModule && !currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                btn.style.display = 'flex';
+                btn.innerText = id === 25 ? "Finish Curriculum & Take Exam" : "Mark Completed & Next";
+                btn.onclick = async () => {
+                    window.stopTTS();
+                    viewingModuleId = currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+                    currentUserData.courses[CURRENT_COURSE_ID].currentModule += 1;
+                    
+                    renderDashboard();
+                    
+                    try {
+                        await setDoc(doc(db, "users", auth.currentUser.uid), { 
+                            courses: {
+                                [CURRENT_COURSE_ID]: { currentModule: currentUserData.courses[CURRENT_COURSE_ID].currentModule }
+                            }
+                        }, { merge: true });
+                    } catch(e) { console.error("Progress save error:", e); }
+                    
+                    showToast("Module Completed!");
+                    if (id < 25) {
+                        loadModule(id + 1); 
+                        window.scrollTo(0,0);
+                    } else {
+                        routeUser(true);
+                    }
+                };
+            } else if (id < currentUserData.courses[CURRENT_COURSE_ID].currentModule || currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                btn.style.display = 'flex';
+                btn.innerText = id === 25 ? "Back to Dashboard" : "Next Module";
+                btn.onclick = () => {
+                    window.stopTTS();
+                    if (id === 25) { 
+                        goToDashboard(); 
+                    } else { 
+                        loadModule(id + 1); 
+                        window.scrollTo(0,0); 
+                    }
+                };
+            } else { 
+                btn.style.display = 'none'; 
+            }
+            const isAlreadyViewing = document.getElementById('module-viewer-screen').classList.contains('active-screen');
+            showScreen('module-viewer-screen', !isAlreadyViewing); 
+        }
+
+        // ==========================================
+        // QUIZ & CERTIFICATE
+        // ==========================================
+        document.getElementById('start-quiz-btn').onclick = () => {
+            const qc = document.getElementById('quiz-container');
+            qc.innerHTML = quizData.map((q, i) => `
+                <div class="quiz-question">
+                    <h3>${i+1}. ${q.q}</h3>
+                    ${q.opts.map((opt, oIdx) => `
+                        <label class="quiz-option">
+                            <input type="radio" name="q${i}" value="${oIdx}">
+                            ${opt}
+                        </label>
+                    `).join('')}
+                </div>
+            `).join('');
+            showScreen('quiz-screen', true);
+        };
+
+        document.getElementById('submit-quiz-btn').onclick = async () => {
+            let score = 0;
+            quizData.forEach((q, i) => {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if(selected && parseInt(selected.value) === q.ans) score++;
+            });
+
+            if (score >= 7) {
+                currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz = true;
+                
+                try {
+                    await setDoc(doc(db, "users", auth.currentUser.uid), { 
+                        courses: {
+                            [CURRENT_COURSE_ID]: { hasPassedQuiz: true }
+                        }
+                    }, { merge: true });
+                } catch(e) { console.error("Exam save error:", e); }
+                
+                showToast("Exam Passed! Generating Certificate...");
+                setTimeout(() => routeUser(true), 1500);
+            } else {
+                showToast(`Score: ${score}/10. You need 7 to pass. Try again!`);
+            }
+        };
+
+        function showCertificate() {
+            if (currentUserData.courses[CURRENT_COURSE_ID].paymentStatus === 'paid') {
+                document.getElementById('cert-pdf-view').style.display = 'block';
+                document.getElementById('cert-name-display').innerText = currentUserData.fullName;
+                
+                const issueDate = new Date();
+                const formattedDate = issueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                document.getElementById('cert-date-display').innerText = "Issued on: " + formattedDate;
+                
+                const encodedData = encodeURIComponent(`VERIFIED CREDENTIAL\nName: ${currentUserData.fullName}\nCourse: Data Analytics Masterclass\nIssuer: Goorac Learn (Goorac Corporation)\nDate: ${formattedDate}\nStatus: VERIFIED`);
+                document.getElementById('cert-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedData}`;
+            }
+        }
+
+        document.getElementById('download-pdf-btn').onclick = () => {
+            const btn = document.getElementById('download-pdf-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Generating PDF...";
+            
+            const element = document.getElementById('printable-cert');
+            const fileName = currentUserData.fullName ? `${currentUserData.fullName.replace(/\s+/g, '_')}_Data_Analytics_Certificate.pdf` : 'Data_Analytics_Certificate.pdf';
+            
+            const opt = {
+                margin:       0,
+                filename:     fileName,
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 3, useCORS: true, allowTaint: true, scrollY: 0, scrollX: 0, windowWidth: 1122 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerText = originalText;
+                showToast("PDF Downloaded Successfully!");
+            }).catch(err => {
+                console.error("PDF generation error: ", err);
+                btn.innerText = originalText;
+                showToast("Error generating PDF");
+            });
+        };
+
+        try {
+            history.replaceState({ screen: 'splash-screen' }, '', '#splash-screen');
+        } catch(e) {
+            console.warn("History API prevented:", e);
+        }
+    </script>
+</body>
+</html>
