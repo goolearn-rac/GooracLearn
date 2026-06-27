@@ -1,1 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta name="title" content="Goorac Learn | Data Analytics & Prompt Engineering Certification">
+    <meta name="description" content="Master Data Analytics and Prompt Engineering with Goorac Learn. Professional 25-module certification courses designed for career growth.">
+    <meta name="keywords" content="Data Analytics, Prompt Engineering, AI Certification, Goorac Learn, Goorac Corporation">
+    <meta name="author" content="Goorac Corporation">
+    <meta name="robots" content="index, follow">
 
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.yourwebsite.com/index.html"> 
+    <meta property="og:title" content="Goorac Learn | Professional Certifications">
+    <meta property="og:description" content="Industry-recognized certifications in Data Analytics and Prompt Engineering.">
+    <meta property="og:image" content="https://www.yourwebsite.com/icon.png"> 
+    <meta property="og:image:secure_url" content="https://www.yourwebsite.com/icon.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Goorac Learn">
+
+    <title>Goorac Learn | Master Data &amp; AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Premium SaaS Theme Variables - Emerald & Midnight Blue */
+        :root {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #059669; /* Emerald Green */
+            --primary-hover: #047857;
+            --accent: #0ea5e9;
+            --border-color: #e2e8f0;
+            --code-bg: #0f172a;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #020617;
+                --surface-color: #0f172a;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --border-color: #1e293b;
+                --code-bg: #000000;
+            }
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            font-family: 'Inter', sans-serif; 
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased; 
+            overflow-x: hidden;
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
+        .section { padding: 80px 0; }
+
+        /* Navigation */
+        .top-nav {
+            background-color: rgba(var(--surface-color), 0.95); 
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            box-shadow: var(--shadow-sm); 
+            backdrop-filter: blur(10px);
+        }
+        .brand { 
+            font-size: 24px; 
+            font-weight: 800; 
+            color: var(--primary); 
+            letter-spacing: -0.5px; 
+            text-decoration: none; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px;
+        }
+        .brand-logo { 
+            width: 36px; 
+            height: 36px; 
+            border-radius: 8px; 
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 900;
+            font-size: 20px;
+        }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-link { 
+            color: var(--text-main); 
+            font-weight: 600; 
+            text-decoration: none; 
+            font-size: 0.98rem; 
+            transition: color 0.2s; 
+        }
+        .nav-link:hover { color: var(--primary); }
+
+        /* Hero */
+        .hero { 
+            text-align: center; 
+            padding: 120px 20px 80px; 
+            background: linear-gradient(135deg, var(--surface-color) 0%, rgba(5,150,105,0.05) 100%);
+        }
+        .hero-logo { 
+            width: 110px; 
+            height: 110px; 
+            border-radius: 50%; 
+            box-shadow: var(--shadow-lg); 
+            margin-bottom: 24px; 
+            border: 6px solid var(--surface-color);
+        }
+        .hero h1 { 
+            font-size: clamp(2.8rem, 5.5vw, 4.2rem); 
+            margin-bottom: 20px; 
+            line-height: 1.1;
+        }
+        .hero .highlight { color: var(--primary); }
+        .hero p { 
+            max-width: 680px; 
+            margin: 0 auto 40px; 
+            font-size: 1.25rem; 
+            color: var(--text-muted);
+        }
+
+        /* Course Cards */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 32px;
+            margin-top: 40px;
+        }
+        .course-card {
+            background: var(--surface-color);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .course-card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+        .course-header {
+            height: 220px;
+            background: linear-gradient(135deg, #059669, #10b981);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            color: white;
+        }
+        .course-header h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            text-align: center;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .course-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.95);
+            color: #059669;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        .course-body {
+            padding: 32px;
+        }
+        .price {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin: 12px 0;
+        }
+        .price span { font-size: 1rem; color: var(--text-muted); }
+        .features-list {
+            list-style: none;
+            margin: 24px 0;
+        }
+        .features-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            font-size: 1rem;
+        }
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            text-decoration: none;
+            border-radius: var(--radius-lg);
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            margin-top: 8px;
+        }
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-3px);
+        }
+
+        /* Trusted By */
+        .trusted-section {
+            padding: 50px 0;
+            background: var(--surface-color);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .logo-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 48px;
+            opacity: 0.75;
+        }
+        .logo-grid span {
+            font-weight: 800;
+            font-size: 1.35rem;
+            color: var(--text-main);
+        }
+
+        /* Benefits */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 28px;
+        }
+        .benefit-card {
+            text-align: center;
+            padding: 32px 20px;
+        }
+        .benefit-icon {
+            width: 68px;
+            height: 68px;
+            margin: 0 auto 20px;
+            background: rgba(5,150,105,0.1);
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--code-bg);
+            color: #94a3b8;
+            padding: 60px 20px 30px;
+            margin-top: auto;
+        }
+        .footer-brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 12px;
+        }
+        .footer-brand span { color: var(--primary); }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+        .copyright {
+            text-align: center;
+            margin-top: 50px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <a href="index.html" class="brand">
+                <div class="brand-logo">G</div>
+                Goorac Learn
+            </a>
+            <div class="nav-links">
+                <a href="#courses" class="nav-link">Courses</a>
+                <a href="data-analytics.html" class="nav-link">Data Analytics</a>
+                <a href="prompt-engineering.html" class="nav-link">Prompt Engineering</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <img src="icon.png" alt="Goorac Logo" class="hero-logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23059669\'/><text x=\'50\' y=\'65\' font-size=\'55\' font-family=\'sans-serif\' font-weight=\'bold\' fill=\'white\' text-anchor=\'middle\'>G</text></svg>'">
+            <h1>Master Tomorrow's <span class="highlight">Skills</span> Today</h1>
+            <p>Industry-leading certification programs in Data Analytics and Prompt Engineering. Learn from structured 25-module curricula trusted by professionals at top companies.</p>
+            
+            <div style="margin-top: 20px;">
+                <a href="#courses" class="btn" style="width: auto; display: inline-flex; padding-left: 48px; padding-right: 48px;">
+                    Explore Our Courses
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Trusted By -->
+    <section class="trusted-section">
+        <div class="container">
+            <div style="text-align:center; margin-bottom: 20px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); font-weight: 700;">Trusted &amp; Recognized By</div>
+            <div class="logo-grid">
+                <span>Google</span>
+                <span>Amazon</span>
+                <span>Microsoft</span>
+                <span>Zoho</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section id="courses" class="section" style="background: var(--bg-color);">
+        <div class="container">
+            <div style="text-align: center; max-width: 700px; margin: 0 auto 60px;">
+                <h2 style="font-size: 2.6rem; margin-bottom: 16px;">Our Flagship Certifications</h2>
+                <p style="font-size: 1.2rem; color: var(--text-muted);">Choose your path. Both programs include lifetime access, hands-on projects, and official certificates.</p>
+            </div>
+
+            <div class="courses-grid">
+                <!-- Data Analytics Card -->
+                <div class="course-card">
+                    <div class="course-header">
+                        <div>
+                            <h3>Data Analytics</h3>
+                        </div>
+                        <div class="course-badge">25 Modules</div>
+                    </div>
+                    <div class="course-body">
+                        <p style="color: var(--text-muted); min-height: 80px;">Transform raw data into business intelligence. Master SQL, Python, Power BI, and predictive analytics.</p>
+                        
+                        <div class="price">₹149 <span>/ one-time</span></div>
+                        
+                        <ul class="features-list">
+                            <li>✅ Advanced Excel &amp; Pivot Tables</li>
+                            <li>✅ SQL &amp; Database Mastery</li>
+                            <li>✅ Python for Data (Pandas, NumPy)</li>
+                            <li>✅ Power BI &amp; Tableau Dashboards</li>
+                            <li>✅ Capstone Project + Certificate</li>
+                        </ul>
+                        
+                        <a href="data-analytics.html" class="btn">Enroll in Data Analytics</a>
+                    </div>
+                </div>
+
+                <!-- Prompt Engineering Card -->
+                <div class="course-card">
+                    <div class="course-header" style="background: linear-gradient(135deg, #0ea5e9, #3b82f6);">
+                        <div>
+                            <h3>Prompt Engineering</h3>
+                        </div>
+                        <div class="course-badge">25 Modules</div>
+                    </div>
+                    <div class="course-body">
+                        <p style="color: var(--text-muted); min-height: 80px;">Master the art and science of working with Large Language Models. Build production-ready AI systems.</p>
+                        
+                        <div class="price">₹149 <span>/ one-time</span></div>
+                        
+                        <ul class="features-list">
+                            <li>✅ Chain of Thought &amp; Guardrails</li>
+                            <li>✅ Secure Prompt Architecture</li>
+                            <li>✅ Code Generation &amp; Debugging</li>
+                            <li>✅ AI Agents &amp; Automation</li>
+                            <li>✅ Capstone Project + Certificate</li>
+                        </ul>
+                        
+                        <a href="prompt-engineering.html" class="btn">Enroll in Prompt Engineering</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Goorac -->
+    <section class="section" style="background: var(--surface-color);">
+        <div class="container">
+            <h2 class="text-center" style="margin-bottom: 60px;">Why Professionals Choose Goorac Learn</h2>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    </div>
+                    <h3>Verifiable Certificates</h3>
+                    <p style="color: var(--text-muted);">Shareable, multi-color digital certificates recognized by industry leaders.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25"><path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894L18 21H6l-2.236-8.106A2 2 0 015.236 10H10" /></svg>
+                    </div>
+                    <h3>Lifetime Access</h3>
+                    <p style="color: var(--text-muted);">All future updates included. Learn at your own pace forever.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 01-2-2H7a2 2 0 01-2 2v16m14 0h-4m-6 0H5" /></svg>
+                    </div>
+                    <h3>Real Projects</h3>
+                    <p style="color: var(--text-muted);">Build portfolio-worthy projects with real datasets and AI use cases.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-brand">Goorac <span>Learn</span></div>
+            <p>Professional certification programs in Data Analytics and Prompt Engineering.</p>
+
+            <div class="footer-grid">
+                <div>
+                    <strong style="color: white;">Courses</strong><br><br>
+                    <a href="data-analytics.html" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Data Analytics</a>
+                    <a href="prompt-engineering.html" style="color: #cbd5e1; text-decoration: none; display: block;">Prompt Engineering</a>
+                </div>
+                <div>
+                    <strong style="color: white;">Company</strong><br><br>
+                    <a href="#" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">About Us</a>
+                    <a href="#" style="color: #cbd5e1; text-decoration: none; display: block;">Careers</a>
+                </div>
+                <div>
+                    <strong style="color: white;">Legal</strong><br><br>
+                    <a href="#" onclick="alert('Privacy Policy content would open here');" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Privacy Policy</a>
+                    <a href="#" onclick="alert('Terms of Service content would open here');" style="color: #cbd5e1; text-decoration: none; display: block;">Terms of Service</a>
+                </div>
+            </div>
+
+            <div class="copyright">
+                &copy; <span id="year"></span> Goorac Corporation. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set current year
+        document.getElementById('year').textContent = new Date().getFullYear();
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                if (this.getAttribute('href') === '#courses') {
+                    e.preventDefault();
+                    document.getElementById('courses').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
