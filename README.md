@@ -1,4 +1,3 @@
-# Goorac Learn
 
 ![Goorac Learn Logo](icon.png)
 
