@@ -8,17 +8,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
-        /* Premium SaaS & App Theme Variables - Updated to Analytics Deep Blue */
+        /* Premium SaaS & App Theme Variables - Updated to Emerald/Teal to match Prompt Engineering */
         :root {
             --bg-color: #f8fafc;
             --surface-color: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --primary: #2563eb; /* Deep Blue */
-            --primary-hover: #1d4ed8;
+            --primary: #059669; /* Emerald Green */
+            --primary-hover: #047857; /* Darker Emerald */
             --border-color: #e2e8f0;
             --success: #10b981;
-            --success-bg: #eff6ff;
+            --success-bg: #ecfdf5; /* Emerald Light BG */
             --locked-bg: #f1f5f9;
             --code-bg: #0f172a; /* Midnight Blue */
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -31,13 +31,13 @@
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #020617; 
+                --bg-color: #020617; /* Deep Midnight Blue */
                 --surface-color: #0f172a;
                 --text-main: #f8fafc;
                 --text-muted: #94a3b8;
                 --border-color: #1e293b;
                 --locked-bg: #0b1120;
-                --success-bg: #1e3a8a;
+                --success-bg: #064e3b; /* Dark Emerald BG */
                 --code-bg: #000000;
             }
         }
@@ -86,7 +86,7 @@
             color: var(--text-main); font-size: 1rem; transition: 0.2s; outline: none;
             appearance: none; 
         }
-        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); }
 
         .btn {
             background-color: var(--primary); color: white; border: none;
@@ -129,11 +129,11 @@
         .content-body h3 { margin-top: 30px; margin-bottom: 15px; font-size: 1.25rem; color: var(--primary); border-bottom: 1px solid var(--border-color); padding-bottom: 5px;}
         .content-body ul, .content-body ol { margin-bottom: 20px; padding-left: 20px; color: var(--text-muted); }
         .content-body li { margin-bottom: 10px; }
-        .content-body mark { background-color: rgba(37, 99, 235, 0.2); padding: 2px 4px; border-radius: 4px; color: var(--primary); font-weight: 600; }
+        .content-body mark { background-color: rgba(5, 150, 105, 0.2); padding: 2px 4px; border-radius: 4px; color: var(--primary); font-weight: 600; }
         .content-body strong { color: var(--text-main); }
         
         .analogy-box {
-            background: rgba(37, 99, 235, 0.05); border-left: 4px solid var(--primary);
+            background: rgba(5, 150, 105, 0.05); border-left: 4px solid var(--primary);
             padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 24px 0; font-size: 1.05rem; color: var(--text-main);
         }
         
@@ -169,7 +169,7 @@
             transition: 0.2s; font-weight: 500; background: var(--surface-color);
         }
         .quiz-option input[type="radio"] { display: none; }
-        .quiz-option:has(input:checked) { border-color: var(--primary); background: rgba(37, 99, 235, 0.05); color: var(--primary); }
+        .quiz-option:has(input:checked) { border-color: var(--primary); background: rgba(5, 150, 105, 0.05); color: var(--primary); }
 
         .cert-scroll-container {
             width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
@@ -198,7 +198,7 @@
         }
         .certificate-wrapper::before {
             content: ''; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px;
-            border: 6px double #2563eb; 
+            border: 6px double #059669; /* Emerald Green */
             pointer-events: none; z-index: 1;
         }
         .certificate-wrapper::after {
@@ -209,16 +209,16 @@
         }
         .cert-content { z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding-top: 15px;}
         .cert-header { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4.5vw, 3.2rem); color: #1e293b; margin-bottom: 0; font-weight: 800;}
-        .cert-sub { font-size: clamp(0.7rem, 1.5vw, 1.1rem); color: #2563eb; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; font-weight: bold; }
-        .cert-name { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4.5vw, 3rem); font-weight: 700; border-bottom: 2px solid #2563eb; padding-bottom: 8px; margin: 0 auto 15px; display: inline-block; min-width: 60%; color: #1d4ed8; line-height: 1.2;}
+        .cert-sub { font-size: clamp(0.7rem, 1.5vw, 1.1rem); color: #059669; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; font-weight: bold; }
+        .cert-name { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4.5vw, 3rem); font-weight: 700; border-bottom: 2px solid #059669; padding-bottom: 8px; margin: 0 auto 15px; display: inline-block; min-width: 60%; color: #047857; line-height: 1.2;}
         .cert-body { font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #475569; margin-bottom: 10px; max-width: 85%; margin-left: auto; margin-right: auto; line-height: 1.5;}
         
-        .multi-color-sig { color: #1d4ed8; font-weight: 800; }
+        .multi-color-sig { color: #047857; font-weight: 800; }
 
         .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; z-index: 2; position: relative; margin-top: auto; padding-bottom: 15px;}
         .cert-qr-container { text-align: center; }
         .cert-qr { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); border: 3px solid #fff; box-shadow: var(--shadow-md); border-radius: 6px; background: white;}
-        .cert-badge { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); background: radial-gradient(circle, #2563eb, #1d4ed8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: clamp(0.5rem, 1vw, 0.75rem); border: 2px dashed white; line-height: 1.2;}
+        .cert-badge { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); background: radial-gradient(circle, #059669, #047857); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: clamp(0.5rem, 1vw, 0.75rem); border: 2px dashed white; line-height: 1.2;}
         .cert-signature-block { text-align: center; }
         .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.2rem, 3vw, 2.2rem); border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 150px; }
 
@@ -573,7 +573,7 @@
                 <div style="font-size: 0.7rem; text-transform: uppercase; color: #94a3b8; margin-bottom: 8px; font-weight: bold; letter-spacing: 1px;">Data Output Result</div>${output}</div>`;
 
         // ==========================================
-        // 25 ADVANCED DATA ANALYTICS MODULES 
+        // 25 HIGHLY DETAILED DATA ANALYTICS MODULES 
         // ==========================================
         const courseData = [
             { 
@@ -582,31 +582,39 @@
                 content_en: `
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Imagine a water purification plant. Muddy river water (raw unstructured data) is pumped in, filtered through various tanks to remove rocks and bacteria (the ETL process), and clean drinking water (structured analytics tables) flows into your tap.</div>
                     <p>Welcome to the foundation of professional Data Analytics. Before you can build beautiful dashboards or predict future sales, you must understand where data comes from and how it moves. The Modern Data Stack (MDS) refers to the entire lifecycle journey of data from a production database into a structured data warehouse.</p>
-                    <p>In enterprise environments, data doesn't just sit in one neat Excel file. It lives in chaotic JSON arrays from web APIs, messy CSVs from marketing tools, and massive relational databases. The process of moving this is called <b>ETL (Extract, Transform, Load)</b>.</p>
-                    <h3>The ETL Process Explained</h3>
-                    <p><b>Extract:</b> Pulling data from its raw source without altering it. If a customer clicks a button on your app, that raw click event is extracted.</p>
-                    <p><b>Transform:</b> This is where the magic happens. The data is cleaned, filtered, and formatted. Timestamps are standardized, null values are handled, and sensitive passwords are encrypted.</p>
-                    <p><b>Load:</b> The clean data is pushed into a Data Warehouse (like Snowflake, Google BigQuery, or Amazon Redshift) where analysts can query it without crashing the main application.</p>
+                    <p>In enterprise environments, data doesn't just sit in one neat Excel file. It lives in chaotic JSON arrays from web APIs, messy CSVs from marketing tools, and massive relational databases.</p>
+                    <h3>The ETL Process Deep Dive</h3>
+                    <p>The process of moving this chaotic data is called <b>ETL (Extract, Transform, Load)</b>:</p>
                     <ul>
-                        <li><b>Data Lakes:</b> Store massive amounts of raw, unstructured data (like raw video files or messy logs).</li>
-                        <li><b>Data Warehouses:</b> Store highly structured, clean data ready for immediate SQL querying.</li>
+                        <li><b>Extract:</b> Pulling data from its raw source without altering it. If a customer clicks a button on your app, that raw click event is extracted. This often involves connecting to REST APIs or scraping logs.</li>
+                        <li><b>Transform:</b> This is where the magic happens. The data is cleaned, filtered, and formatted. Timestamps are standardized to UTC, null values are handled, and sensitive passwords are encrypted. Bad data is dropped to ensure it doesn't pollute the final tables.</li>
+                        <li><b>Load:</b> The clean data is pushed into a Data Warehouse (like Snowflake, Google BigQuery, or Amazon Redshift) where analysts can query it without crashing the main application.</li>
                     </ul>
-                    <p>As an analyst, your primary playground is the Data Warehouse. Understanding this architecture ensures you know exactly why data might be delayed or structured a certain way.</p>
-                    ${generateCodeBox('ETL Conceptual Script', '# Python Pseudo-code for ETL\n\n# 1. EXTRACT\nraw_data = fetch_api_data("https://api.store.com/sales")\n\n# 2. TRANSFORM\nclean_data = []\nfor row in raw_data:\n    row["date"] = format_date(row["raw_date"])\n    row["revenue"] = float(row["amount"]) * 0.85 # Subtract tax\n    clean_data.append(row)\n\n# 3. LOAD\ndb.insert_into_warehouse("sales_clean", clean_data)')}`,
+                    <h3>Data Lakes vs Data Warehouses</h3>
+                    <ul>
+                        <li><b>Data Lakes:</b> Store massive amounts of raw, unstructured data (like raw video files, images, or messy JSON logs). It's incredibly cheap to store data here, but very hard to query.</li>
+                        <li><b>Data Warehouses:</b> Store highly structured, clean, tabular data ready for immediate SQL querying. Storage is more expensive, but analytical queries run in milliseconds.</li>
+                    </ul>
+                    <p>As an analyst, your primary playground is the Data Warehouse. Understanding this architecture ensures you know exactly why data might be delayed or structured a certain way before you even begin analyzing it.</p>
+                    ${generateCodeBox('ETL Conceptual Script', '# Python Pseudo-code for ETL Pipeline\n\n# 1. EXTRACT\nraw_data = fetch_api_data("https://api.store.com/sales")\n\n# 2. TRANSFORM\nclean_data = []\nfor row in raw_data:\n    # Standardize timezone\n    row["date"] = convert_to_utc(row["raw_date"])\n    # Apply business logic: Subtract tax to find net revenue\n    row["net_revenue"] = float(row["amount"]) * 0.85 \n    # Data validation rule\n    if row["net_revenue"] > 0:\n        clean_data.append(row)\n\n# 3. LOAD\ndb.insert_into_warehouse("sales_clean", clean_data)')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு தண்ணீர் சுத்திகரிப்பு நிலையத்தை நினைத்துக்கொள்ளுங்கள். அழுக்கு நீர் (raw data) உள்ளே வந்து, பல தொட்டிகள் மூலம் சுத்திகரிக்கப்பட்டு (ETL), சுத்தமான குடிநீராக (analytics tables) உங்கள் குழாய்க்கு வருகிறது.</div>
                     <p>டேட்டா அனலிடிக்ஸின் அடிப்படைக்கு வரவேற்கிறோம். டேஷ்போர்டுகளை உருவாக்குவதற்கு முன், தரவுகள் எங்கிருந்து வருகின்றன, அவை எவ்வாறு நகர்கின்றன என்பதைப் புரிந்து கொள்ள வேண்டும். நவீன டேட்டா கட்டமைப்பு (MDS) என்பது தரவுகளைச் சேகரித்து, சுத்தப்படுத்தி, சேமிக்கும் முழுப் பயணத்தையும் குறிக்கிறது.</p>
-                    <p>பெரிய நிறுவனங்களில், தரவுகள் ஒரு எக்செல் ஃபைலில் மட்டும் இருக்காது. அவை பலவிதமான மென்பொருட்களிலிருந்து குழப்பமான வடிவங்களில் வரும். இவற்றை நகர்த்தும் முறைக்கு <b>ETL (Extract, Transform, Load)</b> என்று பெயர்.</p>
+                    <p>பெரிய நிறுவனங்களில், தரவுகள் ஒரு எக்செல் ஃபைலில் மட்டும் இருக்காது. அவை பலவிதமான மென்பொருட்களிலிருந்து குழப்பமான வடிவங்களில் (JSON, CSV) வரும்.</p>
                     <h3>ETL செயல்முறை விளக்கம்</h3>
-                    <p><b>Extract (பிரித்தெடுத்தல்):</b> தரவுகளை அதன் மூலத்திலிருந்து நேரடியாகப் பெறுவது. ஒரு பயனர் ஆப்பில் பட்டனை அழுத்தினால், அந்தத் தகவல் பெறப்படும்.</p>
-                    <p><b>Transform (சுத்தப்படுத்துதல்):</b> இங்குதான் முக்கிய வேலை நடக்கிறது. விடுபட்ட தகவல்கள் சரிசெய்யப்படும், தேதிகள் ஒரே சீராக மாற்றப்படும், தேவையற்ற தரவுகள் நீக்கப்படும்.</p>
-                    <p><b>Load (ஏற்றுதல்):</b> சுத்தமான தரவுகள் Data Warehouse-இல் (BigQuery, Snowflake) சேமிக்கப்படும். இங்குதான் நீங்கள் SQL மூலம் தரவுகளை ஆராய்வீர்கள்.</p>
+                    <p>இந்தத் தரவுகளை நகர்த்தும் முறைக்கு <b>ETL (Extract, Transform, Load)</b> என்று பெயர்:</p>
                     <ul>
-                        <li><b>Data Lakes:</b> எந்த ஒரு கட்டமைப்பும் இல்லாத, சுத்தப்படுத்தப்படாத பெருமளவிலான தரவுகளைச் சேமிக்கும் இடம்.</li>
-                        <li><b>Data Warehouses:</b> பகுப்பாய்வுக்குத் தயாராக உள்ள, சுத்தமான தரவுகளைச் சேமிக்கும் இடம்.</li>
+                        <li><b>Extract (பிரித்தெடுத்தல்):</b> தரவுகளை அதன் மூலத்திலிருந்து நேரடியாகப் பெறுவது. ஒரு பயனர் ஆப்பில் பட்டனை அழுத்தினால், அந்தத் தகவல் பெறப்படும்.</li>
+                        <li><b>Transform (சுத்தப்படுத்துதல்):</b> இங்குதான் முக்கிய வேலை நடக்கிறது. விடுபட்ட தகவல்கள் சரிசெய்யப்படும், தேதிகள் ஒரே சீராக மாற்றப்படும், தேவையற்ற தரவுகள் நீக்கப்படும். ரகசிய பாஸ்வேர்டுகள் (Passwords) மறைக்கப்படும்.</li>
+                        <li><b>Load (ஏற்றுதல்):</b> சுத்தமான தரவுகள் Data Warehouse-இல் (BigQuery, Snowflake) சேமிக்கப்படும். இங்குதான் நீங்கள் SQL மூலம் தரவுகளை ஆராய்வீர்கள்.</li>
+                    </ul>
+                    <h3>Data Lakes vs Data Warehouses</h3>
+                    <ul>
+                        <li><b>Data Lakes:</b> எந்த ஒரு கட்டமைப்பும் இல்லாத, சுத்தப்படுத்தப்படாத பெருமளவிலான தரவுகளை (வீடியோக்கள், படங்கள்) மலிவாகச் சேமிக்கும் இடம்.</li>
+                        <li><b>Data Warehouses:</b> பகுப்பாய்வுக்குத் தயாராக உள்ள, சுத்தமான தரவுகளைச் சேமிக்கும் இடம். இது விலை அதிகம் என்றாலும் அதிவேகமாக இயங்கும்.</li>
                     </ul>
                     <p>ஒரு அனலிஸ்டாக, Data Warehouse-இல்தான் நீங்கள் அதிகம் வேலை செய்வீர்கள். இந்த அமைப்பைப் புரிந்துகொள்வது மிகவும் அவசியமாகும்.</p>
-                    ${generateCodeBox('ETL Conceptual Script', '# பைதான் மூலம் ETL தர்க்கம்\n\n# 1. EXTRACT (பெறுதல்)\nraw_data = fetch_api_data("https://api.store.com/sales")\n\n# 2. TRANSFORM (சுத்தப்படுத்துதல்)\nclean_data = []\nfor row in raw_data:\n    row["date"] = format_date(row["raw_date"]) # தேதியை சரிசெய்தல்\n    row["revenue"] = float(row["amount"]) * 0.85 # வரியை நீக்குதல்\n    clean_data.append(row)\n\n# 3. LOAD (ஏற்றுதல்)\ndb.insert_into_warehouse("sales_clean", clean_data)')}`
+                    ${generateCodeBox('ETL Conceptual Script', '# பைதான் மூலம் ETL தர்க்கம்\n\n# 1. EXTRACT (பெறுதல்)\nraw_data = fetch_api_data("https://api.store.com/sales")\n\n# 2. TRANSFORM (சுத்தப்படுத்துதல்)\nclean_data = []\nfor row in raw_data:\n    row["date"] = format_date(row["raw_date"]) # தேதியை சரிசெய்தல்\n    row["net_revenue"] = float(row["amount"]) * 0.85 # வரியை நீக்குதல்\n    if row["net_revenue"] > 0:\n        clean_data.append(row)\n\n# 3. LOAD (ஏற்றுதல்)\ndb.insert_into_warehouse("sales_clean", clean_data)')}`
             },
             { 
                 id: 2, icon: "📈", img: "https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&q=80",
@@ -616,27 +624,37 @@
                     <p>Despite the rise of complex programming languages, spreadsheets remain the absolute backbone of business analytics. Executives love Excel. To be a professional analyst, you must move beyond basic SUM and AVERAGE functions and master dynamic arrays and complex lookups.</p>
                     <p>The most common task in data preparation is combining data from two different sources. For example, you have a list of Order IDs in Sheet 1, and a list of Customer Names matching those IDs in Sheet 2.</p>
                     <h3>The Power of XLOOKUP</h3>
-                    <p>For decades, VLOOKUP was the standard. However, it was rigid—it could only search from left to right, and if you inserted a new column, it broke. <b>XLOOKUP</b> solves this by allowing you to specify exactly which column to search and which column to return, regardless of their order.</p>
+                    <p>For decades, VLOOKUP was the standard. However, it was highly rigid—it could only search from left to right, and if you inserted a new column into the dataset, your entire dashboard would break. <b>XLOOKUP</b> solves this by allowing you to specify exactly which column to search and which column to return, completely regardless of their order.</p>
                     <ul>
-                        <li><b>Exact Match Default:</b> Unlike VLOOKUP, XLOOKUP defaults to finding an exact match, preventing dangerous data mismatch errors.</li>
-                        <li><b>Built-in Error Handling:</b> You can include an "If Not Found" statement directly inside the formula, removing the need for messy IFERROR wrappers.</li>
+                        <li><b>Exact Match Default:</b> Unlike VLOOKUP (which defaults to approximate matches, causing terrible errors), XLOOKUP defaults to finding an exact match, ensuring absolute data integrity.</li>
+                        <li><b>Built-in Error Handling:</b> You can include an "If Not Found" statement directly inside the formula, removing the need for messy nested IFERROR wrappers.</li>
+                        <li><b>Reverse Searching:</b> XLOOKUP can search from the bottom of a list upwards, which is perfect for finding the "most recent" transaction in a chronological ledger.</li>
                     </ul>
                     <h3>Dynamic Arrays: FILTER and UNIQUE</h3>
-                    <p>Modern spreadsheets utilize Dynamic Arrays that "spill" results into neighboring cells. <b>UNIQUE()</b> instantly extracts a list of distinct values from a massive column (e.g., getting a list of unique countries from 10,000 orders). <b>FILTER()</b> allows you to extract entire rows of data based on a condition without using the clunky manual filter tool.</p>
+                    <p>Modern spreadsheets utilize Dynamic Arrays that mathematically "spill" results into neighboring empty cells without needing to drag formulas down manually.</p>
+                    <ul>
+                        <li><b>UNIQUE():</b> Instantly extracts a clean list of distinct values from a massive, repetitive column (e.g., getting a list of unique countries from 10,000 global orders).</li>
+                        <li><b>FILTER():</b> Allows you to extract entire rows of data based on a mathematical condition, keeping the original dataset untouched.</li>
+                    </ul>
                     <p>Mastering these functions allows you to build lightweight, automated dashboards directly in Excel or Google Sheets.</p>
-                    ${generatePromptAndOutput('Excel XLOOKUP Syntax', '=XLOOKUP(lookup_value, lookup_array, return_array, [if_not_found])\n\nExample:\n=XLOOKUP(A2, Customers!A:A, Customers!B:B, "Not Found")', 'Result:\nFinds the ID in A2 inside the Customers Sheet (Column A) and returns the matching Name from Column B. If the ID doesn\'t exist, it displays "Not Found" instead of an ugly #N/A error.')}`,
+                    ${generatePromptAndOutput('Excel XLOOKUP Syntax', '=XLOOKUP(lookup_value, lookup_array, return_array, [if_not_found])\n\nExample:\n=XLOOKUP(A2, Customers!A:A, Customers!B:B, "Client Not Found")', 'Result:\nFinds the ID in A2 inside the Customers Sheet (Column A) and returns the matching Name from Column B. If the ID doesn\'t exist in the database, it displays "Client Not Found" instead of an ugly #N/A error.')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> VLOOKUP என்பது ஒரு தொலைபேசி புத்தகம் போன்றது. ஒருவரின் பெயர் (ID) தெரிந்தால், அதை வைத்து அவரின் எண்ணைக் (data) கண்டுபிடிக்கலாம். XLOOKUP என்பது இன்னும் வேகமான புத்தகம், இதில் வரிசைகளை (columns) மாற்றினாலும் பிழை ஏற்படாது.</div>
                     <p>பைதான் (Python) போன்ற நவீன தொழில்நுட்பங்கள் வந்தாலும், பெரும்பாலான நிறுவனங்களில் எக்செல் (Excel) தான் இன்றும் அடிப்படையாகப் பயன்படுத்தப்படுகிறது. அடிப்படை ஃபார்முலாக்களைத் தாண்டி, தரவுகளை இணைக்கும் மற்றும் பிரிக்கும் மேம்பட்ட ஃபார்முலாக்களை நீங்கள் கற்க வேண்டும்.</p>
                     <p>இரண்டு வெவ்வேறு ஷீட்களில் உள்ள தரவுகளை இணைப்பதே அனலிஸ்ட்களின் முக்கிய வேலையாகும். (எ.கா: ஒரு ஷீட்டில் Order ID இருக்கும், மற்றொரு ஷீட்டில் அந்த ID-க்கு உரிய வாடிக்கையாளர் பெயர் இருக்கும்).</p>
                     <h3>XLOOKUP ஃபார்முலாவின் பயன்கள்</h3>
-                    <p>பல ஆண்டுகளாக VLOOKUP பயன்படுத்தப்பட்டது. ஆனால் அதில் பல குறைகள் இருந்தன. <b>XLOOKUP</b> அந்தச் சிக்கல்களைத் தீர்க்கிறது. இது இடது மற்றும் வலது என இருபுறமும் தேடும் திறன் கொண்டது.</p>
+                    <p>பல ஆண்டுகளாக VLOOKUP பயன்படுத்தப்பட்டது. ஆனால் அதில் பல குறைகள் இருந்தன. இடதுபுறம் இருந்து வலதுபுறமாக மட்டுமே தேட முடியும். நடுவில் புதிய வரியைச் சேர்த்தால் மொத்த கணக்கும் தவறாகிவிடும். <b>XLOOKUP</b> அந்தச் சிக்கல்களைத் தீர்க்கிறது.</p>
                     <ul>
-                        <li><b>துல்லியமான தேடல்:</b> இது இயல்பாகவே துல்லியமான தரவை (Exact Match) மட்டுமே தேடி எடுக்கும், இதனால் பிழைகள் குறையும்.</li>
+                        <li><b>துல்லியமான தேடல்:</b> இது இயல்பாகவே துல்லியமான தரவை (Exact Match) மட்டுமே தேடி எடுக்கும், இதனால் பிழைகள் பெருமளவு குறையும்.</li>
                         <li><b>IFERROR தேவையில்லை:</b> தரவு கிடைக்கவில்லை என்றால் என்ன செய்ய வேண்டும் என்பதை ஃபார்முலாவிலேயே நேரடியாகக் குறிப்பிடலாம்.</li>
+                        <li><b>கீழிருந்து தேடுதல்:</b> சமீபத்திய தரவைக் கண்டுபிடிக்க, பட்டியலின் கீழிருந்து மேலாகத் தேடும் வசதியும் இதில் உள்ளது.</li>
                     </ul>
                     <h3>FILTER மற்றும் UNIQUE ஃபார்முலாக்கள்</h3>
-                    <p><b>UNIQUE()</b> ஃபார்முலா, பல ஆயிரம் தரவுகளில் உள்ள தனித்துவமான பெயர்களை மட்டும் (எ.கா: வாடிக்கையாளர்களின் ஊர் பெயர்கள்) தனியாகப் பிரித்தெடுக்கும். <b>FILTER()</b> ஃபார்முலா மூலம், ஒரு குறிப்பிட்ட நிபந்தனைக்குட்பட்ட வரிகளை (Rows) மட்டும் எளிதாகப் பிரித்தெடுக்கலாம்.</p>
+                    <p>நவீன எக்செல் ஃபார்முலாக்கள் தாமாகவே அடுத்தடுத்த கட்டங்களை நிரப்பிக்கொள்ளும் (Spill) திறன் கொண்டவை.</p>
+                    <ul>
+                        <li><b>UNIQUE():</b> பல ஆயிரம் தரவுகளில் உள்ள தனித்துவமான பெயர்களை மட்டும் (எ.கா: வாடிக்கையாளர்களின் ஊர் பெயர்கள்) தனியாகப் பிரித்தெடுக்கும்.</li>
+                        <li><b>FILTER():</b> ஒரு குறிப்பிட்ட நிபந்தனைக்குட்பட்ட வரிகளை (Rows) மட்டும் எளிதாகப் பிரித்தெடுக்கலாம்.</li>
+                    </ul>
                     <p>இந்த ஃபார்முலாக்களைக் கற்றுக்கொண்டால், எக்செல்லிலேயே மிகச் சிறந்த டேஷ்போர்டுகளை உருவாக்க முடியும்.</p>
                     ${generatePromptAndOutput('Excel XLOOKUP Syntax', '=XLOOKUP(lookup_value, lookup_array, return_array, [if_not_found])\n\nஉதாரணம்:\n=XLOOKUP(A2, Customers!A:A, Customers!B:B, "Not Found")', 'விளைவு:\nA2-வில் உள்ள எண்ணை Customers ஷீட்டில் தேடி, அதற்கான பெயரைத் திருப்பித் தரும். அந்த எண் இல்லையென்றால் "#N/A" என்று வராமல் "Not Found" என்று அழகாகக் காட்டும்.')}`
             },
@@ -646,27 +664,35 @@
                 content_en: `
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If 9 people in a bar earn $30k a year, the average is $30k. If Elon Musk walks in, the average suddenly becomes $100 Million. The 'Mean' is easily tricked. The 'Median' (the middle person) remains $30k, telling you the real truth about the room.</div>
                     <p>Data Analytics is fundamentally rooted in statistics. Without understanding basic statistical principles, you risk misinterpreting data and delivering disastrous recommendations to stakeholders.</p>
-                    <p>The foundation begins with <b>Measures of Central Tendency</b>. These metrics attempt to find the "center" of your dataset.</p>
-                    <h3>Mean, Median, and Mode</h3>
-                    <p>The <b>Mean</b> (Average) is calculated by adding all values and dividing by the count. While useful, it is highly sensitive to extreme outliers (as seen in the Elon Musk analogy).</p>
-                    <p>The <b>Median</b> is the exact middle value when the data is sorted. It is robust against outliers. Always check the median against the mean; if they are vastly different, your data is skewed.</p>
-                    <p>The <b>Mode</b> is simply the most frequently occurring value, highly useful for categorical data (e.g., finding the most popular shirt size sold).</p>
+                    <p>The foundation begins with <b>Measures of Central Tendency</b>. These metrics attempt to mathematically find the "center" of your dataset.</p>
+                    <h3>Mean, Median, and Mode Deep Dive</h3>
                     <ul>
-                        <li><b>Variance:</b> Measures how far each number in the set is from the mean. High variance means the data is highly unpredictable and spread out.</li>
-                        <li><b>Standard Deviation:</b> The square root of the variance. It is easier to interpret because it is in the exact same unit as your data. If the mean age is 30, and the standard deviation is 5, you know most users are between 25 and 35.</li>
+                        <li><b>The Mean (Average):</b> Calculated by adding all values and dividing by the total count. While highly useful for symmetrical data, it is dangerously sensitive to extreme outliers (as seen in the Elon Musk analogy).</li>
+                        <li><b>The Median:</b> The exact middle value when the data is sorted chronologically or numerically. It is incredibly robust against outliers. Always check the median against the mean; if they are vastly different, your data is "skewed".</li>
+                        <li><b>The Mode:</b> The most frequently occurring value. This is highly useful for categorical text data (e.g., finding the most popular shirt size sold in a month).</li>
                     </ul>
-                    <p>By understanding these metrics, you can quickly profile a dataset and identify anomalies before writing a single line of complex code.</p>
-                    ${generateCodeBox('Descriptive Statistics Logic', 'Dataset:\n\nMean: 210.2 (Highly misleading due to the outlier 1000)\nMedian: 14 (Accurate representation of the typical value)\n\nConclusion: When dealing with income, housing prices, or website time-on-page, ALWAYS use Median to report typical user behavior, as these metrics naturally have long tails and extreme outliers.')}`,
+                    <h3>Measures of Dispersion</h3>
+                    <p>Knowing the center isn't enough; you must know how chaotic the data is around that center.</p>
+                    <ul>
+                        <li><b>Variance:</b> Measures how far each number in the set is from the overall mean. High variance means the data is highly unpredictable, risky, and spread out.</li>
+                        <li><b>Standard Deviation:</b> The square root of the variance. It is easier to interpret because it is in the exact same unit as your data. If the mean age is 30, and the standard deviation is 5, you statistically know the vast majority of your users are between 25 and 35.</li>
+                    </ul>
+                    <p>By understanding these foundational metrics, you can quickly profile a dataset and identify anomalies before writing a single line of complex code.</p>
+                    ${generateCodeBox('Descriptive Statistics Logic', 'Dataset:\n\nMean: 210.2 (Highly misleading due to the extreme outlier 1000)\nMedian: 14 (Accurate representation of the typical value)\n\nConclusion: When dealing with income, housing prices, or website time-on-page, ALWAYS use Median to report typical user behavior, as these metrics naturally have long tails and extreme outliers.')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு கடையில் 9 பேர் தலா ₹30,000 சம்பாதிக்கிறார்கள். அம்பானி அங்கே வந்தால் சராசரி (Mean) பல கோடிகளாக மாறும். ஆனால் மையப்பகுதி (Median) மாறாது. இதுவே நிஜம். சராசரியை எளிதில் ஏமாற்றலாம்.</div>
                     <p>டேட்டா அனலிடிக்ஸ் என்பது புள்ளியியலை (Statistics) அடிப்படையாகக் கொண்டது. இந்த அடிப்படைத் தத்துவங்களைப் புரிந்து கொள்ளாவிட்டால், நீங்கள் தரவுகளைத் தவறாகப் புரிந்துகொண்டு நிறுவனத்திற்குத் தவறான ஆலோசனைகளை வழங்க நேரிடும்.</p>
                     <p>இதன் தொடக்கம் <b>மையப் போக்கு அளவைகள் (Measures of Central Tendency)</b> ஆகும். இவை உங்கள் தரவுகளின் மையப் புள்ளியைக் கண்டறிய உதவுகின்றன.</p>
                     <h3>Mean, Median, மற்றும் Mode</h3>
-                    <p><b>சராசரி (Mean):</b> அனைத்து எண்களையும் கூட்டி, மொத்த எண்ணிக்கையால் வகுப்பது. இது பயனுள்ளது என்றாலும், மிகப்பெரிய எண்களால் (Outliers) இது எளிதில் திசைதிருப்பப்படும்.</p>
-                    <p><b>இடைநிலை (Median):</b> எண்களை வரிசைப்படுத்தும்போது நடுவில் இருக்கும் மதிப்பு. இது மிகப்பெரிய எண்களால் பாதிக்கப்படாது. Mean மற்றும் Median இடையே பெரிய வித்தியாசம் இருந்தால், உங்கள் தரவுகள் சீராக இல்லை என்று அர்த்தம்.</p>
-                    <p><b>முகடு (Mode):</b> தரவுகளில் எந்த மதிப்பு அதிக முறை வந்துள்ளதோ அதுவே Mode ஆகும் (எ.கா: எந்த அளவுள்ள சட்டை அதிகம் விற்பனையானது).</p>
                     <ul>
-                        <li><b>Variance (மாறுபாடு):</b> தரவுகள் சராசரியிலிருந்து எவ்வளவு தூரம் விலகியுள்ளன என்பதைக் குறிக்கிறது.</li>
+                        <li><b>சராசரி (Mean):</b> அனைத்து எண்களையும் கூட்டி, மொத்த எண்ணிக்கையால் வகுப்பது. இது பயனுள்ளது என்றாலும், மிகப்பெரிய எண்களால் (Outliers) இது எளிதில் திசைதிருப்பப்படும்.</li>
+                        <li><b>இடைநிலை (Median):</b> எண்களை வரிசைப்படுத்தும்போது நடுவில் இருக்கும் மதிப்பு. இது மிகப்பெரிய எண்களால் பாதிக்கப்படாது. Mean மற்றும் Median இடையே பெரிய வித்தியாசம் இருந்தால், உங்கள் தரவுகள் சீராக இல்லை என்று அர்த்தம்.</li>
+                        <li><b>முகடு (Mode):</b> தரவுகளில் எந்த மதிப்பு அதிக முறை வந்துள்ளதோ அதுவே Mode ஆகும் (எ.கா: எந்த அளவுள்ள சட்டை அதிகம் விற்பனையானது).</li>
+                    </ul>
+                    <h3>தரவு பரவல் (Measures of Dispersion)</h3>
+                    <p>மையப்புள்ளியை மட்டும் அறிவது போதாது, தரவுகள் எவ்வளவு பரவியுள்ளன என்பதையும் அறிய வேண்டும்.</p>
+                    <ul>
+                        <li><b>Variance (மாறுபாடு):</b> தரவுகள் சராசரியிலிருந்து எவ்வளவு தூரம் விலகியுள்ளன என்பதைக் குறிக்கிறது. இது அதிகமாக இருந்தால் டேட்டா கணிக்க முடியாதபடி உள்ளது என அர்த்தம்.</li>
                         <li><b>Standard Deviation (திட்ட விலக்கம்):</b> இது Variance-இன் வர்க்கமூலம் ஆகும். சராசரி வயது 30, திட்ட விலக்கம் 5 என்றால், பெரும்பாலான பயனர்கள் 25 முதல் 35 வயதுக்குட்பட்டவர்கள் என்பதை அறியலாம்.</li>
                     </ul>
                     <p>இந்த அளவீடுகளைப் புரிந்துகொள்வதன் மூலம், ஒரு டேட்டாவில் உள்ள குறைகளை நீங்கள் எளிதாகக் கண்டறியலாம்.</p>
@@ -678,15 +704,19 @@
                 content_en: `
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Hypothesis testing is exactly like a criminal trial. The baseline assumption (Null Hypothesis) is "Innocent until proven guilty". To convict, you need overwhelming mathematical evidence (a p-value < 0.05) to reject innocence and declare guilt.</div>
                     <p>As a Data Analyst, stakeholders will frequently ask you questions like: <i>"Did our new email campaign actually increase sales, or was it just a random good week?"</i> You cannot answer this with a simple "yes" or "no". You must use <b>Hypothesis Testing</b> to prove it mathematically.</p>
-                    <p>This process removes human bias and gut feelings from business decisions. We establish two competing statements:</p>
+                    <p>This process removes human bias, gut feelings, and emotional assumptions from enterprise business decisions. We establish two competing mathematical statements:</p>
                     <h3>The Null and Alternative Hypothesis</h3>
                     <ul>
-                        <li><b>Null Hypothesis (H0):</b> The status quo. There is NO difference. The campaign did nothing. Any change seen is purely due to random chance.</li>
-                        <li><b>Alternative Hypothesis (H1):</b> The claim you are trying to prove. The campaign DID increase sales significantly.</li>
+                        <li><b>Null Hypothesis (H0):</b> The status quo. There is NO difference. The marketing campaign did absolutely nothing. Any spike in sales seen is purely due to random chance.</li>
+                        <li><b>Alternative Hypothesis (H1):</b> The claim you are actively trying to prove. The campaign DID increase sales significantly.</li>
                     </ul>
                     <h3>The Almighty P-Value</h3>
                     <p>To determine which hypothesis is true, we run a statistical test (like a T-test or Z-test) which outputs a <b>p-value</b>. The p-value is the probability that you would see these results purely by random chance if the Null Hypothesis were true.</p>
-                    <p>In business, the industry standard threshold is 0.05 (5%). If your p-value is less than 0.05, it means there is less than a 5% probability this happened by chance. Therefore, the result is <b>Statistically Significant</b>. You reject the Null Hypothesis and confidently tell your boss the campaign was a success.</p>
+                    <p>In business, the industry standard threshold for significance is 0.05 (5%).</p>
+                    <ul>
+                        <li><b>P-Value < 0.05:</b> It means there is less than a 5% probability this happened by chance. Therefore, the result is <b>Statistically Significant</b>. You reject the Null Hypothesis and confidently tell your boss the campaign was a success.</li>
+                        <li><b>P-Value >= 0.05:</b> You failed to reject the null hypothesis. The results are inconclusive and likely random.</li>
+                    </ul>
                     ${generatePromptAndOutput('P-Value Interpretation Rule', 'Scenario: You run an A/B test on a new website button color. Red vs Green. Green gets 500 more clicks.\n\nStatistical Output:\nP-Value = 0.02', 'Decision:\nBecause 0.02 is LESS than 0.05, the result is statistically significant. We reject the Null Hypothesis. We can confidently deploy the Green button to all users, knowing the increase in clicks is mathematically real, not just a random fluke.')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> இது ஒரு நீதிமன்ற விசாரணை போன்றது. 'குற்றம் நிரூபிக்கப்படும் வரை நிரபராதி' என்பது தான் அடிப்படை (Null Hypothesis). நீங்கள் போதுமான ஆதாரங்களை (p-value < 0.05) வைத்து மட்டுமே அவர் குற்றவாளி என நிரூபிக்க முடியும்.</div>
@@ -699,7 +729,11 @@
                     </ul>
                     <h3>P-Value என்றால் என்ன?</h3>
                     <p>எது உண்மை என்பதைக் கண்டறிய நாம் T-test அல்லது Z-test போன்ற கணிதச் சோதனைகளைச் செய்வோம். இது <b>p-value</b> என்ற விடையைத் தரும். இந்த மாற்றம் தற்செயலாக நடப்பதற்கான வாய்ப்பு எத்தனை சதவீதம் என்பதை இது குறிக்கிறது.</p>
-                    <p>பிசினஸ் உலகில், இதற்கான வரம்பு 0.05 (5%) ஆக வைக்கப்பட்டுள்ளது. உங்கள் p-value 0.05-ஐ விடக் குறைவாக இருந்தால், அந்த மாற்றம் தற்செயலானது அல்ல (உண்மையான மாற்றம்) என நிரூபிக்கப்படும். நீங்கள் தைரியமாக விளம்பரம் வெற்றிபெற்றது என முதலாளியிடம் கூறலாம்.</p>
+                    <p>பிசினஸ் உலகில், இதற்கான வரம்பு 0.05 (5%) ஆக வைக்கப்பட்டுள்ளது.</p>
+                    <ul>
+                        <li><b>P-Value < 0.05:</b> உங்கள் p-value 0.05-ஐ விடக் குறைவாக இருந்தால், அந்த மாற்றம் தற்செயலானது அல்ல (உண்மையான மாற்றம்) என நிரூபிக்கப்படும். நீங்கள் தைரியமாக விளம்பரம் வெற்றிபெற்றது என முதலாளியிடம் கூறலாம்.</li>
+                        <li><b>P-Value >= 0.05:</b> முடிவுகள் தற்செயலானவை. இதை நம்பி பிசினஸ் முடிவுகளை எடுக்கக் கூடாது.</li>
+                    </ul>
                     ${generatePromptAndOutput('P-Value Interpretation Rule', 'சூழல்: சிவப்பு பட்டனுக்கும், பச்சை பட்டனுக்கும் ஒரு சோதனை வைக்கிறீர்கள். பச்சை பட்டனுக்கு 500 கிளிக்குகள் அதிகம் கிடைக்கின்றன.\n\nகணித விடை:\nP-Value = 0.02', 'முடிவு:\n0.02 என்பது 0.05-ஐ விடக் குறைவு என்பதால், இந்த முடிவு தற்செயலானது அல்ல. இது புள்ளிவிவர ரீதியாக நிரூபிக்கப்பட்டுள்ளது (Statistically significant). நாம் தைரியமாகப் பச்சை பட்டனைப் பயன்படுத்தலாம்.')}`
             },
             { 
@@ -707,51 +741,54 @@
                 title_en: "5. Exploratory Data Analysis (EDA) Frameworks", title_ta: "5. தரவு ஆய்வு (EDA)", 
                 content_en: `
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> EDA is like inspecting a used car before buying it. You don't just immediately drive it on the highway. You check under the hood for rust (null values), weird engine noises (outliers), and fake parts (duplicates) to ensure it won't crash.</div>
-                    <p>Before you build complex predictive models or executive dashboards, you must understand the raw material you are working with. <b>Exploratory Data Analysis (EDA)</b> is the critical first step in any data project. Skipping EDA is the number one reason why data pipelines fail in production.</p>
-                    <p>EDA is an investigative process where you use statistical summaries and basic visual tools to uncover hidden patterns, spot anomalies, and check assumptions.</p>
+                    <p>Before you build complex predictive models or executive dashboards, you must absolutely understand the raw material you are working with. <b>Exploratory Data Analysis (EDA)</b> is the critical first step in any data project. Skipping EDA is the number one reason why data pipelines fail in production environments.</p>
+                    <p>EDA is an investigative process where you use statistical summaries and basic visual tools to uncover hidden patterns, spot anomalies, and check structural assumptions.</p>
                     <h3>The Core Pillars of EDA</h3>
                     <ul>
-                        <li><b>Data Profiling:</b> Understanding the shape of your data. How many rows? How many columns? What are the data types (Integers, Strings, Datetimes)?</li>
-                        <li><b>Missing Value Treatment:</b> Real-world data is extremely messy. Columns will have blanks (Nulls/NaNs). You must decide whether to DROP those rows entirely (if there are few) or IMPUTE them (filling the blanks with the median value of the column).</li>
-                        <li><b>Outlier Detection:</b> Identifying extreme values that could skew your analysis. If one customer accidentally bought 10,000 laptops instead of 10, that outlier will ruin your average order value calculations.</li>
+                        <li><b>Data Profiling:</b> Understanding the overall shape of your data. How many rows? How many columns? What are the data types (Integers, Strings, Datetimes)? Are they assigned correctly?</li>
+                        <li><b>Missing Value Treatment:</b> Real-world data is extremely messy. Columns will always have blanks (Nulls/NaNs). You must decide whether to DROP those rows entirely (acceptable if there are very few) or IMPUTE them (filling the blanks with the median value of the column so you don't lose the surrounding data).</li>
+                        <li><b>Outlier Detection:</b> Identifying extreme values that could completely skew your analysis. If one customer accidentally typed 10,000 laptops instead of 10 during checkout, that single outlier will completely ruin your average order value calculations.</li>
+                        <li><b>Duplicate Removal:</b> Finding and dropping exact duplicate rows caused by faulty tracking pixels or double-clicks.</li>
                     </ul>
                     <h3>Univariate vs Bivariate Analysis</h3>
-                    <p>In Univariate analysis, you examine one variable at a time (e.g., creating a histogram of customer ages to see the distribution). In Bivariate analysis, you examine the relationship between two variables (e.g., a scatter plot showing Ad Spend vs Sales to see if they are correlated).</p>
-                    <p>EDA guarantees that when you present your final findings, the underlying data is structurally sound and trustworthy.</p>
-                    ${generateCodeBox('Python EDA Action Plan', '# Standard Pandas commands for initial EDA\nimport pandas as pd\ndf = pd.read_csv("data.csv")\n\n# 1. Check shape and data types\nprint(df.info())\n\n# 2. Check for missing (null) values\nprint(df.isnull().sum())\n\n# 3. View statistical summary (Mean, Min, Max) to spot extreme outliers\nprint(df.describe())')}`,
+                    <p>In <b>Univariate analysis</b>, you examine one single variable at a time (e.g., creating a histogram of customer ages to see the density distribution). In <b>Bivariate analysis</b>, you examine the mathematical relationship between two variables (e.g., a scatter plot showing Ad Spend vs Sales to see if they are linearly correlated).</p>
+                    <p>EDA guarantees that when you finally present your findings to the CEO, the underlying data is structurally sound and absolutely trustworthy.</p>
+                    ${generateCodeBox('Python EDA Action Plan', '# Standard Pandas commands for initial EDA checklist\nimport pandas as pd\ndf = pd.read_csv("data.csv")\n\n# 1. Check shape and correct data types\nprint(df.info())\n\n# 2. Check for missing (null) values across all columns\nprint(df.isnull().sum())\n\n# 3. View statistical summary (Mean, Min, Max, Quartiles) to spot extreme outliers\nprint(df.describe())\n\n# 4. Check for duplicate rows\nprint(df.duplicated().sum())')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> EDA என்பது ஒரு பழைய காரை வாங்கும் முன் அதைச் சோதிப்பதைப் போன்றது. உடனடியாக அதை ஓட்டாமல், துருப்பிடித்த பகுதிகள் (Null values), தேவையற்ற சத்தங்கள் (Outliers) உள்ளதா எனச் சரிபார்ப்பது அவசியம்.</div>
                     <p>டேஷ்போர்டுகளை உருவாக்குவதற்கு முன், நீங்கள் பயன்படுத்தும் தரவுகளை முழுமையாகப் புரிந்து கொள்ள வேண்டும். <b>Exploratory Data Analysis (EDA)</b> என்பது எந்தவொரு டேட்டா ப்ராஜெக்ட்டிலும் மிக முக்கியமான முதல் படியாகும். இதைத் தவிர்ப்பது மிகப்பெரிய பிழைகளை உருவாக்கும்.</p>
                     <p>EDA என்பது, தரவுகளில் மறைந்துள்ள வடிவங்களைக் கண்டறியவும், பிழைகளைச் சுட்டிக்காட்டவும் பயன்படும் ஒரு விசாரணைச் செயல்முறையாகும்.</p>
                     <h3>EDA-இன் முக்கிய தூண்கள்</h3>
                     <ul>
-                        <li><b>டேட்டா விவரக்குறிப்பு:</b> தரவுகளில் எத்தனை வரிகள் உள்ளன? என்ன வகையான தரவுகள் (Numbers, Text, Date) உள்ளன என்பதை அறிதல்.</li>
+                        <li><b>டேட்டா விவரக்குறிப்பு (Profiling):</b> தரவுகளில் எத்தனை வரிகள் உள்ளன? என்ன வகையான தரவுகள் (Numbers, Text, Date) உள்ளன என்பதை அறிதல்.</li>
                         <li><b>விடுபட்ட தரவுகள் (Null Values):</b> உண்மையான தரவுகளில் பல இடங்கள் காலியாக இருக்கும். அவற்றை நீக்க வேண்டுமா அல்லது அந்த இடங்களை சராசரி மதிப்பைக் கொண்டு நிரப்ப வேண்டுமா (Imputation) என முடிவெடுக்க வேண்டும்.</li>
                         <li><b>Outliers (அசாதாரண மதிப்புகள்):</b> ஒரு வாடிக்கையாளர் தவறுதலாக 1 பொருளுக்குப் பதிலாக 10,000 பொருட்கள் எனத் தட்டச்சு செய்திருந்தால், அது ஒட்டுமொத்த சராசரியையும் கெடுத்துவிடும். இதைச் சரிசெய்ய வேண்டும்.</li>
+                        <li><b>நகல்கள் (Duplicates):</b> ஒரே தரவு இரண்டு முறை தவறுதலாகப் பதிவாகியிருந்தால் அதை நீக்க வேண்டும்.</li>
                     </ul>
                     <h3>Univariate vs Bivariate பகுப்பாய்வு</h3>
                     <p>Univariate என்பது ஒரு நேரத்தில் ஒரு தரவை மட்டும் ஆராய்வது (எ.கா: வாடிக்கையாளர்களின் வயது). Bivariate என்பது இரண்டு தரவுகளுக்கு இடையிலான உறவை ஆராய்வது (எ.கா: விளம்பரச் செலவுக்கும், விற்பனைக்கும் உள்ள தொடர்பு).</p>
                     <p>முடிவுகளை வெளியிடும் முன், தரவுகள் நம்பகமானவை என்பதை EDA உறுதி செய்கிறது.</p>
-                    ${generateCodeBox('Python EDA Action Plan', '# ஆரம்பகட்ட EDA-க்கான பைதான் (Pandas) கட்டளைகள்\nimport pandas as pd\ndf = pd.read_csv("data.csv")\n\n# 1. தரவுகளின் வகைகளைச் சரிபார்த்தல்\nprint(df.info())\n\n# 2. காலியாக உள்ள தரவுகளைக் கண்டறிதல்\nprint(df.isnull().sum())\n\n# 3. மிகப்பெரிய/மிகச்சிறிய எண்களை ஆராய்தல்\nprint(df.describe())')}`
+                    ${generateCodeBox('Python EDA Action Plan', '# ஆரம்பகட்ட EDA-க்கான பைதான் (Pandas) கட்டளைகள்\nimport pandas as pd\ndf = pd.read_csv("data.csv")\n\n# 1. தரவுகளின் வகைகளைச் சரிபார்த்தல்\nprint(df.info())\n\n# 2. காலியாக உள்ள தரவுகளைக் கண்டறிதல்\nprint(df.isnull().sum())\n\n# 3. மிகப்பெரிய/மிகச்சிறிய எண்களை ஆராய்தல்\nprint(df.describe())\n\n# 4. நகல் தரவுகளைக் கண்டறிதல்\nprint(df.duplicated().sum())')}`
             },
             { 
                 id: 6, icon: "🗄️", img: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=800&q=80",
                 title_en: "6. Relational Algebra & Advanced SELECT Logic", title_ta: "6. SQL: SELECT லாஜிக்", 
                 content_en: `
-                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> SQL is exactly like ordering food at a strict restaurant. SELECT is what you want to eat. FROM is pointing to the menu. WHERE is your allergy constraint (e.g., no peanuts). The chef (database engine) follows this exact order.</div>
-                    <p>Structured Query Language (SQL) is the universal language of data. Regardless of what BI tool you use (Tableau, PowerBI, Looker), under the hood, they are all generating SQL to talk to the database. To be a top-tier analyst, you must master writing raw SQL.</p>
-                    <p>The foundation of SQL is the <b>SELECT</b> statement. But writing a query is not just about memorizing keywords; it is about understanding the <b>Logical Order of Execution</b>.</p>
-                    <h3>How the Engine Reads SQL</h3>
-                    <p>When you write a query, you write it in this order: SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY. However, the database engine processes it in a completely different order:</p>
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> SQL is exactly like ordering food at a strict restaurant. SELECT is what you want to eat. FROM is pointing to the specific menu. WHERE is your allergy constraint (e.g., no peanuts). The chef (database engine) follows this exact logical order without exception.</div>
+                    <p>Structured Query Language (SQL) is the absolute universal language of data. Regardless of what BI tool you use (Tableau, PowerBI, Looker), under the hood, they are all generating raw SQL to talk to the database. To be a top-tier analyst, you must master writing raw SQL.</p>
+                    <p>The foundation of SQL is the <b>SELECT</b> statement. But writing a highly performant query is not just about memorizing keywords; it is about deeply understanding the <b>Logical Order of Execution</b>.</p>
+                    <h3>How the Engine Actually Reads SQL</h3>
+                    <p>When you write a query, you write it in this visual top-to-bottom order: SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY. However, the database engine processes it in a completely different order:</p>
                     <ol>
-                        <li><b>FROM:</b> The engine first locates the table containing the data.</li>
-                        <li><b>WHERE:</b> It filters out rows that don't match your conditions, drastically reducing the dataset size.</li>
-                        <li><b>GROUP BY & HAVING:</b> It groups the remaining data and filters the grouped blocks.</li>
-                        <li><b>SELECT:</b> Only now does it actually pick the specific columns you asked for.</li>
-                        <li><b>ORDER BY:</b> Finally, it sorts the output for you to read.</li>
+                        <li><b>FROM / JOIN:</b> The engine first locates the base table(s) containing the data and merges them.</li>
+                        <li><b>WHERE:</b> It filters out individual rows that don't match your conditions, drastically reducing the dataset size.</li>
+                        <li><b>GROUP BY:</b> It groups the remaining filtered data into aggregated blocks.</li>
+                        <li><b>HAVING:</b> It applies a secondary filter specifically to those grouped blocks.</li>
+                        <li><b>SELECT:</b> Only now does it actually pick the specific vertical columns you asked to see.</li>
+                        <li><b>ORDER BY:</b> Finally, it sorts the final output for you to read.</li>
                     </ol>
-                    <h3>Advanced Filtering Logic</h3>
-                    <p>Mastering the WHERE clause involves using operators like <code>IN</code> (to check a list of values), <code>BETWEEN</code> (for date ranges), and <code>LIKE</code> (using % wildcards for partial text matching, e.g., finding all emails ending in '@gmail.com').</p>
+                    <h3>Advanced Filtering Logic (Regex & Operators)</h3>
+                    <p>Mastering the WHERE clause involves using advanced operators like <code>IN</code> (to check against a strict list of values), <code>BETWEEN</code> (for robust date ranges), and <code>LIKE</code> (using % wildcards for partial text matching, e.g., finding all emails ending in '@gmail.com').</p>
                     ${generatePromptAndOutput('SQL Filter Example', 'SELECT customer_id, purchase_amount, signup_date\nFROM orders\nWHERE purchase_amount > 500\nAND status = \'Delivered\'\nAND email LIKE \'%@gmail.com\'\nORDER BY purchase_amount DESC;', 'customer_id | purchase_amount | signup_date\n104         | 1200.00         | 2025-10-01\n101         | 650.00          | 2025-11-15\n\n(Returns only delivered, high-value Gmail users, sorted highest to lowest)')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> SQL என்பது உணவகத்தில் ஆர்டர் செய்வது போன்றது. SELECT என்பது உங்களுக்கு வேண்டிய உணவு, FROM என்பது மெனு கார்டு, WHERE என்பது 'காரமில்லாமல் கொடுங்கள்' என்ற கட்டுப்பாடு. கணினி இந்த ஆர்டரை அப்படியே பின்பற்றும்.</div>
@@ -760,11 +797,12 @@
                     <h3>கணினி SQL-ஐ படிக்கும் முறை</h3>
                     <p>நாம் SELECT, FROM, WHERE, GROUP BY என்ற வரிசையில்தான் குறியீட்டை எழுதுவோம். ஆனால் கணினி அதைப் படிக்கும் முறை வேறு:</p>
                     <ol>
-                        <li><b>FROM:</b> முதலில் தரவுகள் எங்குள்ளது எனத் தேடும்.</li>
-                        <li><b>WHERE:</b> தேவையற்ற தரவுகளை வடிகட்டி, அளவைக் குறைக்கும்.</li>
-                        <li><b>GROUP BY & HAVING:</b> தரவுகளைத் தொகுத்து, அதிலும் சில கட்டுப்பாடுகளை விதிக்கும்.</li>
+                        <li><b>FROM / JOIN:</b> முதலில் தரவுகள் எங்குள்ளது எனத் தேடும் மற்றும் அட்டவணைகளை இணைக்கும்.</li>
+                        <li><b>WHERE:</b> தேவையற்ற தரவுகளை வடிகட்டி, அளவைக் குறைக்கும். இதுவே மிக முக்கியப் படி.</li>
+                        <li><b>GROUP BY:</b> தரவுகளைத் தொகுத்து சிறு குழுக்களாக மாற்றும்.</li>
+                        <li><b>HAVING:</b> தொகுக்கப்பட்ட குழுக்களில் தேவையற்றதை வடிகட்டும்.</li>
                         <li><b>SELECT:</b> இப்போதுதான் நீங்கள் கேட்ட குறிப்பிட்ட Columns-ஐ எடுக்கும்.</li>
-                        <li><b>ORDER BY:</b> இறுதியாக, நீங்கள் படிப்பதற்காக வரிசைப்படுத்தும்.</li>
+                        <li><b>ORDER BY:</b> இறுதியாக, நீங்கள் படிப்பதற்காக விடையை வரிசைப்படுத்தும்.</li>
                     </ol>
                     <h3>மேம்பட்ட வடிகட்டுதல் (Filtering)</h3>
                     <p>WHERE கட்டளையில் <code>IN</code> (பல மதிப்புகளைத் தேட), <code>BETWEEN</code> (தேதிகளைத் தேட), மற்றும் <code>LIKE</code> ('@gmail.com' என்று முடியும் ஈமெயில்களை மட்டும் தேட) போன்ற ஆப்பரேட்டர்களைப் பயன்படுத்த வேண்டும்.</p>
@@ -774,27 +812,27 @@
                 id: 7, icon: "🔗", img: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80",
                 title_en: "7. Complex Database Joins & Null Handling", title_ta: "7. SQL: டேட்டா இணைப்புகள் (Joins)", 
                 content_en: `
-                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Think of two spreadsheets. Sheet A has Customer IDs and Names. Sheet B has Customer IDs and Purchase Amounts. A SQL JOIN is the glue that stitches these two sheets together side-by-side using the ID as the matching zipper.</div>
-                    <p>Relational databases are designed for efficiency. Instead of storing a customer's name, email, and address on every single order receipt (which wastes massive amounts of storage), databases store customer details in a 'Users' table and order details in an 'Orders' table. <b>JOINs</b> are the mathematical operations used to reconnect this data.</p>
-                    <p>Mastering the different types of JOINs is the most critical SQL skill you will learn.</p>
-                    <h3>The 4 Core Joins</h3>
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Think of two spreadsheets. Sheet A has Customer IDs and Names. Sheet B has Customer IDs and Purchase Amounts. A SQL JOIN is the mathematical glue that stitches these two sheets together side-by-side using the ID as the matching zipper.</div>
+                    <p>Relational databases are designed for extreme storage efficiency. Instead of storing a customer's name, email, and home address on every single order receipt (which wastes massive amounts of server storage), databases store customer details in a central 'Users' table and order details in a separate 'Orders' table. <b>JOINs</b> are the foundational mathematical operations used to reconnect this normalized data.</p>
+                    <p>Mastering the different types of JOINs is the most critical SQL skill you will ever learn. Using the wrong join will silently drop half your dataset.</p>
+                    <h3>The 4 Core Joins Deep Dive</h3>
                     <ul>
-                        <li><b>INNER JOIN:</b> The most common. It acts like the center of a Venn diagram. It only returns rows where there is a match in BOTH tables. If a user never bought an order, they won't appear.</li>
-                        <li><b>LEFT JOIN:</b> Returns ALL rows from the left table (Users), and the matched rows from the right table (Orders). If a user hasn't ordered, their name still appears, but the order columns will say <code>NULL</code>. Excellent for finding inactive users!</li>
-                        <li><b>RIGHT JOIN:</b> The exact opposite of a Left Join. Rarely used in practice, as you can just flip the tables in a Left Join.</li>
-                        <li><b>FULL OUTER JOIN:</b> Returns everything from both tables, with NULLs wherever there isn't a match.</li>
+                        <li><b>INNER JOIN:</b> The most common default. It acts like the center intersection of a Venn diagram. It <i>only</i> returns rows where there is a direct match in BOTH tables. If a registered user never bought an order, they will be completely hidden from the result.</li>
+                        <li><b>LEFT JOIN:</b> Returns ALL rows from the left table (Users), and only the matched rows from the right table (Orders). If a user hasn't ordered anything, their name still appears in the output, but the order columns will display <code>NULL</code>. This is excellent for finding inactive users!</li>
+                        <li><b>RIGHT JOIN:</b> The exact mathematical opposite of a Left Join. Rarely used in practice, as analysts logically prefer to read from left to right, so you can just flip the table order in a Left Join.</li>
+                        <li><b>FULL OUTER JOIN:</b> Returns absolutely everything from both tables, with NULLs injected wherever there isn't a perfect match. Used mostly for deep data auditing.</li>
                     </ul>
-                    <h3>Handling NULL Values</h3>
-                    <p>When using a LEFT JOIN, you will inevitably generate NULL values. You must handle these using functions like <code>COALESCE()</code>, which replaces the NULL with a default value like '0' so your math formulas don't break.</p>
-                    ${generatePromptAndOutput('SQL LEFT JOIN with COALESCE', 'SELECT c.name, \n       COALESCE(o.purchase_amount, 0) as total_spent\nFROM customers c\nLEFT JOIN orders o \nON c.id = o.customer_id;', 'name  | total_spent\nJohn  | 150.00\nSarah | 0.00 (NULL was replaced by 0)\nMike  | 85.50')}`,
+                    <h3>Handling NULL Values Safely</h3>
+                    <p>When using a LEFT JOIN, you will inevitably generate NULL values. You must handle these safely using functions like <code>COALESCE()</code>, which replaces the NULL with a default fallback value (like '0') so your math formulas don't break in BI tools.</p>
+                    ${generatePromptAndOutput('SQL LEFT JOIN with COALESCE', 'SELECT c.name, \n       COALESCE(o.purchase_amount, 0) as total_spent\nFROM customers c\nLEFT JOIN orders o \nON c.id = o.customer_id;', 'name  | total_spent\nJohn  | 150.00\nSarah | 0.00 (NULL was safely replaced by 0)\nMike  | 85.50')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> இரண்டு ஷீட்களை நினைத்துக்கொள்ளுங்கள். ஒன்றில் வாடிக்கையாளர் பெயரும், மற்றொன்றில் அவர்கள் வாங்கிய பில் தொகையும் உள்ளன. இந்த இரண்டையும் Customer ID என்ற ஒரு பொதுவான எண்ணை வைத்து இணைப்பதே SQL JOIN ஆகும்.</div>
                     <p>டேட்டாபேஸ்களில் தரவுகள் தனித்தனி அட்டவணைகளில் (Tables) சேமிக்கப்படும். இதனால் மெமரி சேமிக்கப்படும். வாடிக்கையாளர் விவரங்கள் 'Users' அட்டவணையிலும், அவர்கள் வாங்கிய விவரங்கள் 'Orders' அட்டவணையிலும் இருக்கும். இவற்றை மீண்டும் இணைக்க <b>JOIN</b> பயன்படுகிறது.</p>
-                    <p>JOIN வகைகளைக் கற்றுக்கொள்வது SQL-இல் மிக முக்கியமான திறனாகும்.</p>
+                    <p>JOIN வகைகளைக் கற்றுக்கொள்வது SQL-இல் மிக முக்கியமான திறனாகும். தவறான JOIN-ஐப் பயன்படுத்தினால் உங்கள் தரவுகளில் பாதி காணாமல் போகும்.</p>
                     <h3>4 முக்கிய JOIN வகைகள்</h3>
                     <ul>
-                        <li><b>INNER JOIN:</b> இது இரண்டு அட்டவணைகளிலும் உள்ள பொதுவான தரவுகளை மட்டுமே எடுக்கும் (எ.கா: பொருளை வாங்கிய வாடிக்கையாளர்கள் மட்டும்).</li>
-                        <li><b>LEFT JOIN:</b> முதல் அட்டவணையில் உள்ள அனைவரையும் எடுக்கும். அவர்கள் பொருளை வாங்கவில்லை என்றாலும் அவர்களின் பெயரைக் காட்டும், ஆனால் பில் தொகை உள்ள இடத்தில் <code>NULL</code> (காலி) என்று காட்டும்.</li>
+                        <li><b>INNER JOIN:</b> இது இரண்டு அட்டவணைகளிலும் உள்ள பொதுவான தரவுகளை மட்டுமே எடுக்கும். வாடிக்கையாளர் பெயர் இருந்து, அவருக்கு ஆர்டர் இல்லை என்றால் அந்தப் பெயர் விடைப்பட்டியலில் வராது.</li>
+                        <li><b>LEFT JOIN:</b> முதல் அட்டவணையில் உள்ள அனைவரையும் எடுக்கும். அவர்கள் பொருளை வாங்கவில்லை என்றாலும் அவர்களின் பெயரைக் காட்டும், ஆனால் பில் தொகை உள்ள இடத்தில் <code>NULL</code> (காலி) என்று காட்டும். எந்தப் பயனர்கள் இன்னும் பொருள் வாங்கவில்லை என்பதைக் கண்டுபிடிக்க இது உதவும்.</li>
                         <li><b>RIGHT JOIN:</b> இது LEFT JOIN-இன் நேர் எதிர். ஆனால் இது அதிகம் பயன்படுத்தப்படுவதில்லை.</li>
                         <li><b>FULL OUTER JOIN:</b> இரண்டு அட்டவணைகளிலும் உள்ள அனைத்தையும் சேர்த்து மொத்தமாகக் காட்டும்.</li>
                     </ul>
@@ -807,19 +845,19 @@
                 title_en: "8. Advanced Aggregations & Grouping Matrixes", title_ta: "8. SQL: தொகுத்தல் (Grouping)", 
                 content_en: `
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If you have 10,000 messy receipts in a shoebox, GROUP BY is the act of sorting them into neat piles by 'Month'. Then, an Aggregation like SUM() is you sitting down with a calculator and adding up the total of each specific pile.</div>
-                    <p>Looking at raw, line-by-line database rows is useless for executives. They don't want to see 50,000 individual transactions; they want to see "Total Revenue per City". This requires summarizing data using <b>Aggregations and GROUP BY</b>.</p>
+                    <p>Looking at raw, line-by-line database rows is useless for executives. They don't want to see 50,000 individual transactions; they want to see "Total Revenue per City". This requires summarizing data using powerful <b>Aggregations and GROUP BY</b> logic.</p>
                     <h3>The Big 5 Aggregations</h3>
-                    <p>SQL provides powerful built-in mathematical functions to compress data:</p>
+                    <p>SQL provides highly optimized built-in mathematical functions to compress data:</p>
                     <ul>
-                        <li><b>SUM():</b> Adds up all numeric values.</li>
-                        <li><b>AVG():</b> Calculates the mean.</li>
-                        <li><b>COUNT():</b> Counts the number of rows. (Pro tip: <code>COUNT(DISTINCT user_id)</code> is vital for finding unique visitors, ignoring multiple visits by the same person).</li>
-                        <li><b>MIN() / MAX():</b> Finds the lowest or highest value (e.g., finding the date of the first order and most recent order).</li>
+                        <li><b>SUM():</b> Adds up all numeric values in a column.</li>
+                        <li><b>AVG():</b> Calculates the mean. (Warning: Remember to filter extreme outliers first!).</li>
+                        <li><b>COUNT():</b> Counts the number of rows. <i>Pro Tip:</i> <code>COUNT(DISTINCT user_id)</code> is vital for finding unique visitors, ignoring multiple visits by the exact same person.</li>
+                        <li><b>MIN() / MAX():</b> Finds the lowest or highest value. This is incredibly useful for dates (e.g., finding the date of the first order and most recent order for a cohort).</li>
                     </ul>
                     <h3>The HAVING Clause: Filtering After Grouping</h3>
-                    <p>The most common beginner mistake is trying to use <code>WHERE</code> to filter an aggregated column. Remember the Order of Execution (Module 6)! <code>WHERE</code> happens <i>before</i> aggregation.</p>
-                    <p>If you want to group sales by city, and THEN only show cities with over $100,000 in sales, you must use the <b>HAVING</b> clause, which specifically filters data <i>after</i> the GROUP BY has compressed it.</p>
-                    ${generatePromptAndOutput('SQL GROUP BY & HAVING', 'SELECT department, \n       COUNT(employee_id) as total_staff, \n       AVG(salary) as avg_pay\nFROM employees\nGROUP BY department\nHAVING AVG(salary) > 80000\nORDER BY avg_pay DESC;', 'department  | total_staff | avg_pay\nEngineering | 45          | 95000.00\nFinance     | 12          | 85000.00\n\n(Marketing is excluded because their avg_pay was only 60k, filtered out by the HAVING clause).')}`,
+                    <p>The most common beginner mistake is trying to use a <code>WHERE</code> clause to filter an aggregated column. Remember the Order of Execution (Module 6)! <code>WHERE</code> always happens <i>before</i> aggregation.</p>
+                    <p>If you want to group sales by city, and THEN only show cities with over $100,000 in total sales, you must use the <b>HAVING</b> clause, which specifically filters data <i>after</i> the GROUP BY has compressed it.</p>
+                    ${generatePromptAndOutput('SQL GROUP BY & HAVING', 'SELECT department, \n       COUNT(employee_id) as total_staff, \n       AVG(salary) as avg_pay\nFROM employees\nGROUP BY department\nHAVING AVG(salary) > 80000\nORDER BY avg_pay DESC;', 'department  | total_staff | avg_pay\nEngineering | 45          | 95000.00\nFinance     | 12          | 85000.00\n\n(Marketing is completely excluded from the final output because their avg_pay was only 60k, successfully filtered out by the HAVING clause).')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு பெட்டியில் 10,000 பில்கள் இருந்தால், அவற்றை 'மாதம்' வாரியாக தனித்தனி குவியலாகப் பிரிப்பதே GROUP BY. ஒவ்வொரு குவியலிலும் உள்ள மொத்தப் பணத்தைக் கால்குலேட்டரில் கணக்கிடுவது SUM() போன்ற Aggregation ஆகும்.</div>
                     <p>நிறுவனத் தலைவர்களுக்கு பல லட்சம் வரிகளைக் கொண்ட தனித்தனி தரவுகள் தேவையில்லை. அவர்களுக்கு "ஒவ்வொரு நகரத்திலும் எவ்வளவு வருமானம்" என்ற சுருக்கமே தேவை. இதை உருவாக்க <b>Aggregations மற்றும் GROUP BY</b> பயன்படுகிறது.</p>
@@ -828,8 +866,8 @@
                     <ul>
                         <li><b>SUM():</b> எண்களைக் கூட்டுகிறது.</li>
                         <li><b>AVG():</b> சராசரியைக் கணக்கிடுகிறது.</li>
-                        <li><b>COUNT():</b> எத்தனை வரிகள் உள்ளன என எண்ணும். (<code>COUNT(DISTINCT user_id)</code> மூலம் தனித்துவமான வாடிக்கையாளர்களை மட்டும் எண்ணலாம்).</li>
-                        <li><b>MIN() / MAX():</b> மிகக்குறைந்த மற்றும் அதிகபட்ச மதிப்புகளைக் கண்டறியும்.</li>
+                        <li><b>COUNT():</b> எத்தனை வரிகள் உள்ளன என எண்ணும். (<code>COUNT(DISTINCT user_id)</code> மூலம் தனித்துவமான வாடிக்கையாளர்களை மட்டும் சரியாக எண்ணலாம்).</li>
+                        <li><b>MIN() / MAX():</b> மிகக்குறைந்த மற்றும் அதிகபட்ச மதிப்புகளைக் கண்டறியும். (எ.கா: ஒரு வாடிக்கையாளரின் முதல் ஆர்டர் தேதி மற்றும் கடைசி ஆர்டர் தேதி).</li>
                     </ul>
                     <h3>HAVING கட்டளை (குழுவாக்கிய பின் வடிகட்டுதல்)</h3>
                     <p>தொடக்கநிலையாளர்கள் செய்யும் பொதுவான தவறு, சுருக்கப்பட்ட தரவுகளை வடிகட்ட <code>WHERE</code> கட்டளையைப் பயன்படுத்துவது. <code>WHERE</code> என்பது தரவுகளைச் சுருக்குவதற்கு <i>முன்பே</i> வேலை செய்யும்.</p>
@@ -840,19 +878,19 @@
                 id: 9, icon: "🪟", img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
                 title_en: "9. SQL Window Functions: Part 1 (Rankings)", title_ta: "9. SQL: விண்டோ ஃபங்ஷன்ஸ் (Window Functions)", 
                 content_en: `
-                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A normal GROUP BY squashes 10 rows into 1 single summary row. A Window Function looks at the group, calculates the summary, but keeps all 10 original rows intact, just adding a new column next to them. You get to see the detail AND the total simultaneously.</div>
-                    <p>Window functions separate Junior Analysts from Senior Data Engineers. They allow you to perform complex calculations across a set of rows (a "window") that are related to the current row, without collapsing the dataset.</p>
-                    <h3>The OVER() Clause</h3>
-                    <p>The magic of a window function lies in the <code>OVER()</code> clause. It defines the boundary of the window. You can <code>PARTITION BY</code> (which resets the calculation for each category, like grouping) and <code>ORDER BY</code> (which determines the sequence of the calculation).</p>
-                    <h3>Ranking Functions</h3>
-                    <p>One of the most common business requests is finding the "Top N" of something per category (e.g., the top 3 highest-paid employees in *each* department, or the top 2 best-selling products in *each* country).</p>
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A normal GROUP BY squashes 10 rows into 1 single summary row. A Window Function looks at the group, calculates the summary, but keeps all 10 original rows intact, just adding a new column next to them. You get to see the granular detail AND the total simultaneously.</div>
+                    <p>Window functions separate Junior Analysts from Senior Data Engineers. They allow you to perform highly complex calculations across a set of rows (a "window") that are related to the current row, completely without collapsing the dataset like a GROUP BY does.</p>
+                    <h3>The Magic OVER() Clause</h3>
+                    <p>The absolute core of a window function lies in the <code>OVER()</code> clause. It defines the boundary of the window you are calculating. You can <code>PARTITION BY</code> (which resets the calculation for each category, similar to grouping) and <code>ORDER BY</code> (which determines the strict chronological or numeric sequence of the calculation).</p>
+                    <h3>Ranking Functions Deep Dive</h3>
+                    <p>One of the most common executive requests is finding the "Top N" of something per category (e.g., the top 3 highest-paid employees in *each* department, or the top 2 best-selling products in *each* country).</p>
                     <ul>
-                        <li><b>ROW_NUMBER():</b> Assigns a unique sequential integer to rows. If there is a tie, it randomly picks one to be 1 and the other 2.</li>
-                        <li><b>RANK():</b> If there is a tie for 1st place, both get 1. The next row gets 3 (it skips 2).</li>
-                        <li><b>DENSE_RANK():</b> If there is a tie for 1st place, both get 1. The next row gets 2. (No gaps in ranking).</li>
+                        <li><b>ROW_NUMBER():</b> Assigns a strict unique sequential integer to rows. If there is a tie, it randomly picks one to be 1 and the other 2. It guarantees no duplicates.</li>
+                        <li><b>RANK():</b> If there is a tie for 1st place, both get 1. However, the next row gets 3 (it skips rank 2 entirely).</li>
+                        <li><b>DENSE_RANK():</b> If there is a tie for 1st place, both get 1. The next row gets 2. (There are no mathematical gaps in the ranking).</li>
                     </ul>
-                    <p>To actually filter by these ranks, you must wrap the window function inside a CTE or Subquery (which we will cover in Module 11), because window functions are executed almost last by the database engine.</p>
-                    ${generatePromptAndOutput('SQL ROW_NUMBER Window', 'SELECT name, department, salary,\nROW_NUMBER() OVER(\n    PARTITION BY department \n    ORDER BY salary DESC\n) as salary_rank\nFROM employees;', 'name  | dept  | salary | salary_rank\nAlex  | Tech  | 100k   | 1\nBob   | Tech  | 90k    | 2\nSarah | Sales | 120k   | 1  <-- Notice rank resets for new dept\nMike  | Sales | 80k    | 2')}`,
+                    <p><i>Important Note:</i> To actually filter a query by these ranks (e.g., <code>WHERE rank <= 3</code>), you must wrap the window function inside a CTE or Subquery (covered in Module 11), because window functions are executed almost last by the database engine and cannot be placed directly in a WHERE clause.</p>
+                    ${generatePromptAndOutput('SQL ROW_NUMBER Window', 'SELECT name, department, salary,\nROW_NUMBER() OVER(\n    PARTITION BY department \n    ORDER BY salary DESC\n) as salary_rank\nFROM employees;', 'name  | dept  | salary | salary_rank\nAlex  | Tech  | 100k   | 1\nBob   | Tech  | 90k    | 2\nSarah | Sales | 120k   | 1  <-- Notice rank resets for new dept partition\nMike  | Sales | 80k    | 2')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சாதாரணமாக GROUP BY பயன்படுத்தினால் பத்து வரிகள் ஒரு வரியாகச் சுருங்கிவிடும். ஆனால் Window Function தொகையைக் கணக்கிட்டாலும், பத்து வரிகளையும் அழிக்காமல் அப்படியே வைத்திருக்கும். ஒவ்வொரு வரியின் அருகிலும் புதிதாகப் பதிலைச் சேர்க்கும்.</div>
                     <p>Window functions-ஐக் கற்றுக்கொள்வது உங்களை ஒரு சிறந்த டேட்டா இன்ஜினியராக மாற்றும். இது தரவுகளைச் சுருக்காமல், குறிப்பிட்ட வரிகளுக்கு இடையே சிக்கலான கணக்கீடுகளைச் செய்ய அனுமதிக்கிறது.</p>
@@ -861,10 +899,11 @@
                     <h3>ரேங்கிங் (Ranking Functions)</h3>
                     <p>நிறுவனங்களில் "ஒவ்வொரு துறையிலும் அதிக சம்பளம் வாங்கும் முதல் 3 பேர் யார்?" போன்ற கேள்விகள் அடிக்கடி கேட்கப்படும். இதற்கு ரேங்கிங் பயன்படுகிறது.</p>
                     <ul>
-                        <li><b>ROW_NUMBER():</b> ஒவ்வொரு வரிசைக்கும் 1, 2, 3 எனத் தனிப்பட்ட எண்ணைக் கொடுக்கும். ஒரே மதிப்பு இருந்தால் ஏதேனும் ஒன்றுக்கு 1, மற்றொன்றுக்கு 2 எனக் கொடுக்கும்.</li>
+                        <li><b>ROW_NUMBER():</b> ஒவ்வொரு வரிசைக்கும் 1, 2, 3 எனத் தனிப்பட்ட எண்ணைக் கொடுக்கும். ஒரே மதிப்பு இருந்தால் ஏதேனும் ஒன்றுக்கு 1, மற்றொன்றுக்கு 2 எனக் கொடுக்கும். எண்களில் நகல் இருக்காது.</li>
                         <li><b>RANK():</b> இருவர் முதல் இடத்தைப் பிடித்தால், இருவருக்கும் 1 கொடுக்கும். அடுத்த நபருக்கு 3 கொடுக்கும் (2-ஐத் தவிர்த்துவிடும்).</li>
                         <li><b>DENSE_RANK():</b> இருவர் முதல் இடத்தைப் பிடித்தால் இருவருக்கும் 1 கொடுக்கும். அடுத்த நபருக்கு 2 கொடுக்கும் (எண்களைத் தவிர்க்காது).</li>
                     </ul>
+                    <p>குறிப்பு: இந்த ரேங்க் எண்களை வைத்து வடிகட்ட (Filter) வேண்டுமென்றால், இதை ஒரு CTE-க்குள் (Module 11) வைத்துத்தான் WHERE கட்டளையைப் பயன்படுத்த முடியும்.</p>
                     ${generatePromptAndOutput('SQL ROW_NUMBER Window', 'SELECT name, department, salary,\nROW_NUMBER() OVER(\n    PARTITION BY department \n    ORDER BY salary DESC\n) as salary_rank\nFROM employees;', 'name  | dept  | salary | salary_rank\nAlex  | Tech  | 100k   | 1\nBob   | Tech  | 90k    | 2\nSarah | Sales | 120k   | 1  <-- புதிய துறைக்கு ரேங்க் மீண்டும் 1-லிருந்து தொடங்கும்\nMike  | Sales | 80k    | 2')}`
             },
             { 
@@ -872,12 +911,15 @@
                 title_en: "10. SQL Window Functions: Part 2 (Analytics & Delays)", title_ta: "10. SQL: லேக் மற்றும் லீட் (LAG/LEAD)", 
                 content_en: `
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Imagine looking at your bank statement. LAG() is like a magic mirror that lets you look at yesterday's balance directly on today's row, making it incredibly easy to subtract the two and calculate your daily spending without losing your place.</div>
-                    <p>Beyond simple rankings, Window Functions unlock powerful time-series analytics directly inside your database, saving you from writing messy Python loops later.</p>
+                    <p>Beyond simple rankings, Window Functions unlock powerful time-series analytics directly inside your relational database, saving you from writing messy, slow Python loops later in the pipeline.</p>
                     <h3>Time-Shifting with LAG and LEAD</h3>
-                    <p>How do you calculate Month-over-Month (MoM) revenue growth? You need to subtract January's revenue from February's revenue. But SQL reads data row by row. It cannot naturally "remember" the previous row.</p>
-                    <p><b>LAG()</b> fetches data from a previous row in the partition. <b>LEAD()</b> fetches data from a subsequent row. By using LAG(), you can pull last month's revenue into a new column on the *current* month's row, allowing you to do simple math: <code>(Current - Previous) / Previous</code>.</p>
+                    <p>How do you calculate Month-over-Month (MoM) revenue growth? You need to mathematically subtract January's revenue from February's revenue. But SQL natively reads data row by row, independently. It cannot naturally "remember" the previous row.</p>
+                    <ul>
+                        <li><b>LAG():</b> Fetches data from a previous row in the partition. By using LAG(), you can pull last month's revenue into a new column on the *current* month's row, allowing you to do simple inline math: <code>(Current - Previous) / Previous</code>.</li>
+                        <li><b>LEAD():</b> Fetches data from a subsequent (future) row. Excellent for calculating the time gap between a customer's first purchase and their next purchase.</li>
+                    </ul>
                     <h3>Running Totals (Cumulative Sums)</h3>
-                    <p>You can also use standard aggregations as window functions. By combining <code>SUM()</code> with an <code>ORDER BY</code> inside the <code>OVER()</code> clause, you create a "Running Total". This is how dashboards show a line chart climbing upwards towards a yearly goal.</p>
+                    <p>You can also use standard aggregations as window functions. By combining <code>SUM()</code> with an <code>ORDER BY</code> inside the <code>OVER()</code> clause, you create a dynamic "Running Total". This is precisely how BI dashboards show a line chart steadily climbing upwards towards a yearly sales goal.</p>
                     <p>The database calculates the sum from the "unbounded preceding" row up to the "current row".</p>
                     ${generatePromptAndOutput('SQL LAG() for MoM Growth', 'SELECT month, revenue,\nLAG(revenue, 1) OVER(ORDER BY month) as prev_month,\nrevenue - LAG(revenue, 1) OVER(ORDER BY month) as growth\nFROM monthly_sales;', 'month | rev | prev_month | growth\nJan   | 100 | NULL       | NULL\nFeb   | 150 | 100        | +50\nMar   | 130 | 150        | -20\n\n(Notice January is NULL because there is no previous month to look at).')}`,
                 content_ta: `
@@ -885,7 +927,10 @@
                     <p>ரேங்கிங்கைத் தாண்டி, Window Functions மூலம் SQL-இலேயே கால அடிப்படையிலான பகுப்பாய்வுகளை (Time-series analytics) மிக எளிதாகச் செய்ய முடியும். பைத்தானில் கடினமான குறியீடுகளை எழுதுவதை இது தவிர்க்கும்.</p>
                     <h3>LAG மற்றும் LEAD கட்டளைகள்</h3>
                     <p>மாதாந்திர வருமான வளர்ச்சியை (MoM) எப்படிக் கணக்கிடுவீர்கள்? பிப்ரவரி மாத வருமானத்திலிருந்து ஜனவரி மாத வருமானத்தைக் கழிக்க வேண்டும். ஆனால் SQL தரவுகளை ஒவ்வொரு வரியாகவே படிக்கும், முந்தைய வரியை அதனால் நினைவில் கொள்ள முடியாது.</p>
-                    <p><b>LAG()</b> முந்தைய வரியிலிருந்து தரவைப் பெறும். <b>LEAD()</b> அடுத்த வரியிலிருந்து தரவைப் பெறும். LAG() மூலம் கடந்த மாத வருமானத்தை, இந்த மாத வரிசையிலேயே புதிய column-ஆகக் கொண்டுவரலாம். பிறகு இரண்டையும் எளிதாகக் கழித்துக் கணக்கிடலாம்.</p>
+                    <ul>
+                        <li><b>LAG():</b> முந்தைய வரியிலிருந்து தரவைப் பெறும். LAG() மூலம் கடந்த மாத வருமானத்தை, இந்த மாத வரிசையிலேயே புதிய column-ஆகக் கொண்டுவரலாம். பிறகு இரண்டையும் எளிதாகக் கழித்துக் கணக்கிடலாம்.</li>
+                        <li><b>LEAD():</b> அடுத்த வரியிலிருந்து (எதிர்காலம்) தரவைப் பெறும். ஒரு வாடிக்கையாளரின் முதல் ஆர்டருக்கும் அடுத்த ஆர்டருக்கும் உள்ள இடைவெளியைக் கணக்கிட இது உதவும்.</li>
+                    </ul>
                     <h3>தொடர் கூடுதல் (Running Totals)</h3>
                     <p><code>SUM()</code> ஃபார்முலாவுடன் <code>ORDER BY</code>-ஐ இணைத்து "Running Total"-ஐ உருவாக்கலாம். டேஷ்போர்டுகளில் நிறுவனத்தின் ஆண்டு இலக்கை நோக்கி வரைபடம் மேலே ஏறுவது இப்படித்தான் கணக்கிடப்படுகிறது.</p>
                     ${generatePromptAndOutput('SQL LAG() for MoM Growth', 'SELECT month, revenue,\nLAG(revenue, 1) OVER(ORDER BY month) as prev_month,\nrevenue - LAG(revenue, 1) OVER(ORDER BY month) as growth\nFROM monthly_sales;', 'month | rev | prev_month | growth\nJan   | 100 | NULL       | NULL\nFeb   | 150 | 100        | +50\nMar   | 130 | 150        | -20\n\n(ஜனவரிக்கு முந்தைய மாதம் இல்லாததால் அது NULL எனக் காட்டும்).')}`
@@ -894,18 +939,18 @@
                 id: 11, icon: "⛓️", img: "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=800&q=80",
                 title_en: "11. Subqueries, Common Table Expressions (CTEs)", title_ta: "11. SQL: CTE மற்றும் சப்-குவரி", 
                 content_en: `
-                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A CTE is like writing a rough draft on a sticky note. You create a temporary mini-table, give it a name, stick it on your monitor, and then refer to it immediately in your main query to keep your final code clean and organized.</div>
-                    <p>As your SQL queries become more complex, combining multiple JOINs, aggregations, and window functions in a single SELECT block becomes a tangled, unreadable mess. This is where modular SQL comes in.</p>
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A CTE is like writing a rough draft on a sticky note. You create a temporary mini-table, give it a name, stick it on your monitor, and then refer to it immediately in your main query to keep your final code clean, modular, and organized.</div>
+                    <p>As your SQL queries become increasingly complex, combining multiple JOINs, aggregations, and window functions in a single giant SELECT block becomes a tangled, unreadable mess. This is where modular SQL architecture comes in.</p>
                     <h3>The Problem with Nested Subqueries</h3>
-                    <p>A subquery is a query nested inside another query (e.g., inside the WHERE clause). While functional, deeply nested subqueries are notoriously difficult for humans to read and debug because you have to read them from the inside-out.</p>
+                    <p>A subquery is a query nested inside another query (e.g., executing a SELECT statement inside a WHERE clause). While fully functional, deeply nested subqueries are notoriously difficult for humans to read and debug because you are forced to read them from the inside-out, like a complicated math equation.</p>
                     <h3>The Elegance of CTEs</h3>
-                    <p>A <b>Common Table Expression (CTE)</b>, defined by the <code>WITH</code> clause, solves this by defining the temporary result set at the <i>top</i> of your script. It reads logically from top to bottom.</p>
+                    <p>A <b>Common Table Expression (CTE)</b>, defined by the <code>WITH</code> clause, solves this completely by defining the temporary result set at the absolute <i>top</i> of your script. It reads logically from top to bottom.</p>
                     <ul>
-                        <li><b>Readability:</b> You can break a massive 100-line query into 3 or 4 small, named CTE blocks.</li>
-                        <li><b>Reusability:</b> Once defined at the top, you can reference the same CTE multiple times in your main query.</li>
-                        <li><b>Chaining:</b> You can create a second CTE that queries the first CTE, allowing for step-by-step data transformations that mimic a true data pipeline.</li>
+                        <li><b>Readability:</b> You can break a massive 100-line query into 3 or 4 small, neatly named CTE blocks.</li>
+                        <li><b>Reusability:</b> Once defined at the top, you can reference the exact same CTE multiple times in your main query without rewriting the logic.</li>
+                        <li><b>Chaining:</b> You can create a second CTE that specifically queries the first CTE, allowing for step-by-step sequential data transformations that mimic a true data pipeline.</li>
                     </ul>
-                    <p>In modern enterprise analytics, using CTEs over nested subqueries is a strict formatting requirement for code reviews.</p>
+                    <p>In modern enterprise analytics, using CTEs over nested subqueries is a strict formatting requirement for passing code reviews.</p>
                     ${generateCodeBox('SQL CTE Example', 'WITH HighSpenders AS (\n  -- CTE 1: Find big spenders\n  SELECT customer_id, SUM(amount) as total\n  FROM orders\n  GROUP BY customer_id\n  HAVING SUM(amount) > 5000\n)\n-- Main Query: Join the temporary CTE with the Users table\nSELECT u.name, u.email, hs.total\nFROM users u\nJOIN HighSpenders hs ON u.id = hs.customer_id;')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> CTE என்பது ஒரு தற்காலிகக் குறிப்பு எழுதுவது போன்றது. ஒரு சிறிய தற்காலிக டேபிளை உருவாக்கி, அதற்கு ஒரு பெயரிட்டு, அதைப் பிரதான குறியீட்டில் பயன்படுத்தி குழப்பத்தைத் தவிர்க்கலாம்.</div>
@@ -926,21 +971,21 @@
                 id: 12, icon: "⚡", img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80",
                 title_en: "12. Query Performance Optimization & Indexing", title_ta: "12. SQL வேகம் & இண்டெக்ஸிங் (Indexing)", 
                 content_en: `
-                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A Table Scan is like reading a 1000-page book word-for-word to find every mention of "Abraham Lincoln". An Index Scan is like flipping to the Glossary at the back of the book, finding "Lincoln", and turning exactly to pages 42 and 89. It takes milliseconds instead of hours.</div>
-                    <p>Writing SQL that returns the correct answer is only step one. Writing SQL that returns the answer in 2 seconds instead of 2 hours is what makes you an expert. <b>Query Optimization</b> is crucial because cloud databases (like BigQuery) charge money based on how much data your query processes.</p>
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A Table Scan is like reading a 1000-page book word-for-word to find every mention of "Abraham Lincoln". An Index Scan is like flipping directly to the Glossary at the back of the book, finding "Lincoln", and turning exactly to pages 42 and 89. It takes milliseconds instead of hours.</div>
+                    <p>Writing SQL that returns the correct answer is only step one. Writing SQL that returns the exact answer in 2 seconds instead of 2 hours is what makes you an expert. <b>Query Optimization</b> is absolutely crucial because modern cloud databases (like Google BigQuery and Snowflake) literally charge money based on how much data your query physically processes.</p>
                     <h3>The Enemy: Full Table Scans</h3>
-                    <p>When you use a <code>WHERE</code> clause on a column that isn't optimized, the database engine must read every single row on the hard drive to check the condition. If the table has 500 million rows, this causes massive lag and high server costs.</p>
+                    <p>When you use a <code>WHERE</code> clause on a column that isn't optimized, the database engine must read every single row on the hard drive to check the condition. If the table has 500 million rows, this causes massive system lag and high server costs.</p>
                     <h3>The Solution: Indexing</h3>
-                    <p>Database administrators create <b>Indexes</b> (B-Trees) on frequently searched columns (like User_ID or Email). An index is a sorted copy of just that column with pointers to the actual data row. When you query an indexed column, the engine uses an "Index Scan", skipping 99.9% of the table.</p>
+                    <p>Database administrators create <b>Indexes</b> (usually B-Trees) on frequently searched columns (like User_ID, Email, or Date). An index is a sorted mathematical copy of just that specific column, with precise pointers to the actual data row. When you query an indexed column, the engine uses an "Index Scan", efficiently skipping 99.9% of the table.</p>
                     <h3>Golden Rules for Fast Queries</h3>
                     <ul>
-                        <li><b>Avoid SELECT *:</b> Never pull all columns if you only need three. It wastes RAM and network bandwidth.</li>
-                        <li><b>Filter Early:</b> Put your most restrictive <code>WHERE</code> clauses as early as possible (e.g., inside a CTE) to shrink the dataset before joining it to massive tables.</li>
-                        <li><b>Avoid Functions on Indexed Columns:</b> Writing <code>WHERE YEAR(signup_date) = 2023</code> breaks the index because the engine has to run the YEAR() function on every row before checking. Instead, use <code>WHERE signup_date >= '2023-01-01' AND signup_date < '2024-01-01'</code> to keep the index intact.</li>
+                        <li><b>Avoid SELECT *:</b> Never pull all columns if you only need three. It wastes RAM and massive network bandwidth.</li>
+                        <li><b>Filter Early:</b> Put your most restrictive <code>WHERE</code> clauses as early as possible (e.g., inside a CTE) to shrink the dataset <i>before</i> joining it to massive secondary tables.</li>
+                        <li><b>Avoid Functions on Indexed Columns:</b> Writing <code>WHERE YEAR(signup_date) = 2023</code> actively breaks the index because the engine has to run the YEAR() function on every single row before checking. Instead, use <code>WHERE signup_date >= '2023-01-01' AND signup_date < '2024-01-01'</code> to keep the index intact and blazing fast.</li>
                     </ul>
-                    ${generateCodeBox('Query Optimization Example', '-- BAD: Breaks index and pulls too much data\nSELECT * FROM transactions \nWHERE UPPER(status) = \'PAID\';\n\n-- GOOD: Uses index and limits payload\nSELECT id, amount, date FROM transactions \nWHERE status = \'paid\' OR status = \'PAID\';')}`,
+                    ${generateCodeBox('Query Optimization Example', '-- BAD: Breaks the index and pulls too much data\nSELECT * FROM transactions \nWHERE UPPER(status) = \'PAID\';\n\n-- GOOD: Uses the index properly and limits the network payload\nSELECT id, amount, date FROM transactions \nWHERE status = \'paid\' OR status = \'PAID\';')}`,
                 content_ta: `
-                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> Table Scan என்பது ஒரு 1000 பக்கப் புத்தகத்தில் "காந்தி" என்ற வார்த்தையைக் கண்டுபிடிக்கப் புத்தகம் முழுவதையும் வரி வரியாகப் படிப்பது. Index Scan என்பது புத்தகத்தின் பின்னால் உள்ள Index-ஐப் பார்த்து, காந்தி எந்தப் பக்கத்தில் உள்ளார் என நேரடியாக அந்தப் பக்கத்திற்குச் செல்வது. இது நேரத்தை மிச்சப்படுத்தும்.</div>
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> Table Scan என்பது ஒரு 1000 பக்கப் புத்தகத்தில் "காந்தி" என்ற வார்த்தையைக் கண்டுபிடிக்கப் புத்தகம் முழுவதையும் வரி வரியாகப் படிப்பது. Index Scan என்பது புத்தகத்தின் பின்னால் உள்ள Index-ஐப் பார்த்து, காந்தி எந்தப் பக்கத்தில் உள்ளார் என நேரடியாக அந்தப் பக்கத்திற்குச் செல்வது. இது பல மணிநேரங்களை மிச்சப்படுத்தும்.</div>
                     <p>சரியான விடையைத் தரும் SQL-ஐ எழுதுவது முதல் படி மட்டுமே. 2 மணிநேரம் எடுக்கும் குறியீட்டை 2 வினாடிகளில் வேலை செய்ய வைப்பதே உங்களை ஒரு நிபுணராக்கும். <b>Query Optimization (வேகத்தை அதிகரித்தல்)</b> மிகவும் முக்கியமானது, ஏனெனில் BigQuery போன்ற கிளவுட் டேட்டாபேஸ்கள் நீங்கள் எவ்வளவு தரவைப் பயன்படுத்துகிறீர்களோ அதற்கேற்ப கட்டணம் வசூலிக்கும்.</p>
                     <h3>எதிரி: Full Table Scans</h3>
                     <p>நீங்கள் <code>WHERE</code> கட்டளையைப் பயன்படுத்தும்போது, டேட்டாபேஸ் ஹார்ட் டிரைவில் உள்ள ஒவ்வொரு வரியையும் படிக்க வேண்டி வந்தால் (Full Table Scan), அது பல மில்லியன் வரிகள் உள்ள டேபிளில் பெரிய தாமதத்தை ஏற்படுத்தும்.</p>
@@ -959,18 +1004,18 @@
                 title_en: "13. Python Environment Control & Core Data Structures", title_ta: "13. பைதான் (Python) அறிமுகம்", 
                 content_en: `
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If SQL is a heavy industrial crane designed to lift massive blocks of data out of a warehouse, Python is the Swiss Army Knife you use to slice, carve, loop, and chemically alter that data once it's on your desk.</div>
-                    <p>While SQL is perfect for retrieving data, it is clumsy for complex math, predictive modeling, or automating multi-step tasks. <b>Python</b> is the undisputed industry standard programming language for Data Analytics and Machine Learning.</p>
+                    <p>While SQL is perfect for retrieving data from storage, it is incredibly clumsy for complex math, predictive machine learning models, or automating multi-step daily tasks. <b>Python</b> is the undisputed industry standard programming language for Data Analytics.</p>
                     <h3>The Jupyter Environment</h3>
-                    <p>Data analysts rarely write Python in standard text files (.py). We use <b>Jupyter Notebooks</b> (.ipynb). Notebooks allow you to run Python code in isolated chunks (cells), visualize charts immediately below the code, and keep your data loaded in RAM without re-running the entire script.</p>
+                    <p>Data analysts rarely write Python in standard text files (.py). We use <b>Jupyter Notebooks</b> (.ipynb). Notebooks allow you to run Python code in isolated blocks (cells), visualize colorful charts immediately below the code, and keep your data loaded in RAM without re-running the entire script from scratch.</p>
                     <h3>Core Data Structures</h3>
-                    <p>Before using advanced libraries, you must master Python's native structures:</p>
+                    <p>Before using advanced libraries like Pandas, you must master Python's native structures:</p>
                     <ul>
                         <li><b>Lists <code>[ ]</code>:</b> Ordered, mutable arrays of data. E.g., a list of daily temperatures. Highly flexible but slow for massive math.</li>
-                        <li><b>Dictionaries <code>{ }</code>:</b> Key-Value pairs. E.g., <code>{"name": "John", "age": 30}</code>. This is the exact equivalent of JSON data, making it crucial for working with APIs.</li>
-                        <li><b>Tuples <code>( )</code>:</b> Immutable (unchangeable) lists. Used to protect data that should never be accidentally altered during your script.</li>
+                        <li><b>Dictionaries <code>{ }</code>:</b> Key-Value pairs. E.g., <code>{"name": "John", "age": 30}</code>. This is the exact equivalent of JSON data, making it crucial for working with Web APIs.</li>
+                        <li><b>Tuples <code>( )</code>:</b> Immutable (unchangeable) lists. Used to protect critical data that should never be accidentally altered during your script.</li>
                     </ul>
                     <h3>List Comprehensions</h3>
-                    <p>Python's secret weapon for analysts is the List Comprehension. It allows you to write a <code>for-loop</code> and an <code>if-statement</code> in a single, highly performant line of code.</p>
+                    <p>Python's secret weapon for analysts is the List Comprehension. It allows you to write a <code>for-loop</code> and an <code>if-statement</code> in a single, highly performant, readable line of code.</p>
                     ${generatePromptAndOutput('Python List Comprehension', '# We have a list of sales with tax included. We want to extract just the base price for sales over 100.\n\nsales_with_tax =\n\n# Standard loop takes 4 lines. Comprehension takes 1 line:\nbase_prices = [round(x * 0.85) for x in sales_with_tax if x > 100]\n\nprint(base_prices)', '')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> SQL என்பது பெரிய டேட்டாபேஸிலிருந்து தரவுகளைத் தூக்கி வரும் ஒரு கிரேன் என்றால், பைதான் என்பது அந்தத் தரவுகளை வெட்டவும், மாற்றவும், ஆராயவும் பயன்படும் ஒரு கூர்மையான கத்தி போன்றது.</div>
@@ -994,14 +1039,14 @@
                 content_en: `
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Using a standard Python loop to multiply 1 million numbers is like a teacher grading 1 million exams one by one. NumPy "Vectorization" is like cloning the teacher 1 million times so they grade all the exams simultaneously in a split second.</div>
                     <p>Standard Python lists are highly flexible, but they are incredibly slow for mathematical operations on massive datasets because Python has to check the data type of every single item, one by one, in a <code>for-loop</code>.</p>
-                    <p><b>NumPy (Numerical Python)</b> solves this. It is a library written in C (which is blazing fast) that allows Python to perform <b>Vectorization</b>.</p>
+                    <p><b>NumPy (Numerical Python)</b> solves this completely. It is a mathematical library written in C (which is blazing fast) that allows Python to perform <b>Vectorization</b>.</p>
                     <h3>The NumPy Ndarray</h3>
-                    <p>The core of NumPy is the <i>n-dimensional array</i> (ndarray). Unlike Python lists, NumPy arrays force every item to be the exact same data type (usually integers or floats). Because the computer knows every item is the same, it skips the slow checking process and performs math on the entire array simultaneously.</p>
-                    <h3>Broadcasting</h3>
-                    <p>NumPy allows for mathematical operations without writing loops. If you have an array of 10,000 prices and want to add 5 to all of them, you literally just write <code>array + 5</code>. NumPy "broadcasts" that +5 across all 10,000 elements instantly.</p>
+                    <p>The core of NumPy is the <i>n-dimensional array</i> (ndarray). Unlike standard Python lists, NumPy arrays force every single item to be the exact same data type (usually integers or floats). Because the computer knows every item is identically formatted, it skips the slow checking process and performs math on the entire array simultaneously in memory.</p>
+                    <h3>Broadcasting Mechanics</h3>
+                    <p>NumPy allows for mathematical operations without writing a single loop. If you have an array of 10,000 prices and want to add 5 to all of them, you literally just write <code>array + 5</code>. NumPy logically "broadcasts" that +5 across all 10,000 elements instantly.</p>
                     <ul>
-                        <li><b>Performance:</b> NumPy is often 50x to 100x faster than standard Python lists.</li>
-                        <li><b>Matrix Math:</b> Essential for advanced statistics and Machine Learning algorithms (like calculating dot products in neural networks).</li>
+                        <li><b>Raw Performance:</b> NumPy is often 50x to 100x faster than standard Python lists for deep calculations.</li>
+                        <li><b>Matrix Math:</b> Essential for advanced statistics and Machine Learning algorithms (like calculating complex dot products in deep neural networks).</li>
                     </ul>
                     ${generatePromptAndOutput('NumPy Speed & Broadcasting', 'import numpy as np\nimport time\n\n# Create 1 million numbers\npython_list = list(range(1000000))\nnumpy_array = np.arange(1000000)\n\n# The NumPy Way (Vectorization)\n# No loop required. Happens instantly.\nresult = numpy_array * 2\n\nprint(result[:5])', '[0 2 4 6 8]')}`,
                 content_ta: `
@@ -1023,16 +1068,16 @@
                 title_en: "15. Deep Pandas: Series & DataFrames", title_ta: "15. பாண்டாஸ் (Pandas) டேட்டாபிரேம்", 
                 content_en: `
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A Pandas DataFrame is literally just an Excel spreadsheet powered by Python code instead of mouse clicks. It has rows, columns, and an index. But unlike Excel, it can hold 10 million rows without crashing your computer.</div>
-                    <p>While NumPy handles the raw math, <b>Pandas</b> is the ultimate tool for Data Analysis in Python. It is built on top of NumPy, meaning it inherits the blazing speed of vectorized arrays, but wraps them in a highly usable, Excel-like interface.</p>
-                    <h3>Series vs DataFrame</h3>
-                    <p>There are two core objects in Pandas you must understand:</p>
+                    <p>While NumPy handles the raw math, <b>Pandas</b> is the absolute ultimate tool for Data Analysis in Python. It is built natively on top of NumPy, meaning it inherits the blazing speed of vectorized arrays, but wraps them in a highly usable, Excel-like visual interface.</p>
+                    <h3>Series vs DataFrame Structure</h3>
+                    <p>There are two core objects in Pandas you must fundamentally understand:</p>
                     <ul>
-                        <li><b>Series:</b> A single column of data. It is essentially a 1-dimensional NumPy array, but with an explicit index (row labels).</li>
-                        <li><b>DataFrame:</b> A 2-dimensional table made up of multiple Series (columns) glued together sharing the same index. This is your spreadsheet.</li>
+                        <li><b>Series:</b> A single column of data. It is essentially a 1-dimensional NumPy array, but with an explicit index (row labels) attached to it.</li>
+                        <li><b>DataFrame:</b> A 2-dimensional table made up of multiple Series (columns) glued together sharing the exact same index. This is your spreadsheet.</li>
                     </ul>
-                    <h3>Data Ingestion and Exploration</h3>
-                    <p>Pandas can ingest data from almost anywhere: <code>read_csv()</code>, <code>read_excel()</code>, <code>read_json()</code>, or even <code>read_sql()</code> to pull directly from a database. Once loaded, you use specific methods to profile the dataset instantly.</p>
-                    <p>Methods like <code>df.head()</code> (show first 5 rows), <code>df.info()</code> (show data types and null counts), and <code>df.value_counts()</code> (show the frequency of unique values in a column) are your bread and butter for initial EDA.</p>
+                    <h3>Data Ingestion and Rapid Exploration</h3>
+                    <p>Pandas can ingest data from almost anywhere: <code>read_csv()</code>, <code>read_excel()</code>, <code>read_json()</code>, or even <code>read_sql()</code> to pull directly from a live database. Once loaded, you use specific methods to profile the dataset instantly.</p>
+                    <p>Methods like <code>df.head()</code> (show first 5 rows), <code>df.info()</code> (show data types and null counts), and <code>df.value_counts()</code> (show the frequency of unique values in a specific column) are your bread and butter for initial EDA.</p>
                     ${generatePromptAndOutput('Pandas Data Ingestion', 'import pandas as pd\n\n# Load a CSV file into a DataFrame\ndf = pd.read_csv("users.csv")\n\n# Select a specific column (Series)\nages = df["Age"]\n\n# Filter the DataFrame using boolean indexing (just like WHERE in SQL)\npremium_users = df[df["Subscription"] == "Premium"]\n\nprint(premium_users.head(2))', '   ID      Name  Age Subscription\n0  101  Alice M.   28      Premium\n3  104    Bob T.   34      Premium')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> Pandas DataFrame என்பது பைதான் மூலம் இயங்கும் ஒரு அதிவேக எக்செல் ஷீட் ஆகும். இதில் rows மற்றும் columns இருக்கும். ஆனால் எக்செல் போல அல்லாமல், இது பல லட்சம் வரிகளைக் கொண்டிருந்தாலும் கம்ப்யூட்டரை ஹேங் (hang) செய்யாது.</div>
@@ -1052,14 +1097,14 @@
                 id: 16, icon: "🧼", img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&q=80",
                 title_en: "16. Advanced Data Cleaning & Transformations", title_ta: "16. பைதான்: தரவு சுத்திகரிப்பு (Cleaning)", 
                 content_en: `
-                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Data from the real world is like a messy teenager's bedroom. Names have weird spaces, dates are formatted wrong, and prices have dollar signs attached making them impossible to add up. Pandas lets you scrub this clean with a few simple commands.</div>
-                    <p>80% of a Data Analyst's job is cleaning data. If you feed messy data into a visualization tool or a machine learning model, you get garbage out. Pandas provides incredibly powerful string and datetime manipulation tools.</p>
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Data from the real world is like a messy teenager's bedroom. Names have weird spaces, dates are formatted wrong, and prices have dollar signs attached making them impossible to add up mathematically. Pandas lets you scrub this clean with a few simple commands.</div>
+                    <p>80% of a professional Data Analyst's job is cleaning data. If you feed messy, chaotic data into a visualization tool or a machine learning model, you get garbage out. Pandas provides incredibly powerful string and datetime manipulation tools to fix this.</p>
                     <h3>String Manipulation (.str)</h3>
-                    <p>If a column contains prices like <code>"$1,200.50"</code>, it is technically a 'String' (text). You cannot do math on text. You must use the <code>.str</code> accessor to replace the dollar signs and commas, and then cast the column into a float (decimal number).</p>
-                    <h3>Handling Datetimes</h3>
-                    <p>Dates imported from CSVs are usually just dumb text strings (e.g., "15-Jan-2023"). By using <code>pd.to_datetime()</code>, you convert that text into a smart datetime object. Once converted, you can easily extract just the month, just the year, or calculate the exact number of days between two columns.</p>
-                    <h3>Treating Null Values</h3>
-                    <p>We discussed Nulls in EDA. In Pandas, you execute this using <code>df.dropna()</code> to delete rows with blanks, or <code>df.fillna()</code> to replace the blanks with a specific value (like 0 or the column mean).</p>
+                    <p>If a column contains prices like <code>"$1,200.50"</code>, it is technically a 'String' (text). You absolutely cannot do math on text. You must use the <code>.str</code> accessor to mathematically replace the dollar signs and commas, and then immediately cast the column into a float (decimal number).</p>
+                    <h3>Handling Datetimes Natively</h3>
+                    <p>Dates imported from CSVs are usually just dumb text strings (e.g., "15-Jan-2023"). By using <code>pd.to_datetime()</code>, you convert that text into a smart datetime object. Once successfully converted, you can easily extract just the month, just the year, or calculate the exact number of days between two columns.</p>
+                    <h3>Treating Null Values Programmatically</h3>
+                    <p>We discussed Nulls in EDA. In Pandas, you execute this treatment using <code>df.dropna()</code> to aggressively delete rows with blanks, or <code>df.fillna()</code> to intelligently replace the blanks with a specific value (like 0 or the column mean).</p>
                     ${generateCodeBox('Pandas Cleaning Script', '# 1. Clean String & Convert to Float\ndf["Price"] = df["Price"].str.replace("$", "").str.replace(",", "").astype(float)\n\n# 2. Fix Text Formatting (Title Case & Strip whitespace)\ndf["City"] = df["City"].str.strip().str.title()\n\n# 3. Convert to Datetime and extract the Year\ndf["Date"] = pd.to_datetime(df["Date"])\ndf["Year"] = df["Date"].dt.year\n\n# 4. Fill missing ages with the median\ndf["Age"].fillna(df["Age"].median(), inplace=True)')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> உண்மையான தரவுகள் எப்போதுமே குழப்பமாக இருக்கும். பெயர்களில் இடைவெளி இருக்கும், எண்களில் '$' குறி இருக்கும், தேதிகள் தவறான வடிவில் இருக்கும். இவற்றைச் சுத்தப்படுத்த Pandas உதவுகிறது.</div>
@@ -1077,15 +1122,16 @@
                 title_en: "17. Aggregations, Merging & GroupBy Chaining", title_ta: "17. பைதான்: தரவுகளை இணைத்தல் (Merge)", 
                 content_en: `
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If SQL is like writing a formal letter to request data from the basement, Pandas <code>merge</code> and <code>groupby</code> is like having all the papers directly on your desk and stapling them together yourself.</div>
-                    <p>Everything you learned in SQL (JOINs, GROUP BY, HAVING) can be executed natively in Python using Pandas. This is crucial when your data doesn't live in a neat SQL database (e.g., combining a CSV export from Shopify with a JSON export from Facebook Ads).</p>
-                    <h3>Merging DataFrames</h3>
-                    <p><code>pd.merge()</code> is the exact equivalent of a SQL JOIN. You specify the left DataFrame, the right DataFrame, the type of join (<code>how='left'</code>), and the column they share (<code>on='customer_id'</code>).</p>
-                    <h3>Advanced GroupBy</h3>
-                    <p>The <code>.groupby()</code> method in Pandas splits the data into groups. However, to make it useful, you must chain it with an aggregation method like <code>.agg()</code>. This allows you to apply different mathematical functions to different columns simultaneously.</p>
+                    <p>Everything you learned in SQL (JOINs, GROUP BY, HAVING) can be executed natively in Python using Pandas. This is absolutely crucial when your data doesn't live in a neat SQL database (e.g., combining a chaotic CSV export from Shopify with a JSON export from Facebook Ads).</p>
+                    <h3>Merging DataFrames Natively</h3>
+                    <p><code>pd.merge()</code> is the exact Python equivalent of a SQL JOIN. You specify the left DataFrame, the right DataFrame, the type of join (<code>how='left'</code>), and the column they share (<code>on='customer_id'</code>). It handles the mapping automatically.</p>
+                    <h3>Advanced GroupBy Mechanics</h3>
+                    <p>The <code>.groupby()</code> method in Pandas splits the data into manageable groups. However, to make it useful, you must chain it with an aggregation method like <code>.agg()</code>. This allows you to apply completely different mathematical functions to different columns simultaneously.</p>
                     <ul>
-                        <li><b>Custom Lambda Functions:</b> You aren't restricted to standard SUM and AVG. You can write custom lambda functions inside your groupby to calculate complex logic on the fly (e.g., finding the range between max and min price per city).</li>
+                        <li><b>Custom Lambda Functions:</b> You aren't restricted to standard SUM and AVG. You can write custom lambda functions inside your groupby to calculate complex logic on the fly (e.g., finding the range between max and min price per city in one line).</li>
+                        <li><b>Multi-Index Resets:</b> Always remember to append <code>.reset_index()</code> after grouping to turn the aggregated results back into a clean, flat DataFrame.</li>
                     </ul>
-                    ${generateCodeBox('Pandas Merge & GroupBy', '# 1. Perform a LEFT JOIN\nmerged_df = pd.merge(customers_df, orders_df, on="customer_id", how="left")\n\n# 2. Group by City, and calculate different metrics for different columns\nsummary = merged_df.groupby("City").agg({\n    "order_amount": "sum",       # Total sales per city\n    "customer_id": "count",      # Number of orders\n    "rating": "mean"             # Average customer rating\n}).reset_index()\n\nprint(summary)')}`,
+                    ${generateCodeBox('Pandas Merge & GroupBy', '# 1. Perform a LEFT JOIN natively\nmerged_df = pd.merge(customers_df, orders_df, on="customer_id", how="left")\n\n# 2. Group by City, and calculate different metrics for different columns\nsummary = merged_df.groupby("City").agg({\n    "order_amount": "sum",       # Total sales per city\n    "customer_id": "count",      # Number of orders\n    "rating": "mean"             # Average customer rating\n}).reset_index()\n\nprint(summary)')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> SQL என்பது அடித்தளத்தில் உள்ள ஆவணங்களை எடுத்துவரக் கடிதம் எழுதுவது போன்றது. Pandas <code>merge</code> என்பது அந்த ஆவணங்கள் அனைத்தும் உங்கள் மேசையிலேயே இருக்க, நீங்களே அவற்றை ஸ்டேப்ளர் (stapler) போட்டு இணைப்பது போன்றது.</div>
                     <p>SQL-இல் நீங்கள் கற்ற (JOINs, GROUP BY) அனைத்தையும் பைதானிலும் செய்ய முடியும். உங்களின் தரவுகள் SQL டேட்டாபேஸில் இல்லாமல், CSV அல்லது JSON ஃபைல்களாக இருந்தால் இது மிகவும் பயன்படும்.</p>
@@ -1095,6 +1141,7 @@
                     <p>Pandas-இல் <code>.groupby()</code> தரவுகளைக் குழுக்களாகப் பிரிக்கிறது. இதனுடன் <code>.agg()</code> கட்டளையைச் சேர்த்தால், வெவ்வேறு Columns-க்கு வெவ்வேறு கணிதங்களை ஒரே நேரத்தில் செய்ய முடியும்.</p>
                     <ul>
                         <li><b>Lambda ஃபங்ஷன்கள்:</b> சாதாரண SUM மற்றும் AVG மட்டுமின்றி, உங்கள் சொந்த லாஜிக்குகளையும் (Lambda) இந்த groupby-க்குள் பயன்படுத்தலாம்.</li>
+                        <li><b>Reset Index:</b> குழுவாக்கிய பின் அட்டவணையைச் சீராக்க <code>.reset_index()</code> பயன்படுத்துவதை மறக்க வேண்டாம்.</li>
                     </ul>
                     ${generateCodeBox('Pandas Merge & GroupBy', '# 1. LEFT JOIN மூலம் இணைத்தல்\nmerged_df = pd.merge(customers_df, orders_df, on="customer_id", how="left")\n\n# 2. நகரம் வாரியாகத் தொகுத்து, பல கணக்கீடுகளைச் செய்தல்\nsummary = merged_df.groupby("City").agg({\n    "order_amount": "sum",       # மொத்த விற்பனை\n    "customer_id": "count",      # ஆர்டர்களின் எண்ணிக்கை\n    "rating": "mean"             # சராசரி ரேட்டிங்\n}).reset_index()\n\nprint(summary)')}`
             },
@@ -1102,17 +1149,17 @@
                 id: 18, icon: "📅", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&q=80",
                 title_en: "18. Time-Series Data Profiling & Resampling", title_ta: "18. கால அடிப்படையிலான தரவு (Time-Series)", 
                 content_en: `
-                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A heart monitor beeps every second. Reading every single beep is overwhelming. Resampling is like asking the machine to just give you the "average heart rate per minute" so you can actually read the chart.</div>
-                    <p>Time-Series analysis is a specialized branch of data analytics dealing with data indexed in time order (e.g., stock market prices, server logs, or daily website traffic). Pandas was originally created for finance, so its time-series capabilities are unmatched.</p>
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A hospital heart monitor beeps every single second. Reading every single beep is visually overwhelming. Resampling is like asking the machine to just give you the "average heart rate per minute" so you can actually read the trend chart clearly.</div>
+                    <p>Time-Series analysis is a highly specialized branch of data analytics dealing exclusively with data indexed in chronological time order (e.g., stock market prices, backend server logs, or daily website traffic). Pandas was originally created for Wall Street finance, so its time-series capabilities are unmatched.</p>
                     <h3>Setting the Datetime Index</h3>
-                    <p>For time-series magic to work in Pandas, you must set the date column as the actual Index of the DataFrame using <code>df.set_index('Date', inplace=True)</code>.</p>
-                    <h3>Resampling</h3>
-                    <p><code>.resample()</code> is like a specialized <code>groupby()</code> exclusively for time. If you have a sensor recording temperatures every 5 minutes (thousands of rows), you can resample it to <code>'D'</code> (Daily) and apply a <code>.mean()</code> to instantly get daily averages.</p>
+                    <p>For time-series magic to work natively in Pandas, you must set the date column as the actual structural Index of the DataFrame using <code>df.set_index('Date', inplace=True)</code>.</p>
+                    <h3>Resampling Frequencies</h3>
+                    <p><code>.resample()</code> is exactly like a specialized <code>groupby()</code> built exclusively for time. If you have a sensor recording temperatures every 5 minutes (thousands of noisy rows), you can resample it down to <code>'D'</code> (Daily) and apply a <code>.mean()</code> to instantly get clean daily averages.</p>
                     <h3>Rolling Windows (Moving Averages)</h3>
-                    <p>Stock market charts often show a "7-Day Moving Average" to smooth out the chaotic daily jumps and reveal the true trend. In Pandas, you use <code>.rolling(window=7).mean()</code>. This calculation slides down your data day by day, averaging the previous 7 days at every step.</p>
+                    <p>Stock market charts often show a "7-Day Moving Average" to smooth out the chaotic daily jumps and reveal the true underlying trend. In Pandas, you execute this using <code>.rolling(window=7).mean()</code>. This calculation mathematically slides down your data day by day, averaging the previous 7 days at every single step.</p>
                     ${generatePromptAndOutput('Pandas Resample & Rolling', '# Assuming "Date" is already set as the DataFrame index\n\n# Downsample hourly server hits to total Daily hits\ndaily_hits = df["server_requests"].resample("D").sum()\n\n# Calculate a 7-day rolling moving average to smooth the trend\nrolling_trend = daily_hits.rolling(window=7).mean()\n\nprint(rolling_trend.tail(3))', 'Date\n2025-10-15    15200.5\n2025-10-16    15450.2\n2025-10-17    15800.0\nName: server_requests, dtype: float64')}`,
                 content_ta: `
-                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> இதய துடிப்பு மானிட்டர் ஒவ்வொரு நொடியும் சத்தமிடும். அத்தனை தரவுகளையும் பார்ப்பது கடினம். Resampling என்பது, "ஒரு நிமிடத்தின் சராசரி துடிப்பை மட்டும் காட்டு" என்று சொல்வது போன்றது. இதனால் வரைபடம் தெளிவாகப் புரியும்.</div>
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> மருத்துவமனையில் இதய துடிப்பு மானிட்டர் ஒவ்வொரு நொடியும் சத்தமிடும். அத்தனை தரவுகளையும் பார்ப்பது கடினம். Resampling என்பது, "ஒரு நிமிடத்தின் சராசரி துடிப்பை மட்டும் காட்டு" என்று சொல்வது போன்றது. இதனால் வரைபடம் தெளிவாகப் புரியும்.</div>
                     <p>பங்குச்சந்தை விலைகள், தினசரி வலைத்தளப் பார்வையாளர்கள் போன்ற கால அடிப்படையிலான தரவுகளை (Time-Series) ஆராய்வது அனலிடிக்ஸின் முக்கியப் பகுதியாகும். Pandas முதலில் நிதித்துறைக்காகவே (Finance) உருவாக்கப்பட்டது, எனவே இதில் Time-Series கருவிகள் மிகச் சிறப்பாக உள்ளன.</p>
                     <h3>Datetime-ஐ Index ஆக மாற்றுதல்</h3>
                     <p>Pandas-இல் Time-Series சரியாக வேலை செய்ய, தேதி உள்ள Column-ஐ DataFrame-இன் Index-ஆக மாற்ற வேண்டும்: <code>df.set_index('Date')</code>.</p>
@@ -1128,12 +1175,12 @@
                 content_en: `
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A table of 1,000 numbers will put executives to sleep in a boardroom. A sharp line chart showing a massive dip in revenue highlighted in red wakes them up instantly. Visualization is the translation layer between math and human psychology.</div>
                     <p>While BI tools like Tableau are great for interactive dashboards, Python allows for highly customized, programmatic, and statistically deep visualizations. The two core libraries are <b>Matplotlib</b> (the foundation) and <b>Seaborn</b> (the beautiful, statistical wrapper).</p>
-                    <h3>Choosing the Right Chart</h3>
+                    <h3>Choosing the Exact Right Chart</h3>
                     <ul>
-                        <li><b>Line Charts:</b> Exclusively for showing trends over time (Time-Series).</li>
-                        <li><b>Bar Charts:</b> For comparing categorical groups (e.g., Sales by Region).</li>
-                        <li><b>Scatter Plots:</b> For showing the correlation between two continuous variables (e.g., Marketing Spend vs Total Revenue).</li>
-                        <li><b>Histograms:</b> For showing the distribution and density of a single variable (e.g., creating buckets of User Ages to see where the bulk of your users sit).</li>
+                        <li><b>Line Charts:</b> Used exclusively for showing trends over time (Time-Series). Never use a line chart for categories.</li>
+                        <li><b>Bar Charts:</b> Perfect for comparing categorical groups (e.g., Sales by Region or Department).</li>
+                        <li><b>Scatter Plots:</b> Built for showing the correlation between two continuous variables (e.g., Marketing Spend vs Total Revenue).</li>
+                        <li><b>Histograms:</b> Built for showing the distribution and density of a single variable (e.g., creating buckets of User Ages to see where the bulk of your users sit).</li>
                     </ul>
                     <h3>Seaborn's Superpower: Heatmaps</h3>
                     <p>When running machine learning or deep analysis, you need to know which variables are mathematically correlated. A Correlation Matrix calculates this, and a Seaborn Heatmap visualizes it instantly with color gradients, instantly revealing hidden relationships (e.g., noticing that 'Rainy Weather' highly correlates with 'Uber Surge Pricing').</p>
@@ -1157,16 +1204,16 @@
                 title_en: "20. BI Architecture & Relational Data Modeling", title_ta: "20. BI மாடலிங் (Star Schema)", 
                 content_en: `
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A Star Schema puts the 'Fact' table (metrics like Sales and Quantity) in the center like a sun. It connects to 'Dimension' tables (context like Time, Product details, Store location) orbiting around it like planets. This makes querying lighting fast.</div>
-                    <p>Before you drag and drop charts in Tableau, Power BI, or Looker, you must build the underlying Data Model. If your model is a mess of tangled relationships, your dashboard will be incredibly slow and show inaccurate numbers.</p>
+                    <p>Before you blindly drag and drop charts in Tableau, Power BI, or Looker, you must build the underlying Data Model. If your model is a mess of tangled relationships, your dashboard will be incredibly slow and show inaccurate numbers.</p>
                     <h3>Dimensional Modeling</h3>
-                    <p>The industry standard for Business Intelligence (BI) architecture is the <b>Star Schema</b>.</p>
+                    <p>The absolute industry standard for Business Intelligence (BI) architecture is the <b>Star Schema</b>.</p>
                     <ul>
                         <li><b>Fact Tables:</b> These sit in the center. They contain the quantitative measurements (the numbers) of a business event. Examples: Order Amount, Discount Applied, Units Sold. They also contain the Foreign Keys to connect to Dimension tables.</li>
                         <li><b>Dimension Tables:</b> These orbit the Fact table. They contain the descriptive attributes (the text) that give context to the numbers. Examples: Customer Name, Product Category, Store Region, Date hierarchies.</li>
                     </ul>
-                    <h3>Cardinality & Cross-Filtering</h3>
-                    <p>When connecting tables in Power BI, you must define the cardinality. Most relationships should be <b>One-to-Many (1:*)</b>. One unique customer in the Dimension table can have Many orders in the Fact table. The cross-filter direction should almost always flow <i>from</i> the Dimension (the filter) <i>to</i> the Fact (the numbers). Bi-directional filters often cause massive calculation errors and should be avoided.</p>
-                    ${generateCodeBox('Data Modeling Best Practices', 'Rule 1: Never put descriptive text (like Product Category) directly in the Fact table. It wastes space. Use an Integer ID and link it to a Dimension table.\nRule 2: Always create a dedicated Calendar/Date Dimension table to handle complex time intelligence (YTD, MoM) easily in BI tools.\nRule 3: Keep it a Star. Avoid Snowflake schemas (Dimensions attached to other Dimensions) unless absolutely necessary, as they slow down rendering.')}`,
+                    <h3>Cardinality & Cross-Filtering Direction</h3>
+                    <p>When connecting tables in Power BI, you must define the cardinality. Most relationships should be <b>One-to-Many (1:*)</b>. One unique customer in the Dimension table can have Many orders in the Fact table. The cross-filter direction should almost always flow <i>from</i> the Dimension (the filter) <i>to</i> the Fact (the numbers). Bi-directional filters often cause massive calculation errors and should be avoided at all costs.</p>
+                    ${generateCodeBox('Data Modeling Best Practices', 'Rule 1: Never put descriptive text (like Product Category) directly in the Fact table. It wastes space. Use an Integer ID and link it to a Dimension table.\nRule 2: Always create a dedicated Calendar/Date Dimension table to handle complex time intelligence (YTD, MoM) easily in BI tools.\nRule 3: Keep it a Star. Avoid Snowflake schemas (Dimensions attached to other Dimensions) unless absolutely necessary, as they drastically slow down visual rendering.')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> Star Schema என்பது மையத்தில் 'Fact' டேபிளையும் (விற்பனை எண்கள்), அதைச் சுற்றி 'Dimension' டேபிள்களையும் (நேரம், பொருள், கடை விவரங்கள்) சூரியனையும் கோள்களையும் போல ஒரு நட்சத்திர வடிவில் அமைப்பதாகும். இது டேஷ்போர்டை வேகமாக இயங்கச் செய்யும்.</div>
                     <p>Tableau அல்லது Power BI-இல் வரைபடங்களை உருவாக்கும் முன், தரவுகளுக்கு இடையிலான உறவை (Data Model) சரியாக அமைக்க வேண்டும். கட்டமைப்பு தவறாக இருந்தால், டேஷ்போர்டு மெதுவாக வேலை செய்யும், எண்கள் தவறாகக் காட்டும்.</p>
@@ -1187,16 +1234,16 @@
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A dashboard is exactly like a car's dashboard speedometer. It should not take 5 minutes of intense reading to figure out how fast you are going. It must be instantly scannable, prioritizing the most critical information at a glance.</div>
                     <p>An analyst can write the most brilliant SQL and Python code in the world, but if the final dashboard is cluttered and confusing, the stakeholders will ignore it. <b>Dashboard UI/UX</b> is a critical skillset.</p>
                     <h3>The F-Pattern and Visual Hierarchy</h3>
-                    <p>In Western cultures, human eyes scan screens in an 'F' pattern (Top-Left, across, then down). Therefore, your real estate is strictly prioritized:</p>
+                    <p>In Western cultures, human eyes naturally scan screens in an 'F' pattern (Top-Left, across, then down). Therefore, your real estate is strictly prioritized:</p>
                     <ul>
                         <li><b>Top-Left to Top-Right:</b> High-level BANs (Big A** Numbers). Total Revenue, Total Users, YTD Growth.</li>
                         <li><b>Middle Section:</b> Trend lines and primary charts answering the "Why" behind the BANs.</li>
                         <li><b>Bottom Section:</b> Granular, row-level data tables for users who want to export or dig deep.</li>
                     </ul>
                     <h3>Cognitive Load & Chart Crimes</h3>
-                    <p>Avoid "Chart Crimes". Never use a 3D Pie Chart (humans cannot accurately judge 3D volume on a 2D screen, distorting the data). If you have more than 3 categories, use a Bar Chart instead of a Pie Chart.</p>
-                    <p>Remove chart junk: Gridlines, excessive borders, and heavy axis labels create cognitive load. Maximize the "Data-to-Ink ratio" (Edward Tufte's principle: use ink only to display data, erase everything else).</p>
-                    ${generateCodeBox('Dashboard UX Checklist', '1. The 5-Second Rule: Can a user understand the core message in 5 seconds?\n2. Color Consistency: Does Red ALWAYS mean bad? Don\'t use Red for "Company A" in one chart and Red for "Losses" in another.\n3. Alignment: Are charts aligned to a strict grid? Misalignment feels unprofessional.\n4. Interactivity: Are global date/region filters placed intuitively at the top/side?')}`,
+                    <p>Avoid "Chart Crimes". Never use a 3D Pie Chart (humans cannot accurately judge 3D volume on a 2D screen, actively distorting the data). If you have more than 3 categories, use a Bar Chart instead of a Pie Chart.</p>
+                    <p>Remove chart junk: Gridlines, excessive borders, and heavy axis labels create cognitive load. Maximize the "Data-to-Ink ratio" (Edward Tufte's core principle: use ink only to display data, erase everything else).</p>
+                    ${generateCodeBox('Dashboard UX Checklist', '1. The 5-Second Rule: Can a user understand the core business message in 5 seconds?\n2. Color Consistency: Does Red ALWAYS mean bad? Don\'t use Red for "Company A" in one chart and Red for "Losses" in another.\n3. Alignment: Are charts logically aligned to a strict grid? Misalignment feels highly unprofessional.\n4. Interactivity: Are global date/region filters placed intuitively at the top or side?')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> டேஷ்போர்டு என்பது காரின் ஸ்பீடோமீட்டர் போன்றது. நீங்கள் எவ்வளவு வேகத்தில் செல்கிறீர்கள் என்பதைப் புரிந்துகொள்ள 5 நிமிடம் ஆகக் கூடாது. பார்த்த உடனே முக்கியத் தகவல்கள் புரிய வேண்டும்.</div>
                     <p>ஒரு அனலிஸ்ட் எவ்வளவு சிறந்த குறியீடுகளை எழுதினாலும், இறுதி டேஷ்போர்டு குழப்பமாக இருந்தால் அது தோல்வியே. <b>டேஷ்போர்டு டிசைன் (UI/UX)</b> மிக முக்கியமான திறனாகும்.</p>
@@ -1217,18 +1264,18 @@
                 title_en: "22. Analytics Storytelling & Executive Reporting", title_ta: "22. டேட்டா மூலம் கதை சொல்லுதல்", 
                 content_en: `
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Don't tell your boss "Conversion dropped 5%". That's just a raw fact. Tell them "Because our new checkout page takes 2 seconds longer to load on iPhones, we lost $50,000 this week. Here is how we fix it." That is Data Storytelling.</div>
-                    <p>The biggest gap between Junior and Senior analysts is communication. Executives do not care about how cool your Python script is or how complex your SQL join was. They care about business impact. <b>Data Storytelling</b> bridges the gap between raw analysis and strategic action.</p>
+                    <p>The absolute biggest gap between Junior and Senior analysts is communication. Executives do not care about how cool your Python script is or how complex your SQL join was. They care exclusively about business impact. <b>Data Storytelling</b> bridges the gap between raw analysis and strategic action.</p>
                     <h3>The Insight Framework</h3>
-                    <p>Every presentation or report must follow a narrative arc, often replacing the "What" with the "So What?"</p>
+                    <p>Every presentation or report must follow a narrative arc, actively replacing the "What" with the "So What?"</p>
                     <ol>
                         <li><b>The Context (The Hook):</b> Establish the baseline. "Historically, mobile sales account for 60% of our revenue."</li>
                         <li><b>The Problem (The Conflict):</b> Introduce the anomaly your data found. "However, last week, mobile sales dropped by 15%."</li>
-                        <li><b>The Root Cause (The Climax):</b> Reveal the 'Why' using your deep dive analysis. "Our EDA showed this drop was isolated entirely to iOS users upgrading to the new app version, which has a bug."</li>
+                        <li><b>The Root Cause (The Climax):</b> Reveal the 'Why' using your deep dive analysis. "Our EDA showed this drop was isolated entirely to iOS users upgrading to the new app version, which has a critical bug."</li>
                         <li><b>The Action (The Resolution):</b> Provide the recommendation. "We need the dev team to patch the iOS cart API immediately to recover the $50k weekly loss."</li>
                     </ol>
                     <h3>Slide Deck Principles</h3>
                     <p>When presenting data, use declarative slide titles. Instead of a title saying "Q3 Revenue Stats", the title should be the conclusion itself: "Q3 Revenue Fell 10% Due to Supply Chain Delays in August". Force the audience to read the insight before they even look at the chart.</p>
-                    ${generateCodeBox('The "So What?" Rule', 'Amateur Insight: "Bounce rate on the landing page is 75%."\n\nProfessional Insight: "75% of users are leaving the landing page without clicking. Because our CAC (Cost to Acquire) is $10, we are burning $7.50 for every $10 spent on ads. We must redesign the hero banner to match the ad copy."')}`,
+                    ${generateCodeBox('The "So What?" Rule', 'Amateur Insight: "Bounce rate on the landing page is 75%."\n\nProfessional Insight: "75% of users are leaving the landing page without clicking. Because our CAC (Cost to Acquire) is $10, we are burning $7.50 for every $10 spent on ads. We must redesign the hero banner to match the ad copy to stop this leak."')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> முதலாளியிடம் "விற்பனை 5% குறைந்தது" என்று சொல்லாதீர்கள். "புதிய ஆப் அப்டேட்டிற்குப் பிறகு ஐபோன்களில் வேகம் குறைந்ததால், இந்த வாரம் ₹5 லட்சம் நஷ்டம். இதை இப்படிச் சரிசெய்யலாம்" என்று தீர்வாகக் கூறுங்கள். இதுவே Data Storytelling.</div>
                     <p>ஜூனியர் மற்றும் சீனியர் அனலிஸ்ட்களுக்கு இடையிலான மிகப்பெரிய வேறுபாடு அவர்களின் தகவல் தொடர்புத் திறன்தான். நீங்கள் எவ்வளவு சிறந்த SQL எழுதினீர்கள் என்பது மேலாளர்களுக்குத் தேவையில்லை. பிசினஸில் என்ன தாக்கம் ஏற்பட்டது என்பதே அவர்களுக்குத் தேவை. <b>Data Storytelling</b> என்பது வெறும் எண்களைக் கதையாகவும் தீர்வாகவும் மாற்றுவதாகும்.</p>
@@ -1249,16 +1296,16 @@
                 title_en: "23. Direct Business Metrics: Cohorts & Churn Tracking", title_ta: "23. பிசினஸ் மெட்ரிக்ஸ் (CAC & LTV)", 
                 content_en: `
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A Cohort is just a group of people who share a common characteristic, like a graduating high school class (The Class of '99). "Users who signed up in January" is a cohort. We track them over time to see when they eventually stop using the app (Churn).</div>
-                    <p>Data analysts must speak the language of business. The two most critical metrics in modern SaaS (Software as a Service) and E-commerce companies are <b>CAC</b> and <b>LTV</b>. If you understand these, you understand profitability.</p>
+                    <p>Data analysts must speak the native language of business. The two most absolutely critical metrics in modern SaaS (Software as a Service) and E-commerce companies are <b>CAC</b> and <b>LTV</b>. If you understand these, you understand profitability.</p>
                     <h3>CAC and LTV</h3>
                     <ul>
-                        <li><b>Customer Acquisition Cost (CAC):</b> How much marketing money you spent to get one new customer. (Total Marketing Spend / New Customers).</li>
-                        <li><b>Lifetime Value (LTV):</b> The total net profit a company makes from a customer over their entire relationship.</li>
+                        <li><b>Customer Acquisition Cost (CAC):</b> How much marketing money you spent to logically get one new customer. (Total Marketing Spend / New Customers).</li>
+                        <li><b>Lifetime Value (LTV):</b> The total net profit a company realistically makes from a customer over their entire relationship.</li>
                     </ul>
-                    <p><b>The Golden Ratio:</b> A healthy business needs an LTV to CAC ratio of at least 3:1. (If you spend $10 to get a user, they must spend at least $30 over their lifetime). If CAC > LTV, the company is burning money and will go bankrupt.</p>
+                    <p><b>The Golden Ratio:</b> A healthy business desperately needs an LTV to CAC ratio of at least 3:1. (If you spend $10 to get a user, they must spend at least $30 over their lifetime). If CAC > LTV, the company is actively burning money and will go bankrupt.</p>
                     <h3>Cohort Analysis & Churn</h3>
-                    <p><b>Churn Rate</b> is the percentage of users who stop paying/using your service. To analyze this deeply, we build a <b>Retention Cohort Grid</b>. Instead of looking at all users globally, we group them by the month they joined (the Cohort). We then track them month by month.</p>
-                    <p>If the January Cohort has 80% retention in Month 1, but crashes to 10% in Month 2, it tells us the onboarding experience is great, but the core product lacks long-term value (stickiness).</p>
+                    <p><b>Churn Rate</b> is the explicit percentage of users who stop paying/using your service. To analyze this deeply, we build a <b>Retention Cohort Grid</b>. Instead of looking at all users globally, we group them strictly by the month they joined (the Cohort). We then track them month by month.</p>
+                    <p>If the January Cohort has 80% retention in Month 1, but completely crashes to 10% in Month 2, it tells us the onboarding experience is great, but the core product actively lacks long-term value (stickiness).</p>
                     ${generatePromptAndOutput('Business Metric Formulas', 'CAC = (Total Sales & Marketing Expenses) / (Number of New Customers Acquired)\n\nLTV = Average Order Value (AOV) x Purchase Frequency x Customer Lifespan\n\nChurn Rate = (Lost Customers during Period) / (Total Customers at Start of Period) * 100', 'Example:\nStart Month with 1000 users. Lose 50 users.\nChurn Rate = (50 / 1000) * 100 = 5% Churn.')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> கோஹார்ட் (Cohort) என்பது ஒரே பண்பைப் பகிர்ந்துகொள்ளும் ஒரு குழு. "ஜனவரியில் ஆப்பை டவுன்லோட் செய்தவர்கள்" ஒரு கோஹார்ட். இவர்கள் எப்போது ஆப்பை நீக்குகிறார்கள் (Churn) என்பதைக் காலப்போக்கில் கண்காணிப்பதே கோஹார்ட் அனாலிசிஸ்.</div>
@@ -1278,17 +1325,17 @@
                 id: 24, icon: "🧪", img: "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=800&q=80",
                 title_en: "24. Enterprise A/B Testing & Conversion Experimentation", title_ta: "24. A/B டெஸ்டிங் (A/B Testing)", 
                 content_en: `
-                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> You show a Red Checkout Button to 50% of your users (Group A) and a Green Checkout Button to the other 50% (Group B). Whichever group buys more items reveals the winner. That is A/B testing in its simplest form.</div>
-                    <p>Companies like Google and Amazon don't guess what their users want; they test it. <b>A/B Testing (Split Testing)</b> is the gold standard for optimizing conversion rates based on empirical data rather than executive opinions.</p>
-                    <h3>The Rules of Experimentation</h3>
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> You show a Red Checkout Button to exactly 50% of your users (Group A) and a Green Checkout Button to the other 50% (Group B). Whichever group buys more items reveals the clear winner. That is A/B testing in its simplest form.</div>
+                    <p>Companies like Google and Amazon don't guess what their users want; they test it. <b>A/B Testing (Split Testing)</b> is the gold standard for optimizing conversion rates based entirely on empirical data rather than executive opinions.</p>
+                    <h3>The Strict Rules of Experimentation</h3>
                     <p>Running an A/B test is highly scientific. If done incorrectly, you will make false assumptions that damage the business.</p>
                     <ul>
-                        <li><b>Isolate Variables:</b> You can only test ONE thing at a time. If you change the button color AND the headline text, you won't know which change caused the increase in sales.</li>
-                        <li><b>Sample Size:</b> You must calculate the required sample size <i>before</i> running the test. If you stop the test after only 10 clicks just because Green is winning, that is a statistical illusion (Variance). You must wait until statistical significance is reached.</li>
-                        <li><b>Full Week Cycles:</b> User behavior changes on weekends. Always run tests for full 7-day increments (e.g., 7, 14, or 21 days) to capture the complete weekly lifecycle.</li>
+                        <li><b>Isolate Variables:</b> You can only physically test ONE thing at a time. If you change the button color AND the headline text, you won't know which specific change caused the increase in sales.</li>
+                        <li><b>Sample Size:</b> You must mathematically calculate the required sample size <i>before</i> running the test. If you stop the test after only 10 clicks just because Green is winning, that is a statistical illusion (Variance). You must wait until statistical significance is securely reached.</li>
+                        <li><b>Full Week Cycles:</b> User behavior completely changes on weekends. Always run tests for full 7-day increments (e.g., 7, 14, or 21 days) to capture the complete weekly lifecycle.</li>
                     </ul>
                     <h3>Validating with Hypothesis Testing</h3>
-                    <p>This brings us back to Module 4. Once the A/B test concludes, you use a T-test to calculate the p-value. If the Green button generated 2% more sales, but the p-value is 0.40, the test failed. The 2% lift was just random noise. If the p-value is 0.01, the Green button is statistically proven superior.</p>
+                    <p>This brings us perfectly back to Module 4. Once the A/B test concludes, you use a statistical T-test to calculate the p-value. If the Green button generated 2% more sales, but the p-value is 0.40, the test failed. The 2% lift was just random noise. If the p-value is 0.01, the Green button is statistically proven superior.</p>
                     ${generateCodeBox('A/B Testing Checklist', '1. Define the Metric: What exactly are we measuring? (e.g., Click-Through Rate).\n2. Calculate Sample Size: Use an online calculator based on your current baseline traffic.\n3. Split Traffic: Use a tool like Optimizely or Google Optimize to split traffic 50/50 randomly.\n4. Run the Test: Do not peek early! Let it run the full required duration.\n5. Analyze: Run a statistical significance test (Z-test for proportions).')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> 50% பயனர்களுக்குச் சிவப்பு பட்டனையும் (Group A), மீதமுள்ள 50% பயனர்களுக்குப் பச்சை பட்டனையும் (Group B) காட்டுவது. எந்தக் குழுவில் அதிக விற்பனை நடக்கிறதோ அந்தப் பட்டனே சிறந்தது. இதுவே A/B Testing.</div>
@@ -1308,19 +1355,19 @@
                 id: 25, icon: "🚀", img: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=80",
                 title_en: "25. Applied Predictive Analytics & Portfolio Building", title_ta: "25. முன்கணிப்பு & போர்ட்ஃபோலியோ உருவாக்கம்", 
                 content_en: `
-                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If you notice that for every $100 you spend on ads, sales go up by exactly $300, you can draw a straight line on a graph. Linear regression uses that historical line to predict the future: "If we spend $500 next month, we will make $1,500."</div>
-                    <p>We conclude the masterclass with the bridge between Data Analytics and Data Science: <b>Predictive Analytics</b>. While normal analytics looks at the past (What happened?), predictive analytics looks at the future (What will happen?).</p>
-                    <h3>Linear Regression</h3>
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If you strictly notice that for every $100 you spend on ads, sales consistently go up by exactly $300, you can draw a straight line on a graph. Linear regression uses that historical line to mathematically predict the future: "If we spend $500 next month, we will likely make $1,500."</div>
+                    <p>We conclude the masterclass with the bridge between Data Analytics and Data Science: <b>Predictive Analytics</b>. While normal analytics looks at the past (What happened?), predictive analytics looks deeply at the future (What will happen?).</p>
+                    <h3>Linear Regression Core</h3>
                     <p>The foundation of predictive modeling is Linear Regression. It mathematically determines the relationship between an Independent Variable (like Ad Spend) and a Dependent Variable (like Revenue). By fitting a "line of best fit" through historical scatter plot data, you can plug in future Ad Spend numbers to predict future Revenue.</p>
-                    <p>In Python, this is executed using the <code>Scikit-Learn</code> library. You split your data into "Training Data" (to teach the math) and "Testing Data" (to see if the math accurately predicts outcomes it hasn't seen yet).</p>
+                    <p>In Python, this is executed using the highly popular <code>Scikit-Learn</code> library. You split your data into "Training Data" (to teach the math) and "Testing Data" (to see if the math accurately predicts outcomes it hasn't actually seen yet).</p>
                     <h3>Building Your Professional Portfolio</h3>
-                    <p>To land a job in Data Analytics, a certificate isn't enough. You must build a public portfolio (on GitHub or personal website) demonstrating your skills. A strong portfolio requires 3 specific projects:</p>
+                    <p>To successfully land a high-paying job in Data Analytics, a certificate isn't enough. You must actively build a public portfolio (on GitHub or a personal website) explicitly demonstrating your skills. A strong portfolio requires 3 specific projects:</p>
                     <ol>
                         <li><b>The Data Cleaning Project (Python/Pandas):</b> Find a heavily corrupted, messy dataset on Kaggle. Document step-by-step how you cleaned the strings, handled nulls, and merged tables.</li>
-                        <li><b>The Complex Query Project (SQL):</b> Showcase your ability to use CTEs, Window Functions, and Joins to answer complex business questions from a relational database.</li>
-                        <li><b>The Executive Dashboard (Tableau/PowerBI):</b> Build a visually stunning, uncluttered dashboard following the UX principles from Module 21. Deploy it publicly using Tableau Public.</li>
+                        <li><b>The Complex Query Project (SQL):</b> Showcase your distinct ability to use CTEs, Window Functions, and Joins to answer complex business questions from a relational database.</li>
+                        <li><b>The Executive Dashboard (Tableau/PowerBI):</b> Build a visually stunning, uncluttered dashboard strictly following the UX principles from Module 21. Deploy it publicly using Tableau Public.</li>
                     </ol>
-                    <p>Always frame your portfolio projects around <b>Business Value</b>. Don't just say "I built a chart." Say "I built a dashboard that identified a 15% churn risk, leading to a targeted retention campaign."</p>
+                    <p>Always aggressively frame your portfolio projects around <b>Business Value</b>. Don't just say "I built a chart." Say "I built a dashboard that actively identified a 15% churn risk, leading to a targeted retention campaign."</p>
                     ${generateCodeBox('Linear Regression Core Formula', 'Mathematical Model:\nY = mX + b\n\nY = The Dependent Variable (e.g., Predicted Sales)\nX = The Independent Variable (e.g., Ad Spend)\nm = The Slope (The multiplier effect)\nb = The Y-Intercept (Baseline sales with 0 ad spend)')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> விளம்பரத்திற்கு ₹100 செலவழித்தால் ₹300 லாபம் கிடைக்கிறது என்றால், இதை வைத்து ஒரு நேர்கோடு வரையலாம். இதை வைத்து எதிர்காலத்தைக் கணிக்கலாம்: "அடுத்த மாதம் ₹500 செலவழித்தால் ₹1,500 லாபம் கிடைக்கும்". இதுவே Linear Regression.</div>
@@ -1382,6 +1429,7 @@
             }
         };
 
+        // --- NEW AUTO-OPT-IN LOGIC FOR EXISTING USERS ON SAME DOMAIN ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const photoUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=random`;
@@ -1393,9 +1441,26 @@
                     if (docSnap.exists()) {
                         currentUserData = docSnap.data();
                         
-                        if (!currentUserData.courses) currentUserData.courses = {};
+                        let dbNeedsUpdate = false;
+                        
+                        if (!currentUserData.courses) {
+                            currentUserData.courses = {};
+                            dbNeedsUpdate = true;
+                        }
                         if (!currentUserData.courses[CURRENT_COURSE_ID]) {
                             currentUserData.courses[CURRENT_COURSE_ID] = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
+                            dbNeedsUpdate = true;
+                        }
+                        
+                        // Automatically push the new course node to Firestore so it shows up without needing the profile screen
+                        if (dbNeedsUpdate) {
+                            try {
+                                await setDoc(doc(db, "users", user.uid), { 
+                                    courses: {
+                                        [CURRENT_COURSE_ID]: currentUserData.courses[CURRENT_COURSE_ID]
+                                    }
+                                }, { merge: true });
+                            } catch(e) { console.error("Auto-init save error:", e); }
                         }
                         
                         routeUser(true);
@@ -1506,7 +1571,7 @@
                         "contact": currentUserData.whatsappNumber || ""
                     },
                     "theme": { 
-                        "color": "#2563eb" 
+                        "color": "#059669" // Emerald theme for Razorpay
                     },
                     "modal": {
                         "ondismiss": function(){
