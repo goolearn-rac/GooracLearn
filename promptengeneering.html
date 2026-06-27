@@ -761,7 +761,7 @@
                         <li><b>பொய்களைத் தடுத்தல்:</b> "கொடுக்கப்பட்ட ஆவணத்தில் பதில் இல்லையென்றால், 'Data not found' என்று மட்டுமே பதிலளிக்கவும். ஊகிக்க முயற்சிக்க வேண்டாம்."</li>
                     </ul>
                     <h3>இயல்புநிலை நடத்தைகளை மாற்றுதல்</h3>
-                    <p>AI-கள் பொதுவாக உரையாடல் போலப் பதிலளிக்கவே பழக்கப்படுத்தப்பட்டுள்ளன. நீங்கள் ஒரு சாஃப்ட்வேர் API-ஐ உருவாக்கும்போது, AI-இன் இந்த தேவையற்ற உரையாடல்கள் உங்கள் சிஸ்டத்தை உடைக்கலாம். இவற்றைத் தடுக்க எதிர்மறை கட்டளைகள் கட்டாயம் தேவை.</p>
+                    <p>AI-கள் பெரும்பாலும் உரையாடல் போலப் பதிலளிக்கவே பழக்கப்படுத்தப்பட்டுள்ளன. நீங்கள் ஒரு சாஃப்ட்வேர் API-ஐ உருவாக்கும்போது, AI-இன் இந்த தேவையற்ற உரையாடல்கள் உங்கள் சிஸ்டத்தை உடைக்கலாம். இவற்றைத் தடுக்க எதிர்மறை கட்டளைகள் கட்டாயம் தேவை.</p>
                     ${generatePromptAndOutput('Strict Guardrail Prompt', 'கீழே உள்ள உரையிலிருந்து நிறுவனங்களின் பெயர்களை மட்டும் பிரித்தெடு.\n\nவிதிகள்:\n- பெயர்களை கமாவால் (comma) பிரித்து மட்டுமே வெளியிடு.\n- முன்னுரை அல்லது வேறு எந்த உரையையும் சேர்க்க வேண்டாம்.\n- எண்களோ அல்லது புல்லட் பாயிண்டுகளோ (bullet points) வேண்டாம்.', 'ஆப்பிள், மைக்ரோசாப்ட், கூகுள்')}`
             },
             { 
@@ -1408,6 +1408,7 @@
             }
         };
 
+        // --- NEW AUTO-OPT-IN LOGIC FOR EXISTING USERS ON SAME DOMAIN ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const photoUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=random`;
@@ -1419,10 +1420,26 @@
                     if (docSnap.exists()) {
                         currentUserData = docSnap.data();
                         
-                        // Strict initialization for the nested course schema if missing
-                        if (!currentUserData.courses) currentUserData.courses = {};
+                        let dbNeedsUpdate = false;
+                        
+                        if (!currentUserData.courses) {
+                            currentUserData.courses = {};
+                            dbNeedsUpdate = true;
+                        }
                         if (!currentUserData.courses[CURRENT_COURSE_ID]) {
                             currentUserData.courses[CURRENT_COURSE_ID] = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
+                            dbNeedsUpdate = true;
+                        }
+                        
+                        // Automatically push the new course node to Firestore so it shows up without needing the profile screen
+                        if (dbNeedsUpdate) {
+                            try {
+                                await setDoc(doc(db, "users", user.uid), { 
+                                    courses: {
+                                        [CURRENT_COURSE_ID]: currentUserData.courses[CURRENT_COURSE_ID]
+                                    }
+                                }, { merge: true });
+                            } catch(e) { console.error("Auto-init save error:", e); }
                         }
                         
                         routeUser(true);
