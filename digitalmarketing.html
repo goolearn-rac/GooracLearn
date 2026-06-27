@@ -1364,7 +1364,7 @@
                     <h3>உங்களின் போர்ட்ஃபோலியோ (Portfolio)</h3>
                     <p>இப்போது நீங்கள் ஒரு சீனியர் டிஜிட்டல் மார்க்கெட்டருக்கான அறிவைப் பெற்றுள்ளீர்கள். நல்ல வேலை அல்லது பெரிய கிளைண்ட்களைப் (Clients) பெற, இதை நிரூபிக்க வேண்டும். ஒரு போர்ட்ஃபோலியோவை உருவாக்குங்கள். அதில் உங்களுக்குத் தெரிந்த மென்பொருட்களைப் பட்டியலிடாமல், <b>Case Studies</b> (வெற்றிக் கதைகள்) எழுதுங்கள்.</p>
                     <p>"நான் ஒரு வெப்சைட்டில் A/B Testing செய்து, புதிய Zapier ஆட்டோமேஷனை உருவாக்கினேன். இதனால் விற்பனை 9% அதிகரித்து, மாதம் ₹10 லட்சம் கூடுதல் லாபம் கிடைத்தது" என்று எழுதுங்கள். இதுவே உங்களை அடுத்த கட்டத்திற்குக் கொண்டு செல்லும்.</p>
-                    ${generatePromptBox('Privacy Policy Generator Prompt', 'கருவி: ChatGPT (இதை ஒரு வழக்கறிஞரிடம் சரிபார்க்கவும்)\n\nPrompt: "நான் [உங்கள் நாடு] அடிப்படையில் உலகளவில் இயங்கும் ஒரு டிஜிட்டல் மார்க்கெட்டிங் ஏஜென்சியை நடத்துகிறேன். நாங்கள் Meta Pixel, Google Analytics மற்றும் Mailchimp பயன்படுத்துகிறோம். GDPR மற்றும் CCPA சட்டங்களுக்கு உட்பட்ட ஒரு முழுமையான 'Privacy Policy' மற்றும் 'Cookie Policy' டெம்ப்ளேட்டை உருவாக்கு. பயனர்கள் தங்கள் டேட்டாவை அழிக்கக் கோரும் உரிமைகள் பற்றிய பகுதியையும் சேர்க்கவும்."')}`
+                    ${generatePromptBox('Privacy Policy Generator Prompt', 'கருவி: ChatGPT (இதை ஒரு வழக்கறிஞரிடம் சரிபார்க்கவும்)\n\nPrompt: "நான் [உங்கள் நாடு] அடிப்படையில் உலகளவில் இயங்கும் ஒரு டிஜிட்டல் மார்க்கெட்டிங் ஏஜென்சியை நடத்துகிறேன். நாங்கள் Meta Pixel, Google Analytics மற்றும் Mailchimp பயன்படுத்துகிறோம். GDPR மற்றும் CCPA சட்டங்களுக்கு உட்பட்ட ஒரு முழுமையான \\\'Privacy Policy\\\' மற்றும் \\\'Cookie Policy\\\' டெம்ப்ளேட்டை உருவாக்கு. பயனர்கள் தங்கள் டேட்டாவை அழிக்கக் கோரும் உரிமைகள் பற்றிய பகுதியையும் சேர்க்கவும்."')}`
             }
         ];
 
@@ -1410,6 +1410,7 @@
             }
         };
 
+        // --- NEW AUTO-OPT-IN LOGIC FOR EXISTING USERS ON SAME DOMAIN ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const photoUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=random`;
@@ -1432,6 +1433,7 @@
                             dbNeedsUpdate = true;
                         }
                         
+                        // Automatically push the new course node to Firestore so it shows up without needing the profile screen
                         if (dbNeedsUpdate) {
                             try {
                                 await setDoc(doc(db, "users", user.uid), { 
