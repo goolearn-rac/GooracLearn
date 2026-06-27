@@ -1,3 +1,4 @@
+# Goorac Learn
 
 ![Goorac Learn Logo](icon.png)
 
@@ -14,13 +15,14 @@ Goorac Corporation is a leading innovator in professional development and educat
 
 Goorac Learn empowers professionals and students by providing high-quality, industry-relevant certification courses. Our platform focuses on practical skills, rigorous assessment, and recognized credentials to help learners advance in their careers.
 
-## 🛠 Repository Structure
+## ✨ Platform Features
 
-- `/courses` - Course content, syllabus documentation, and learning modules.
-- `/assets` - Media files, branding elements, and course materials.
-- `/src` - Platform source code and infrastructure scripts.
-- `/docs` - Internal documentation, style guides, and operational procedures.
+- **Industry-Leading Certifications**: Comprehensive programs designed with input from top industry experts.
+- **Practical Learning**: Hands-on projects, real-world case studies, and interactive assessments.
+- **Flexible Learning Paths**: Self-paced modules accessible anytime, anywhere.
+- **Recognized Credentials**: Globally acknowledged certificates to boost your career.
+- **Cutting-Edge Content**: Regularly updated curriculum aligned with the latest industry trends.
 
 ---
 
-*© 2026 - 2046 Goorac Corporation. All Rights Reserved.*
+*© 2026 Goorac Corporation. All Rights Reserved.*
