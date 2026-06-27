@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Goorac Learn | Advanced Digital Marketing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        /* Premium SaaS & App Theme Variables - Emerald/Teal */
+        :root {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #059669; /* Emerald Green */
+            --primary-hover: #047857; /* Darker Emerald */
+            --border-color: #e2e8f0;
+            --success: #10b981;
+            --success-bg: #ecfdf5; /* Emerald Light BG */
+            --locked-bg: #f1f5f9;
+            --code-bg: #0f172a; /* Midnight Blue */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #020617; /* Deep Midnight Blue */
+                --surface-color: #0f172a;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --border-color: #1e293b;
+                --locked-bg: #0b1120;
+                --success-bg: #064e3b; /* Dark Emerald BG */
+                --code-bg: #000000;
+            }
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: var(--bg-color); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; line-height: 1.6;
+            -webkit-font-smoothing: antialiased; overflow-x: hidden;
+        }
+
+        .top-nav {
+            background-color: var(--surface-color); border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px); background-color: rgba(var(--surface-color), 0.9);
+        }
+        .brand { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; cursor: pointer; }
+
+        .screen { display: none; flex: 1; padding: 30px 20px 80px 20px; max-width: 640px; margin: 0 auto; width: 100%; min-height: 100vh;}
+        .active-screen { display: block; animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(15px); } to { opacity: 1; transform: translateX(0); } }
+
+        #splash-screen.active-screen { display: flex; flex-direction: column; }
+        .spinner { 
+            width: 40px; height: 40px; border: 4px solid var(--border-color); 
+            border-top-color: var(--primary); border-radius: 50%; 
+            animation: spin 1s linear infinite; margin-top: 20px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        h1, h2, h3 { font-weight: 700; margin-bottom: 12px; line-height: 1.2; letter-spacing: -0.5px; }
+        p { margin-bottom: 20px; color: var(--text-muted); font-size: 1.05rem; }
+        
+        .card {
+            background: var(--surface-color); border-radius: var(--radius-xl);
+            border: 1px solid var(--border-color); padding: 24px;
+            box-shadow: var(--shadow-md); margin-bottom: 24px;
+        }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main); }
+        .input-group input {
+            width: 100%; padding: 16px; border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); background-color: var(--bg-color); 
+            color: var(--text-main); font-size: 1rem; transition: 0.2s; outline: none;
+            appearance: none; 
+        }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); }
+
+        .btn {
+            background-color: var(--primary); color: white; border: none;
+            border-radius: var(--radius-lg); padding: 16px; width: 100%; font-size: 1rem;
+            font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none !important; }
+        .btn:active:not(:disabled) { transform: scale(0.98); } 
+        .btn-success { background-color: var(--success); }
+        .btn-outline { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
+
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
+            text-align: center; border-radius: 30px; padding: 16px 24px;
+            position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%);
+            font-size: 15px; font-weight: 500; box-shadow: var(--shadow-lg);
+            opacity: 0; transition: opacity 0.3s, bottom 0.3s;
+        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
+        .progress-bar-bg { background: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px; margin-bottom: 10px;}
+        .progress-bar-fill { background: var(--primary); height: 100%; width: 0%; transition: width 0.8s ease-out; }
+
+        .module-item {
+            background-color: var(--surface-color); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; transition: 0.2s; box-shadow: var(--shadow-sm);
+        }
+        .module-item:active:not(.locked) { transform: scale(0.98); background: var(--bg-color); }
+        .module-item.locked { background-color: var(--locked-bg); opacity: 0.6; cursor: not-allowed; }
+        .module-item.completed { border-left: 4px solid var(--success); }
+        
+        .mod-icon { font-size: 24px; width: 44px; height: 44px; background: var(--bg-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
+        .mod-details { flex: 1; }
+        .mod-title { font-weight: 600; font-size: 1rem; color: var(--text-main); margin-bottom: 2px; }
+        .mod-status { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
+
+        .mod-hero-img { width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .content-body h3 { margin-top: 30px; margin-bottom: 15px; font-size: 1.25rem; color: var(--primary); border-bottom: 1px solid var(--border-color); padding-bottom: 5px;}
+        .content-body ul, .content-body ol { margin-bottom: 20px; padding-left: 20px; color: var(--text-muted); }
+        .content-body li { margin-bottom: 10px; }
+        .content-body mark { background-color: rgba(5, 150, 105, 0.2); padding: 2px 4px; border-radius: 4px; color: var(--primary); font-weight: 600; }
+        .content-body strong { color: var(--text-main); }
+        
+        .analogy-box {
+            background: rgba(5, 150, 105, 0.05); border-left: 4px solid var(--primary);
+            padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 24px 0; font-size: 1.05rem; color: var(--text-main);
+        }
+        
+        .code-wrapper {
+            position: relative; background: var(--code-bg); border-radius: var(--radius-lg);
+            margin: 24px 0; border: 1px solid var(--border-color); overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        .code-header {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.05); padding: 8px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .code-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; font-weight: 600;}
+        .copy-btn {
+            background: transparent; color: #cbd5e1; border: 1px solid #475569; border-radius: 4px;
+            padding: 4px 10px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; font-weight: 600;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .copy-btn.copied { background: var(--success); border-color: var(--success); color: white; }
+        .code-wrapper pre {
+            padding: 20px; margin: 0; overflow-x: auto; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem; color: #f8fafc; white-space: pre-wrap; line-height: 1.5;
+        }
+
+        .lang-switch-bar { display: flex; background: var(--locked-bg); padding: 4px; border-radius: 30px; width: fit-content; }
+        .lang-btn { background: transparent; border: none; padding: 8px 24px; border-radius: 20px; cursor: pointer; font-weight: 600; color: var(--text-muted); transition: 0.2s; }
+        .lang-btn.active { background: var(--surface-color); color: var(--primary); box-shadow: var(--shadow-sm); }
+
+        .quiz-question { margin-bottom: 40px; }
+        .quiz-option {
+            display: block; padding: 16px; border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg); margin-bottom: 12px; cursor: pointer;
+            transition: 0.2s; font-weight: 500; background: var(--surface-color);
+        }
+        .quiz-option input[type="radio"] { display: none; }
+        .quiz-option:has(input:checked) { border-color: var(--primary); background: rgba(5, 150, 105, 0.05); color: var(--primary); }
+
+        .cert-scroll-container {
+            width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px; border-radius: 12px; background: rgba(0,0,0,0.02);
+            padding: 10px; border: 1px solid var(--border-color);
+        }
+        
+        .certificate-wrapper {
+            background: #ffffff;
+            background-image: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            border: 0px solid transparent; 
+            padding: 50px 60px; 
+            text-align: center;
+            border-radius: 0px; 
+            box-shadow: none; 
+            color: #0f172a;
+            margin: 0 auto;
+            position: relative; 
+            overflow: hidden;
+            width: 100%;
+            min-width: 900px; 
+            max-width: 1122px; 
+            aspect-ratio: 1.414; 
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .certificate-wrapper::before {
+            content: ''; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 6px double #059669; /* Emerald Green */
+            pointer-events: none; z-index: 1;
+        }
+        .certificate-wrapper::after {
+            content: 'GROWTH'; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: clamp(60px, 15vw, 180px); color: rgba(0,0,0,0.03); font-weight: 900;
+            pointer-events: none; z-index: 0;
+        }
+        .cert-content { z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding-top: 15px;}
+        .cert-header { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4.5vw, 3.2rem); color: #1e293b; margin-bottom: 0; font-weight: 800;}
+        .cert-sub { font-size: clamp(0.7rem, 1.5vw, 1.1rem); color: #059669; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; font-weight: bold; }
+        .cert-name { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4.5vw, 3rem); font-weight: 700; border-bottom: 2px solid #059669; padding-bottom: 8px; margin: 0 auto 15px; display: inline-block; min-width: 60%; color: #047857; line-height: 1.2;}
+        .cert-body { font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #475569; margin-bottom: 10px; max-width: 85%; margin-left: auto; margin-right: auto; line-height: 1.5;}
+        
+        .multi-color-sig { color: #047857; font-weight: 800; }
+
+        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; z-index: 2; position: relative; margin-top: auto; padding-bottom: 15px;}
+        .cert-qr-container { text-align: center; }
+        .cert-qr { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); border: 3px solid #fff; box-shadow: var(--shadow-md); border-radius: 6px; background: white;}
+        .cert-badge { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); background: radial-gradient(circle, #059669, #047857); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: clamp(0.5rem, 1vw, 0.75rem); border: 2px dashed white; line-height: 1.2;}
+        .cert-signature-block { text-align: center; }
+        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.2rem, 3vw, 2.2rem); border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 150px; }
+
+        @media print {
+            @page { size: A4 landscape; margin: 0; }
+            body { background: white; margin: 0; }
+            body * { visibility: hidden; }
+            #cert-pdf-view, #cert-pdf-view * { visibility: visible; }
+            #cert-pdf-view { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh;}
+            .cert-scroll-container { border: none; background: transparent; padding: 0; overflow: visible; }
+            .certificate-wrapper { 
+                width: 297mm !important; height: 210mm !important; 
+                margin: 0 !important; border: 0px solid transparent !important; 
+                max-width: none !important; min-width: 0 !important; aspect-ratio: auto !important;
+                -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-shadow: none !important;
+            }
+            .cert-content { padding-top: 0 !important; }
+            .cert-footer { padding-bottom: 0 !important; }
+            .btn { display: none !important; }
+            .top-nav { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast">Message</div>
+
+    <div class="top-nav">
+        <div class="brand" onclick="window.location.href='index.html'">Goorac <span style="color:var(--text-main)">Learn</span></div>
+        <div id="nav-profile" style="display:none; align-items: center; gap: 8px; cursor: pointer;" onclick="window.location.href='profile.html'"></div>
+    </div>
+
+    <div id="splash-screen" class="screen active-screen" style="justify-content: center; align-items: center; text-align: center;">
+        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 20px; border-radius: 50%; box-shadow: var(--shadow-md);">
+        <h1 style="color: var(--primary); margin-bottom: 8px; font-size: 2rem;">Goorac Learn</h1>
+        <p style="color: var(--text-muted); font-weight: 500; font-size: 1rem;">Initializing marketing workspace...</p>
+        <div class="spinner"></div>
+    </div>
+
+    <div id="login-screen" class="screen">
+        <img src="https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?auto=format&fit=crop&w=800&q=80" alt="Marketing Strategy" style="width:100%; height:180px; object-fit:cover; border-radius: var(--radius-xl); margin-bottom: 24px;">
+        <h1 style="font-size: 2.2rem;">Master Digital Marketing</h1>
+        <p>Transform your brand with modern AI tools, Meta Ads, SEO, and advanced funnel automations across 25 comprehensive Modules. Get officially certified.</p>
+        
+        <button id="primary-auth-btn" class="btn" style="background: #0f172a; margin-top: 20px;">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Sign in with Google
+        </button>
+    </div>
+
+    <div id="profile-screen" class="screen">
+        <h2>Certificate Setup</h2>
+        <p>Enter your details exactly as they should appear on your final diploma.</p>
+        <div class="card">
+            <div class="input-group">
+                <label>Full Legal Name</label>
+                <input type="text" id="prof-name" placeholder="E.g., Jane Smith">
+            </div>
+            <div class="input-group">
+                <label>WhatsApp Number</label>
+                <input type="tel" id="prof-wa" placeholder="+91 9876543210">
+            </div>
+            <button id="save-profile-btn" class="btn">Continue</button>
+        </div>
+    </div>
+
+    <div id="payment-screen" class="screen">
+        <h2 style="font-size: 2.2rem; margin-bottom: 10px;">Unlock Premium Access</h2>
+        <p>Get lifetime access to our 25 advanced Digital Marketing modules, AI prompt templates, Meta Ad strategies, and your verified official certificate.</p>
+        
+        <div class="card" style="text-align: center; border: 2px solid var(--primary); padding: 30px 20px;">
+            <div style="background: var(--success-bg); padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:10px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <h3 style="color: var(--primary); margin-bottom: 5px;">Secure One-Time Payment</h3>
+                <p style="color: var(--text-main); font-weight: 800; font-size: 2rem; margin:0;">₹199</p>
+            </div>
+            
+            <ul style="text-align: left; margin-bottom: 30px; list-style: none; padding: 0; font-size: 1.05rem;">
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Full 25-Module Masterclass</li>
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Verified Professional Certificate</li>
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Lifetime Access & Updates</li>
+            </ul>
+            
+            <button id="pay-razorpay-btn" class="btn" style="font-size: 1.1rem; padding: 18px;">
+                Pay Securely Now
+            </button>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                100% Encrypted & Safe
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard-screen" class="screen">
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600;">
+            <span>Course Progress</span>
+            <span id="progress-text" style="color: var(--primary);">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+        </div>
+        <div style="margin-top: -5px; margin-bottom: 30px; font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
+            Course: Digital Marketing Masterclass
+        </div>
+
+        <div id="module-list-container"></div>
+        
+        <div id="quiz-unlock-banner" style="display:none; margin-top: 30px;">
+            <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
+                <h3 style="color: var(--success);">🎉 Curriculum Complete!</h3>
+                <p style="color: #064e3b; font-size: 0.95rem;">Take the final 10-question exam to earn your certificate.</p>
+                <button id="start-quiz-btn" class="btn btn-success">Start Final Exam</button>
+            </div>
+        </div>
+
+        <div id="certificate-access-banner" style="display:none; margin-top: 30px;">
+            <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
+                <h3 style="color: var(--success);">🏆 Masterclass Certified</h3>
+                <p style="color: #064e3b; font-size: 0.95rem;">You have successfully completed this course and earned your certificate.</p>
+                <button onclick="viewCertificate()" class="btn btn-success">View Certificate</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="module-viewer-screen" class="screen">
+        <button onclick="goToDashboard()" style="background:none; border:none; color:var(--text-muted); font-weight:600; cursor:pointer; padding: 0 0 20px 0; display:flex; align-items:center; gap:5px; font-size: 1rem;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"></path></svg> Back
+        </button>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
+            <div class="lang-switch-bar" style="margin-bottom: 0;">
+                <button class="lang-btn active" id="btn-en" onclick="setContentLang('en')">English</button>
+                <button class="lang-btn" id="btn-ta" onclick="setContentLang('ta')">தமிழ்</button>
+            </div>
+            
+            <button id="tts-btn" class="btn btn-outline" style="width: auto; padding: 8px 20px; border-radius: 20px; border-color: var(--primary); color: var(--primary); margin-top: 0; background: var(--success-bg);" onclick="toggleTTS()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5 10v4a2 2 0 002 2h2l4 4V4L9 8H7a2 2 0 00-2 2z"></path></svg>
+                <span id="tts-text">Listen</span>
+            </button>
+        </div>
+
+        <img id="viewer-img" class="mod-hero-img" src="" alt="Module Hero" onerror="this.style.display='none'">
+        <h1 id="viewer-title" style="color: var(--primary); font-size: 1.8rem;"></h1>
+        <div class="content-body" id="viewer-content" style="font-size: 1.05rem; margin-bottom: 40px; color: var(--text-main);"></div>
+        
+        <button id="mark-complete-btn" class="btn">Mark Completed & Next</button>
+    </div>
+
+    <div id="quiz-screen" class="screen">
+        <h2>Certification Exam</h2>
+        <p>Answer 10 questions. You need 70% (7/10) to pass.</p>
+        <div id="quiz-container"></div>
+        <button id="submit-quiz-btn" class="btn">Submit Exam</button>
+    </div>
+
+    <div id="cert-screen" class="screen" style="max-width: 100%;">
+        <div id="cert-pdf-view" style="display:none; width: 100%;">
+            
+            <div class="cert-scroll-container">
+                <div class="certificate-wrapper" id="printable-cert">
+                    <div class="cert-content">
+                        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 55px; height: 55px; object-fit: contain; margin-bottom: 5px; border-radius: 50%; box-shadow: var(--shadow-md);">
+                        
+                        <div class="cert-header">Goorac Learn</div>
+                        <div style="font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">from Goorac Corporation</div>
+                        <div class="cert-sub">Certificate of Professional Mastery</div>
+                        <div class="cert-body">This document officially certifies that</div>
+                        
+                        <div class="cert-name" id="cert-name-display">Student Name</div>
+                        
+                        <div class="cert-body" style="margin-bottom: 15px;">
+                            has successfully completed all 25 advanced modules and passed the comprehensive final examination for the<br>
+                            <span style="font-size: 1.3em; font-weight: 800; color: #0f172a; display: inline-block; margin-top: 8px;">Digital Marketing Masterclass</span>
+                        </div>
+                        
+                        <div class="cert-date" id="cert-date-display" style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #475569; font-size: 0.95rem; background: #f1f5f9; padding: 6px 16px; border-radius: 20px; border: 1px solid #cbd5e1;">Date of Issue</div>
+                        
+                        <div style="margin-top: 15px; border-top: 2px dashed #e2e8f0; padding-top: 10px; width: 100%; max-width: 600px;">
+                            <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Valid & Recognized By</div>
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 25px;">
+                                <img src="images/google.png" alt="Google" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="images/microsoft.png" alt="Microsoft" crossorigin="anonymous" style="height: 20px; object-fit: contain;">
+                                <img src="images/amazon.png" alt="Amazon" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="images/zoho.png" alt="Zoho" crossorigin="anonymous" style="height: 18px; object-fit: contain;">
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="cert-footer">
+                        <div class="cert-qr-container">
+                            <img id="cert-qr-img" class="cert-qr" src="" alt="Verified QR" crossorigin="anonymous">
+                            <div style="font-size: clamp(0.5rem, 1vw, 0.75rem); color: #10b981; margin-top: 5px; font-weight: 800; letter-spacing: 1px;">✓ VERIFIED</div>
+                        </div>
+                        
+                        <div class="cert-badge">
+                            OFFICIAL<br>CERTIFIED
+                        </div>
+
+                        <div class="cert-signature-block">
+                            <div class="cert-signature multi-color-sig">Dr. Jonathan Reynolds</div>
+                            <div style="font-size: clamp(0.6rem, 1.2vw, 0.9rem); color: #64748b; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Director of Marketing</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; max-width: 400px; margin: 0 auto;">
+                <button id="download-pdf-btn" class="btn btn-success">Download High-Res PDF</button>
+                <button onclick="goToDashboard()" class="btn btn-outline">Back to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDeXk6z_5mYQZi_xIsQsN935KxuIBxAM3w",
+            authDomain: "gooraclearn.firebaseapp.com",
+            projectId: "gooraclearn",
+            storageBucket: "gooraclearn.firebasestorage.app",
+            messagingSenderId: "221459932053",
+            appId: "1:221459932053:web:af713811da7edd113e0c9c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        // CHANGED TO DIGITAL MARKETING
+        const CURRENT_COURSE_ID = "digital-marketing";
+
+        let contentLang = 'en';
+        let currentUserData = null; 
+        let viewingModuleId = 1;
+        let isSpeaking = false; 
+
+        window.showToast = (msg) => {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        };
+
+        window.copyCode = (btn) => {
+            const codeText = btn.parentElement.parentElement.querySelector('pre').innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                btn.innerText = "Copied!";
+                btn.classList.add('copied');
+                setTimeout(() => { btn.innerText = "Copy"; btn.classList.remove('copied'); }, 2000);
+            });
+        };
+
+        window.stopTTS = () => {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            isSpeaking = false;
+            const ttsText = document.getElementById('tts-text');
+            if (ttsText) ttsText.innerText = "Listen";
+        };
+
+        window.toggleTTS = () => {
+            if (!window.speechSynthesis) return showToast("Audio playback not supported on this browser.");
+            
+            if (isSpeaking) {
+                window.stopTTS();
+                return;
+            }
+
+            const title = document.getElementById('viewer-title').innerText;
+            const contentNode = document.getElementById('viewer-content').cloneNode(true);
+            
+            contentNode.querySelectorAll('.copy-btn, .code-label').forEach(el => el.remove());
+            const contentText = contentNode.innerText;
+            
+            const fullText = title + ". " + contentText;
+            const utterance = new SpeechSynthesisUtterance(fullText);
+            
+            utterance.lang = contentLang === 'ta' ? 'ta-IN' : 'en-US';
+            utterance.rate = 0.90; 
+
+            utterance.onend = () => {
+                isSpeaking = false;
+                document.getElementById('tts-text').innerText = "Listen";
+            };
+
+            utterance.onerror = (e) => {
+                console.warn("TTS Processing Error", e);
+                window.stopTTS();
+            };
+
+            isSpeaking = true;
+            document.getElementById('tts-text').innerText = "Stop Playing";
+            window.speechSynthesis.speak(utterance);
+        };
+
+        window.showScreen = (screenId, pushHistory = true) => {
+            window.stopTTS(); 
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active-screen'));
+            document.getElementById(screenId).classList.add('active-screen');
+            window.scrollTo(0,0);
+            if(pushHistory) {
+                try {
+                    history.pushState({ screen: screenId }, '', '#' + screenId);
+                } catch(e) {
+                    console.warn("History API prevented:", e);
+                }
+            }
+        };
+
+        window.goBack = () => { 
+            window.stopTTS(); 
+            goToDashboard();
+        };
+        
+        window.addEventListener('popstate', (e) => {
+            window.stopTTS();
+            if(e.state && e.state.screen) showScreen(e.state.screen, false);
+            else if(currentUserData) routeUser(false);
+        });
+
+        window.goToDashboard = () => {
+            renderDashboard();
+            showScreen('dashboard-screen', true);
+        };
+
+        window.viewCertificate = () => {
+            showCertificate();
+            showScreen('cert-screen', true);
+        };
+
+        // Redesigned "Code Box" to act as AI Prompts/Tool configs for Digital Marketing
+        const generatePromptBox = (label, code) => `
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-label">${label}</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy Prompt</button>
+                </div>
+                <pre><code>${code}</code></pre>
+            </div>`;
+
+        // ==========================================
+        // 25 HIGHLY DETAILED DIGITAL MARKETING MODULES 
+        // ==========================================
+        const courseData = [
+            { 
+                id: 1, icon: "🌍", img: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=800&q=80",
+                title_en: "1. The Modern Marketing Ecosystem", title_ta: "1. நவீன மார்க்கெட்டிங் உலகம்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Traditional marketing is like shouting with a megaphone in a crowded street, hoping someone cares. Digital marketing is like walking up to a single person who explicitly told a friend they were hungry, and quietly handing them a menu for your restaurant.</div>
+                    <p>Welcome to the absolute foundation of modern Digital Marketing. Before we touch any AI tools, Meta Dashboards, or SEO strategies, you must deeply understand the landscape you are entering. The digital marketing ecosystem is entirely driven by data, psychology, and algorithms.</p>
+                    <p>Unlike traditional billboards or TV commercials, where success is nearly impossible to track, digital marketing allows you to track every single click, pause, and purchase with terrifying precision.</p>
+                    <h3>Inbound vs. Outbound Marketing</h3>
+                    <p>The entire industry is split into two massive pillars:</p>
+                    <ul>
+                        <li><b>Inbound Marketing (The Magnet):</b> This is when the customer is actively searching for a solution, and you position yourself to be found. Examples include SEO (Google Search), educational YouTube videos, and high-value blog posts. It takes a long time to build, but it is highly sustainable and cheap over time.</li>
+                        <li><b>Outbound Marketing (The Megaphone):</b> This is when you interrupt a user who is doing something else (like scrolling Instagram or watching a video) to show them your offer. Examples include Meta Ads, YouTube Ads, and cold emails. It costs money upfront, but it generates instant, scalable results.</li>
+                    </ul>
+                    <h3>The Rule of 7 and Omni-Channel Presence</h3>
+                    <p>An outdated but still relevant psychological principle is the "Rule of 7", which states a consumer needs to see a brand's message at least 7 times before they will provoke an action. In 2026, this has evolved into <b>Omni-Channel Marketing</b>.</p>
+                    <p>You cannot just rely on Facebook. A user might discover you on an Instagram Reel, search your brand name on Google two days later, read a blog post on your site, leave without buying, get retargeted by a YouTube ad a week later, and finally buy through a promotional email.</p>
+                    <p>As a professional marketer, your job is not just to run an ad; it is to build this interconnected web. You must understand where your customer spends their time online and strategically place touchpoints across their entire digital journey.</p>
+                    ${generatePromptBox('ChatGPT Prompt: Market Blueprint', 'Act as a Chief Marketing Officer. I am launching a [Insert Business Type, e.g., online app for fitness]. Outline a basic omni-channel marketing strategy balancing both Inbound (SEO/Content) and Outbound (Paid Ads). What channels should I prioritize in my first 90 days to maximize ROI?')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பழைய மார்க்கெட்டிங் என்பது, கூட்டத்தில் நின்று கூச்சலிட்டுப் பொருட்களை விற்பது போன்றது. டிஜிட்டல் மார்க்கெட்டிங் என்பது, பசியோடு இருப்பவரை மட்டும் சரியாகக் கண்டுபிடித்து அவரிடம் மெனு கார்டைக் கொடுப்பது போன்றது.</div>
+                    <p>நவீன டிஜிட்டல் மார்க்கெட்டிங் உலகத்திற்கு உங்களை வரவேற்கிறோம். கருவிகளைப் பயன்படுத்துவதற்கு முன், இந்த உலகம் எப்படிச் செயல்படுகிறது என்பதை நீங்கள் ஆழமாகப் புரிந்து கொள்ள வேண்டும். இது முழுமையாக டேட்டா மற்றும் மனித உளவியலை அடிப்படையாகக் கொண்டது.</p>
+                    <p>டிவியிலோ, பேப்பரிலோ விளம்பரம் கொடுத்தால் எத்தனை பேர் பார்த்தார்கள் எனக் கணக்கிடுவது கடினம். ஆனால் டிஜிட்டல் மார்க்கெட்டிங்கில் ஒவ்வொரு கிளிக்கையும் துல்லியமாகக் கணக்கிட முடியும்.</p>
+                    <h3>இன்பவுண்ட் (Inbound) vs அவுட்பவுண்ட் (Outbound)</h3>
+                    <p>இந்தத் துறை இரண்டு முக்கியப் பிரிவுகளாகப் பிரிக்கப்பட்டுள்ளது:</p>
+                    <ul>
+                        <li><b>இன்பவுண்ட் (Inbound):</b> வாடிக்கையாளர்கள் அவர்களாகவே உங்களைத் தேடி வருவது. (எ.கா: கூகுள் தேடல் (SEO), யூடியூப் வீடியோக்கள்). இதை உருவாக்க நேரம் ஆகும், ஆனால் நீண்ட காலத்திற்குச் செலவில்லாமல் பலன் தரும்.</li>
+                        <li><b>அவுட்பவுண்ட் (Outbound):</b> வாடிக்கையாளர்கள் வேறு வேலை செய்து கொண்டிருக்கும்போது அவர்களை ஈர்ப்பது. (எ.கா: இன்ஸ்டாகிராம் விளம்பரங்கள், யூடியூப் Ads). இதற்குப் பணம் செலவாகும், ஆனால் உடனடியாக விற்பனை நடக்கும்.</li>
+                    </ul>
+                    <h3>ஓம்னி-சேனல் (Omni-Channel) அணுகுமுறை</h3>
+                    <p>ஒருவர் உங்கள் விளம்பரத்தை ஒரு முறை பார்த்தால் பொருளை வாங்க மாட்டார். அவர் இன்ஸ்டாகிராமில் உங்களைப் பார்க்க வேண்டும், பிறகு கூகுளில் தேட வேண்டும், பிறகு யூடியூபில் உங்கள் விளம்பரம் வர வேண்டும். இப்படிப் பல இடங்களில் (Channels) அவரைத் தொடர்புகொள்வதே "ஓம்னி-சேனல்" அணுகுமுறை.</p>
+                    <p>ஒரு சிறந்த மார்க்கெட்டராக, உங்கள் வேலை வெறும் விளம்பரம் கொடுப்பது மட்டுமல்ல, வாடிக்கையாளரின் ஒட்டுமொத்தப் பயணத்தையும் கட்டமைப்பதாகும்.</p>
+                    ${generatePromptBox('ChatGPT Prompt: Market Blueprint', 'நீ ஒரு சிறந்த மார்க்கெட்டிங் நிபுணராகச் செயல்படு. நான் ஒரு [உங்கள் பிசினஸ் வகை] தொடங்கப் போகிறேன். முதல் 90 நாட்களில் நான் எந்தெந்த சமூக வலைத்தளங்களில் கவனம் செலுத்த வேண்டும்? இலவச மற்றும் கட்டண விளம்பரங்களை எப்படிப் பயன்படுத்த வேண்டும் என்று ஒரு திட்டத்தை உருவாக்கு.')}`
+            },
+            { 
+                id: 2, icon: "🧠", img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
+                title_en: "2. AI-Assisted Market Research & Personas", title_ta: "2. AI மூலம் சந்தை ஆராய்ச்சி", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Selling without a Buyer Persona is like shooting an arrow blindfolded in a forest. You might hit a tree, but you definitely won't hit the target. Market research takes off the blindfold and puts a bright red dot on the exact customer you want.</div>
+                    <p>The biggest mistake beginners make is thinking their product is for "everyone". If you market to everyone, you market to no one. To create high-converting ad copy and content, you must deeply understand your specific customer's pain points, desires, and demographics.</p>
+                    <p>Historically, building a <b>Buyer Persona</b> required expensive focus groups and months of surveys. Today, we use AI models like ChatGPT and Claude to instantly simulate entire customer bases using billions of data points.</p>
+                    <h3>The Anatomy of a Perfect Persona</h3>
+                    <p>A professional persona goes far beyond "Age 25-35, living in the USA." It must include psychographics:</p>
+                    <ul>
+                        <li><b>Pain Points (The Agony):</b> What is currently frustrating them? What keeps them awake at 2 AM?</li>
+                        <li><b>Desires (The Dream):</b> What is their ultimate goal? How does your product make them feel powerful or secure?</li>
+                        <li><b>Objections:</b> Why would they refuse to buy your product? (Too expensive? Too complicated?)</li>
+                        <li><b>Information Diet:</b> Where do they hang out online? Which YouTube channels do they watch? Which influencers do they trust?</li>
+                    </ul>
+                    <h3>Using AI to Extract Insights</h3>
+                    <p>Instead of guessing these answers, you can instruct an AI to scrape the internet's collective knowledge. You can feed an AI a list of Amazon reviews for a competitor's product and ask it to identify the top 3 complaints. You can ask the AI to roleplay as your target customer and interview them directly.</p>
+                    <p>Once you define this persona, every single ad, email, and landing page you write moving forward will be strictly tailored to this exact psychological profile, drastically reducing your marketing costs.</p>
+                    ${generatePromptBox('ChatGPT Prompt: Persona Generation', 'I sell [Your Product, e.g., organic skincare for sensitive skin]. Create a highly detailed, 3-dimensional Buyer Persona. Include their name, age, job, exact pain points regarding current skincare products, their ultimate desires, the top 3 reasons they might hesitate to buy my product, and exactly which social media platforms they use the most.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> வாடிக்கையாளர் யார் எனத் தெரியாமல் பொருட்களை விற்பது, கண்களைக் கட்டிக்கொண்டு அம்பு எய்வது போன்றது. சந்தை ஆராய்ச்சி (Market research) என்பது அந்தக் கட்டை அவிழ்த்து, சரியான இலக்கைக் காட்டும்.</div>
+                    <p>தொடர்பாளர்கள் செய்யும் மிகப்பெரிய தவறு, "என் பொருள் அனைவருக்கும் ஏற்றது" என்று நினைப்பது. அனைவரையும் இலக்காகக் கொண்டால், யாரையும் உங்களால் கவர முடியாது. சிறந்த விளம்பரங்களை உருவாக்க, உங்கள் வாடிக்கையாளரின் ஆசைகள், வலிகள் மற்றும் தேவைகளை நீங்கள் ஆழமாகப் புரிந்து கொள்ள வேண்டும்.</p>
+                    <p>இதற்காக ஒரு <b>Buyer Persona</b> (வாடிக்கையாளர் மாதிரி) உருவாக்க வேண்டும். முற்காலத்தில் இதற்குப் பல மாதங்கள் ஆகும். ஆனால் இன்று, ChatGPT போன்ற AI கருவிகளை வைத்து இதைச் சில நிமிடங்களில் செய்துவிடலாம்.</p>
+                    <h3>சரியான Persona-இன் அமைப்புகள்</h3>
+                    <p>வெறுமனே "25 முதல் 35 வயதுள்ளவர்கள்" என்று சொல்வது போதாது. அவர்களின் மனநிலையைப் புரிந்து கொள்ள வேண்டும்:</p>
+                    <ul>
+                        <li><b>வலிகள் (Pain Points):</b> அவர்களை தற்போது எது அதிகம் தொந்தரவு செய்கிறது?</li>
+                        <li><b>ஆசைகள் (Desires):</b> அவர்களின் இறுதி இலக்கு என்ன? உங்கள் பொருள் அவர்களுக்கு எப்படி உதவும்?</li>
+                        <li><b>தடைகள் (Objections):</b> உங்கள் பொருளை வாங்க அவர்கள் ஏன் தயங்குவார்கள்? (விலை அதிகமா? புரியவில்லையா?)</li>
+                        <li><b>தகவல் தேடல் (Info Diet):</b> அவர்கள் எந்த வலைத்தளங்களை அதிகம் பயன்படுத்துகிறார்கள்? யாரைப் பின்தொடர்கிறார்கள்?</li>
+                    </ul>
+                    <h3>AI-ஐப் பயன்படுத்துதல்</h3>
+                    <p>நீங்கள் சுயமாக யோசிப்பதற்குப் பதிலாக, AI-யிடம் கேட்கலாம். உங்கள் போட்டியாளர்களின் அமேசான் (Amazon) கமெண்ட்களை AI-யிடம் கொடுத்து, "வாடிக்கையாளர்கள் எதைக் குறையாகச் சொல்கிறார்கள்?" என்று கேட்கலாம். இதை வைத்து உங்கள் பொருளை நீங்கள் சிறப்பாக விற்கலாம்.</p>
+                    ${generatePromptBox('ChatGPT Prompt: Persona Generation', 'நான் [உங்கள் பொருள்] விற்கிறேன். எனக்கான சரியான வாடிக்கையாளர் மாதிரி (Buyer Persona) ஒன்றை உருவாக்கு. அவர்களின் வயது, வேலை, அவர்கள் தற்போது எதிர்கொள்ளும் பிரச்சனைகள், அவர்களின் ஆசைகள் மற்றும் என் பொருளை வாங்கத் தயங்குவதற்கான 3 முக்கியக் காரணங்கள் ஆகியவற்றைப் பட்டியலிடு.')}`
+            },
+            { 
+                id: 3, icon: "🕵️", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
+                title_en: "3. Competitor Espionage Tools", title_ta: "3. போட்டியாளர்களை ஆராய்தல்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Why invent a new recipe from scratch when you can sneak into Gordon Ramsay's kitchen, look at his exact ingredients, and just make yours slightly better? Competitor research lets you reverse-engineer success without spending your own money on failures.</div>
+                    <p>In digital marketing, nothing is truly hidden. If a competitor is making millions of dollars online, they are leaving a massive digital footprint. Your job is to use visual, no-code tools to track that footprint and steal their winning strategies legally.</p>
+                    <p>Before launching any campaign, you must perform a deep competitive audit. This saves you thousands of dollars in "testing phase" ad spend because you already know what the market responds to.</p>
+                    <h3>The Big Three Espionage Tools</h3>
+                    <ul>
+                        <li><b>Meta Ad Library (Free):</b> Facebook (Meta) requires total transparency for advertising. You can type any competitor's brand name into the Meta Ad Library and instantly see every single ad they are currently running. If an ad has been running for over 3 months, it means it is highly profitable. Study their headlines, images, and offers.</li>
+                        <li><b>SimilarWeb (Freemium):</b> Plug any competitor's URL into SimilarWeb to see a massive breakdown of their website traffic. You will see exactly where their visitors come from (Is it 80% Google Search? 40% YouTube?). This tells you exactly which marketing channel you need to attack.</li>
+                        <li><b>Ahrefs or Ubersuggest (Freemium):</b> These SEO tools allow you to type in a competitor's website and see exactly which Google keywords are driving them the most free traffic. You can literally download their keyword list and write better blog posts targeting the same terms.</li>
+                    </ul>
+                    <h3>Funnel Hacking</h3>
+                    <p>Don't just look at their ads; look at their entire sales machine. Click their ad. Look at their landing page. Put your email in their lead form. Note how many emails they send you over the next week and what psychological triggers they use to try and close the sale. This is called "Funnel Hacking".</p>
+                    <p>Once you map out their entire process, you build a slightly superior version for your own brand.</p>
+                    ${generatePromptBox('Competitor Analysis Action Plan', 'Tool: Meta Ad Library (adslibrary.facebook.com)\n\nAction: Search for your top 3 competitors. Filter by "Active Ads". Look for ads running longer than 30 days.\nAnalyze: What is the primary emotion they are targeting? (Fear of missing out? Greed? Convenience?)\nResult: Note down their primary "Hook" (the first 3 seconds of the video) and use it as inspiration for your own script.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> புதிதாக ஒரு சமையல் குறிப்பை யோசிப்பதற்குப் பதிலாக, ஒரு பெரிய செஃப் என்னென்ன பொருட்களைப் பயன்படுத்துகிறார் என்று பார்த்து, அதைவிடச் சிறப்பாகச் சமைப்பது போன்றது இது. உங்கள் பணத்தை வீணாக்காமல், மற்றவர்களின் வெற்றியை நீங்கள் சட்டப்பூர்வமாகப் பயன்படுத்திக் கொள்ளலாம்.</div>
+                    <p>டிஜிட்டல் மார்க்கெட்டிங்கில் எதுவும் ரகசியம் இல்லை. ஒரு நிறுவனம் பல லட்சம் சம்பாதிக்கிறது என்றால், அவர்கள் ஆன்லைனில் பல தடங்களை விட்டுச் சென்றிருப்பார்கள். இலவசக் கருவிகளைப் பயன்படுத்தி, அவர்களின் உத்திகளை ஆராய்வதே உங்கள் வேலை.</p>
+                    <p>விளம்பரம் கொடுப்பதற்கு முன், உங்கள் போட்டியாளர்களை ஆராய வேண்டும். இது உங்கள் பல ஆயிரம் ரூபாயை மிச்சப்படுத்தும்.</p>
+                    <h3>3 முக்கிய ஆராய்ச்சி கருவிகள் (Tools)</h3>
+                    <ul>
+                        <li><b>Meta Ad Library (இலவசம்):</b> இதில் உங்கள் போட்டியாளரின் பெயரை உள்ளிட்டால், அவர்கள் பேஸ்புக் மற்றும் இன்ஸ்டாகிராமில் ஓடவிட்டிருக்கும் அனைத்து விளம்பரங்களையும் பார்க்கலாம். ஒரு விளம்பரம் 3 மாதங்களுக்கு மேல் ஓடுகிறது என்றால், அது அதிக லாபம் தருகிறது என அர்த்தம். அதை ஆராயுங்கள்.</li>
+                        <li><b>SimilarWeb (இலவசம்/கட்டணம்):</b> போட்டியாளரின் வெப்சைட்டை இதில் போட்டால், அவர்களுக்கு மக்கள் எங்கிருந்து வருகிறார்கள் (கூகுளா, யூடியூபா?) என்ற முழு விவரமும் கிடைக்கும். இதை வைத்து நீங்கள் எந்தத் தளத்தில் கவனம் செலுத்த வேண்டும் என முடிவெடுக்கலாம்.</li>
+                        <li><b>Ubersuggest (இலவசம்/கட்டணம்):</b> கூகுளில் எந்தெந்த வார்த்தைகளைத் (Keywords) தேடி மக்கள் அவர்களின் வெப்சைட்டிற்குச் செல்கிறார்கள் என்பதை இது காட்டும். அந்த வார்த்தைகளை வைத்து நீங்கள் அதைவிடச் சிறந்த கட்டுரைகளை எழுதலாம்.</li>
+                    </ul>
+                    <h3>Funnel Hacking (ஃபனல் ஹேக்கிங்)</h3>
+                    <p>அவர்களின் விளம்பரத்தை மட்டும் பார்க்காதீர்கள். அதை க்ளிக் செய்து, அவர்கள் வெப்சைட்டிற்குச் சென்று, உங்கள் ஈமெயிலைக் கொடுத்துப் பாருங்கள். அடுத்த ஒரு வாரத்திற்கு அவர்கள் உங்களுக்கு எப்படி ஈமெயில் அனுப்புகிறார்கள் என்பதைக் கவனியுங்கள். இதை ஆராய்ந்து உங்களுக்கான சிறந்த வழியை உருவாக்குங்கள்.</p>
+                    ${generatePromptBox('Competitor Analysis Action Plan', 'கருவி: Meta Ad Library (adslibrary.facebook.com)\n\nசெயல்பாடு: உங்கள் 3 முக்கியப் போட்டியாளர்களைத் தேடுங்கள். 30 நாட்களுக்கு மேல் ஓடும் விளம்பரங்களைக் கவனியுங்கள்.\nஆராய்ச்சி: அவர்கள் மக்களிடம் எந்த உணர்வைத் தூண்டுகிறார்கள்? (பயமா? ஆசையா?)\nமுடிவு: அவர்களின் வீடியோவின் முதல் 3 வினாடிகளை (Hook) ஆராய்ந்து, உங்களின் சொந்த விளம்பரத்திற்கு அதைப் பயன்படுத்துங்கள்.')}`
+            },
+            { 
+                id: 4, icon: "🎁", img: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&q=80",
+                title_en: "4. Brand Positioning & The Irresistible Offer", title_ta: "4. பிராண்ட் பொசிஷனிங் & சிறந்த சலுகை (Offer)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If you are selling a generic bottle of water for $2 at a grocery store, no one cares. If you are selling that exact same $2 bottle of water for $10 in the middle of a scorching desert, people will fight to buy it. The product didn't change; the positioning and the offer changed.</div>
+                    <p>Before you spend a single dollar on Meta Ads or Google Ads, you must have an incredibly strong "Offer". The greatest digital marketer in the world cannot sell a terrible offer. Conversely, an amateur marketer can make millions if the offer is absolutely irresistible.</p>
+                    <h3>What is an Offer?</h3>
+                    <p>An offer is NOT just your product. An offer is the combination of the Product, the Price, the Bonuses, the Guarantee, and the Delivery method. It is the complete package you present to the customer.</p>
+                    <ul>
+                        <li><b>The Core Promise:</b> What specific, tangible result will the customer get? (e.g., "Lose 10 pounds in 30 days" is infinitely better than "Get healthier").</li>
+                        <li><b>Risk Reversal (The Guarantee):</b> People are terrified of losing money online. You must remove the risk. A 30-day money-back guarantee, or a "We work for free until you get results" promise drastically increases conversion rates.</li>
+                        <li><b>Scarcity & Urgency:</b> Human psychology requires a reason to act *now*. Is the offer limited to the first 50 people? Does the discount expire in 24 hours? Without urgency, people will procrastinate forever.</li>
+                    </ul>
+                    <h3>Brand Positioning</h3>
+                    <p>How is your brand perceived against competitors? Are you the cheap, budget option (Walmart)? The ultra-premium luxury option (Rolex)? The fast, convenient option (McDonald's)? You cannot be all three. You must explicitly choose your lane and ensure every piece of your marketing content aggressively supports that specific position.</p>
+                    <p>If you position yourself as a premium SaaS agency, your website cannot have spelling errors and cheap stock photos, or the psychological illusion shatters instantly.</p>
+                    ${generatePromptBox('ChatGPT Prompt: Offer Creation Framework', 'I am selling [Product/Service]. Using Alex Hormozi\'s "Grand Slam Offer" framework, help me construct an irresistible offer. \n1. Identify the dream outcome.\n2. List the perceived likelihood of achievement.\n3. Detail the time delay to get results.\n4. Detail the effort and sacrifice required. \nNow, generate 3 specific, high-converting offer packages that maximize value and minimize risk for the buyer.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சாதாரணமாக ஒரு பாட்டில் தண்ணீர் ₹20 என்றால் யாரும் பெரிதாக நினைக்க மாட்டார்கள். அதே தண்ணீரை ஒரு சுட்டெரிக்கும் பாலைவனத்தில் ₹100-க்கு விற்றாலும் மக்கள் போட்டி போட்டு வாங்குவார்கள். தண்ணீர் மாறவில்லை; அதை விற்கும் இடமும் (Positioning) சலுகையும் மாறியது.</div>
+                    <p>விளம்பரத்திற்குப் பணம் செலவழிக்கும் முன், உங்களிடம் ஒரு மிகச் சிறந்த "Offer" (சலுகை) இருக்க வேண்டும். உலகின் மிகச் சிறந்த மார்க்கெட்டரால் கூட ஒரு மோசமான பொருளை விற்க முடியாது. ஆனால், சலுகை மிகச் சிறப்பாக இருந்தால் ஒரு புதியவரால் கூட பல லட்சங்களைச் சம்பாதிக்க முடியும்.</p>
+                    <h3>Offer (சலுகை) என்றால் என்ன?</h3>
+                    <p>Offer என்பது வெறும் பொருள் அல்ல. பொருள், விலை, அதனுடன் இலவசமாகக் கிடைக்கும் போன்ஸ், உத்தரவாதம் (Guarantee) ஆகியவை எல்லாம் சேர்ந்ததே ஒரு முழுமையான Offer.</p>
+                    <ul>
+                        <li><b>உறுதியான வாக்குறுதி:</b> வாடிக்கையாளருக்கு என்ன கிடைக்கும்? ("ஆரோக்கியமாக வாழுங்கள்" என்பதை விட "30 நாளில் 5 கிலோ எடையைக் குறைங்கள்" என்பது சக்திவாய்ந்தது).</li>
+                        <li><b>ஆபத்தைக் குறைத்தல் (Guarantee):</b> ஆன்லைனில் பணம் கட்ட மக்கள் பயப்படுவார்கள். "30 நாள் பணத்தைத் திரும்பத் தரும் உத்தரவாதம்" (Money-back guarantee) கொடுத்தால் விற்பனை பல மடங்கு அதிகரிக்கும்.</li>
+                        <li><b>அவசரம் (Urgency):</b> இப்போதே வாங்க வேண்டும் என்ற எண்ணத்தை உருவாக்க வேண்டும். "முதல் 50 பேருக்கு மட்டுமே" அல்லது "இன்று இரவுடன் சலுகை முடிகிறது" போன்ற விஷயங்கள் தேவை.</li>
+                    </ul>
+                    <h3>பிராண்ட் பொசிஷனிங் (Brand Positioning)</h3>
+                    <p>சந்தையில் உங்கள் பிராண்ட் எங்குள்ளது? மலிவான விலையா? அல்லது விலை உயர்ந்த சொகுசுப் பொருளா? அல்லது மிக வேகமான சேவையா? மூன்றிலும் உங்களால் நிற்க முடியாது. ஒன்றை மட்டும் தேர்ந்தெடுத்து, உங்கள் வெப்சைட் முதல் விளம்பரம் வரை அனைத்திலும் அதை மட்டுமே நிலைநிறுத்த வேண்டும்.</p>
+                    ${generatePromptBox('ChatGPT Prompt: Offer Creation Framework', 'நான் [உங்கள் பொருள்] விற்கிறேன். மக்கள் இதை உடனே வாங்கும் வகையில் ஒரு மிகச் சிறந்த Offer-ஐ (Grand Slam Offer) உருவாக்க எனக்கு உதவு. \nவாடிக்கையாளரின் மிகப்பெரிய ஆசை என்ன? அதற்கான ஆபத்தை (Risk) நான் எப்படிக் குறைப்பது? அவர்களுக்கு உடனே ரிசல்ட் கிடைக்கும் வகையில் 3 சிறந்த சலுகை ஐடியாக்களை எனக்குத் கொடு.')}`
+            },
+            { 
+                id: 5, icon: "🏢", img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
+                title_en: "5. Setting Up Your Digital Real Estate", title_ta: "5. டிஜிட்டல் முகவரிகளை உருவாக்குதல்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If you open a beautiful bakery but forget to put a sign on the door, paint the walls, or list it on Google Maps, no one will walk in. Digital Real Estate is setting up your "online storefront" properly so customers instantly trust you when they arrive.</div>
+                    <p>Before launching complex automated funnels, you must secure and optimize your foundational digital profiles. Just like registering an enterprise with the Ministry of MSME gives you legal legitimacy in the real world, claiming your digital profiles gives you algorithmic and consumer legitimacy on the internet.</p>
+                    <h3>Google Business Profile (GBP)</h3>
+                    <p>If you have a local physical business or a service area business, a <b>Google Business Profile</b> (formerly Google My Business) is the single most powerful free tool on the internet. It controls how you appear on Google Maps and local search results.</p>
+                    <ul>
+                        <li><b>Total Optimization:</b> Do not just put your name and phone number. Fill out every single field. Add professional photos of the exterior, interior, and your team. List your specific services with detailed text descriptions (this helps SEO).</li>
+                        <li><b>The Review Engine:</b> The algorithm heavily ranks businesses with consistent, positive reviews. You must build an automated system (using a simple WhatsApp link or QR code) to politely ask every satisfied customer to drop a 5-star review immediately after purchase.</li>
+                    </ul>
+                    <h3>Social Media Optimization (SMO)</h3>
+                    <p>Your Instagram, Facebook, and LinkedIn pages are not personal diaries; they are landing pages. A user decides in 3 seconds if they trust your brand based on your profile.</p>
+                    <ul>
+                        <li><b>The Bio:</b> Your bio should follow a strict formula: Who you help + How you help them + Call to Action (CTA). Example: "Helping enterprise startups scale via AI. Click below to book a free audit 👇 [Link]".</li>
+                        <li><b>The Link-in-Bio:</b> Never link directly to a chaotic homepage. Use tools like Linktree or a dedicated mobile-optimized landing page that captures emails or directs them to your best offer.</li>
+                        <li><b>Visual Consistency:</b> Ensure your profile picture (logo), banner imagery, and brand colors are identical across all platforms to build instant psychological recognition.</li>
+                    </ul>
+                    ${generatePromptBox('Profile Bio Formula', 'Framework: [I help / We provide] + [Target Audience] + [Achieve specific result] + [Method] + [Call to Action]\n\nExample for a Digital Agency:\n"We help MSME businesses double their local foot traffic using hyper-targeted Google Ads. Ready to scale? Get your free audit below 👇 [Link]"')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு அழகான கடையைத் திறந்துவிட்டு, வெளியே போர்டு வைக்காமலோ, கூகுள் மேப்பில் சேர்க்காமலோ இருந்தால் யாரும் வரமாட்டார்கள். டிஜிட்டல் முகவரி (Digital Real Estate) என்பது வாடிக்கையாளர்கள் பார்த்தவுடன் நம்பும் வகையில் உங்கள் ஆன்லைன் கடையைச் சரியாக அமைப்பதாகும்.</div>
+                    <p>சிக்கலான விளம்பரங்களைத் தொடங்கும் முன், உங்கள் அடிப்படை ஆன்லைன் பக்கங்களைச் சரியாக அமைக்க வேண்டும். MSME-இல் பதிவு செய்வது நிஜ உலகில் எப்படி ஒரு அங்கீகாரத்தைத் தருமோ, அதேபோல சமூக வலைத்தளங்களைச் சரியாக அமைப்பது இன்டர்நெட்டில் உங்களுக்கு அங்கீகாரத்தைத் தரும்.</p>
+                    <h3>Google Business Profile (GBP)</h3>
+                    <p>உங்களுக்கு ஒரு லோக்கல் பிசினஸ் இருந்தால், <b>Google Business Profile</b> (கூகுள் மேப்ஸ்) தான் உலகின் மிகச் சிறந்த இலவசக் கருவி.</p>
+                    <ul>
+                        <li><b>முழுமையாக நிரப்புதல்:</b> பெயர் மற்றும் எண்ணை மட்டும் கொடுக்காமல், அனைத்தையும் நிரப்பவும். கடையின் படங்கள், நீங்கள் விற்கும் பொருட்கள்/சேவைகள் அனைத்தையும் விரிவாக எழுத வேண்டும். இது உங்களை முதல் இடத்தில் கொண்டுவர உதவும்.</li>
+                        <li><b>ரிவியூ (Reviews):</b> நிறைய 5-ஸ்டார் ரிவியூகள் இருக்கும் நிறுவனங்களையே கூகுள் முதலில் காட்டும். ஒவ்வொரு வாடிக்கையாளரிடமும் வாட்ஸ்அப் மூலமாகவோ, QR கோடு மூலமாகவோ ரிவியூ கேட்கும் ஒரு அமைப்பை நீங்கள் உருவாக்க வேண்டும்.</li>
+                    </ul>
+                    <h3>சமூக வலைத்தளங்களைச் சீரமைத்தல் (SMO)</h3>
+                    <p>உங்கள் இன்ஸ்டாகிராம் மற்றும் பேஸ்புக் பக்கங்கள் வெறும் டைரிகள் அல்ல; அவை உங்கள் வெப்சைட் போன்றவை. ஒரு பயனர் 3 வினாடிகளில் உங்கள் பிராண்டை நம்பலாமா என முடிவெடுத்துவிடுவார்.</p>
+                    <ul>
+                        <li><b>பயோ (Bio):</b> உங்களின் Bio இந்த வரிசையில் இருக்க வேண்டும்: நீங்கள் யாருக்கு உதவுகிறீர்கள் + எப்படி உதவுகிறீர்கள் + ஆக்‌ஷன் (CTA). எ.கா: "சிறு குறு தொழில்களை AI மூலம் வளர்க்க உதவுகிறோம். இலவச ஆலோசனைக்கு கீழே க்ளிக் செய்யவும் 👇".</li>
+                        <li><b>லிங்க் (Link):</b> பயனர்களை குழப்பமான முதல் பக்கத்திற்கு அனுப்பாமல், நேரடியாக உங்கள் சிறந்த சலுகையைக் காட்டும் பக்கத்திற்கு (Linktree மூலம்) அனுப்ப வேண்டும்.</li>
+                    </ul>
+                    ${generatePromptBox('Profile Bio Formula', 'பார்முலா: [யாருக்கு உதவுகிறோம்] + [என்ன பலன்] + [என்ன செய்ய வேண்டும்]\n\nஉதாரணம்:\n"உள்ளூர் பிசினஸ்களை கூகுள் விளம்பரங்கள் மூலம் லாபமடையச் செய்கிறோம். உங்கள் வியாபாரத்தை வளர்க்க தயாரா? இங்கே க்ளிக் செய்யவும் 👇 [Link]"')}`
+            },
+            { 
+                id: 6, icon: "🏗️", img: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80",
+                title_en: "6. No-Code Landing Page Architecture", title_ta: "6. லேண்டிங் பேஜ் (Landing Page) வடிவமைப்பு", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A Homepage is like a digital brochure—people wander around looking at everything. A Landing Page is like a hallway with no doors and only one exit at the end. You guide the user directly to the exact action you want them to take, removing all distractions.</div>
+                    <p>When you run paid ads, you should <b>never</b> send traffic to your generic website homepage. Homepages have menus, "About Us" links, and multiple buttons that distract the user. You must send paid traffic to a dedicated <b>Landing Page</b>.</p>
+                    <p>In modern marketing, you don't need to know HTML/CSS to build these. We use visual, drag-and-drop builders like Framer, Webflow, WordPress (Elementor), or Unbounce.</p>
+                    <h3>The Anatomy of a High-Converting Page</h3>
+                    <ul>
+                        <li><b>The Hero Section:</b> This is the section visible before scrolling (Above the Fold). It must contain a massive, benefit-driven Headline, a supportive sub-headline, and a giant Call to Action (CTA) button. If the user doesn't understand what you sell in 3 seconds, they will leave.</li>
+                        <li><b>Social Proof:</b> Immediately below the hero section, you need trust markers. Logos of companies you've worked with ("Trusted By"), 5-star Trustpilot reviews, or video testimonials.</li>
+                        <li><b>The PAS Framework:</b> The body of the page should agitate the Problem, agitate the Agony, and introduce your product as the Solution.</li>
+                        <li><b>No Leakage:</b> Remove the top navigation menu entirely. There should only be two options on a landing page: Click the CTA button to buy/sign up, or close the browser window.</li>
+                    </ul>
+                    <h3>Mobile-First Optimization</h3>
+                    <p>Over 80% of Meta and TikTok ad traffic comes from mobile devices. If you build a beautiful landing page on your desktop monitor, but the text is unreadable on an iPhone, you will lose all your money. Always design and preview in mobile view first.</p>
+                    ${generatePromptBox('Landing Page Wireframe Blueprint', 'Tool: Canva or Framer (Visual Builder)\n\nSection 1 (Hero): Headline (Ultimate Benefit), Subhead (How it works), CTA Button (e.g., "Get Started Free").\nSection 2 (Trust): 3-5 Logos of known clients/partners.\nSection 3 (Features): 3 Columns highlighting the core pain-point solutions with simple icons.\nSection 4 (Social Proof): 2 strong customer quotes with photos.\nSection 5 (Final Hook): Bottom CTA button reiterating the urgency/guarantee.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு சாதாரண வெப்சைட் (Homepage) என்பது கண்காட்சி போன்றது—மக்கள் அங்கும் இங்கும் சுற்றிப் பார்ப்பார்கள். ஆனால் லேண்டிங் பேஜ் (Landing page) என்பது ஒரே ஒரு வழியைக் கொண்ட குறுகிய பாதை போன்றது. பயனரைத் திசைதிருப்பாமல் நேராகப் பொருளை வாங்க வைப்பதே இதன் நோக்கம்.</div>
+                    <p>நீங்கள் விளம்பரம் கொடுக்கும்போது, வாடிக்கையாளர்களை ஒருபோதும் உங்கள் சாதாரண வெப்சைட்டின் முதல் பக்கத்திற்கு அனுப்பக் கூடாது. அங்குள்ள 'About Us', 'Contact' போன்ற லிங்க்கள் அவர்களைத் திசைதிருப்பிவிடும். அவர்களைப் பிரத்யேகமாக உருவாக்கப்பட்ட <b>Landing Page</b>-க்கு மட்டுமே அனுப்ப வேண்டும்.</p>
+                    <p>இதற்கு கோடிங் (Coding) தேவையில்லை. Framer, WordPress அல்லது Wix போன்ற கருவிகள் மூலம் நீங்களே இதை எளிதாக வடிவமைக்கலாம்.</p>
+                    <h3>அதிக விற்பனையைத் தரும் பக்கத்தின் வடிவமைப்பு</h3>
+                    <ul>
+                        <li><b>ஹிரோ செக்‌ஷன் (Hero Section):</b> இது ஸ்க்ரோல் செய்வதற்கு முன் திரையில் தெரிவது. இதில் மிகப் பெரிய எழுத்துக்களில் உங்கள் சலுகை (Headline) மற்றும் ஒரு பெரிய பட்டன் (Buy Now / Sign Up) இருக்க வேண்டும். 3 வினாடிகளில் அவர்களுக்கு விஷயம் புரிய வேண்டும்.</li>
+                        <li><b>நம்பகத்தன்மை (Social Proof):</b> இதற்குக் கீழே, நீங்கள் பணியாற்றிய நிறுவனங்களின் லோகோக்கள், 5-ஸ்டார் ரிவியூகள் அல்லது வாடிக்கையாளர்களின் வீடியோக்களை வைக்க வேண்டும்.</li>
+                        <li><b>PAS முறை:</b> பக்கத்தின் நடுப்பகுதியில் பயனரின் பிரச்சனை, அதன் வலி, மற்றும் அதற்கான தீர்வாக உங்கள் பொருள் இருப்பதை விளக்க வேண்டும்.</li>
+                        <li><b>கவனச்சிதறல் கூடாது:</b> மேலே உள்ள மெனுக்களை (Navigation bar) முழுமையாக நீக்கிவிட வேண்டும். வாடிக்கையாளருக்கு இரண்டே வழிகள்தான் இருக்க வேண்டும்: பட்டனை அழுத்த வேண்டும், அல்லது வெளியேற வேண்டும்.</li>
+                    </ul>
+                    <h3>மொபைல் வடிவமைப்பு (Mobile-First)</h3>
+                    <p>இன்ஸ்டாகிராம் மற்றும் பேஸ்புக் விளம்பரங்களில் இருந்து வரும் 80% பேர் மொபைலில் தான் வருவார்கள். எனவே, கம்ப்யூட்டரில் அழகாக இருப்பதை விட, மொபைலில் அது வேகமாக வேலை செய்கிறதா என்பதையே முதலில் பார்க்க வேண்டும்.</p>
+                    ${generatePromptBox('Landing Page Wireframe Blueprint', 'கருவி: Framer அல்லது Elementor\n\nபகுதி 1 (Hero): பெரிய தலைப்பு, சிறிய விளக்கம், மற்றும் பட்டன்.\nபகுதி 2 (Trust): நம்பகத்தன்மையைக் காட்ட 3 லோகோக்கள்.\nபகுதி 3 (Features): 3 முக்கியத் தீர்வுகளை ஐகான்களுடன் (Icons) விளக்குதல்.\nபகுதி 4 (Proof): வாடிக்கையாளர்களின் 2 சிறந்த ரிவியூகள்.\nபகுதி 5 (Bottom CTA): இறுதியில் மீண்டும் ஒரு பெரிய பட்டன் (உத்தரவாதத்துடன்).')}`
+            },
+            { 
+                id: 7, icon: "🕸️", img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
+                title_en: "7. Technical SEO Fundamentals for Non-Coders", title_ta: "7. SEO அடிப்படைகள் (Technical SEO)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A website without SEO is like a beautiful book sitting at the very bottom of a locked basement in a library. Search Engine Optimization is the process of registering that book with the librarian (Google) and putting it on the front display shelf.</div>
+                    <p>Search Engine Optimization (SEO) is the process of manipulating your website so that Google algorithms rank it on the first page of search results for specific keywords. While it sounds highly technical, 90% of SEO can be managed through no-code platforms and standard plugins like Yoast or RankMath.</p>
+                    <h3>The Three Pillars of SEO</h3>
+                    <ul>
+                        <li><b>On-Page SEO:</b> This is everything you control directly on your page. The exact text, the formatting, the images. You must ensure your target keywords are naturally woven into the content.</li>
+                        <li><b>Off-Page SEO:</b> This is trust built from the outside. The primary metric here is "Backlinks" (other reputable websites putting a link on their site that points to yours). Google views backlinks as "votes of confidence".</li>
+                        <li><b>Technical SEO:</b> This is the structural foundation of your site. Is it fast? Is it secure (HTTPS)? Is it mobile-responsive?</li>
+                    </ul>
+                    <h3>Core Technical Elements to Master</h3>
+                    <p>You must understand how to optimize your <b>Title Tags</b> and <b>Meta Descriptions</b>. These are the blue links and short gray text paragraphs that actually appear on the Google search results page. If they are boring, no one will click them, and Google will drop your ranking.</p>
+                    <p>You also need to structure your page using correct <b>Header Tags (H1, H2, H3)</b>. An H1 is the title of the book. An H2 is the chapter. An H3 is a sub-section. Google's crawler bots use these tags to understand the hierarchical logic of your page. Never use an H2 just because you want the text to look bigger visually.</p>
+                    ${generatePromptBox('On-Page SEO Checklist', '1. Title Tag: Is it under 60 characters? Does it contain the primary keyword near the beginning?\n2. Meta Description: Is it under 155 characters? Does it end with a Call to Action (e.g., "Click here to learn more")?\n3. URL Slug: Is the URL clean and short? (e.g., /digital-marketing-course instead of /p=12345)\n4. Image Alt-Text: Do all images have descriptive text for visually impaired users and Google bots?\n5. H1 Tag: Is there exactly ONE H1 tag on the page containing the main keyword?')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> SEO இல்லாத வெப்சைட் என்பது, நூலகத்தின் இருட்டறையில் பூட்டி வைக்கப்பட்ட ஒரு அழகான புத்தகம் போன்றது. SEO என்பது அந்தப் புத்தகத்தை நூலகரிடம் (கூகுள்) பதிவு செய்து, முதல் வரிசையில் பார்வைக்கு வைக்கும் செயலாகும்.</div>
+                    <p>Search Engine Optimization (SEO) என்பது, குறிப்பிட்ட வார்த்தைகளை கூகுளில் தேடும்போது உங்கள் வெப்சைட்டை முதல் பக்கத்தில் கொண்டு வரும் உத்தியாகும். இது கோடிங் சம்பந்தப்பட்ட விஷயம் என்று நினைத்தாலும், 90% SEO வேலைகளை Yoast அல்லது RankMath போன்ற சாதாரண ப்ளகின்கள் மூலமே செய்துவிடலாம்.</p>
+                    <h3>SEO-இன் 3 முக்கியத் தூண்கள்</h3>
+                    <ul>
+                        <li><b>ஆன்-பேஜ் (On-Page SEO):</b> உங்கள் பக்கத்தில் உள்ள எழுத்துக்கள், படங்கள் மற்றும் தலைப்புகளில் சரியான தேடல் வார்த்தைகளை (Keywords) இயல்பாகப் பயன்படுத்துவது.</li>
+                        <li><b>ஆஃப்-பேஜ் (Off-Page SEO):</b> மற்ற பிரபலமான வெப்சைட்டுகள் உங்கள் வெப்சைட்டிற்கான லிங்க்கை (Backlinks) தங்கள் தளத்தில் வைப்பது. இதை ஒரு 'நம்பிக்கை ஓட்டு' போல கூகுள் கருதும்.</li>
+                        <li><b>டெக்னிக்கல் (Technical SEO):</b> உங்கள் தளம் வேகமாக உள்ளதா? மொபைலில் சரியாக வேலை செய்கிறதா? பாதுகாப்பாக (HTTPS) உள்ளதா? என்பதைச் சரிபார்ப்பது.</li>
+                    </ul>
+                    <h3>முக்கியமான SEO கூறுகள்</h3>
+                    <p>கூகுள் தேடல் முடிவுகளில் நீல நிறத்தில் தெரியும் <b>Title Tag</b> மற்றும் அதற்குக் கீழே உள்ள சிறிய விளக்கமான <b>Meta Description</b> ஆகியவற்றைச் சிறப்பாக எழுத வேண்டும். இது சுவாரஸ்யமாக இல்லாவிட்டால் யாரும் கிளிக் செய்ய மாட்டார்கள், உங்கள் ரேங்கும் குறைந்துவிடும்.</p>
+                    <p>பக்கத்தின் தலைப்புகளைச் சரியாக <b>(H1, H2, H3)</b> அமைக்க வேண்டும். H1 என்பது புத்தகத்தின் தலைப்பு போல, H2 என்பது அத்தியாயம் போல. எழுத்தைப் பெரிதாக்க வேண்டும் என்பதற்காக H2-ஐத் தவறாகப் பயன்படுத்தக் கூடாது. கூகுள் இதை வைத்துத்தான் உங்கள் பக்கத்தைப் புரிந்து கொள்கிறது.</p>
+                    ${generatePromptBox('On-Page SEO Checklist', '1. Title Tag: 60 எழுத்துக்களுக்குள் உள்ளதா? முக்கிய கீ-வேர்டு முதலில் உள்ளதா?\n2. Meta Description: 155 எழுத்துக்களுக்குள் உள்ளதா? "மேலும் அறிய கிளிக் செய்யவும்" என்று முடிகிறதா?\n3. URL: வெப்சைட் லிங்க் சுருக்கமாகவும் தெளிவாகவும் உள்ளதா? (எ.கா: /digital-course)\n4. படங்களுக்கான Alt-Text: எல்லா படங்களுக்கும் கூகுள் படிப்பதற்கான உரை உள்ளதா?\n5. H1 Tag: ஒரு பக்கத்திற்கு ஒரே ஒரு H1 (முக்கிய தலைப்பு) மட்டும் உள்ளதா?')}`
+            },
+            { 
+                id: 8, icon: "🤖", img: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=80",
+                title_en: "8. The AI Content Engine (Prompt Engineering)", title_ta: "8. AI மூலம் கன்டென்ட் உருவாக்குதல்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Using AI without Prompt Engineering is like giving a master chef a grocery store and saying "make food". You will get something generic. Prompt Engineering is giving the chef a strict recipe, exact measurements, and demanding a 5-star French pastry.</div>
+                    <p>Content is king in inbound marketing, but creating 30 blog posts, 50 social media captions, and 10 email newsletters a month manually will cause extreme burnout. The modern marketer uses AI (ChatGPT, Claude, Gemini) as their personal copywriting team.</p>
+                    <p>However, if you just ask AI to "write a blog post about SEO", it will output robotic, boring, highly predictable spam that Google will actively penalize. You must master <b>Advanced Prompt Engineering</b>.</p>
+                    <h3>The 4-Part Prompt Framework (R.C.T.F)</h3>
+                    <ul>
+                        <li><b>Role:</b> Give the AI a strict persona. "Act as a Senior Copywriter who specializes in direct-response marketing and human psychology."</li>
+                        <li><b>Context:</b> Give it the exact background. "I am launching a new B2B software for local businesses. The target audience is overwhelmed managers who hate complex tech."</li>
+                        <li><b>Task:</b> Define exactly what you want. "Write a 500-word blog post explaining how automation saves 10 hours a week."</li>
+                        <li><b>Format/Tone:</b> Define the style constraints. "Use a conversational, witty tone. Do not use corporate jargon (like 'leverage' or 'synergy'). Use short paragraphs and bullet points for scannability."</li>
+                    </ul>
+                    <h3>Iterative Refinement</h3>
+                    <p>Never accept the first output. A good marketer treats the AI like a junior employee. If the output is too robotic, reply: "Make it punchier. Add a metaphor about driving a car. Shorten the intro by 50%."</p>
+                    <p>By building a library of perfect prompts, you can generate a month's worth of highly authentic, SEO-optimized content in a single afternoon.</p>
+                    ${generatePromptBox('Master Copywriting Prompt', 'Role: Act as an expert conversion copywriter.\nTask: Write an email newsletter promoting my new [Product Name].\nContext: My audience struggles with [Pain Point]. This product solves it by [Mechanism].\nFormat: Use the PAS (Problem, Agitation, Solution) framework. Keep the tone empathetic but authoritative. Maximum 250 words. Include a strong Call to Action at the end. Avoid the word "Revolutionary".')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சரியான Prompt இல்லாமல் AI-ஐப் பயன்படுத்துவது, ஒரு பெரிய சமையல்காரரிடம் "ஏதாவது சமைத்துக்கொடு" என்று சொல்வது போன்றது. ஆனால் Prompt Engineering என்பது, சரியான அளவுகளையும், என்ன உணவு வேண்டும் என்பதையும் துல்லியமாகக் கூறுவதாகும்.</div>
+                    <p>இன்பவுண்ட் மார்க்கெட்டிங்கில் கன்டென்ட் (Content) தான் ராஜா. ஆனால் மாதம் 30 கட்டுரைகள், 50 இன்ஸ்டாகிராம் பதிவுகளை சுயமாக எழுதுவது மிகவும் கடினம். நவீன மார்க்கெட்டர்கள் இதற்கு AI (ChatGPT, Claude) கருவிகளைப் பயன்படுத்துகின்றனர்.</p>
+                    <p>ஆனால், "SEO பற்றி ஒரு கட்டுரை எழுது" என்று சாதாரணமாகக் கேட்டால், AI மிகவும் போர் அடிக்கும் ரோபோட் போல எழுதும். இதை கூகுளும் நிராகரிக்கும். இதைத் தவிர்க்க நீங்கள் <b>Prompt Engineering</b> (AI-யிடம் சரியாகக் கேள்விகேட்கும் முறை) கற்க வேண்டும்.</p>
+                    <h3>4-பகுதி Prompt கட்டமைப்பு (R.C.T.F)</h3>
+                    <ul>
+                        <li><b>Role (பங்கு):</b> AI-க்கு ஒரு பொறுப்பைக் கொடுங்கள். "நீ ஒரு 10 வருட அனுபவமுள்ள, மனித உளவியல் தெரிந்த சிறந்த காப்பிறைட்டராக (Copywriter) செயல்படு."</li>
+                        <li><b>Context (சூழல்):</b> பின்னணியை விளக்குங்கள். "நான் சிறு தொழில்களுக்கான ஒரு சாஃப்ட்வேரை விற்கிறேன். என் வாடிக்கையாளர்கள் பிசியான மேனேஜர்கள்."</li>
+                        <li><b>Task (வேலை):</b> என்ன வேண்டும் எனத் தெளிவாகக் கூறுங்கள். "ஆட்டோமேஷன் மூலம் எப்படி வாரம் 10 மணிநேரம் சேமிக்கலாம் என 500 வார்த்தைகளில் ஒரு கட்டுரை எழுது."</li>
+                        <li><b>Format (வடிவம்/தொனி):</b> ஸ்டைலைக் கட்டுப்படுத்துங்கள். "நண்பனிடம் பேசுவது போல எழுது. கடினமான வார்த்தைகளைப் பயன்படுத்தாதே. பத்திகளைச் (paragraphs) சிறியதாக அமை."</li>
+                    </ul>
+                    <h3>திருத்தம் செய்தல் (Refinement)</h3>
+                    <p>AI தரும் முதல் விடையை அப்படியே பயன்படுத்தாதீர்கள். "இன்னும் கொஞ்சம் சுவாரஸ்யமாக மாற்று, ஒரு காரை ஓட்டுவது போன்ற உதாரணத்தைச் சேர்" என்று திருத்தங்கள் சொல்லி வாங்குவதே சிறந்த மார்க்கெட்டரின் வேலையாகும்.</p>
+                    ${generatePromptBox('Master Copywriting Prompt', 'Role: நீ ஒரு சிறந்த விற்பனை எழுத்தாளராகச் செயல்படு.\nTask: எனது [பொருளின் பெயர்] பற்றி விளக்கி ஒரு ஈமெயில் எழுது.\nContext: என் வாடிக்கையாளர்கள் [பிரச்சனை] மூலம் சிரமப்படுகிறார்கள். என் பொருள் அதைத் தீர்க்கும்.\nFormat: PAS (Problem, Agitation, Solution) முறையைப் பின்பற்று. அன்பாகவும் ஆனால் உறுதியாகவும் பேசு. அதிகபட்சம் 250 வார்த்தைகள். முடிவில் ஒரு உறுதியான Call to Action வை. "புரட்சிகரமான" போன்ற போலி வார்த்தைகளைத் தவிர்த்துவிடு.')}`
+            },
+            { 
+                id: 9, icon: "🎨", img: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80",
+                title_en: "9. Graphic Design & Video on Autopilot", title_ta: "9. டிசைன் & வீடியோ ஆட்டோமேஷன்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A massive block of plain text on social media is like a speed bump on a highway—everyone will just swerve around it. Graphics and video are the giant glowing billboard that forces them to hit the brakes and look.</div>
+                    <p>You do not need an expensive Adobe Photoshop subscription or a professional video editing rig to create stunning, high-converting digital assets. The current generation of visual SaaS tools has completely democratized graphic design for marketers.</p>
+                    <h3>The Canva Workflow</h3>
+                    <p><b>Canva</b> is the undisputed king of no-code design. The secret to professional Canva usage is constraint. Amateurs use 15 different fonts and chaotic colors. Professionals build a "Brand Kit" (locking in exactly 2 brand fonts and a 3-color palette) and exclusively use those constraints on pre-built templates.</p>
+                    <ul>
+                        <li><b>Visual Hierarchy:</b> The most important text (the Hook) must be the largest. Less important text must be significantly smaller. Create contrast.</li>
+                        <li><b>Negative Space:</b> Don't fill every pixel with graphics. Let the design "breathe". Empty space draws the eye directly to the core message.</li>
+                    </ul>
+                    <h3>AI Image & Video Generation</h3>
+                    <p>For custom ad creatives, tools like <b>Midjourney</b> (for photorealistic or stylized imagery) and <b>CapCut</b> (for rapid mobile video editing) are essential. CapCut provides automated captioning, which is mandatory, as 70% of social media users watch videos on mute.</p>
+                    <p>If you are marketing audio/music (e.g., distributing tracks via platforms like SwaLay or BandLab), you can use visualizers and AI-generated abstract loops to create highly engaging YouTube Shorts or Instagram Reels without ever picking up a camera.</p>
+                    ${generatePromptBox('Midjourney Ad Creative Prompt', 'Tool: Midjourney (via Discord)\n\nPrompt structure for a highly clickable ad background:\n/imagine prompt: A clean, minimalist workspace desk, top-down view, soft cinematic lighting, featuring a modern laptop and a cup of coffee, negative space on the left side for text overlay, brand colors teal and white, 8k, photorealistic --ar 16:9')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சமூக வலைத்தளங்களில் வெறும் எழுத்துக்களை மட்டும் போடுவது, நெடுஞ்சாலையில் உள்ள வேகத்தடை போன்றது—அனைவரும் அதைத் தவிர்த்துவிட்டுப் போய்விடுவார்கள். ஆனால் நல்ல டிசைன் அல்லது வீடியோ என்பது அவர்களை பிரேக் போட்டுப் பார்க்க வைக்கும் பெரிய ஒளிரும் விளம்பரப் பலகை போன்றது.</div>
+                    <p>சிறந்த டிசைன்களை உருவாக்க உங்களுக்கு ஃபோட்டோஷாப் (Photoshop) போன்ற பெரிய மென்பொருட்களோ, வீடியோ எடிட்டிங் திறமையோ தேவையில்லை. நவீன no-code கருவிகள் மூலம் யார் வேண்டுமானாலும் சிறந்த டிசைன்களை உருவாக்கலாம்.</p>
+                    <h3>Canva (கேன்வா) பயன்படுத்தும் முறை</h3>
+                    <p><b>Canva</b> தான் டிசைனிங்கின் ராஜா. புதியவர்கள் நிறைய வண்ணங்களையும் எழுத்துருக்களையும் (Fonts) பயன்படுத்தி டிசைனைக் கெடுத்துவிடுவார்கள். சிறந்த மார்க்கெட்டர்கள் "Brand Kit"-ஐ உருவாக்கி, 2 எழுத்துருக்கள் மற்றும் 3 நிறங்களை மட்டுமே மீண்டும் மீண்டும் பயன்படுத்தி ஒரு நிலையான பிராண்ட் அடையாளத்தை உருவாக்குவார்கள்.</p>
+                    <ul>
+                        <li><b>Visual Hierarchy:</b> மிக முக்கியமான தலைப்பு (Hook) பெரிய எழுத்திலும், மற்றவை சிறியதாகவும் இருக்க வேண்டும்.</li>
+                        <li><b>காலி இடம் (Negative Space):</b> டிசைன் முழுவதும் எதையாவது நிரப்பி வைக்கக் கூடாது. காலியாக உள்ள இடங்கள்தான் மக்களின் கவனத்தை முக்கியச் செய்தியின் மீது திருப்பும்.</li>
+                    </ul>
+                    <h3>AI மூலம் படங்கள் மற்றும் வீடியோக்கள்</h3>
+                    <p>விளம்பரங்களுக்குத் தேவையான படங்களை உருவாக்க <b>Midjourney</b> மற்றும் வீடியோக்களை எடிட் செய்ய <b>CapCut</b> போன்ற கருவிகளைப் பயன்படுத்தலாம். 70% மக்கள் சமூக வலைத்தளங்களில் சத்தமில்லாமல் (Mute) வீடியோ பார்ப்பதால், CapCut-இன் Auto-captions (தானியங்கி எழுத்துக்கள்) வசதியைப் பயன்படுத்துவது கட்டாயமாகும்.</p>
+                    <p>நீங்கள் இசையை (BandLab/SwaLay மூலம்) மார்க்கெட்டிங் செய்கிறீர்கள் என்றால், கேமராவே இல்லாமல் AI மூலம் உருவாக்கப்பட்ட விஷுவல் லூப்களை வைத்து யூடியூப் ஷார்ட்ஸ் (Shorts) உருவாக்கலாம்.</p>
+                    ${generatePromptBox('Midjourney Ad Creative Prompt', 'கருவி: Midjourney\n\nவிளம்பரப் பின்னணிக்கான Prompt:\n/imagine prompt: ஒரு சுத்தமான டேபிள், மேலிருந்து பார்க்கும் கோணம், மென்மையான வெளிச்சம், ஒரு லேப்டாப் மற்றும் காபி கப். இடதுபுறம் எழுத்துக்களைச் சேர்க்க காலி இடம் இருக்க வேண்டும். நிறங்கள்: நீலம் மற்றும் வெள்ளை, மிகத் துல்லியமான புகைப்படம் போல இருக்க வேண்டும் --ar 16:9')}`
+            },
+            { 
+                id: 10, icon: "📱", img: "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=800&q=80",
+                title_en: "10. Social Media Distribution & Algorithms", title_ta: "10. சோஷியல் மீடியா அல்காரிதம்கள்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Social media algorithms are like strict bouncers at a nightclub. If you bring a boring crowd (bad content), they throw you out (zero reach). If you bring an exciting crowd that keeps the party going (high retention/engagement), they give you the VIP table and invite everyone else inside.</div>
+                    <p>Creating great content is only 50% of the job. Understanding exactly how the algorithms decide to distribute that content is the other 50%. Every platform (Instagram, YouTube, LinkedIn) operates on a completely different mathematical logic.</p>
+                    <h3>The Retention Metric (Video)</h3>
+                    <p>For short-form video (TikTok, IG Reels, YT Shorts), the absolute king of metrics is <b>Average View Duration (Retention)</b>. The algorithm does not care about likes or comments initially. It tests your video on a small batch of 100 people. If 70% of them swipe away in the first 3 seconds, the video dies immediately. If 50% watch until the very end, it pushes it to 1,000 people, then 10,000.</p>
+                    <p>To win this game, your videos must have a "Hook" (a shocking statement, a visual change, or a clear promise) within the first 3 seconds.</p>
+                    <h3>The Engagement Metric (Text/Images)</h3>
+                    <p>For LinkedIn or Twitter, the algorithm prioritizes "Dwell Time" and "Comments". If a user stops scrolling to read a long post, the algorithm notes the dwell time. If they leave a comment, and you reply, triggering a conversation, the algorithm assumes the post is highly valuable and pushes it to their extended network.</p>
+                    <h3>Automated Scheduling</h3>
+                    <p>Do not post manually. Use platforms like <b>Buffer, Hootsuite, or Metricool</b> to schedule an entire month of content in one afternoon. This ensures consistent posting times and keeps your brand active even when you are sleeping or on vacation.</p>
+                    ${generatePromptBox('Viral Video Script Format', 'Format to maximize Retention Algorithms:\n\n[0-3 Seconds: The Hook] - State the exact result or shocking claim (e.g., "Stop wasting money on FB ads until you watch this.")\n[3-10 Seconds: The Setup] - Explain why the current way is broken.\n[10-45 Seconds: The Value] - Deliver 3 rapid-fire, actionable tips.\n[45-60 Seconds: The Call to Action] - Tell them exactly what to do next (e.g., "Save this video so you don\'t forget.")')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சோஷியல் மீடியா அல்காரிதம்கள் கிளப்பில் உள்ள காவலாளிகள் (Bouncers) போன்றவர்கள். நீங்கள் கொடுக்கும் கன்டென்ட் போர் அடித்தால், அவர்கள் உங்களை வெளியே தள்ளிவிடுவார்கள் (Reach இருக்காது). உங்கள் கன்டென்ட் மக்களை ஈர்த்து அங்கேயே கட்டிப்போட்டால், அவர்கள் உங்களை விஐபி (VIP) ஆக்கி, நிறைய பேரிடம் கொண்டு சேர்ப்பார்கள்.</div>
+                    <p>சிறந்த கன்டென்ட்டை உருவாக்குவது 50% வேலை மட்டுமே. அல்காரிதம் (Algorithm) அதை எப்படி மக்களிடம் கொண்டு செல்கிறது என்பதைப் புரிந்துகொள்வது மீதி 50%. இன்ஸ்டாகிராம், யூடியூப், லிங்க்ட்இன் என ஒவ்வொன்றும் வெவ்வேறு லாஜிக்குகளில் இயங்குகின்றன.</p>
+                    <h3>வீடியோக்களுக்கான அளவுகோல் (Retention)</h3>
+                    <p>Reels அல்லது Shorts-ஐப் பொறுத்தவரை, லைக் அல்லது கமெண்ட்டை விட <b>வீடியோவை எவ்வளவு நேரம் பார்க்கிறார்கள் (Retention)</b> என்பதே முக்கியம். அல்காரிதம் முதலில் 100 பேரிடம் உங்கள் வீடியோவைக் காட்டும். அதில் 70 பேர் முதல் 3 வினாடிகளில் ஸ்க்ரோல் செய்துவிட்டால், வீடியோ முடங்கிவிடும். பாதிப் பேர் முழுமையாகப் பார்த்தால், அதை 10,000 பேருக்குக் கொண்டு செல்லும்.</p>
+                    <p>இதற்கு உங்கள் வீடியோவின் முதல் 3 வினாடிகளில் (Hook) ஒரு அதிர்ச்சியான செய்தியோ அல்லது உறுதியான சலுகையோ இருக்க வேண்டும்.</p>
+                    <h3>எழுத்து/படங்களுக்கான அளவுகோல் (Engagement)</h3>
+                    <p>லிங்க்ட்இன் அல்லது டிவிட்டரில், ஒரு பதிவில் மக்கள் எவ்வளவு நேரம் செலவிடுகிறார்கள் (Dwell Time) என்பதை அல்காரிதம் கவனிக்கும். ஒருவர் கமெண்ட் செய்து, அதற்கு நீங்கள் ரிப்ளை செய்து ஒரு உரையாடல் உருவானால், அந்தப் பதிவு மிகச் சிறந்தது என நினைத்து அதைப் பலருக்குக் காட்டும்.</p>
+                    <h3>ஆட்டோமேட்டிக் போஸ்டிங் (Scheduling)</h3>
+                    <p>தினமும் சுயமாகப் போஸ்ட் செய்யாதீர்கள். <b>Buffer</b> அல்லது <b>Metricool</b> போன்ற கருவிகளைப் பயன்படுத்தி ஒரு மாதத்திற்குத் தேவையான பதிவுகளை ஒரே நாளில் செட் செய்துவிடுங்கள். இது நீங்கள் தூங்கும்போதும் உங்கள் பிராண்டை ஆக்டிவாக வைத்திருக்கும்.</p>
+                    ${generatePromptBox('Viral Video Script Format', 'அல்காரிதமை வெல்லும் வீடியோ அமைப்பு:\n\n[0-3 வினாடிகள்: Hook] - "ஃபேஸ்புக் விளம்பரங்களில் பணத்தை வீணாக்குவதை நிறுத்துங்கள்!" (கவனத்தை ஈர்த்தல்)\n[3-10 வினாடிகள்: பிரச்சனை] - தற்போதுள்ள முறை ஏன் தவறானது என விளக்குதல்.\n[10-45 வினாடிகள்: தீர்வு] - 3 மிகச் சிறந்த, சுருக்கமான குறிப்புகளை வழங்குதல்.\n[45-60 வினாடிகள்: Action] - அடுத்து என்ன செய்ய வேண்டும் எனக் கூறுதல் ("மறக்காமல் இருக்க இந்த வீடியோவை Save செய்யுங்கள்").')}`
+            },
+            { 
+                id: 11, icon: "🎯", img: "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=800&q=80",
+                title_en: "11. The Anatomy of a High-Converting Ad", title_ta: "11. அதிக விற்பனை தரும் விளம்பர அமைப்பு", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A bad ad talks entirely about the company: "We have been in business for 10 years and we are the best." A good ad talks entirely about the customer: "Are you tired of back pain? Here is how to fix it in 10 minutes." People only care about themselves.</div>
+                    <p>Now we transition into Phase 3: The Paid Engine. When you pay Meta or Google for traffic, you cannot afford to be boring. Every impression costs money. To make a return on your investment, your ads must rely heavily on proven psychological copywriting structures.</p>
+                    <h3>The AIDA Framework</h3>
+                    <p>Almost all successful ads are built on the AIDA formula:</p>
+                    <ul>
+                        <li><b>Attention (The Visual & Headline):</b> The scroll-stopper. Bold colors, controversial statements, or striking imagery that forces the brain to pause.</li>
+                        <li><b>Interest (The Lead):</b> Introduce a shocking statistic or a relatable pain point. Validate their frustration.</li>
+                        <li><b>Desire (The Body):</b> Introduce your product not as a list of features, but as a list of <i>benefits</i>. (Feature: "1TB Storage". Benefit: "Keep 100,000 photos of your children safe forever").</li>
+                        <li><b>Action (The CTA):</b> A strict, urgent command. "Click here to claim your 50% discount before midnight."</li>
+                    </ul>
+                    <h3>Ad Formats That Win</h3>
+                    <p>In modern paid social, high-production Hollywood-style commercials perform terribly. They look like ads, and people hate ads. The highest converting format is <b>UGC (User Generated Content)</b>. This is a video shot on a standard iPhone by a regular person (or an actor looking like a regular person) reviewing your product organically. It blends perfectly into the social feed, lowering the user's defense mechanisms.</p>
+                    ${generatePromptBox('AIDA Ad Copy Generator', 'Tool: ChatGPT / Claude\n\nPrompt: "Write a Facebook Ad for my [Product Name]. Use the AIDA psychological framework. \n[Attention]: Start with a question calling out [Specific Target Audience]. \n[Interest]: Highlight how frustrating [Specific Problem] is. \n[Desire]: Explain how my product solves this easily. \n[Action]: End with a strong CTA to click the link below. Use minimal emojis."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு மோசமான விளம்பரம் நிறுவனத்தைப் பற்றி மட்டுமே பேசும்: "நாங்கள் 10 வருடங்களாகத் தொழிலில் உள்ளோம், நாங்களே சிறந்தவர்கள்." ஆனால் ஒரு சிறந்த விளம்பரம் வாடிக்கையாளரைப் பற்றி மட்டுமே பேசும்: "முதுகு வலியால் அவதிப்படுகிறீர்களா? 10 நிமிடங்களில் அதை எப்படிச் சரிசெய்வது எனப் பாருங்கள்." மக்கள் தங்களைப் பற்றிக் கேட்பதையே விரும்புவார்கள்.</div>
+                    <p>இப்போது கட்டண விளம்பரங்கள் (Paid Ads) பகுதிக்குள் நுழைகிறோம். பேஸ்புக்கிற்கும் கூகுளுக்கும் பணத்தைக் கொடுக்கும்போது நாம் மிகவும் கவனமாக இருக்க வேண்டும். உங்கள் விளம்பரங்கள் மனித உளவியலை (Psychology) அடிப்படையாகக் கொண்டிருக்க வேண்டும்.</p>
+                    <h3>AIDA பார்முலா</h3>
+                    <p>வெற்றிகரமான விளம்பரங்கள் அனைத்தும் இந்த முறையில்தான் எழுதப்படுகின்றன:</p>
+                    <ul>
+                        <li><b>Attention (கவனத்தை ஈர்த்தல்):</b> ஸ்க்ரோல் செய்வதை நிறுத்த வைக்கும் போல்டான நிறங்கள் அல்லது அதிர்ச்சியான தலைப்பு.</li>
+                        <li><b>Interest (ஆர்வத்தைத் தூண்டுதல்):</b> அவர்களின் வலியைப் புரிந்துகொள்வது போலப் பேசி ஆர்வத்தை ஏற்படுத்துதல்.</li>
+                        <li><b>Desire (ஆசையை உருவாக்குதல்):</b> உங்கள் பொருளின் சிறப்பம்சங்களை (Features) கூறாமல், அதனால் அவர்களுக்கு என்ன பயன் (Benefits) என்று கூறுங்கள். (சிறப்பம்சம்: "1TB மெமரி". பயன்: "உங்கள் குழந்தையின் 1 லட்சத்திற்கும் மேற்பட்ட புகைப்படங்களை வாழ்நாள் முழுவதும் பத்திரமாக வையுங்கள்").</li>
+                        <li><b>Action (செயல்பட வைத்தல்):</b> "இன்றிரவுக்குள் 50% தள்ளுபடியைப் பெற இங்கே கிளிக் செய்யவும்" எனத் தெளிவாகக் கூறுதல்.</li>
+                    </ul>
+                    <h3>எந்த வகையான விளம்பரம் சிறந்தது?</h3>
+                    <p>சினிமா போலப் பிரம்மாண்டமாக எடுக்கப்படும் விளம்பரங்களை மக்கள் விரும்புவதில்லை. சாதாரண மொபைல் போனில், ஒரு சாதாரண மனிதர் உங்கள் பொருளைப் பயன்படுத்திப் பார்த்து ரிவியூ (Review) சொல்வது போன்ற வீடியோக்களே (UGC - User Generated Content) தற்போது அதிக விற்பனையைத் தருகின்றன. இது விளம்பரம் போலத் தெரியாததால் மக்கள் இதை நம்புவார்கள்.</p>
+                    ${generatePromptBox('AIDA Ad Copy Generator', 'கருவி: ChatGPT\n\nPrompt: "எனது [பொருளின் பெயர்]-க்கு ஒரு பேஸ்புக் விளம்பரம் எழுது. AIDA முறையைப் பயன்படுத்து. \n[Attention]: வாடிக்கையாளர்களின் கவனத்தை ஈர்க்கும் ஒரு கேள்வியுடன் தொடங்கு. \n[Interest]: அவர்களின் பிரச்சனை எவ்வளவு சிரமமானது என விவரி. \n[Desire]: என் பொருள் அதை எப்படி எளிதாகத் தீர்க்கும் எனக் கூறு. \n[Action]: கீழே கிளிக் செய்யத் தூண்டும் ஒரு உறுதியான CTA-ஐ வை."')}`
+            },
+            { 
+                id: 12, icon: "⚙️", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+                title_en: "12. Meta Ads Manager Architecture", title_ta: "12. பேஸ்புக்/மெட்டா Ads அமைப்புகள்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Boosting a post on the Instagram app is like playing the slot machines at a casino—it's flashy, easy, and designed to take your money. Meta Ads Manager is like going to the back room and buying the actual casino. You have total control over the math and the targeting.</div>
+                    <p>Never, ever use the blue "Boost Post" button on Facebook or Instagram. It is a simplified tool designed to extract money from amateurs in exchange for "vanity metrics" (likes and comments) rather than actual sales. Professional marketers exclusively use the <b>Meta Business Manager</b> and the desktop Ads Manager.</p>
+                    <h3>The 3-Tier Campaign Structure</h3>
+                    <p>Meta Ads are strictly organized into a 3-tier hierarchy. You must understand this structure to avoid total chaos when managing budgets.</p>
+                    <ul>
+                        <li><b>Level 1: Campaign (The Objective):</b> This is where you tell the AI your ultimate goal. Do you want Video Views? Lead Forms? Or Website Sales? The AI will optimize entirely based on this choice. If you pick "Traffic", it will find people who love to click but never buy. If you want sales, you must strictly choose the "Sales" objective.</li>
+                        <li><b>Level 2: Ad Set (The Targeting & Budget):</b> This is where you define WHO sees the ad, WHERE they see it (Instagram Stories vs Facebook Feed), and exactly how much money you want to spend per day. You can create multiple Ad Sets within a Campaign to test different audiences against each other.</li>
+                        <li><b>Level 3: Ad (The Creative):</b> This is the actual video, image, and text that the user sees. You place multiple Ads inside an Ad Set so the AI can figure out which specific video works best.</li>
+                    </ul>
+                    <h3>Business Manager Safety</h3>
+                    <p>Meta's automated security systems are notoriously aggressive and will frequently ban accounts without warning. To protect your business, always verify your domain, set up Two-Factor Authentication (2FA) for all admins, and ensure your billing details match your legal business documents perfectly.</p>
+                    ${generatePromptBox('Meta Structure Cheat Sheet', 'Goal: Test 2 different Audiences and 3 different Videos.\n\n[Campaign]: Objective = Sales (Budget: $50/day via CBO)\n  |-- [Ad Set 1]: Targeting Broad (Ages 18-65, No interests)\n        |-- [Ad 1]: Video A (Humor)\n        |-- [Ad 2]: Video B (Educational)\n        |-- [Ad 3]: Image C (Testimonial)\n  |-- [Ad Set 2]: Targeting Competitor Interests\n        |-- [Ad 1]: Video A (Humor)\n        |-- [Ad 2]: Video B (Educational)\n        |-- [Ad 3]: Image C (Testimonial)')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> இன்ஸ்டாகிராமில் "Boost Post" பட்டனை அழுத்துவது, லாட்டரி சீட்டு வாங்குவது போன்றது—பணம் வீணாகும் வாய்ப்பு அதிகம். ஆனால் Meta Ads Manager-ஐப் பயன்படுத்துவது, லாட்டரி கம்பெனியையே விலைக்கு வாங்குவது போன்றது. நீங்கள் முழு கட்டுப்பாட்டுடன் செயல்படலாம்.</div>
+                    <p>பேஸ்புக் அல்லது இன்ஸ்டாகிராமில் உள்ள நீல நிற "Boost Post" பட்டனை ஒருபோதும் பயன்படுத்தாதீர்கள். அது லைக் மற்றும் கமெண்ட்களை (Vanity metrics) மட்டுமே கொண்டு வரும், விற்பனையைக் கொண்டு வராது. தொழில்முறை மார்க்கெட்டர்கள் கம்ப்யூட்டரில் <b>Meta Ads Manager</b>-ஐ மட்டுமே பயன்படுத்துவார்கள்.</p>
+                    <h3>விளம்பரத்தின் 3-அடுக்கு அமைப்பு (3-Tier Structure)</h3>
+                    <p>Meta விளம்பரங்கள் 3 முக்கிய அடுக்குகளாகப் பிரிக்கப்பட்டுள்ளன. பட்ஜெட்டைச் சரியாக நிர்வகிக்க இதைப் புரிந்துகொள்வது மிக அவசியம்.</p>
+                    <ul>
+                        <li><b>அடுக்கு 1: Campaign (இலக்கு):</b> உங்கள் இறுதி இலக்கு என்ன என்பதை AI-யிடம் கூறுவது. உங்களுக்கு வீடியோ பார்வைகள் வேண்டுமா? அல்லது விற்பனை (Sales) வேண்டுமா? விற்பனை வேண்டும் என்றால் "Sales" என்பதை மட்டுமே தேர்ந்தெடுக்க வேண்டும். "Traffic"-ஐத் தேர்ந்தெடுத்தால், AI வெறும் கிளிக் செய்யும் நபர்களை மட்டுமே கொண்டு வரும், அவர்கள் பொருளை வாங்க மாட்டார்கள்.</li>
+                        <li><b>அடுக்கு 2: Ad Set (பார்வையாளர்கள் & பட்ஜெட்):</b> யார் விளம்பரத்தைப் பார்க்க வேண்டும், எங்கே பார்க்க வேண்டும் (Instagram Stories ஆ அல்லது Feed ஆ), ஒரு நாளைக்கு எவ்வளவு செலவு செய்ய வேண்டும் என்பதை இங்குதான் முடிவு செய்ய வேண்டும்.</li>
+                        <li><b>அடுக்கு 3: Ad (விளம்பரம்):</b> இதுதான் வாடிக்கையாளர் பார்க்கும் உண்மையான வீடியோ, படம் மற்றும் உரை. ஒரு Ad Set-க்குள் பல வீடியோக்களை வைத்தால், எது நன்றாக வேலை செய்கிறது என்பதை AI-யே கண்டுபிடித்துக்கொள்ளும்.</li>
+                    </ul>
+                    <h3>பாதுகாப்பு (Safety)</h3>
+                    <p>Meta-இன் பாதுகாப்பு அமைப்பு மிகக் கடுமையானது, எந்த முன்னறிவிப்புமின்றி அக்கவுண்ட்களை முடக்கிவிடும். இதைத் தவிர்க்க, உங்கள் அக்கவுண்ட்டிற்கு 2FA (Two-Factor Authentication) அமைத்து, பில்லிங் முகவரியைச் சரியாக வைத்திருக்க வேண்டும்.</p>
+                    ${generatePromptBox('Meta Structure Cheat Sheet', 'இலக்கு: 2 வெவ்வேறு பார்வையாளர்களிடம் 3 வீடியோக்களைச் சோதிப்பது.\n\n[Campaign]: Objective = Sales (Budget: $50/day)\n  |-- [Ad Set 1]: அனைவரையும் குறிவைத்தல் (Broad Targeting)\n        |-- [Ad 1]: வீடியோ A (காமெடி)\n        |-- [Ad 2]: வீடியோ B (விளக்கம்)\n        |-- [Ad 3]: புகைப்படம் C (ரிவியூ)\n  |-- [Ad Set 2]: போட்டியாளர்களின் வாடிக்கையாளர்களைக் குறிவைத்தல்\n        |-- [Ad 1, Ad 2, Ad 3]')}`
+            },
+            { 
+                id: 13, icon: "🚀", img: "https://images.unsplash.com/photo-1557838923-2985c318be48?w=800&q=80",
+                title_en: "13. Launching & Testing Your First Meta Campaign", title_ta: "13. முதல் Meta விளம்பரத்தை இயக்குதல்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> AI targeting is like a heat-seeking missile. In the old days, you had to steer the missile manually using joystick controls (detailed interest targeting). Today, the AI is so smart that you just point it generally at the sky, give it a great ad, and it will find the heat signature (the buyer) entirely on its own.</div>
+                    <p>The days of micro-targeting are dead. Five years ago, marketers would target "Married women, aged 32-34, who like Yoga and Starbucks." Today, because of iOS privacy updates and vastly superior Machine Learning algorithms, <b>Broad Targeting</b> is the industry standard.</p>
+                    <h3>The Advantage+ Revolution</h3>
+                    <p>Meta's algorithm is now smarter than you. If you restrict it with too many detailed interests, costs skyrocket because you shrink the pool of available impressions. Modern strategy dictates leaving the targeting wide open (e.g., just Age 18-65+, Location: India).</p>
+                    <p><i>How does the AI know who to show it to?</i> <b>The Ad Creative is the targeting.</b> If your video starts by saying "Attention local bakery owners!", the algorithm will observe who stops scrolling. It will instantly realize bakery owners are engaging with the ad, and it will aggressively find more of them automatically. This is called algorithmic creative-targeting.</p>
+                    <h3>Testing Methodology (The Sandbox)</h3>
+                    <p>Never assume you know what will work. You must run a "Testing Phase."</p>
+                    <ul>
+                        <li>Set up a Campaign with CBO (Campaign Budget Optimization) turned on.</li>
+                        <li>Create one Ad Set with 3 entirely different videos (e.g., Video 1: Educational, Video 2: Emotional, Video 3: Founder talking).</li>
+                        <li>Let the AI spend money for 72 hours without touching it. The algorithm needs this time to exit the "Learning Phase".</li>
+                        <li>After 3 days, turn off the "Loser" ads that are costing too much per click, and let the budget automatically flow to the "Winner".</li>
+                    </ul>
+                    ${generatePromptBox('Testing Phase Rules', 'Rule 1: DO NOT TOUCH THE CAMPAIGN FOR 72 HOURS. Editing a live campaign forces the AI to restart the learning phase from scratch.\nRule 2: Don\'t fall in love with your own videos. If the ugly, unedited selfie-video gets cheaper sales than the $1,000 professional cinematic video, turn off the cinematic video.\nRule 3: Look at CPC (Cost Per Click) and CTR (Click-Through Rate) to determine if the Hook is working.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பழைய காலத்தில் ஏவுகணையை நாமே ஜாய்ஸ்டிக் (Joystick) வைத்து இலக்கை நோக்கிக் கட்டுப்படுத்த வேண்டும். ஆனால் இன்றைய AI, வெப்பத்தை உணர்ந்து தானே இலக்கைத் தாக்கும் ஏவுகணை போன்றது. நீங்கள் வானத்தை நோக்கிச் சுட்டால் போதும், AI அதற்கான சரியான ஆளைத் தேடிக் கண்டுபிடித்துக் கொள்ளும்.</div>
+                    <p>முன்பெல்லாம் விளம்பரம் கொடுக்கும்போது "30 வயதுள்ள, யோகா பிடிக்கும் பெண்கள்" என மிக நுணுக்கமாகக் (Micro-targeting) குறிவைக்க வேண்டும். ஆனால் இன்று, ஆப்பிளின் (iOS) பிரைவசி கட்டுப்பாடுகள் வந்தபிறகு, அந்த முறை வேலை செய்யாது. இன்று அனைவரையும் குறிவைக்கும் <b>Broad Targeting</b> முறைதான் சிறந்தது.</p>
+                    <h3>Advantage+ மற்றும் AI-இன் ஆற்றல்</h3>
+                    <p>Meta-இன் அல்காரிதம் இப்போது உங்களை விட அறிவானது. நீங்கள் அதிக கட்டுப்பாடுகளை விதித்தால், விளம்பரச் செலவு அதிகமாகிவிடும். தற்போதுள்ள சிறந்த யுக்தி, இலக்கை விரிவாக வைப்பதே (எ.கா: இந்தியா முழுவதும், வயது 18-65).</p>
+                    <p><i>அப்படியென்றால் AI எப்படிச் சரியான வாடிக்கையாளரைக் கண்டுபிடிக்கும்?</i> <b>உங்கள் வீடியோவே அதற்கான வழிகாட்டி.</b> உங்கள் வீடியோ, "பேக்கரி ஓனர்கள் கவனத்திற்கு!" என்று தொடங்கினால், யார் அதைப் பார்க்கிறார்கள் என்பதை AI கவனிக்கும். பேக்கரி ஓனர்கள் மட்டும் அதைப் பார்க்கிறார்கள் என்பதைப் புரிந்துகொண்டு, அது தானாகவே அத்தகைய ஆட்களைத் தேடிக் கண்டுபிடிக்கும்.</p>
+                    <h3>சோதனை முறை (Testing Phase)</h3>
+                    <p>எந்த வீடியோ வேலை செய்யும் என நீங்களாகவே முடிவு செய்யாதீர்கள். அதைக் கண்டிப்பாகச் சோதிக்க வேண்டும்.</p>
+                    <ul>
+                        <li>CBO (Campaign Budget Optimization)-ஐ ஆன் செய்து ஒரு Campaign-ஐ உருவாக்குங்கள்.</li>
+                        <li>அதில் 3 முற்றிலும் மாறுபட்ட வீடியோக்களை (எ.கா: கல்வி, உணர்வுபூர்வமான, நகைச்சுவை) வையுங்கள்.</li>
+                        <li>AI-ஐ 72 மணிநேரத்திற்கு (3 நாட்கள்) தொந்தரவு செய்யாமல் இயங்க விடுங்கள். AI-க்கு கற்றுக்கொள்ள (Learning Phase) இந்த நேரம் தேவை.</li>
+                        <li>3 நாட்களுக்குப் பிறகு, அதிக செலவு வைக்கும் "தோல்வியடைந்த" வீடியோக்களை நிறுத்திவிட்டு, "வெற்றிபெற்ற" வீடியோவிற்குப் பணத்தை முழுமையாக அனுப்புங்கள்.</li>
+                    </ul>
+                    ${generatePromptBox('Testing Phase Rules', 'விதி 1: 72 மணி நேரத்திற்கு விளம்பரத்தை மாற்றவோ, எடிட் செய்யவோ கூடாது. அப்படிச் செய்தால் AI மீண்டும் முதலில் இருந்து கற்கத் தொடங்கும்.\nவிதி 2: எந்த வீடியோ குறைவான செலவில் விற்பனையைக் கொண்டு வருகிறதோ, அதுவே சிறந்த வீடியோ. (அது பார்ப்பதற்கு அழகாக இல்லாவிட்டாலும் பரவாயில்லை).\nவிதி 3: மக்கள் வீடியோவைக் கிளிக் செய்கிறார்களா என்பதை அறிய CPC மற்றும் CTR-ஐக் கவனியுங்கள்.')}`
+            },
+            { 
+                id: 14, icon: "🔍", img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
+                title_en: "14. Google Ads (Search & Intent Marketing)", title_ta: "14. கூகுள் விளம்பரங்கள் (Google Ads)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Facebook Ads are like handing out flyers to people enjoying a picnic—you are interrupting them hoping they might be hungry. Google Ads are like standing behind the counter at a fast-food restaurant—the person walking up to you already has their wallet out and is explicitly asking for a burger.</div>
+                    <p>While Meta Ads create demand (interruption marketing), <b>Google Search Ads</b> capture existing demand (intent marketing). Because the user is actively typing a solution into the search bar, the conversion rates for Google Search are traditionally the highest in the entire digital marketing industry.</p>
+                    <h3>Keyword Match Types</h3>
+                    <p>Google Ads run entirely on an auction system based on Keywords. But how strictly Google interprets those keywords is controlled by Match Types. Using the wrong match type will drain your daily budget in 30 minutes on irrelevant clicks.</p>
+                    <ul>
+                        <li><b>Broad Match (No symbols):</b> <i>digital marketing course</i>. Google will show your ad to ANYONE searching for anything loosely related, including "free marketing degree" or "what is marketing". Highly dangerous for beginners.</li>
+                        <li><b>Phrase Match ("quotes"):</b> <i>"digital marketing course"</i>. The ad will only show if the search contains that exact phrase, though words can be added before or after. (e.g., "Best digital marketing course online" will trigger it). This is the safest balance of volume and control.</li>
+                        <li><b>Exact Match ([brackets]):</b> <i>[digital marketing course]</i>. Shows only when that precise phrase (or very close variants) is typed. Highly restrictive, but yields the absolute best ROI.</li>
+                    </ul>
+                    <h3>Negative Keywords: Your Defensive Shield</h3>
+                    <p>The most important part of Google Ads is telling Google what you DO NOT want to pay for. If you sell a premium ₹10,000 course, you must add words like "free", "cheap", "torrent", and "PDF" to your <b>Negative Keyword List</b>. If someone types "free digital marketing course", your ad will be blocked from showing, saving you the cost of a useless click.</p>
+                    ${generatePromptBox('Google Ads Quality Score Logic', 'Quality Score is a metric (1-10) determining how much you pay per click. To get a 10/10 and pay the absolute minimum:\n\n1. Expected CTR: Your ad headline must be extremely clickable.\n2. Ad Relevance: The exact keyword they searched MUST be in the Ad Headline.\n3. Landing Page Experience: The landing page must load fast, be mobile-friendly, and contain the exact keyword they searched for.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பேஸ்புக் விளம்பரம் என்பது, பூங்காவில் ஓய்வெடுப்பவர்களிடம் சென்று நோட்டீஸ் கொடுப்பது போன்றது—அவர்களுக்குப் பசி இருக்கிறதா என்று நமக்குத் தெரியாது. கூகுள் விளம்பரம் என்பது, ஹோட்டலில் கல்லாவில் நிற்பது போன்றது—பசியோடு வருபவர் அவராகவே வந்து உங்களிடம் உணவைக் கேட்பார்.</div>
+                    <p>பேஸ்புக் விளம்பரங்கள் தேவையை உருவாக்குகின்றன (Interruption). ஆனால் <b>கூகுள் விளம்பரங்கள்</b> ஏற்கனவே உள்ள தேவையைப் பூர்த்தி செய்கின்றன (Intent). பயனர்கள் தாமாகவே தங்களுக்கு வேண்டியதைக் கூகுளில் தேடுவதால், கூகுள் விளம்பரங்களில்தான் விற்பனைக்கான வாய்ப்பு (Conversion rate) மிக அதிகம்.</p>
+                    <h3>கீ-வேர்டு வகைகள் (Keyword Match Types)</h3>
+                    <p>கூகுள் விளம்பரங்கள் முழுவதும் 'தேடல் வார்த்தைகளை' (Keywords) அடிப்படையாகக் கொண்டு ஏல முறையில் இயங்குகின்றன. ஆனால் அந்த வார்த்தைகளை நீங்கள் எப்படிக் கொடுக்கிறீர்கள் என்பதைப் பொறுத்தே கூகுள் செயல்படும். தவறான முறையைப் பயன்படுத்தினால் உங்கள் பணம் 30 நிமிடங்களில் வீணாகிவிடும்.</p>
+                    <ul>
+                        <li><b>Broad Match (குறியீடு இல்லை):</b> <i>digital marketing course</i>. தொடர்புடைய எந்த வார்த்தையைத் தேடினாலும் (எ.கா: "இலவச மார்க்கெட்டிங்") கூகுள் உங்கள் விளம்பரத்தைக் காட்டும். இது புதியவர்களுக்கு மிகவும் ஆபத்தானது.</li>
+                        <li><b>Phrase Match (" "):</b> <i>"digital marketing course"</i>. இந்த வார்த்தைகள் அப்படியே இருக்க வேண்டும், ஆனால் முன்னும் பின்னும் வேறு வார்த்தைகள் இருக்கலாம் (எ.கா: "best digital marketing course online"). இதுவே பாதுகாப்பான முறை.</li>
+                        <li><b>Exact Match ([ ]):</b> <i>[digital marketing course]</i>. இதை மட்டும் தட்டச்சு செய்தால் மட்டுமே விளம்பரம் வரும். இது மிகச் சிறந்த வாடிக்கையாளர்களை மட்டுமே கொண்டுவரும்.</li>
+                    </ul>
+                    <h3>Negative Keywords (எதிர்மறை வார்த்தைகள்)</h3>
+                    <p>எந்தெந்த வார்த்தைகளுக்கு உங்கள் விளம்பரம் வரக்கூடாது என கூகுளிடம் சொல்வதே இதன் மிக முக்கியப் பகுதி. நீங்கள் ஒரு தரமான கட்டணக் கோர்ஸை விற்றால், "free", "cheap", "torrent" போன்ற வார்த்தைகளை <b>Negative Keyword List</b>-இல் சேர்க்க வேண்டும். இதனால் இலவசமாகத் தேடுபவர்களுக்கு உங்கள் விளம்பரம் காட்டப்படாது, உங்கள் பணமும் மிச்சமாகும்.</p>
+                    ${generatePromptBox('Google Ads Quality Score Logic', 'Quality Score என்பது (1-10) ஒரு கிளிக்குக்கு நீங்கள் எவ்வளவு பணம் கட்ட வேண்டும் என்பதைத் தீர்மானிக்கும். 10/10 பெற்றுச் செலவைக் குறைக்க:\n\n1. CTR: உங்கள் தலைப்பு கிளிக் செய்யத் தூண்டும்படி இருக்க வேண்டும்.\n2. Ad Relevance: பயனர் தேடிய வார்த்தை அப்படியே உங்கள் தலைப்பில் இருக்க வேண்டும்.\n3. Landing Page: வெப்சைட் வேகமாகத் திறக்க வேண்டும், தேடிய வார்த்தை வெப்சைட்டிலும் இருக்க வேண்டும்.')}`
+            },
+            { 
+                id: 15, icon: "👻", img: "https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=800&q=80",
+                title_en: "15. The Meta Pixel & Retargeting Mastery", title_ta: "15. பிக்சல் (Pixel) மற்றும் ரீ-டார்கெட்டிங்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> The Meta Pixel is like a digital security camera placed at the entrance of your website store. It memorizes the face of every single person who walks in. When those people leave without buying and go back to scrolling Facebook, the Pixel recognizes their face and shows them a reminder ad.</div>
+                    <p>It is a statistical fact that 97% of people who visit your website for the first time will leave without buying anything. If you do not have a system to bring them back, you are throwing 97% of your marketing budget directly into the trash.</p>
+                    <p>The <b>Meta Pixel</b> (and Google Tag) solves this. It is a tiny, invisible piece of tracking code you paste into your website's header. It tracks user behavior (Page Views, Add to Cart, Purchases) and matches that behavior to their social media profiles.</p>
+                    <h3>Building Retargeting Audiences</h3>
+                    <p>Once the Pixel is installed, you can build highly specific <b>Custom Audiences</b> inside the Ads Manager:</p>
+                    <ul>
+                        <li><b>The Hot Audience:</b> "People who added a product to their cart in the last 7 days, but did NOT purchase." You can run a specific ad offering them a 10% discount to finish their checkout. This is the highest ROI ad you will ever run.</li>
+                        <li><b>The Warm Audience:</b> "People who watched 50% of your video on Instagram." They showed interest, but haven't visited the site yet. You hit them with an ad showing customer testimonials.</li>
+                    </ul>
+                    <h3>Lookalike Audiences (LAL)</h3>
+                    <p>The Pixel doesn't just track; it learns. Once you get 100+ purchases, you can tell Meta: "Look at the data profile of these 100 buyers, and go find me 1 Million new people in India who have the exact same psychological and behavioral profile." This is called a <b>Lookalike Audience</b>, and it is the ultimate scaling tool for e-commerce.</p>
+                    <h3>The CAPI (Conversions API) Reality</h3>
+                    <p>Because of ad-blockers and Apple's strict privacy rules, the traditional browser Pixel is losing power (it gets blocked). Modern marketers must implement <b>CAPI (Conversions API)</b>. Instead of the user's browser sending data to Facebook, your website's secure backend server sends the purchase data directly to Facebook's server, bypassing the blockers completely.</p>
+                    ${generatePromptBox('Pixel Event Tracking Blueprint', 'Standard Events to configure visually in your no-code builder:\n\n1. PageView: Fires on every single page load.\n2. ViewContent: Fires when they look at a specific product/course page.\n3. AddToCart: Fires when the CTA button is clicked.\n4. Purchase: Fires EXCLUSIVELY on the "Thank You" page after the credit card is successfully charged (Requires passing the dynamic Value/Currency for accurate ROI tracking).')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> Meta Pixel என்பது உங்கள் வெப்சைட்டின் வாசலில் வைக்கப்பட்டுள்ள டிஜிட்டல் சிசிடிவி (CCTV) கேமரா போன்றது. உள்ளே வரும் அனைவரின் முகத்தையும் அது பதிவு செய்துகொள்ளும். அவர்கள் பொருளை வாங்காமல் வெளியேறி மீண்டும் பேஸ்புக்கைப் பயன்படுத்தும்போது, கேமரா அவர்களைக் கண்டுபிடித்து மீண்டும் உங்கள் விளம்பரத்தைக் காட்டும்.</div>
+                    <p>உங்கள் வெப்சைட்டிற்கு முதல் முறை வரும் 97% பேர் எதையும் வாங்காமல் வெளியேறிவிடுவார்கள். அவர்களை மீண்டும் உள்ளே கொண்டுவர உங்களிடம் ஒரு திட்டம் இல்லையென்றால், உங்கள் மார்க்கெட்டிங் பட்ஜெட்டில் 97% குப்பையில் போடுவதற்குச் சமம்.</p>
+                    <p>இதைத் தீர்க்க <b>Meta Pixel</b> (மற்றும் Google Tag) பயன்படுகிறது. இது உங்கள் வெப்சைட்டில் மறைந்திருக்கும் ஒரு சிறிய குறியீடு (Code). மக்கள் உங்கள் தளத்தில் என்ன செய்கிறார்கள் (பார்த்தார்களா, கார்ட்டில் சேர்த்தார்களா) என்பதைக் கண்காணித்து, அவர்களின் பேஸ்புக் கணக்குடன் அதை இணைக்கும்.</p>
+                    <h3>ரீ-டார்கெட்டிங் (Retargeting) பார்வையாளர்கள்</h3>
+                    <p>பிக்சலை நிறுவிய பின், நீங்கள் மிகத் துல்லியமான <b>Custom Audiences</b>-ஐ உருவாக்கலாம்:</p>
+                    <ul>
+                        <li><b>Hot Audience (தயாரானவர்கள்):</b> "கடந்த 7 நாட்களில் கார்ட்டில் (Cart) பொருளைச் சேர்த்துவிட்டு, வாங்காமல் சென்றவர்கள்." இவர்களுக்கு மட்டும் 10% தள்ளுபடியுடன் ஒரு விளம்பரத்தைக் காட்டினால் உடனே வாங்குவார்கள். இதுவே அதிக லாபம் தரும் விளம்பரம்.</li>
+                        <li><b>Warm Audience (ஆர்வமுள்ளவர்கள்):</b> "இன்ஸ்டாகிராமில் உங்கள் வீடியோவைப் பாதிக்கு மேல் பார்த்தவர்கள்." இவர்களுக்கு உங்கள் பொருளின் ரிவியூ வீடியோக்களை (Testimonials) விளம்பரமாகக் காட்டலாம்.</li>
+                    </ul>
+                    <h3>Lookalike Audiences (LAL)</h3>
+                    <p>பிக்சல் கண்காணிப்பது மட்டுமின்றி, கற்றுக்கொள்ளவும் செய்யும். 100 பேர் உங்கள் பொருளை வாங்கிய பிறகு, "இந்த 100 பேரின் மனநிலையைப் போலவே உள்ள வேறு 10 லட்சம் புதிய ஆட்களை இந்தியாவில் தேடிக் கண்டுபிடி" என Meta-விடம் கூறலாம். இதுவே <b>Lookalike Audience</b> எனப்படும். வியாபாரத்தை விரிவுபடுத்த இதுவே சிறந்த ஆயுதம்.</p>
+                    <h3>CAPI (Conversions API)</h3>
+                    <p>ஆப்பிளின் (Apple iOS) பிரைவசி கட்டுப்பாடுகளால் சாதாரண பிக்சல் தற்போது சரிவர வேலை செய்வதில்லை. எனவே நவீன மார்க்கெட்டர்கள் <b>CAPI (Conversions API)</b> முறையைப் பயன்படுத்துகிறார்கள். இது பிரவுசரைத் தவிர்த்துவிட்டு, நேரடியாக உங்கள் சர்வரில் இருந்து பேஸ்புக் சர்வருக்குப் பாதுகாப்பாகத் தகவல்களை அனுப்பும்.</p>
+                    ${generatePromptBox('Pixel Event Tracking Blueprint', 'உங்கள் வெப்சைட்டில் கண்காணிக்க வேண்டிய முக்கிய நிகழ்வுகள்:\n\n1. PageView: வெப்சைட்டைத் திறந்ததும் செயல்படும்.\n2. ViewContent: குறிப்பிட்ட பொருளைப் பார்க்கும்போது செயல்படும்.\n3. AddToCart: பொருளை கார்ட்டில் சேர்க்கும்போது செயல்படும்.\n4. Purchase: பணம் செலுத்திய பிறகு வரும் "Thank You" பக்கத்தில் மட்டுமே இது செயல்பட வேண்டும். (அப்போதுதான் லாபத்தைத் துல்லியமாகக் கணக்கிட முடியும்).')}`
+            },
+            { 
+                id: 16, icon: "🧲", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80",
+                title_en: "16. Lead Magnet Funnels & Value Exchange", title_ta: "16. லீட் மேக்னட் (Lead Magnets)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Asking someone to buy a $1,000 product on the first interaction is like asking someone to marry you on the first date. They will run away. A Lead Magnet is like offering to buy them a coffee first. It is a low-risk, high-value exchange that starts the relationship.</div>
+                    <p>Now we enter Phase 4: Funnels & Automation. A "Funnel" is simply the psychological and physical journey a stranger takes to become a paying customer. At the very top of that funnel, you need a mechanism to capture their contact information (Email/WhatsApp) so you can market to them for free forever.</p>
+                    <p>People protect their email addresses fiercely. They will not give it to you just to "Join our newsletter." You must bribe them. This ethical bribe is called a <b>Lead Magnet</b>.</p>
+                    <h3>Types of High-Converting Lead Magnets</h3>
+                    <p>A good lead magnet solves one specific problem, incredibly fast.</p>
+                    <ul>
+                        <li><b>The Blueprint / Checklist:</b> Highly effective. "Download the exact 10-point checklist we use to rank YouTube videos." It promises instant gratification.</li>
+                        <li><b>The Template:</b> "Steal our top 5 high-converting Email Templates." People love done-for-you resources.</li>
+                        <li><b>The Mini-Course:</b> A 3-day video series delivered via email. Excellent for building deep authority and trust before pitching a high-ticket service.</li>
+                        <li><b>The Calculator / Tool:</b> "Find out your exact ROI with our free pricing calculator."</li>
+                    </ul>
+                    <h3>The Squeeze Page Architecture</h3>
+                    <p>The landing page for your lead magnet is called a "Squeeze Page". It should be brutally simple. A headline, a bulleted list of 3 benefits they will get inside the free guide, an image of the guide (make digital PDFs look like physical 3D books to increase perceived value), and a form asking for First Name and Email. Nothing else.</p>
+                    ${generatePromptBox('Lead Magnet Idea Generator', 'Prompt for AI:\n"My target audience is [describe audience, e.g., first-time home buyers]. They are currently struggling with [pain point, e.g., understanding mortgage rates]. Generate 5 ideas for a highly actionable, 2-page PDF Lead Magnet I can give them for free in exchange for their email address. Make the titles irresistible and outcome-focused."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> அறிமுகம் இல்லாத ஒருவரிடம் எடுத்தவுடனே ₹10,000-க்கு ஒரு பொருளை விற்க நினைப்பது, முதல் சந்திப்பிலேயே ஒருவரைத் திருமணம் செய்துகொள்ளக் கேட்பது போன்றது. அவர்கள் ஓடிவிடுவார்கள். லீட் மேக்னட் (Lead Magnet) என்பது முதலில் அவர்களுக்கு ஒரு காபி வாங்கிக் கொடுத்து நட்பைத் தொடங்குவது போன்றது. இது பாதுகாப்பான, மதிப்புமிக்க ஒரு பரிமாற்றம்.</div>
+                    <p>இப்போது நாம் ஃபனல் மற்றும் ஆட்டோமேஷன் (Funnels & Automation) பகுதிக்குள் நுழைகிறோம். ஃபனல் என்பது ஒரு புதிய நபர், பணம் கொடுக்கும் வாடிக்கையாளராக மாறும் உளவியல் பயணமாகும். இந்த ஃபனலின் உச்சியில், அவர்களின் ஈமெயில் அல்லது வாட்ஸ்அப் எண்ணைப் பெற வேண்டும், அப்போதுதான் அவர்களுக்கு வாழ்நாள் முழுவதும் இலவசமாக மார்க்கெட்டிங் செய்ய முடியும்.</p>
+                    <p>ஆனால் மக்கள் தங்கள் ஈமெயிலை எளிதில் தர மாட்டார்கள். அவர்களுக்கு நாம் ஏதாவது இலவசமாகக் கொடுக்க வேண்டும். இந்த மதிப்புமிக்க பரிசையே <b>Lead Magnet</b> என்கிறோம்.</p>
+                    <h3>சிறந்த லீட் மேக்னட் வகைகள்</h3>
+                    <p>ஒரு நல்ல லீட் மேக்னட், ஒரு குறிப்பிட்ட பிரச்சனையை மிக விரைவாகத் தீர்க்க வேண்டும்.</p>
+                    <ul>
+                        <li><b>செக்லிஸ்ட் (Checklist):</b> "யூடியூப் வீடியோக்களை வைரலாக்க நாங்கள் பயன்படுத்தும் 10-பாயிண்ட் செக்லிஸ்ட்டை இலவசமாக டவுன்லோட் செய்யுங்கள்." இது உடனடியாகப் பலன் தரும்.</li>
+                        <li><b>டெம்ப்ளேட் (Template):</b> "எங்களின் சிறந்த 5 ஈமெயில் டெம்ப்ளேட்களை இலவசமாக எடுத்துக்கொள்ளுங்கள்." ஏற்கனவே செய்துமுடிக்கப்பட்ட வேலைகளை மக்கள் விரும்புவார்கள்.</li>
+                        <li><b>மினி-கோர்ஸ் (Mini-Course):</b> 3 நாள் வீடியோக்களை ஈமெயில் மூலம் அனுப்புவது. விலை உயர்ந்த பொருட்களை விற்கும் முன், வாடிக்கையாளரின் நம்பிக்கையைப் பெற இது உதவும்.</li>
+                    </ul>
+                    <h3>Squeeze Page கட்டமைப்பு</h3>
+                    <p>லீட் மேக்னட்டை வழங்கும் லேண்டிங் பேஜை "Squeeze Page" என்று அழைப்பார்கள். இது மிகவும் எளிமையாக இருக்க வேண்டும். ஒரு தலைப்பு, இலவசப் பொருளில் கிடைக்கும் 3 முக்கிய நன்மைகள், பொருளின் படம் (டிஜிட்டல் PDF-ஐ நிஜ புத்தகம் போல 3D-யில் காட்ட வேண்டும்), மற்றும் பெயரும் ஈமெயிலும் கேட்கும் ஒரு பாக்ஸ். வேறு எந்தத் தகவலும் அங்கு இருக்கக் கூடாது.</p>
+                    ${generatePromptBox('Lead Magnet Idea Generator', 'AI-க்கான Prompt:\n"எனது வாடிக்கையாளர்கள் [வாடிக்கையாளர் விவரம், எ.கா: புதிதாக வீடு வாங்குபவர்கள்]. அவர்கள் தற்போது [பிரச்சனை, எ.கா: பேங்க் லோன் புரியாமல்] சிரமப்படுகிறார்கள். ஈமெயிலைப் பெறுவதற்காக நான் அவர்களுக்கு இலவசமாகக் கொடுக்கக்கூடிய 2-பக்க PDF ஐடியாக்களில் சிறந்த 5 ஐடியாக்களை எனக்குக் கொடு. தலைப்புகள் மிகவும் ஈர்க்கக்கூடியதாக இருக்க வேண்டும்."')}`
+            },
+            { 
+                id: 17, icon: "📧", img: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800&q=80",
+                title_en: "17. Email Automation & Behavioral CRM", title_ta: "17. ஈமெயில் ஆட்டோமேஷன் (Email Automation)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Regular email is like sending the exact same flyer to 10,000 mailboxes. Behavioral CRM email is like a robot waiter standing next to a customer; the second the customer looks at the dessert menu, the robot instantly hands them a coupon for chocolate cake. It responds to their behavior.</div>
+                    <p>Social media platforms own your followers. If Meta bans your account tomorrow, you lose your entire business. But <b>You own your Email List</b>. It is the most valuable asset a digital business can possess. Email marketing consistently yields the highest ROI of any digital channel ($36 return for every $1 spent).</p>
+                    <h3>The Power of the CRM</h3>
+                    <p>A CRM (Customer Relationship Management) tool like Mailchimp, Klaviyo, or ActiveCampaign doesn't just send emails; it tracks user behavior. Every click, every page they visit, and every purchase is logged under their profile.</p>
+                    <p>Based on this data, you use <b>Tags and Segments</b> to divide your list. You should never send the exact same email to a person who has bought 5 times (VIP) and a person who just joined your list yesterday (Prospect). You speak to them differently.</p>
+                    <h3>Core Automated Flows</h3>
+                    <p>Instead of manually writing emails every day ("Broadcasts"), you build visual logic trees ("Flows") that trigger automatically based on what the user does.</p>
+                    <ul>
+                        <li><b>The Welcome Sequence (The Soap Opera):</b> Triggers the moment they download your Lead Magnet. Over the next 5 days, it automatically sends 5 emails telling your brand story, building immense trust, and softly pitching your core product.</li>
+                        <li><b>The Abandoned Cart Recovery:</b> The ultimate money-maker. If a user adds an item to their cart but leaves the website, the CRM waits exactly 4 hours and automatically sends an email: "Hey, you forgot this! Here is 5% off to complete your order."</li>
+                        <li><b>The Win-Back Campaign:</b> If a past customer hasn't opened an email or bought anything in 90 days, the system automatically triggers a massive "We miss you" discount offer to re-engage them before they churn completely.</li>
+                    </ul>
+                    ${generatePromptBox('Abandoned Cart Sequence Strategy', 'Email 1 (4 hours later): Customer Service Tone. "Did something go wrong with your checkout? We saved your cart for you. Click here to resume."\n\nEmail 2 (24 hours later): Urgency. "Your cart is expiring soon. Items are not reserved and might sell out."\n\nEmail 3 (48 hours later): The Bribe. "Okay, we really want you to try this. Here is a 10% discount code: SAVE10. Expires in 12 hours."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சாதாரண ஈமெயில் என்பது 10,000 பேருக்கு ஒரே நோட்டீஸை அனுப்புவது போன்றது. ஆனால் Behavioral CRM என்பது ஒரு ரோபோ வெயிட்டர் போன்றது; வாடிக்கையாளர் ஐஸ்கிரீம் மெனுவைப் பார்த்த அடுத்த நொடி, ரோபோ அவர்களுக்கு ஐஸ்கிரீமிற்கான கூப்பனைக் கொடுக்கும். வாடிக்கையாளரின் செயலுக்கு ஏற்ப இது தானாகவே இயங்கும்.</div>
+                    <p>சமூக வலைத்தளங்கள் உங்கள் கட்டுப்பாட்டில் இல்லை. நாளை உங்கள் அக்கவுண்ட் முடக்கப்பட்டால் உங்கள் பிசினஸ் முடிந்துவிடும். ஆனால் <b>உங்கள் ஈமெயில் பட்டியல் (Email List) உங்கள் சொத்து</b>. செலவு செய்யும் ஒவ்வொரு ரூபாய்க்கும் அதிக லாபத்தைத் (ROI) தருவது ஈமெயில் மார்க்கெட்டிங்தான்.</p>
+                    <h3>CRM-இன் ஆற்றல்</h3>
+                    <p>Mailchimp அல்லது Klaviyo போன்ற CRM கருவிகள் வெறும் ஈமெயிலை மட்டும் அனுப்பாது; அவை வாடிக்கையாளர்களைக் கண்காணிக்கும். அவர்கள் எந்த லிங்க்கைக் கிளிக் செய்கிறார்கள், எந்தப் பக்கத்தைப் பார்க்கிறார்கள் என்பதைப் பதிவு செய்யும்.</p>
+                    <p>இதை வைத்து உங்கள் வாடிக்கையாளர்களைப் பிரிக்க வேண்டும் (Segments). 5 முறை பொருள் வாங்கிய விஐபி-க்கும் (VIP), நேற்று புதிதாக வந்தவருக்கும் ஒரே ஈமெயிலை அனுப்பக் கூடாது. இருவரிடமும் வெவ்வேறு விதமாகப் பேச வேண்டும்.</p>
+                    <h3>முக்கியமான ஆட்டோமேட்டிக் ஈமெயில்கள் (Automated Flows)</h3>
+                    <p>தினமும் நீங்களே ஈமெயில் எழுதுவதற்குப் பதிலாக, பயனர் செய்யும் செயலுக்கு ஏற்ப தானாகவே இயங்கும் அமைப்பை (Flows) உருவாக்க வேண்டும்.</p>
+                    <ul>
+                        <li><b>வரவேற்பு (Welcome Sequence):</b> ஒருவர் உங்கள் லீட் மேக்னட்டை டவுன்லோட் செய்தவுடன் இது தொடங்கும். அடுத்த 5 நாட்களுக்குத் தானாகவே உங்கள் பிராண்டின் கதையைச் சொல்லி, நம்பிக்கையை உருவாக்கி, மெதுவாகப் பொருளை விற்கும்.</li>
+                        <li><b>கார்ட்டில் விட்டவர்கள் (Abandoned Cart):</b> இதுதான் அதிகம் பணம் சம்பாதித்துத் தரும். ஒருவர் பொருளை கார்ட்டில் சேர்த்துவிட்டு வாங்காமல் சென்றால், சரியாக 4 மணிநேரம் கழித்து: "இதை மறந்துவிட்டீர்களா? இதோ 5% தள்ளுபடி, உடனே வாங்குங்கள்" என்று கணினி தானாகவே ஈமெயில் அனுப்பும்.</li>
+                        <li><b>மீண்டும் கொண்டுவருதல் (Win-Back):</b> 90 நாட்களாக எதையும் வாங்காத பழைய வாடிக்கையாளர்களுக்கு ஒரு பெரிய தள்ளுபடியைக் கொடுத்து மீண்டும் அவர்களை ஈர்க்கும் சிஸ்டம்.</li>
+                    </ul>
+                    ${generatePromptBox('Abandoned Cart Sequence Strategy', 'ஈமெயில் 1 (4 மணிநேரம் கழித்து): உதவி கேட்கும் தொனி. "பணம் செலுத்துவதில் ஏதாவது பிரச்சனையா? உங்கள் கார்ட் பத்திரமாக உள்ளது. இங்கே கிளிக் செய்து முடிக்கவும்."\n\nஈமெயில் 2 (24 மணிநேரம் கழித்து): அவசரம். "உங்கள் கார்ட் விரைவில் காலியாகப் போகிறது. பொருட்கள் தீர்ந்துவிடலாம்."\n\nஈமெயில் 3 (48 மணிநேரம் கழித்து): சலுகை. "இதோ 10% தள்ளுபடி கோடு: SAVE10. இன்னும் 12 மணிநேரத்தில் முடிவடையும்."')}`
+            },
+            { 
+                id: 18, icon: "💬", img: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800&q=80",
+                title_en: "18. Conversational Commerce (WhatsApp & SMS)", title_ta: "18. வாட்ஸ்அப் & SMS மார்க்கெட்டிங்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> An email is like a letter in a mailbox—people check it when they feel like it (20% open rate). A WhatsApp message is a tap on the shoulder—they pull their phone out of their pocket and look at it immediately (95% open rate).</div>
+                    <p>While email is perfect for long-form nurturing and storytelling, it suffers from cluttered inboxes and spam filters. To drive instant, explosive revenue (like a 24-hour flash sale), you must leverage <b>Conversational Commerce</b> via SMS and WhatsApp Business APIs.</p>
+                    <h3>The Power of WhatsApp in Emerging Markets</h3>
+                    <p>In regions like India, Latin America, and Europe, WhatsApp is the default communication layer of the internet. Open rates routinely exceed 95%, and click-through rates are mathematically staggering compared to email.</p>
+                    <ul>
+                        <li><b>Transactional vs Promotional:</b> You must separate your strategy. Transactional messages (Order confirmed, Shipping updates, OTPs) build immense trust. Promotional messages (Flash Sales, New Product Drops) drive revenue.</li>
+                        <li><b>The 24-Hour Rule:</b> WhatsApp enforces strict anti-spam rules. Once a user messages your business, you have a 24-hour open window to chat freely. Once that window closes, you must use a pre-approved, paid "Template Message" to re-initiate contact.</li>
+                    </ul>
+                    <h3>Building Interactive Chatbots</h3>
+                    <p>Using no-code tools like ManyChat, Wati, or Intercom, you can build visual chatbot logic flows. If a user clicks your Facebook Ad, instead of going to a website, it opens their WhatsApp. The bot immediately says: "Hi! Are you looking for Men's or Women's shoes?" The user taps a button, and the bot guides them through the entire checkout process entirely inside the chat interface.</p>
+                    <p>This removes the friction of loading a slow mobile website, drastically increasing conversion rates.</p>
+                    ${generatePromptBox('WhatsApp Broadcast Template', 'WhatsApp restricts overly promotional spam. You must submit templates for approval. Use this structure for high approval and conversion:\n\nFormat: [Personalized Greeting] + [High-Value Update] + [Clear CTA Button] + [Opt-out option]\n\nExample:\n"Hi {{1}}, your favorite premium running shoes are back in stock in your size! 🏃‍♂️ We saved a pair for you. Tap below to claim them before they sell out again. 👇"\n[Button: Shop Now]\n[Button: Stop Messages]')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஈமெயில் என்பது தபால் பெட்டியில் உள்ள கடிதம் போன்றது—மக்களுக்கு நேரம் கிடைக்கும்போது மட்டுமே பார்ப்பார்கள் (20% ஓபன் ரேட்). ஆனால் வாட்ஸ்அப் மெசேஜ் என்பது தோளில் தட்டுவது போன்றது—உடனே பாக்கெட்டிலிருந்து போனை எடுத்துப் பார்ப்பார்கள் (95% ஓபன் ரேட்).</div>
+                    <p>கதைகள் சொல்வதற்கும், ஆழமான உறவை உருவாக்குவதற்கும் ஈமெயில் சிறந்தது. ஆனால் 24-மணிநேர ஆஃபர் போன்ற உடனடி விற்பனைக்கு நீங்கள் <b>வாட்ஸ்அப் (WhatsApp) மற்றும் SMS</b> மார்க்கெட்டிங்கையே பயன்படுத்த வேண்டும்.</p>
+                    <h3>வாட்ஸ்அப் மார்க்கெட்டிங்கின் ஆற்றல்</h3>
+                    <p>இந்தியா போன்ற நாடுகளில் வாட்ஸ்அப் தான் இன்டர்நெட்டின் முதன்மைத் தொடர்பு சாதனமாக உள்ளது. இதில் 95% பேர் மெசேஜைத் திறந்து பார்ப்பார்கள், ஈமெயிலை விடக் கிளிக் செய்யும் விகிதம் பல மடங்கு அதிகம்.</p>
+                    <ul>
+                        <li><b>பரிவர்த்தனை vs விளம்பரம்:</b> உங்கள் வியூகத்தைப் பிரிக்க வேண்டும். பரிவர்த்தனை மெசேஜ்கள் (ஆர்டர் கன்ஃபார்ம், ஷிப்பிங்) வாடிக்கையாளரின் நம்பிக்கையை உருவாக்கும். விளம்பர மெசேஜ்கள் (சலுகைகள், புதிய பொருட்கள்) விற்பனையைக் கொண்டுவரும்.</li>
+                        <li><b>24-மணிநேர விதி:</b> வாட்ஸ்அப் ஸ்பேமை (Spam) தடுக்கும் விதிகளைக் கொண்டுள்ளது. ஒரு பயனர் உங்களுக்கு மெசேஜ் அனுப்பியதில் இருந்து 24 மணிநேரத்திற்கு நீங்கள் இலவசமாகப் பேசலாம். அதன் பிறகு, நீங்கள் வாட்ஸ்அப்பால் அங்கீகரிக்கப்பட்ட, கட்டண "Template Message"-ஐ மட்டுமே அனுப்ப முடியும்.</li>
+                    </ul>
+                    <h3>சாட்பாட் (Chatbots) உருவாக்குதல்</h3>
+                    <p>ManyChat அல்லது Wati போன்ற no-code கருவிகள் மூலம் தானியங்கி சாட்பாட்களை உருவாக்கலாம். ஒருவர் உங்கள் பேஸ்புக் விளம்பரத்தைக் கிளிக் செய்தால், வெப்சைட்டிற்குப் போவதற்குப் பதிலாக வாட்ஸ்அப் திறக்கும். உடனே சாட்பாட்: "வணக்கம்! உங்களுக்கு ஆண்கள் காலணி வேண்டுமா, பெண்கள் காலணி வேண்டுமா?" எனக் கேட்கும். பயனர் பட்டனை அழுத்த அழுத்த, வாட்ஸ்அப்பிலேயே மொத்த விற்பனையும் முடிந்துவிடும்.</p>
+                    <p>இது வெப்சைட் மெதுவாகத் திறக்கும் பிரச்சனையைத் தவிர்த்து, விற்பனையை மிக வேகமாக நடத்தும்.</p>
+                    ${generatePromptBox('WhatsApp Broadcast Template', 'வாட்ஸ்அப்பில் விளம்பரங்களை அனுமதி வாங்க வேண்டும். அதற்கு இந்த முறையைப் பயன்படுத்தவும்:\n\nஅமைப்பு: [பெயர்] + [முக்கியத் தகவல்] + [பட்டன்] + [நிறுத்துவதற்கான வழி]\n\nஉதாரணம்:\n"வணக்கம் {{1}}, உங்களுக்குப் பிடித்த ரன்னிங் ஷூ மீண்டும் ஸ்டாக்குக்கு வந்துவிட்டது! 🏃‍♂️ உங்களுக்காக ஒரு ஜோடியை வைத்திருக்கிறோம். விற்றுத் தீரும் முன் கீழே கிளிக் செய்து வாங்கவும். 👇"\n[பட்டன்: Shop Now]\n[பட்டன்: Stop Messages]')}`
+            },
+            { 
+                id: 19, icon: "🔗", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+                title_en: "19. Zapier & No-Code API Automations", title_ta: "19. Zapier & நோ-கோடு ஆட்டோமேஷன்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Imagine having an invisible, hyper-fast assistant. The second a customer buys a product in your online store, this assistant instantly runs to your accounting software to log the sale, runs to your email software to send a receipt, and texts your phone to celebrate. That assistant is Zapier.</div>
+                    <p>The modern digital marketer is essentially a systems architect. You will use 10 different SaaS tools daily (Shopify, Meta Ads, Mailchimp, Slack, Google Sheets). None of these tools natively talk to each other. If you manually download CSV files from one tool and upload them to another, you will waste 20 hours a week on brain-dead data entry.</p>
+                    <h3>The Trigger and Action Logic</h3>
+                    <p>Tools like <b>Zapier</b> or <b>Make.com</b> use visual APIs to stitch the internet together without writing a single line of backend code. Automations are built on a simple IF/THEN logic loop.</p>
+                    <ul>
+                        <li><b>The Trigger (The "IF"):</b> The specific event that starts the automation. Example: "IF a new lead submits their phone number on my Facebook Lead Form..."</li>
+                        <li><b>The Action (The "THEN"):</b> What the system does automatically in response. Example: "...THEN instantly add their details to a new row in Google Sheets, AND add them to a Mailchimp VIP audience, AND send a Slack message to the sales team to call them immediately."</li>
+                    </ul>
+                    <h3>Speed to Lead (The 5-Minute Rule)</h3>
+                    <p>Why is automation critical? Psychological studies show that if a B2B sales team calls a new lead within 5 minutes of them submitting a form, the conversion rate is 100x higher than if they call 30 minutes later. The lead is currently holding their phone, thinking about your product. Zapier guarantees that the lead is routed to the sales team in 1.5 seconds.</p>
+                    <p>By automating the repetitive technical plumbing, you free up your brain to focus entirely on high-level creative strategy and copywriting.</p>
+                    ${generatePromptBox('Zapier Workflow Architecture', 'Use Case: Lead Generation Pipeline\n\n[Trigger App]: Facebook Lead Ads\nEvent: New Lead Generated\n      ↓\n[Action App 1]: Google Sheets\nEvent: Create New Spreadsheet Row (Logs the lead for backup)\n      ↓\n[Action App 2]: Mailchimp\nEvent: Add/Update Subscriber (Tags them as "FB Lead", triggering the Welcome Email Sequence)\n      ↓\n[Action App 3]: Twilio / WhatsApp API\nEvent: Send SMS (Texts the lead instantly: "Hi [Name], thanks for your interest! An agent will call you in 5 mins.")')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு கண்ணுக்குத் தெரியாத, அதிவேக உதவியாளர் இருப்பதை நினைத்துக்கொள்ளுங்கள். ஒரு வாடிக்கையாளர் வெப்சைட்டில் பொருளை வாங்கிய அடுத்த நொடி, இந்த உதவியாளர் உங்கள் கணக்குப் புத்தகத்தில் அதை எழுதி, ஈமெயிலில் ரசீது அனுப்பி, உங்கள் போனுக்கு "விற்பனை ஆகிவிட்டது" என மெசேஜ் அனுப்புவார். அந்த உதவியாளர்தான் Zapier.</div>
+                    <p>நவீன டிஜிட்டல் மார்க்கெட்டர்கள் தினமும் பல மென்பொருட்களைப் (Shopify, Meta Ads, Mailchimp, Google Sheets) பயன்படுத்துவார்கள். இவை ஒன்றுக்கொன்று நேரடியாகத் தொடர்புகொள்ளாது. ஒரு மென்பொருளில் இருந்து டேட்டாவை டவுன்லோட் செய்து, மற்றொன்றில் நீங்களே அப்லோட் செய்தால் வாரம் 20 மணிநேரம் வீணாகும்.</p>
+                    <h3>Trigger மற்றும் Action (தூண்டுதலும் செயலும்)</h3>
+                    <p><b>Zapier</b> அல்லது <b>Make.com</b> போன்ற கருவிகள் கோடிங் (Coding) இல்லாமலேயே இந்த மென்பொருட்களை ஒன்றிணைக்கின்றன. இது IF/THEN (இது நடந்தால்/அதைச் செய்) என்ற அடிப்படையில் இயங்குகிறது.</p>
+                    <ul>
+                        <li><b>Trigger (தூண்டுதல் - IF):</b> ஆட்டோமேஷனைத் தொடங்கும் நிகழ்வு. எ.கா: "ஒருவர் பேஸ்புக் விளம்பரத்தில் தனது நம்பரைக் கொடுத்தால்..."</li>
+                        <li><b>Action (செயல் - THEN):</b> கணினி தானாகவே செய்யும் வேலை. எ.கா: "...உடனே அந்த நம்பரை Google Sheets-இல் சேமித்து, Mailchimp-இல் ஈமெயில் லிஸ்டில் சேர்த்து, சேல்ஸ் டீமுக்கு உடனே கால் செய்யச் சொல்லி Slack-இல் மெசேஜ் அனுப்பு."</li>
+                    </ul>
+                    <h3>வேகத்தின் முக்கியத்துவம் (5-Minute Rule)</h3>
+                    <p>ஆட்டோமேஷன் ஏன் முக்கியம்? ஒருவர் தனது நம்பரைக் கொடுத்த 5 நிமிடங்களுக்குள் அவருக்குப் போன் செய்தால், பொருள் விற்பனையாகும் வாய்ப்பு 100 மடங்கு அதிகம் என ஆய்வுகள் கூறுகின்றன. Zapier மூலம் வாடிக்கையாளரின் நம்பரை 1.5 வினாடிகளில் உங்கள் சேல்ஸ் டீமுக்கு அனுப்பிவிடலாம்.</p>
+                    <p>இதுபோன்ற சலிப்பான வேலைகளைக் கணினியிடம் கொடுத்துவிட்டு, நீங்கள் புதிய மார்க்கெட்டிங் யுக்திகளை யோசிப்பதில் முழு கவனத்தையும் செலுத்தலாம்.</p>
+                    ${generatePromptBox('Zapier Workflow Architecture', 'பயன்பாடு: லீட் ஜெனரேஷன் (Lead Generation)\n\n[Trigger App]: Facebook Lead Ads (புதிய நம்பர் வந்தவுடன்)\n      ↓\n[Action App 1]: Google Sheets (நம்பரை பேக்கப்பிற்காக சேவ் செய்தல்)\n      ↓\n[Action App 2]: Mailchimp (ஈமெயில் லிஸ்டில் சேர்த்து Welcome Email-ஐத் தொடங்குதல்)\n      ↓\n[Action App 3]: WhatsApp API (வாடிக்கையாளருக்கு உடனே மெசேஜ் அனுப்புதல்: "உங்கள் தகவலுக்கு நன்றி! 5 நிமிடங்களில் உங்களை அழைப்போம்.")')}`
+            },
+            { 
+                id: 20, icon: "📱", img: "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=800&q=80",
+                title_en: "20. Mobile App Marketing & ASO", title_ta: "20. மொபைல் ஆப் மார்க்கெட்டிங் (ASO)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> SEO is optimizing your website so it shows up first on Google Search. ASO (App Store Optimization) is the exact same thing, but optimizing your App so it shows up first when someone searches inside the Apple App Store or Google Play Store.</div>
+                    <p>As businesses evolve, many transition from simple websites to native mobile applications (or wrapper apps using no-code platforms like Appilix or Webtonative). Marketing a mobile app requires a completely different ecosystem of tools and strategies compared to marketing a standard website.</p>
+                    <h3>App Store Optimization (ASO)</h3>
+                    <p>Just like Google, the App Stores have their own search algorithms. To rank highly organically, you must optimize:</p>
+                    <ul>
+                        <li><b>The App Title & Subtitle:</b> This is heavily weighted. Do not just use your brand name. If your brand is "Zenith", your title should be "Zenith - Meditation & Sleep App" to capture the keywords.</li>
+                        <li><b>The Visuals:</b> Users scroll fast. Your app icon must stand out, and your screenshots should not just be random images of the app; they should have large, bold text overlays explaining the specific benefits of the app.</li>
+                        <li><b>Review Velocity:</b> The algorithm looks at how many 5-star reviews you get *recently*, not just historically. Build an in-app prompt asking users for a review only *after* they experience a "win" (e.g., right after they complete their first workout in the app).</li>
+                    </ul>
+                    <h3>App Install Campaigns & Deep Linking</h3>
+                    <p>When running Meta or Google Ads for an app, you do not use standard "Traffic" campaigns. You must run <b>App Install Campaigns</b>. These ads link directly to the App Store page.</p>
+                    <p>Furthermore, you must implement <b>Deep Linking</b>. If a user already has your app installed, and they click your retargeting ad for a specific pair of shoes, a deep link forces their phone to bypass the mobile browser, open your app directly, and land perfectly on that specific shoe page. This eliminates friction and skyrockets in-app purchases.</p>
+                    ${generatePromptBox('ASO Keyword Strategy Prompt', 'Tool: ChatGPT\n\nPrompt: "I am launching an app for [App Purpose, e.g., tracking stock market investments] on the Google Play Store. Generate a list of 20 high-volume, low-competition keywords users might type into the search bar. Then, write a 30-character App Subtitle and a 4,000-character Long Description perfectly optimized for the Play Store algorithm, placing the keywords naturally in the first 3 paragraphs."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> கூகுளில் உங்கள் வெப்சைட் முதலில் வரச் செய்வது SEO. அதேபோல, ஆப்பிள் ஆப் ஸ்டோர் (App Store) அல்லது கூகுள் ப்ளே ஸ்டோரில் (Play Store) ஒருவர் தேடும்போது, உங்கள் ஆப் முதலில் வரச் செய்வது ASO (App Store Optimization) ஆகும்.</div>
+                    <p>பல நிறுவனங்கள் வெப்சைட்டிலிருந்து மொபைல் ஆப்பிற்கு (Appilix அல்லது Webtonative போன்ற கருவிகள் மூலம்) மாறுகின்றன. வெப்சைட்டை மார்க்கெட்டிங் செய்வதற்கும், மொபைல் ஆப்பை மார்க்கெட்டிங் செய்வதற்கும் நிறைய வேறுபாடுகள் உள்ளன.</p>
+                    <h3>App Store Optimization (ASO)</h3>
+                    <p>கூகுளைப் போலவே ஆப் ஸ்டோர்களுக்கும் தனி அல்காரிதம் உள்ளது. அதில் முதல் இடத்தில் வர இவற்றைச் சரியாக அமைக்க வேண்டும்:</p>
+                    <ul>
+                        <li><b>தலைப்பு (App Title):</b> உங்கள் பிராண்ட் பெயரை மட்டும் வைக்காதீர்கள். பிராண்ட் பெயர் "Zenith" என்றால், "Zenith - தியானம் & தூக்கம்" என வைக்க வேண்டும். அப்போதுதான் மக்கள் தேடும் வார்த்தைகள் (Keywords) அதில் இருக்கும்.</li>
+                        <li><b>படங்கள் (Screenshots):</b> பயனர்கள் வேகமாக ஸ்க்ரோல் செய்வார்கள். உங்கள் ஆப் ஐகான் ஈர்க்கக்கூடியதாக இருக்க வேண்டும். ஸ்கிரீன்ஷாட்களில் ஆப்பின் பயன்களைப் பெரிய எழுத்துக்களில் எழுதிக் காட்ட வேண்டும்.</li>
+                        <li><b>ரிவியூ வேகம் (Review Velocity):</b> சமீபத்தில் எத்தனை 5-ஸ்டார் ரிவியூகள் வந்தன என்பதை அல்காரிதம் கவனிக்கும். ஆப்பிற்குள் பயனர் ஒரு வெற்றியை அடைந்தவுடன் (எ.கா: முதல் ஆர்டரை முடித்தவுடன்) அவரிடம் ஆட்டோமேட்டிக்காக ரிவியூ கேட்கும் அமைப்பை (In-app prompt) உருவாக்க வேண்டும்.</li>
+                    </ul>
+                    <h3>App Install Ads & Deep Linking</h3>
+                    <p>ஆப்பிற்காக விளம்பரம் செய்யும்போது சாதாரண விளம்பரங்களை இயக்கக் கூடாது. <b>App Install Campaigns</b> என்ற பிரத்யேக விளம்பரங்களை இயக்க வேண்டும். இது பயனர்களை நேரடியாக ப்ளே ஸ்டோருக்குக் கொண்டு செல்லும்.</p>
+                    <p>மேலும், <b>Deep Linking</b> முறையைப் பயன்படுத்த வேண்டும். ஏற்கனவே ஆப்பை இன்ஸ்டால் செய்த ஒருவர் விளம்பரத்தைக் கிளிக் செய்தால், அது பிரவுசரைத் திறக்காமல் நேரடியாக ஆப்பிற்குள் சென்று குறிப்பிட்ட பொருளைக் காட்டும். இது விற்பனையை அதிகரிக்கும்.</p>
+                    ${generatePromptBox('ASO Keyword Strategy Prompt', 'கருவி: ChatGPT\n\nPrompt: "நான் கூகுள் ப்ளே ஸ்டோரில் [ஆப்பின் நோக்கம், எ.கா: ஸ்டாக் மார்க்கெட் முதலீடு] ஆப்பை வெளியிடுகிறேன். மக்கள் அதிகம் தேடக்கூடிய 20 Keywords-ஐக் கொடு. அதை வைத்து 30 எழுத்துக்களுக்குள் ஒரு சிறந்த Subtitle-ஐயும், 4,000 எழுத்துக்களுக்குள் அல்காரிதமுக்கு ஏற்ற ஒரு Long Description-ஐயும் எழுதிக் கொடு."')}`
+            },
+            { 
+                id: 21, icon: "📊", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+                title_en: "21. Marketing Analytics Dashboards", title_ta: "21. மார்க்கெட்டிங் டேஷ்போர்டுகள்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Running multiple marketing campaigns without a dashboard is like flying a passenger jet at night with all the dials and screens turned off. You might feel like you are moving fast, but you are completely blind to how much fuel you are burning or if you are about to crash.</div>
+                    <p>Welcome to Phase 5: The Professional Marketer. Amateurs check their Facebook Ads Manager, then switch tabs to check their Google Analytics, then switch tabs to check Shopify. They look at isolated fragments of data. Professionals build a single centralized <b>Marketing Dashboard</b> (using no-code tools like Looker Studio, Tableau, or PowerBI) to see the entire business ecosystem on one screen.</p>
+                    <h3>The Problem with Platform Dashboards</h3>
+                    <p>Facebook's dashboard wants you to think Facebook is driving all the sales. Google's dashboard wants you to think Google is driving all the sales. If you add up the sales reported by Facebook and Google, the number will always be higher than the actual money in your bank account. They take double credit.</p>
+                    <p>By exporting all your raw data into a neutral, third-party dashboard, you uncover the absolute truth.</p>
+                    <h3>Building the Executive View</h3>
+                    <p>A professional marketing dashboard must follow strict UI/UX hierarchy rules (The F-Pattern):</p>
+                    <ul>
+                        <li><b>Top Row (The North Star Metrics):</b> Total Ad Spend, Total Revenue, Blended ROAS (Return on Ad Spend), and Blended CAC (Customer Acquisition Cost). These are the only numbers the CEO cares about.</li>
+                        <li><b>Middle Row (The Trends):</b> A line chart showing Revenue vs Spend over the last 30 days. Are costs rising while sales are dropping? You need to spot the visual trend instantly.</li>
+                        <li><b>Bottom Row (The Granular Breakdown):</b> A table showing performance broken down strictly by channel (Meta vs Google vs TikTok) so the media buyer knows exactly where to shift the daily budget.</li>
+                    </ul>
+                    ${generatePromptBox('Looker Studio Connection Script', 'Concept: Blended ROAS Calculation\n\nTo calculate TRUE profitability in a dashboard, you must create a Custom Calculated Field that merges data sources:\n\nFormula:\nBlended ROAS = SUM(Shopify_Net_Revenue) / (SUM(Meta_Ad_Spend) + SUM(Google_Ad_Spend) + SUM(TikTok_Ad_Spend))\n\nIf Blended ROAS drops below 3.0, the dashboard should visually highlight the metric in Red, triggering an immediate budget audit.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> டேஷ்போர்டு இல்லாமல் மார்க்கெட்டிங் செய்வது, இரவில் விமானத்தின் அனைத்துத் திரைகளையும் அணைத்துவிட்டு விமானத்தை ஓட்டுவது போன்றது. நீங்கள் வேகமாகச் செல்வது போலத் தோன்றும், ஆனால் எவ்வளவு எரிபொருள் வீணாகிறது, எப்போது விபத்து நடக்கும் என்று உங்களுக்குத் தெரியாது.</div>
+                    <p>Phase 5: தொழில்முறை மார்க்கெட்டருக்குள் நுழைகிறோம். புதியவர்கள் பேஸ்புக்கில் ஒரு ரிப்போர்ட், கூகுளில் ஒரு ரிப்போர்ட், ஷாப்பிஃபையில் ஒரு ரிப்போர்ட் எனத் தனித்தனியாகப் பார்ப்பார்கள். ஆனால் சிறந்த மார்க்கெட்டர்கள் Looker Studio அல்லது PowerBI போன்ற கருவிகளைப் பயன்படுத்தி, முழு வியாபாரத்தையும் ஒரே திரையில் காட்டும் <b>Marketing Dashboard</b>-ஐ உருவாக்குவார்கள்.</p>
+                    <h3>தனித்தனி ரிப்போர்ட்களில் உள்ள பிரச்சனை</h3>
+                    <p>பேஸ்புக் தன்னிச்சையாகத் தான் விற்பனையைக் கொண்டுவந்ததாகக் கணக்குக் காட்டும். கூகுளும் அப்படியே செய்யும். இரண்டின் எண்களையும் கூட்டினால், உங்கள் பேங்கில் உள்ள உண்மையான பணத்தை விட அது அதிகமாக இருக்கும் (இரண்டு பேரும் ஒரே விற்பனைக்கு உரிமை கொண்டாடுவார்கள்).</p>
+                    <p>இந்தத் தவறுகளைத் தவிர்க்க, அனைத்துத் தரவுகளையும் ஒரு பொதுவான (Neutral) டேஷ்போர்டுக்குக் கொண்டுவந்து உண்மையான லாபத்தைக் கணக்கிட வேண்டும்.</p>
+                    <h3>டேஷ்போர்டின் சரியான கட்டமைப்பு</h3>
+                    <p>ஒரு தொழில்முறை டேஷ்போர்டு இந்த வரிசையில்தான் இருக்க வேண்டும்:</p>
+                    <ul>
+                        <li><b>மேல்பகுதி (North Star Metrics):</b> மொத்த விளம்பரச் செலவு, மொத்த வருமானம், மற்றும் ஒட்டுமொத்த ROAS (செலவு செய்த ஒவ்வொரு ரூபாய்க்கும் எவ்வளவு லாபம்). இதை மட்டுமே நிறுவனத்தின் உரிமையாளர் பார்ப்பார்.</li>
+                        <li><b>நடுப்பகுதி (Trends):</b> கடந்த 30 நாட்களில் செலவுக்கும் வருமானத்திற்கும் உள்ள வித்தியாசத்தைக் காட்டும் லைன் சார்ட் (Line Chart). செலவு அதிகமாகி, வருமானம் குறைகிறதா என்பதை உடனே கண்டுபிடிக்க இது உதவும்.</li>
+                        <li><b>கீழ்ப்பகுதி (விரிவான தகவல்கள்):</b> எந்த பிளாட்ஃபார்ம் (பேஸ்புக்கா, கூகுளா) சிறந்த லாபத்தைத் தருகிறது என்ற முழுமையான அட்டவணை. இதை வைத்து எந்த விளம்பரத்திற்கு அதிகப் பணம் ஒதுக்க வேண்டும் என முடிவு செய்யலாம்.</li>
+                    </ul>
+                    ${generatePromptBox('Looker Studio Connection Script', 'Blended ROAS (உண்மையான லாபம்) கணக்கிடும் முறை:\n\nடேஷ்போர்டில் உண்மையான லாபத்தைக் கணக்கிட இந்த ஃபார்முலாவைப் பயன்படுத்த வேண்டும்:\n\nBlended ROAS = மொத்த ஷாப்பிஃபை வருமானம் / (பேஸ்புக் செலவு + கூகுள் செலவு)\n\nஇந்த ROAS 3-ஐ விடக் குறைந்தால், டேஷ்போர்டில் அந்த எண் சிவப்பு நிறத்தில் ஒளிர வேண்டும். உடனே விளம்பரச் செலவுகளை ஆராய்ந்து சரிசெய்ய வேண்டும்.')}`
+            },
+            { 
+                id: 22, icon: "⚖️", img: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80",
+                title_en: "22. Marketing Attribution Modeling", title_ta: "22. அட்ரிபியூஷன் (Attribution Modeling)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A basketball player passes the ball to a teammate, who passes it to another, who finally shoots and scores. Who gets the credit for the point? The one who shot it (Last-Click)? The one who started the play (First-Click)? Or do you divide the credit equally among all three (Linear)? That is Attribution Modeling.</div>
+                    <p>As mentioned in the previous module, the biggest lie in digital marketing is that a single ad is solely responsible for a sale. A modern consumer journey involves multiple touchpoints across multiple days and platforms. <b>Attribution Modeling</b> is the mathematical framework you use to assign financial credit to those various touchpoints.</p>
+                    <h3>The 4 Core Attribution Models</h3>
+                    <ul>
+                        <li><b>Last-Click Attribution:</b> The default model for most platforms. 100% of the revenue credit is given to the final ad the user clicked before buying. <i>Problem:</i> It completely ignores the YouTube ad that first introduced the customer to your brand 5 days earlier.</li>
+                        <li><b>First-Click Attribution:</b> 100% of the credit goes to the very first ad they ever clicked. Excellent for understanding which channels are best for brand awareness and bringing in fresh blood.</li>
+                        <li><b>Linear Attribution:</b> Every single touchpoint gets an equal slice of the credit. If they clicked Facebook, then an Email, then Google Search, each channel gets 33.3% of the revenue credit.</li>
+                        <li><b>Data-Driven (Algorithmic) Attribution:</b> The modern enterprise standard. Machine learning algorithms analyze historical data and mathematically assign weighted credit based on how critical each step actually was to the final conversion.</li>
+                    </ul>
+                    <h3>Why This Matters for Scaling</h3>
+                    <p>If you only look at "Last-Click", your Brand Awareness campaigns (like Facebook Video Views) will look like they are losing money, so you turn them off. But 3 weeks later, your Google Search sales suddenly collapse. Why? Because you turned off the Facebook ads that were filling the top of the funnel! Attribution prevents you from accidentally starving your own marketing machine.</p>
+                    ${generatePromptBox('Attribution Audit Script', 'Strategy for Auditing Attribution:\n\nAction: Open Google Analytics 4 (GA4) -> Advertising -> Attribution -> Model Comparison.\nTask: Compare the "Last Click" model against the "First Click" model for your Meta Ads channel.\nAnalysis: If Meta shows $5k in revenue on Last Click, but $15k in revenue on First Click, it means Meta is acting as an incredible top-of-funnel discovery engine. DO NOT turn it off, even if the Last Click ROI looks weak.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> கூடைப்பந்து விளையாட்டில் ஒருவர் பந்தை மற்றவருக்கு பாஸ் செய்ய, அவர் மூன்றாமவருக்கு பாஸ் செய்ய, இறுதியாக அவர் கோல் போடுகிறார். இப்போது யாருக்குக் கிரெடிட் கொடுப்பது? கோல் போட்டவருக்கா (Last-Click)? பந்தை முதலில் எடுத்தவருக்கா (First-Click)? அல்லது மூவருக்கும் சமமாகப் பிரித்துத் தருவதா (Linear)? இதுவே Attribution Modeling.</div>
+                    <p>டிஜிட்டல் மார்க்கெட்டிங்கில் மிகப்பெரிய பொய் என்னவென்றால், ஒரு குறிப்பிட்ட விளம்பரம் மட்டுமே முழு விற்பனையையும் கொண்டுவந்தது என்று நம்புவது. இன்று ஒரு வாடிக்கையாளர் பல நாட்கள், பல விளம்பரங்களைப் பார்த்த பிறகே பொருளை வாங்குவார். இந்த விற்பனைக்கான கிரெடிட்டை எந்த விளம்பரத்திற்குக் கொடுப்பது என்பதைத் தீர்மானிப்பதே <b>Attribution Modeling</b> ஆகும்.</p>
+                    <h3>4 முக்கிய Attribution மாடல்கள்</h3>
+                    <ul>
+                        <li><b>Last-Click Attribution (கடைசி கிளிக்):</b> இதுவே பெரும்பாலான தளங்களில் இயல்பாக இருக்கும். ஒருவர் பொருளை வாங்கும் முன் கடைசியாக எந்த விளம்பரத்தைக் கிளிக் செய்தாரோ, அதற்கே 100% கிரெடிட் சேரும். <i>பிரச்சனை:</i> 5 நாட்களுக்கு முன் யூடியூபில் பார்த்து பிராண்டைத் தெரிந்துகொண்டதை இது கணக்கில் கொள்ளாது.</li>
+                        <li><b>First-Click Attribution (முதல் கிளிக்):</b> முதன்முதலில் எந்த விளம்பரத்தைப் பார்த்து உள்ளே வந்தாரோ அதற்கே 100% கிரெடிட். புதிய வாடிக்கையாளர்களை எந்தத் தளம் அதிகம் கொண்டுவருகிறது என்றறிய இது உதவும்.</li>
+                        <li><b>Linear Attribution (சமமான பங்கிடு):</b> வாடிக்கையாளர் கடந்து வந்த அனைத்து விளம்பரங்களுக்கும் சமமான கிரெடிட் வழங்கப்படும். பேஸ்புக், ஈமெயில், கூகுள் என மூன்றையும் கிளிக் செய்திருந்தால், மூவருக்கும் தலா 33.3% கிரெடிட்.</li>
+                        <li><b>Data-Driven Attribution (AI மாடல்):</b> பெரிய நிறுவனங்கள் பயன்படுத்துவது. எந்தெந்த விளம்பரம் விற்பனைக்கு எவ்வளவு உதவியது என்பதை AI துல்லியமாகக் கணக்கிட்டுக் கிரெடிட்டைக் கொடுக்கும்.</li>
+                    </ul>
+                    <h3>இது ஏன் மிகவும் முக்கியம்?</h3>
+                    <p>"Last-Click"-ஐ மட்டுமே நம்பி, பேஸ்புக் விளம்பரம் லாபம் தரவில்லை என்று அதை நிறுத்திவிடுவீர்கள். ஆனால் 3 வாரங்கள் கழித்துக் கூகுளில் நடக்கும் விற்பனையும் படுபாதாளத்திற்குச் செல்லும். காரணம்? பேஸ்புக்தான் புதிய வாடிக்கையாளர்களை உள்ளே கொண்டு வந்தது! அந்த ஆரம்பப்புள்ளியை நீங்கள் நிறுத்தியதே சரிவுக்குக் காரணம். இதைப் புரிந்துகொள்ளவே Attribution உதவுகிறது.</p>
+                    ${generatePromptBox('Attribution Audit Script', 'GA4-இல் (Google Analytics) Attribution-ஐச் சரிபார்க்கும் முறை:\n\nGA4-இல் Model Comparison பகுதிக்குச் செல்லவும். Meta Ads-இன் "Last Click" மற்றும் "First Click" லாபத்தை ஒப்பிடவும்.\n\nமுடிவு: Last Click-இல் லாபம் குறைவாகவும், First Click-இல் லாபம் அதிகமாகவும் இருந்தால், Meta விளம்பரங்கள் புதிய வாடிக்கையாளர்களைத் தேடித் தருவதில் மிகச் சிறப்பாகச் செயல்படுகிறது என்று அர்த்தம். அதை ஒருபோதும் நிறுத்திவிடக் கூடாது.')}`
+            },
+            { 
+                id: 23, icon: "📈", img: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80",
+                title_en: "23. Customer Acquisition Cost (CAC) vs. LTV", title_ta: "23. CAC மற்றும் LTV (லாபக் கணக்கீடு)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If you buy a machine that prints a $30 bill every time you insert a $10 bill, how many $10 bills would you insert? All of them. As fast as you can. Understanding the LTV to CAC ratio transforms marketing from an "expense" into a money-printing machine.</div>
+                    <p>To transition from a junior marketer to a Chief Marketing Officer (CMO), you must stop talking about "Likes" and "Click-Through Rates" and start speaking exclusively in enterprise financial metrics. The absolute most important formula in all of digital business is the relationship between <b>CAC</b> and <b>LTV</b>.</p>
+                    <h3>Customer Acquisition Cost (CAC)</h3>
+                    <p>This is the fully loaded cost of acquiring one net-new paying customer. It is calculated by taking your total marketing and sales expenses (Ad spend, software costs, agency fees) and dividing it by the number of new customers acquired in that period.</p>
+                    <p>If you spent $5,000 on Meta Ads and got 100 new customers, your CAC is exactly $50.</p>
+                    <h3>Lifetime Value (LTV)</h3>
+                    <p>This is the total gross profit a company will make from a customer over the entire duration of their relationship. If a customer buys a $100 pair of shoes (with a $50 profit margin), and historical data shows they buy a new pair exactly once a year for 3 years, their LTV is $150.</p>
+                    <h3>The Golden 3:1 Ratio</h3>
+                    <p>Enterprise scaling relies on a strict mathematical balance:</p>
+                    <ul>
+                        <li><b>LTV:CAC < 1:1 :</b> You are spending $50 to make $40. The business is hemorrhaging cash and will go bankrupt.</li>
+                        <li><b>LTV:CAC = 1:1 :</b> You spend $50 to make $50. You are breaking even, but you have no money left to pay your employees or office rent.</li>
+                        <li><b>LTV:CAC = 3:1 (The Golden Standard):</b> You spend $50 to acquire a customer who brings in $150 in profit. You have a highly profitable, scalable business model.</li>
+                        <li><b>LTV:CAC > 5:1 :</b> You are actually growing too slowly! If your ratio is 6:1, it means you are acquiring customers extremely cheaply and you should aggressively double or triple your ad budget to capture more market share.</li>
+                    </ul>
+                    ${generatePromptBox('SaaS / E-com Profitability Calculator', 'No-code mathematical logic block:\n\nTo lower CAC:\n1. Increase Ad Click-Through Rate (better creatives).\n2. Increase Landing Page Conversion Rate (better UX/Offer).\n\nTo increase LTV:\n1. Implement automated "Upsell" funnels immediately after checkout.\n2. Launch aggressive Email/WhatsApp retention campaigns to force a 2nd purchase.\n3. Switch from one-off products to monthly recurring subscriptions.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ₹10 நோட்டை உள்ளே போட்டால் ₹30 நோட்டை அச்சிட்டுத் தரும் ஒரு இயந்திரம் உங்களிடம் இருந்தால், அதில் எத்தனை ₹10 நோட்டுகளைப் போடுவீர்கள்? உங்களால் முடிந்த அனைத்தையும் போடுவீர்கள் இல்லையா! மார்க்கெட்டிங்கை ஒரு "செலவு" என நினைக்காமல், "பணம் அச்சிடும் இயந்திரமாக" மாற்றுவதே LTV மற்றும் CAC விகிதத்தின் வேலையாகும்.</div>
+                    <p>ஒரு சிறந்த மார்க்கெட்டிங் தலைவராக (CMO) மாற, "லைக்குகள்" மற்றும் "கிளிக்குகள்" பற்றிப் பேசுவதை நிறுத்திவிட்டு, பிசினஸின் லாப நஷ்ட எண்களைப் பேச வேண்டும். டிஜிட்டல் வியாபாரத்தின் மிக முக்கியமான சூத்திரம் <b>CAC</b> மற்றும் <b>LTV</b> இடையிலான உறவாகும்.</p>
+                    <h3>Customer Acquisition Cost (CAC)</h3>
+                    <p>ஒரு புதிய வாடிக்கையாளரைப் பிடிக்க நிறுவனத்திற்கு ஆகும் மொத்தச் செலவு. (மொத்த மார்க்கெட்டிங் செலவு / புதிதாக வந்த வாடிக்கையாளர்கள்). பேஸ்புக் விளம்பரத்திற்கு ₹5,000 செலவழித்து 100 புதிய வாடிக்கையாளர்கள் கிடைத்தால், உங்கள் CAC சரியாக ₹50.</p>
+                    <h3>Lifetime Value (LTV)</h3>
+                    <p>ஒரு வாடிக்கையாளர் தன் வாழ்நாளில் உங்கள் நிறுவனத்திற்குக் கொடுக்கும் மொத்த லாபம். ஒருவர் ₹1000 மதிப்பிலான பொருளை வாங்குகிறார் (அதில் ₹500 லாபம்). அவர் வருடத்திற்கு ஒருமுறை என 3 வருடங்கள் தொடர்ந்து வாங்கினால், அந்த வாடிக்கையாளரின் LTV ₹1500 ஆகும்.</p>
+                    <h3>தங்க விதி: 3:1 விகிதம் (The Golden Ratio)</h3>
+                    <p>பெரிய நிறுவனங்கள் இந்த விகிதத்தை மிகக் கண்டிப்பாகப் பின்பற்றும்:</p>
+                    <ul>
+                        <li><b>1:1 க்குக் கீழ்:</b> ₹50 செலவழித்து ₹40 லாபம் பார்ப்பது. நிறுவனம் திவாலாகப் போகிறது என அர்த்தம்.</li>
+                        <li><b>1:1 விகிதம்:</b> ₹50 செலவழித்து ₹50 லாபம். நஷ்டம் இல்லை, ஆனால் அலுவலக வாடகையோ சம்பளமோ கொடுக்கப் பணம் மிஞ்சாது.</li>
+                        <li><b>3:1 விகிதம் (Golden Standard):</b> ₹50 செலவழித்து ₹150 லாபம் பார்ப்பது. இதுவே மிகவும் பாதுகாப்பான, லாபகரமான பிசினஸ் மாடல்.</li>
+                        <li><b>5:1 க்கும் மேல்:</b> லாபம் மிக அதிகம், ஆனால் உங்கள் வளர்ச்சி மெதுவாக உள்ளது. நீங்கள் விளம்பரச் செலவை உடனடியாக 3 மடங்கு அதிகரித்து, சந்தையை ஆக்கிரமிக்க வேண்டும்.</li>
+                    </ul>
+                    ${generatePromptBox('SaaS / E-com Profitability Calculator', 'லாபத்தை அதிகரிக்கும் உத்திகள்:\n\nCAC-ஐ (செலவு) குறைக்க:\n1. விளம்பரத்தின் CTR-ஐ அதிகரிப்பது (சிறந்த டிசைன்கள்).\n2. லேண்டிங் பேஜின் தரத்தை உயர்த்துவது.\n\nLTV-ஐ (லாபத்தை) அதிகரிக்க:\n1. பொருளை வாங்கிய உடனே மற்றொரு பொருளை ஆஃபரில் கொடுப்பது (Upsell).\n2. ஈமெயில்/வாட்ஸ்அப் மூலம் அவர்களை மீண்டும் வாங்க வைப்பது.\n3. மாத சந்தா (Subscription) முறைக்கு மாறுவது.')}`
+            },
+            { 
+                id: 24, icon: "🧪", img: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&q=80",
+                title_en: "24. Enterprise A/B Testing Matrix", title_ta: "24. ஏ/பி டெஸ்டிங் (A/B Testing)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A/B Testing is like going to the eye doctor. They flip the lenses and ask, "Number 1, or Number 2?" You don't guess which one is better; you strictly test them side-by-side until the vision is perfectly clear. Data removes opinions.</div>
+                    <p>In world-class organizations, the phrase "I think this will work" is banned. Instead, they say, "Let's run a test." <b>A/B Testing (Split Testing)</b> is the scientific method of optimizing your conversion rates by pitting two variations of a page or ad against each other in real-time.</p>
+                    <h3>The Golden Rules of Experimentation</h3>
+                    <p>If you run a test incorrectly, you will generate "False Positives" and make disastrous business decisions.</p>
+                    <ul>
+                        <li><b>The Rule of One:</b> You must isolate variables. If you change the headline text AND the button color AND the hero image all at the same time, and sales increase by 10%, you have absolutely no idea which of those 3 changes caused the increase. Test exactly one element per experiment.</li>
+                        <li><b>Statistical Sample Size:</b> You cannot declare a winner after 50 clicks. You must run the test until it reaches <b>Statistical Significance</b> (usually a p-value < 0.05). This proves mathematically that the result is real, and not just a random fluke of internet traffic.</li>
+                        <li><b>Full Week Cycles:</b> User behavior is drastically different on a Tuesday morning compared to a Saturday night. You must let an A/B test run for full 7-day increments (e.g., 7 days, 14 days) to capture the complete behavioral cycle.</li>
+                    </ul>
+                    <h3>Tools for No-Code Testing</h3>
+                    <p>You do not need a developer to run A/B tests on your website. Tools like <b>Optimizely, VWO, or Google Optimize (or its modern alternatives)</b> allow you to visually edit a webpage. The tool automatically intercepts incoming traffic, sends 50% to the original page, 50% to the new variation, and tracks the conversion math for you.</p>
+                    ${generatePromptBox('A/B Testing Hypothesis Template', 'Every test must start with a strict hypothesis. Do not test random things.\n\nTemplate:\n"Because we observed [Data/Insight], we expect that changing [Variable A] to [Variable B] will cause a [Expected Impact] in [Specific Metric]."\n\nExample:\n"Because we observed 80% drop-off on the checkout page, we expect that changing the long 5-field form into a fast 2-field form will cause a 15% increase in completed purchases."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> கண் மருத்துவரிடம் செல்லும்போது, லென்ஸை மாற்றி "ஒன்றாம் நம்பரா, இரண்டாம் நம்பரா?" எனக் கேட்பார். எது சிறந்தது என நாம் யூகிப்பதில்லை; இரண்டையும் அருகருகே வைத்துச் சோதித்துப் பார்க்கிறோம். A/B டெஸ்டிங் என்பதும் யூகிப்பதைத் தவிர்த்து, தரவுகளின் அடிப்படையில் முடிவெடுப்பதாகும்.</div>
+                    <p>சிறந்த நிறுவனங்களில் "இது வேலை செய்யும் என நான் நினைக்கிறேன்" என்று கூறுவதைத் தடை செய்துவிடுவார்கள். அதற்குப் பதிலாக, "இதை டெஸ்ட் செய்து பார்ப்போம்" என்றே கூறுவார்கள். <b>A/B Testing (Split Testing)</b> என்பது இரண்டு வெவ்வேறு டிசைன்களை மக்களிடம் காட்டி, எது அதிக விற்பனையைத் தருகிறது என அறிவியல் பூர்வமாகச் சோதிப்பதாகும்.</p>
+                    <h3>சோதனைக்கான தங்க விதிகள்</h3>
+                    <p>சோதனையைத் தவறாகச் செய்தால், அது நிறுவனத்திற்குப் பெரிய நஷ்டத்தை ஏற்படுத்தும்.</p>
+                    <ul>
+                        <li><b>ஒரே ஒரு மாற்றம் (Rule of One):</b> ஒரே நேரத்தில் தலைப்பு, பட்டன் நிறம், படம் என அனைத்தையும் மாற்றிவிட்டு விற்பனை 10% அதிகரித்தால், எதனால் விற்பனை அதிகரித்தது என்று உங்களுக்குத் தெரியாது. ஒரு சோதனைக்கு ஒரே ஒரு மாற்றத்தை மட்டுமே செய்ய வேண்டும்.</li>
+                        <li><b>போதுமான பார்வையாளர்கள் (Sample Size):</b> வெறும் 50 பேர் கிளிக் செய்தவுடன் முடிவுக்கு வந்துவிடக் கூடாது. சோதனை <b>Statistical Significance</b> (p-value < 0.05) என்ற கணித அளவை எட்டும் வரை காத்திருக்க வேண்டும். அப்போதுதான் அந்த வெற்றி தற்செயலானது அல்ல என உறுதியாகும்.</li>
+                        <li><b>முழு வாரச் சுழற்சி:</b> செவ்வாய்க்கிழமை காலைக்கும், சனிக்கிழமை இரவுக்கும் மக்களின் மனநிலை மாறும். எனவே சோதனையைக் கண்டிப்பாக 7, 14 அல்லது 21 நாட்கள் என முழு வாரச் சுழற்சியில் மட்டுமே நடத்த வேண்டும்.</li>
+                    </ul>
+                    <h3>No-Code கருவிகள்</h3>
+                    <p>இதற்கு கோடிங் தேவையில்லை. <b>Optimizely</b> அல்லது <b>VWO</b> போன்ற கருவிகள் மூலம் வெப்சைட்டை எளிதாக மாற்றலாம். வரும் 100 பேரில் 50 பேருக்குப் பழைய டிசைனையும், 50 பேருக்குப் புதிய டிசைனையும் காட்டி, எது சிறந்தது என இந்தக் கருவிகளே கணக்கிட்டுச் சொல்லிவிடும்.</p>
+                    ${generatePromptBox('A/B Testing Hypothesis Template', 'ஒவ்வொரு சோதனையும் ஒரு தெளிவான காரணத்துடன் (Hypothesis) தொடங்க வேண்டும்.\n\nபார்முலா:\n"[காரணம்]-ஐ நாங்கள் கவனித்ததால், [மாற்றம் 1]-ஐ [மாற்றம் 2]-ஆக மாற்றுவதன் மூலம் [குறிப்பிட்ட ரிசல்ட்] கிடைக்கும் என எதிர்பார்க்கிறோம்."\n\nஉதாரணம்:\n"பேமெண்ட் பக்கத்தில் 80% பேர் வெளியேறுவதைக் கவனித்ததால், 5 வரிகள் கொண்ட படிவத்தை 2 வரிகளாக மாற்றுவதன் மூலம் விற்பனை 15% அதிகரிக்கும் என எதிர்பார்க்கிறோம்."')}`
+            },
+            { 
+                id: 25, icon: "🏆", img: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=80",
+                title_en: "25. Global Scaling & Data Privacy Compliance", title_ta: "25. பிரைவசி & பிசினஸை விரிவுபடுத்துதல்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Scaling a marketing campaign is like driving a race car. The faster you go, the more important the brakes and seatbelts become. Data privacy laws (GDPR/CCPA) are the seatbelts. If you scale to $100k/month without compliance, you will crash into massive lawsuits and lose everything.</div>
+                    <p>We conclude this Masterclass with the absolute endgame: Scaling to enterprise levels safely. When you crack the code (you hit a 3:1 ROAS), the only logical next step is to double or triple your daily ad budgets to acquire as much market share as humanly possible. But scaling breaks things.</p>
+                    <h3>The Mathematics of Scaling</h3>
+                    <p>A brutal reality of paid advertising is that <b>efficiency decreases as volume increases</b>. If you are spending $50/day and getting a $10 CAC, do not assume spending $500/day will keep your CAC at $10. As you force the algorithm to find more people faster, it has to reach further into colder audiences. Your CAC will naturally rise to $15 or $20. You must ensure your Profit Margins and LTV can absorb this rising CAC at scale.</p>
+                    <h3>Global Data Privacy Compliance</h3>
+                    <p>As you scale globally, you are no longer just a small local shop. You are actively storing the personal tracking data of millions of people. You must adhere to strict international laws:</p>
+                    <ul>
+                        <li><b>GDPR (Europe):</b> You cannot place a Meta tracking Pixel on a European user's browser without their explicit, manual consent (The Cookie Banner). If you track them without consent, fines can reach €20 Million or 4% of your global revenue.</li>
+                        <li><b>CCPA (California):</b> Users have the legal right to ask you exactly what data you have on them, and the right to demand you permanently delete it from your Mailchimp and Shopify databases within 30 days.</li>
+                    </ul>
+                    <h3>Building Your Professional Portfolio</h3>
+                    <p>You now possess the knowledge of a Senior Digital Marketer. To land enterprise clients or high-paying jobs, you must prove it. Build a public portfolio (e.g., a simple Notion page). Do not just list tools you know. List <b>Case Studies</b>.</p>
+                    <p>Structure your portfolio like this: "I identified a 4% conversion rate on Client X's landing page. I implemented a new AIDA-structured Hook and an automated Zapier lead flow. Conversion rate increased to 9%, resulting in an extra $12,000 in monthly recurring revenue."</p>
+                    <p>That is how you get hired instantly.</p>
+                    ${generatePromptBox('Privacy Policy Generator Prompt', 'Tool: ChatGPT (Always have a real lawyer review the final output)\n\nPrompt: "I am running a digital marketing agency based in [Your Country] operating globally. We use Meta Pixels, Google Analytics, and Mailchimp for CRM. Generate a comprehensive Privacy Policy and Cookie Policy template compliant with both GDPR and CCPA. Include clear sections on Data Collection, Third-Party Sharing, and User Deletion Rights."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பிசினஸை விரிவுபடுத்துவது (Scaling) ரேஸ் கார் ஓட்டுவது போன்றது. வேகம் அதிகரிக்க அதிகரிக்க, பிரேக்கும் சீட்பெல்ட்டும் மிக முக்கியமாகிவிடும். பிரைவசி சட்டங்கள் (GDPR) சீட்பெல்ட் போன்றவை. இதைப் பின்பற்றாமல் பல லட்சங்களுக்கு பிசினஸை விரிவுபடுத்தினால், பெரிய சட்டச் சிக்கல்களில் மாட்டி அனைத்தையும் இழக்க நேரிடும்.</div>
+                    <p>இந்த மாஸ்டர்கிளாஸின் இறுதிக் கட்டத்திற்கு வந்துவிட்டோம்: பாதுகாப்பாக பிசினஸை விரிவுபடுத்துதல் (Scaling). உங்களின் லாப விகிதம் 3:1 என்ற இலக்கை அடைந்தவுடன், விளம்பரச் செலவை 2 அல்லது 3 மடங்கு அதிகரித்துச் சந்தையை முழுமையாகக் கைப்பற்ற வேண்டும். ஆனால், விரிவுபடுத்தும்போது பல சிக்கல்கள் வரும்.</p>
+                    <h3>வளர்ச்சியின் கணிதம் (Math of Scaling)</h3>
+                    <p>கட்டண விளம்பரங்களின் கசப்பான உண்மை என்னவென்றால், <b>பட்ஜெட் அதிகரிக்க அதிகரிக்க, லாப விகிதம் குறையும்</b>. தினமும் ₹5,000 செலவழித்து ஒரு வாடிக்கையாளரை ₹50-க்குக் கொண்டுவந்தால், செலவை ₹50,000 ஆக உயர்த்தும்போது அதே ₹50-க்கு வாடிக்கையாளர் கிடைக்க மாட்டார். அல்காரிதம் வேகமாக ஆட்களைத் தேட வேண்டியிருப்பதால், சம்பந்தமில்லாத ஆட்களையும் கொண்டுவரும். செலவு ₹100 ஆக உயரும். உங்களின் பொருளின் லாபம் (Margin) இந்த உயர்வைக் கையாளும் அளவுக்கு வலுவாக இருக்க வேண்டும்.</p>
+                    <h3>தரவுப் பாதுகாப்புச் சட்டங்கள் (Data Privacy)</h3>
+                    <p>நீங்கள் உலகளாவிய அளவில் விரிவடையும்போது, பல லட்சம் மக்களின் தனிப்பட்ட தரவுகளைச் சேமிக்கிறீர்கள். சர்வதேசச் சட்டங்களை நீங்கள் கண்டிப்பாகப் பின்பற்ற வேண்டும்:</p>
+                    <ul>
+                        <li><b>GDPR (ஐரோப்பா):</b> பயனரின் அனுமதியின்றி (Cookie Banner) அவர்களின் பிரவுசரில் Meta பிக்சலை வைக்கக் கூடாது. மீறினால் பல கோடி ரூபாய் அபராதம் விதிக்கப்படும்.</li>
+                        <li><b>CCPA (கலிபோர்னியா):</b> உங்களிடம் தங்களைப் பற்றிய என்ன தரவுகள் உள்ளன எனக் கேட்கவும், அதை 30 நாட்களுக்குள் நிரந்தரமாக அழித்துவிடக் கோரவும் பயனர்களுக்குச் சட்டப்பூர்வ உரிமை உள்ளது. உங்கள் Mailchimp மற்றும் Shopify-இல் இருந்து அவற்றை நீக்க வேண்டும்.</li>
+                    </ul>
+                    <h3>உங்களின் போர்ட்ஃபோலியோ (Portfolio)</h3>
+                    <p>இப்போது நீங்கள் ஒரு சீனியர் டிஜிட்டல் மார்க்கெட்டருக்கான அறிவைப் பெற்றுள்ளீர்கள். நல்ல வேலை அல்லது பெரிய கிளைண்ட்களைப் (Clients) பெற, இதை நிரூபிக்க வேண்டும். ஒரு போர்ட்ஃபோலியோவை உருவாக்குங்கள். அதில் உங்களுக்குத் தெரிந்த மென்பொருட்களைப் பட்டியலிடாமல், <b>Case Studies</b> (வெற்றிக் கதைகள்) எழுதுங்கள்.</p>
+                    <p>"நான் ஒரு வெப்சைட்டில் A/B Testing செய்து, புதிய Zapier ஆட்டோமேஷனை உருவாக்கினேன். இதனால் விற்பனை 9% அதிகரித்து, மாதம் ₹10 லட்சம் கூடுதல் லாபம் கிடைத்தது" என்று எழுதுங்கள். இதுவே உங்களை அடுத்த கட்டத்திற்குக் கொண்டு செல்லும்.</p>
+                    ${generatePromptBox('Privacy Policy Generator Prompt', 'கருவி: ChatGPT (இதை ஒரு வழக்கறிஞரிடம் சரிபார்க்கவும்)\n\nPrompt: "நான் [உங்கள் நாடு] அடிப்படையில் உலகளவில் இயங்கும் ஒரு டிஜிட்டல் மார்க்கெட்டிங் ஏஜென்சியை நடத்துகிறேன். நாங்கள் Meta Pixel, Google Analytics மற்றும் Mailchimp பயன்படுத்துகிறோம். GDPR மற்றும் CCPA சட்டங்களுக்கு உட்பட்ட ஒரு முழுமையான 'Privacy Policy' மற்றும் 'Cookie Policy' டெம்ப்ளேட்டை உருவாக்கு. பயனர்கள் தங்கள் டேட்டாவை அழிக்கக் கோரும் உரிமைகள் பற்றிய பகுதியையும் சேர்க்கவும்."')}`
+            }
+        ];
+
+        // ==========================================
+        // 10-QUESTION QUIZ (DIGITAL MARKETING)
+        // ==========================================
+        const quizData = [
+            { q: "Which of the following is considered an 'Inbound' marketing channel?", opts: ["Facebook Sponsored Ads", "Cold Calling", "SEO (Google Search)", "YouTube Pre-roll Ads"], ans: 2 },
+            { q: "What is the primary purpose of a 'Lead Magnet'?", opts: ["To sell a high-ticket product immediately", "To ethically capture a user's contact information in exchange for value", "To increase website loading speed", "To bypass Meta's ad review process"], ans: 1 },
+            { q: "According to the AIDA copywriting framework, what does the 'D' stand for?", opts: ["Data", "Demographics", "Desire", "Duration"], ans: 2 },
+            { q: "If you spend $1,000 on Meta Ads and acquire 20 new customers, what is your CAC?", opts: ["$20", "$50", "$1,000", "$20,000"], ans: 1 },
+            { q: "When setting up Google Ads, which Keyword Match Type is the most restrictive and precise?", opts: ["Broad Match", "Phrase Match", "Negative Match", "Exact Match"], ans: 3 },
+            { q: "Why is the Meta Pixel critical for modern digital marketing?", opts: ["It automatically creates ad graphics", "It writes SEO blog posts", "It tracks website visitor behavior to allow for Retargeting", "It bypasses email spam filters"], ans: 2 },
+            { q: "In an A/B split test, what is the 'Rule of One'?", opts: ["You should only run the test for 1 hour", "You must only change ONE variable (e.g., just the headline) per test", "You can only target one country", "You must use one specific color"], ans: 1 },
+            { q: "What does 'Omni-Channel Marketing' refer to?", opts: ["Using only one platform to save money", "Creating a seamless consumer experience across multiple different platforms and touchpoints", "Selling products wholesale", "Bypassing social media entirely"], ans: 1 },
+            { q: "In No-Code Automations (like Zapier), a workflow is built on which foundational logic?", opts: ["HTML / CSS", "Trigger / Action (IF/THEN)", "Query / Subquery", "Primary Key / Foreign Key"], ans: 1 },
+            { q: "Which global data privacy law strictly protects the data of European citizens and requires cookie consent?", opts: ["CCPA", "HIPAA", "MSME", "GDPR"], ans: 3 }
+        ];
+
+        // ==========================================
+        // UI & ROUTING
+        // ==========================================
+        window.setContentLang = (lang) => {
+            window.stopTTS(); 
+            contentLang = lang;
+            document.getElementById('btn-en').className = `lang-btn ${lang === 'en' ? 'active' : ''}`;
+            document.getElementById('btn-ta').className = `lang-btn ${lang === 'ta' ? 'active' : ''}`;
+            
+            const mod = courseData.find(m => m.id === viewingModuleId);
+            const imgEl = document.getElementById('viewer-img');
+            imgEl.style.display = 'block'; 
+            imgEl.src = mod.img;
+            document.getElementById('viewer-title').innerText = lang === 'en' ? mod.title_en : mod.title_ta;
+            document.getElementById('viewer-content').innerHTML = lang === 'en' ? mod.content_en : mod.content_ta;
+        };
+
+        document.getElementById('primary-auth-btn').onclick = async () => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch(error) {
+                console.error("Login Error:", error);
+                showToast("Sign In Failed: " + error.message);
+            }
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const photoUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=random`;
+                document.getElementById('nav-profile').innerHTML = `<img src="${photoUrl}" alt="Profile" style="width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; box-shadow: var(--shadow-sm);">`;
+                document.getElementById('nav-profile').style.display = 'flex';
+                
+                try {
+                    const docSnap = await getDoc(doc(db, "users", user.uid));
+                    if (docSnap.exists()) {
+                        currentUserData = docSnap.data();
+                        
+                        let dbNeedsUpdate = false;
+                        
+                        if (!currentUserData.courses) {
+                            currentUserData.courses = {};
+                            dbNeedsUpdate = true;
+                        }
+                        if (!currentUserData.courses[CURRENT_COURSE_ID]) {
+                            currentUserData.courses[CURRENT_COURSE_ID] = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
+                            dbNeedsUpdate = true;
+                        }
+                        
+                        if (dbNeedsUpdate) {
+                            try {
+                                await setDoc(doc(db, "users", user.uid), { 
+                                    courses: {
+                                        [CURRENT_COURSE_ID]: currentUserData.courses[CURRENT_COURSE_ID]
+                                    }
+                                }, { merge: true });
+                            } catch(e) { console.error("Auto-init save error:", e); }
+                        }
+                        
+                        routeUser(true);
+                    } else {
+                        currentUserData = { 
+                            fullName: "",
+                            whatsappNumber: "",
+                            courses: {
+                                [CURRENT_COURSE_ID]: { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false }
+                            }
+                        };
+                        showScreen('profile-screen', true);
+                    }
+                } catch (error) {
+                    console.error("Firestore read error:", error);
+                    currentUserData = { courses: { [CURRENT_COURSE_ID]: { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false } } };
+                    showScreen('profile-screen', true);
+                }
+            } else {
+                document.getElementById('nav-profile').style.display = 'none';
+                showScreen('login-screen', true);
+            }
+        });
+
+        function routeUser(pushHistory = true) {
+            if (!currentUserData.fullName) return showScreen('profile-screen', pushHistory);
+            if (currentUserData.courses[CURRENT_COURSE_ID].paymentStatus !== 'paid') return showScreen('payment-screen', pushHistory);
+            
+            if (currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                showCertificate();
+                return showScreen('cert-screen', pushHistory);
+            }
+            
+            renderDashboard();
+            showScreen('dashboard-screen', pushHistory);
+        }
+
+        // ==========================================
+        // FORMS & PROGRESS
+        // ==========================================
+        document.getElementById('save-profile-btn').onclick = async () => {
+            const name = document.getElementById('prof-name').value;
+            const wa = document.getElementById('prof-wa').value;
+            if(!name || !wa) return showToast("Name and WhatsApp required!");
+
+            currentUserData.fullName = name;
+            currentUserData.whatsappNumber = wa;
+            
+            if (!currentUserData.courses) currentUserData.courses = {};
+            if (!currentUserData.courses[CURRENT_COURSE_ID]) {
+                currentUserData.courses[CURRENT_COURSE_ID] = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
+            }
+            
+            try {
+                await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
+            } catch(e) { console.error("Profile save error:", e); }
+            
+            routeUser(true);
+        };
+
+        document.getElementById('pay-razorpay-btn').onclick = async () => {
+            const user = auth.currentUser;
+            if (!user) return showToast("Please sign in first.");
+
+            const btn = document.getElementById('pay-razorpay-btn');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "Initializing Secure Gateway...";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('https://goolearn-payment.hf.space/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        userId: user.uid,
+                        courseId: CURRENT_COURSE_ID 
+                    })
+                });
+                
+                if (!response.ok) throw new Error("Order creation failed on backend");
+                const orderData = await response.json();
+
+                const options = {
+                    "key": "rzp_live_T1HpoAe39yK0FV", 
+                    "amount": orderData.amount, 
+                    "currency": "INR",
+                    "name": "Goorac Learn",
+                    "description": "Unlock Digital Marketing Masterclass",
+                    "order_id": orderData.id, 
+                    "handler": async function (response) {
+                        showToast("Payment Successful! Unlocking curriculum...");
+                        
+                        currentUserData.courses[CURRENT_COURSE_ID].paymentStatus = 'paid';
+                        
+                        try {
+                            await setDoc(doc(db, "users", user.uid), { 
+                                courses: {
+                                    [CURRENT_COURSE_ID]: { paymentStatus: 'paid' }
+                                }
+                            }, { merge: true });
+                        } catch(e) { console.warn("Local sync skipped, relying fully on webhook."); }
+                        
+                        routeUser(true);
+                    },
+                    "prefill": {
+                        "name": currentUserData.fullName || "",
+                        "contact": currentUserData.whatsappNumber || ""
+                    },
+                    "theme": { 
+                        "color": "#059669" // Emerald theme
+                    },
+                    "modal": {
+                        "ondismiss": function(){
+                            btn.innerText = originalText;
+                            btn.disabled = false;
+                        }
+                    }
+                };
+
+                const rzp = new window.Razorpay(options);
+                
+                rzp.on('payment.failed', function (response){
+                    showToast("Payment Failed: " + response.error.description);
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                });
+                
+                rzp.open();
+
+            } catch (error) {
+                console.error("Payment initiation failed:", error);
+                showToast("Could not connect to payment gateway. Try again.");
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        };
+
+        function renderDashboard() {
+            const container = document.getElementById('module-list-container');
+            container.innerHTML = '';
+            
+            let progressMod = currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+            if(progressMod > 25) progressMod = 25;
+            const percentage = Math.round(((progressMod - 1) / 25) * 100);
+            
+            if (currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                document.getElementById('progress-bar').style.width = '100%';
+                document.getElementById('progress-text').innerText = '100% - Certified';
+            } else {
+                document.getElementById('progress-bar').style.width = percentage + '%';
+                document.getElementById('progress-text').innerText = percentage + '%';
+            }
+
+            courseData.forEach(mod => {
+                const isCompleted = mod.id < currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+                const isUnlocked = mod.id <= currentUserData.courses[CURRENT_COURSE_ID].currentModule || currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz;
+                
+                container.innerHTML += `
+                    <div class="module-item ${isUnlocked ? '' : 'locked'} ${isCompleted ? 'completed' : ''}" onclick="${isUnlocked ? `loadModule(${mod.id})` : ''}">
+                        <div class="mod-icon">${mod.icon}</div>
+                        <div class="mod-details">
+                            <div class="mod-title">${mod.title_en}</div>
+                            <div class="mod-status">${isCompleted ? '✅ Completed' : (isUnlocked ? '📖 Ready' : '🔒 Locked')}</div>
+                        </div>
+                    </div>`;
+            });
+
+            if (currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                document.getElementById('quiz-unlock-banner').style.display = 'none';
+                document.getElementById('certificate-access-banner').style.display = 'block';
+            } else if (currentUserData.courses[CURRENT_COURSE_ID].currentModule > 25) {
+                document.getElementById('quiz-unlock-banner').style.display = 'block';
+                document.getElementById('certificate-access-banner').style.display = 'none';
+            } else {
+                document.getElementById('quiz-unlock-banner').style.display = 'none';
+                document.getElementById('certificate-access-banner').style.display = 'none';
+            }
+        }
+
+        window.loadModule = (id) => {
+            viewingModuleId = id;
+            setContentLang(contentLang);
+            const btn = document.getElementById('mark-complete-btn');
+            
+            if (id === currentUserData.courses[CURRENT_COURSE_ID].currentModule && !currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                btn.style.display = 'flex';
+                btn.innerText = id === 25 ? "Finish Curriculum & Take Exam" : "Mark Completed & Next";
+                btn.onclick = async () => {
+                    window.stopTTS();
+                    viewingModuleId = currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+                    currentUserData.courses[CURRENT_COURSE_ID].currentModule += 1;
+                    
+                    renderDashboard();
+                    
+                    try {
+                        await setDoc(doc(db, "users", auth.currentUser.uid), { 
+                            courses: {
+                                [CURRENT_COURSE_ID]: { currentModule: currentUserData.courses[CURRENT_COURSE_ID].currentModule }
+                            }
+                        }, { merge: true });
+                    } catch(e) { console.error("Progress save error:", e); }
+                    
+                    showToast("Module Completed!");
+                    if (id < 25) {
+                        loadModule(id + 1); 
+                        window.scrollTo(0,0);
+                    } else {
+                        routeUser(true);
+                    }
+                };
+            } else if (id < currentUserData.courses[CURRENT_COURSE_ID].currentModule || currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                btn.style.display = 'flex';
+                btn.innerText = id === 25 ? "Back to Dashboard" : "Next Module";
+                btn.onclick = () => {
+                    window.stopTTS();
+                    if (id === 25) { 
+                        goToDashboard(); 
+                    } else { 
+                        loadModule(id + 1); 
+                        window.scrollTo(0,0); 
+                    }
+                };
+            } else { 
+                btn.style.display = 'none'; 
+            }
+            const isAlreadyViewing = document.getElementById('module-viewer-screen').classList.contains('active-screen');
+            showScreen('module-viewer-screen', !isAlreadyViewing); 
+        }
+
+        // ==========================================
+        // QUIZ & CERTIFICATE
+        // ==========================================
+        document.getElementById('start-quiz-btn').onclick = () => {
+            const qc = document.getElementById('quiz-container');
+            qc.innerHTML = quizData.map((q, i) => `
+                <div class="quiz-question">
+                    <h3>${i+1}. ${q.q}</h3>
+                    ${q.opts.map((opt, oIdx) => `
+                        <label class="quiz-option">
+                            <input type="radio" name="q${i}" value="${oIdx}">
+                            ${opt}
+                        </label>
+                    `).join('')}
+                </div>
+            `).join('');
+            showScreen('quiz-screen', true);
+        };
+
+        document.getElementById('submit-quiz-btn').onclick = async () => {
+            let score = 0;
+            quizData.forEach((q, i) => {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if(selected && parseInt(selected.value) === q.ans) score++;
+            });
+
+            if (score >= 7) {
+                currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz = true;
+                
+                try {
+                    await setDoc(doc(db, "users", auth.currentUser.uid), { 
+                        courses: {
+                            [CURRENT_COURSE_ID]: { hasPassedQuiz: true }
+                        }
+                    }, { merge: true });
+                } catch(e) { console.error("Exam save error:", e); }
+                
+                showToast("Exam Passed! Generating Certificate...");
+                setTimeout(() => routeUser(true), 1500);
+            } else {
+                showToast(`Score: ${score}/10. You need 7 to pass. Try again!`);
+            }
+        };
+
+        function showCertificate() {
+            if (currentUserData.courses[CURRENT_COURSE_ID].paymentStatus === 'paid') {
+                document.getElementById('cert-pdf-view').style.display = 'block';
+                document.getElementById('cert-name-display').innerText = currentUserData.fullName;
+                
+                const issueDate = new Date();
+                const formattedDate = issueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                document.getElementById('cert-date-display').innerText = "Issued on: " + formattedDate;
+                
+                const encodedData = encodeURIComponent(`VERIFIED CREDENTIAL\nName: ${currentUserData.fullName}\nCourse: Digital Marketing Masterclass\nIssuer: Goorac Learn (Goorac Corporation)\nDate: ${formattedDate}\nStatus: VERIFIED`);
+                document.getElementById('cert-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedData}`;
+            }
+        }
+
+        document.getElementById('download-pdf-btn').onclick = () => {
+            const btn = document.getElementById('download-pdf-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Generating PDF...";
+            
+            const element = document.getElementById('printable-cert');
+            const fileName = currentUserData.fullName ? `${currentUserData.fullName.replace(/\s+/g, '_')}_Digital_Marketing_Certificate.pdf` : 'Digital_Marketing_Certificate.pdf';
+            
+            const opt = {
+                margin:       0,
+                filename:     fileName,
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 3, useCORS: true, allowTaint: true, scrollY: 0, scrollX: 0, windowWidth: 1122 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerText = originalText;
+                showToast("PDF Downloaded Successfully!");
+            }).catch(err => {
+                console.error("PDF generation error: ", err);
+                btn.innerText = originalText;
+                showToast("Error generating PDF");
+            });
+        };
+
+        try {
+            history.replaceState({ screen: 'splash-screen' }, '', '#splash-screen');
+        } catch(e) {
+            console.warn("History API prevented:", e);
+        }
+    </script>
+</body>
+</html>
