@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Goorac Learn | Advanced HR Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        /* Premium SaaS & App Theme Variables - Synced to Portal Emerald/Teal */
+        :root {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #059669; /* Emerald Green */
+            --primary-hover: #047857; /* Darker Emerald */
+            --border-color: #e2e8f0;
+            --success: #10b981;
+            --success-bg: #ecfdf5; /* Emerald Light BG */
+            --locked-bg: #f1f5f9;
+            --code-bg: #0f172a; /* Midnight Blue */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #020617; /* Deep Midnight Blue */
+                --surface-color: #0f172a;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --border-color: #1e293b;
+                --locked-bg: #0b1120;
+                --success-bg: #064e3b; /* Dark Emerald BG */
+                --code-bg: #000000;
+            }
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: var(--bg-color); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; line-height: 1.6;
+            -webkit-font-smoothing: antialiased; overflow-x: hidden;
+        }
+
+        .top-nav {
+            background-color: var(--surface-color); border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px); background-color: rgba(var(--surface-color), 0.9);
+        }
+        .brand { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; cursor: pointer; }
+
+        .screen { display: none; flex: 1; padding: 30px 20px 80px 20px; max-width: 640px; margin: 0 auto; width: 100%; min-height: 100vh;}
+        .active-screen { display: block; animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(15px); } to { opacity: 1; transform: translateX(0); } }
+
+        #splash-screen.active-screen { display: flex; flex-direction: column; }
+        .spinner { 
+            width: 40px; height: 40px; border: 4px solid var(--border-color); 
+            border-top-color: var(--primary); border-radius: 50%; 
+            animation: spin 1s linear infinite; margin-top: 20px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        h1, h2, h3 { font-weight: 700; margin-bottom: 12px; line-height: 1.2; letter-spacing: -0.5px; }
+        p { margin-bottom: 20px; color: var(--text-muted); font-size: 1.05rem; }
+        
+        .card {
+            background: var(--surface-color); border-radius: var(--radius-xl);
+            border: 1px solid var(--border-color); padding: 24px;
+            box-shadow: var(--shadow-md); margin-bottom: 24px;
+        }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main); }
+        .input-group input {
+            width: 100%; padding: 16px; border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); background-color: var(--bg-color); 
+            color: var(--text-main); font-size: 1rem; transition: 0.2s; outline: none;
+            appearance: none; 
+        }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); }
+
+        .btn {
+            background-color: var(--primary); color: white; border: none;
+            border-radius: var(--radius-lg); padding: 16px; width: 100%; font-size: 1rem;
+            font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none !important; }
+        .btn:active:not(:disabled) { transform: scale(0.98); } 
+        .btn-success { background-color: var(--success); }
+        .btn-outline { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
+
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
+            text-align: center; border-radius: 30px; padding: 16px 24px;
+            position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%);
+            font-size: 15px; font-weight: 500; box-shadow: var(--shadow-lg);
+            opacity: 0; transition: opacity 0.3s, bottom 0.3s;
+        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
+        .progress-bar-bg { background: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px; margin-bottom: 10px;}
+        .progress-bar-fill { background: var(--primary); height: 100%; width: 0%; transition: width 0.8s ease-out; }
+
+        .module-item {
+            background-color: var(--surface-color); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; transition: 0.2s; box-shadow: var(--shadow-sm);
+        }
+        .module-item:active:not(.locked) { transform: scale(0.98); background: var(--bg-color); }
+        .module-item.locked { background-color: var(--locked-bg); opacity: 0.6; cursor: not-allowed; }
+        .module-item.completed { border-left: 4px solid var(--success); }
+        
+        .mod-icon { font-size: 24px; width: 44px; height: 44px; background: var(--bg-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
+        .mod-details { flex: 1; }
+        .mod-title { font-weight: 600; font-size: 1rem; color: var(--text-main); margin-bottom: 2px; }
+        .mod-status { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
+
+        .mod-hero-img { width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .content-body h3 { margin-top: 30px; margin-bottom: 15px; font-size: 1.25rem; color: var(--primary); border-bottom: 1px solid var(--border-color); padding-bottom: 5px;}
+        .content-body ul, .content-body ol { margin-bottom: 20px; padding-left: 20px; color: var(--text-muted); }
+        .content-body li { margin-bottom: 10px; }
+        .content-body mark { background-color: rgba(5, 150, 105, 0.2); padding: 2px 4px; border-radius: 4px; color: var(--primary); font-weight: 600; }
+        .content-body strong { color: var(--text-main); }
+        
+        .analogy-box {
+            background: rgba(5, 150, 105, 0.05); border-left: 4px solid var(--primary);
+            padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 24px 0; font-size: 1.05rem; color: var(--text-main);
+        }
+        
+        .code-wrapper {
+            position: relative; background: var(--code-bg); border-radius: var(--radius-lg);
+            margin: 24px 0; border: 1px solid var(--border-color); overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        .code-header {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.05); padding: 8px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .code-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; font-weight: 600;}
+        .copy-btn {
+            background: transparent; color: #cbd5e1; border: 1px solid #475569; border-radius: 4px;
+            padding: 4px 10px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; font-weight: 600;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .copy-btn.copied { background: var(--success); border-color: var(--success); color: white; }
+        .code-wrapper pre {
+            padding: 20px; margin: 0; overflow-x: auto; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem; color: #f8fafc; white-space: pre-wrap; line-height: 1.5;
+        }
+
+        .lang-switch-bar { display: flex; background: var(--locked-bg); padding: 4px; border-radius: 30px; width: fit-content; }
+        .lang-btn { background: transparent; border: none; padding: 8px 24px; border-radius: 20px; cursor: pointer; font-weight: 600; color: var(--text-muted); transition: 0.2s; }
+        .lang-btn.active { background: var(--surface-color); color: var(--primary); box-shadow: var(--shadow-sm); }
+
+        .quiz-question { margin-bottom: 40px; }
+        .quiz-option {
+            display: block; padding: 16px; border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg); margin-bottom: 12px; cursor: pointer;
+            transition: 0.2s; font-weight: 500; background: var(--surface-color);
+        }
+        .quiz-option input[type="radio"] { display: none; }
+        .quiz-option:has(input:checked) { border-color: var(--primary); background: rgba(5, 150, 105, 0.05); color: var(--primary); }
+
+        .cert-scroll-container {
+            width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px; border-radius: 12px; background: rgba(0,0,0,0.02);
+            padding: 10px; border: 1px solid var(--border-color);
+        }
+        
+        .certificate-wrapper {
+            background: #ffffff;
+            background-image: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            border: 0px solid transparent; 
+            padding: 50px 60px; 
+            text-align: center;
+            border-radius: 0px; 
+            box-shadow: none; 
+            color: #0f172a;
+            margin: 0 auto;
+            position: relative; 
+            overflow: hidden;
+            width: 100%;
+            min-width: 900px; 
+            max-width: 1122px; 
+            aspect-ratio: 1.414; 
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .certificate-wrapper::before {
+            content: ''; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 6px double #059669; /* Emerald Green */
+            pointer-events: none; z-index: 1;
+        }
+        .certificate-wrapper::after {
+            content: 'QUANTUM'; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: clamp(60px, 15vw, 180px); color: rgba(0,0,0,0.03); font-weight: 900;
+            pointer-events: none; z-index: 0;
+        }
+        .cert-content { z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding-top: 15px;}
+        .cert-header { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4.5vw, 3.2rem); color: #1e293b; margin-bottom: 0; font-weight: 800;}
+        .cert-sub { font-size: clamp(0.7rem, 1.5vw, 1.1rem); color: #059669; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; font-weight: bold; }
+        .cert-name { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4.5vw, 3rem); font-weight: 700; border-bottom: 2px solid #059669; padding-bottom: 8px; margin: 0 auto 15px; display: inline-block; min-width: 60%; color: #047857; line-height: 1.2;}
+        .cert-body { font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #475569; margin-bottom: 10px; max-width: 85%; margin-left: auto; margin-right: auto; line-height: 1.5;}
+        
+        .multi-color-sig { color: #047857; font-weight: 800; }
+
+        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; z-index: 2; position: relative; margin-top: auto; padding-bottom: 15px;}
+        .cert-qr-container { text-align: center; }
+        .cert-qr { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); border: 3px solid #fff; box-shadow: var(--shadow-md); border-radius: 6px; background: white;}
+        .cert-badge { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); background: radial-gradient(circle, #059669, #047857); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: clamp(0.5rem, 1vw, 0.75rem); border: 2px dashed white; line-height: 1.2;}
+        .cert-signature-block { text-align: center; }
+        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.2rem, 3vw, 2.2rem); border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 150px; }
+
+        @media print {
+            @page { size: A4 landscape; margin: 0; }
+            body { background: white; margin: 0; }
+            body * { visibility: hidden; }
+            #cert-pdf-view, #cert-pdf-view * { visibility: visible; }
+            #cert-pdf-view { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh;}
+            .cert-scroll-container { border: none; background: transparent; padding: 0; overflow: visible; }
+            .certificate-wrapper { 
+                width: 297mm !important; height: 210mm !important; 
+                margin: 0 !important; border: 0px solid transparent !important; 
+                max-width: none !important; min-width: 0 !important; aspect-ratio: auto !important;
+                -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-shadow: none !important;
+            }
+            .cert-content { padding-top: 0 !important; }
+            .cert-footer { padding-bottom: 0 !important; }
+            .btn { display: none !important; }
+            .top-nav { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast">Message</div>
+
+    <div class="top-nav">
+        <div class="brand" onclick="window.location.href='index.html'">Goorac <span style="color:var(--text-main)">Learn</span></div>
+        <div id="nav-profile" style="display:none; align-items: center; gap: 8px; cursor: pointer;" onclick="window.location.href='profile.html'"></div>
+    </div>
+
+    <div id="splash-screen" class="screen active-screen" style="justify-content: center; align-items: center; text-align: center;">
+        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 20px; border-radius: 50%; box-shadow: var(--shadow-md);">
+        <h1 style="color: var(--primary); margin-bottom: 8px; font-size: 2rem;">Goorac Learn</h1>
+        <p style="color: var(--text-muted); font-weight: 500; font-size: 1rem;">Initializing management workspace...</p>
+        <div class="spinner"></div>
+    </div>
+
+    <div id="login-screen" class="screen">
+        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80" alt="HR Core" style="width:100%; height:180px; object-fit:cover; border-radius: var(--radius-xl); margin-bottom: 24px;">
+        <h1 style="font-size: 2.2rem;">Master HR Management</h1>
+        <p>Lead human capital optimization strategies. Learn structural engineering of talent acquisition, regulatory framework matrices, and performance metrics systems over 25 comprehensive modules. Earn enterprise-verified credentials.</p>
+        
+        <button id="primary-auth-btn" class="btn" style="background: #0f172a; margin-top: 20px;">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Sign in with Google
+        </button>
+    </div>
+
+    <div id="profile-screen" class="screen">
+        <h2>Certificate Setup</h2>
+        <p>Enter your details exactly as they should appear on your final diploma.</p>
+        <div class="card">
+            <div class="input-group">
+                <label>Full Legal Name</label>
+                <input type="text" id="prof-name" placeholder="E.g., Jane Smith">
+            </div>
+            <div class="input-group">
+                <label>WhatsApp Number</label>
+                <input type="tel" id="prof-wa" placeholder="+91 9876543210">
+            </div>
+            <button id="save-profile-btn" class="btn">Continue</button>
+        </div>
+    </div>
+
+    <div id="payment-screen" class="screen">
+        <h2 style="font-size: 2.2rem; margin-bottom: 10px;">Unlock Premium Access</h2>
+        <p>Get lifetime access to our 25 advanced HR Management modules, policy templates, evaluation scripts, and your verified official certificate.</p>
+        
+        <div class="card" style="text-align: center; border: 2px solid var(--primary); padding: 30px 20px;">
+            <div style="background: var(--success-bg); padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:10px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <h3 style="color: var(--primary); margin-bottom: 5px;">Secure One-Time Payment</h3>
+                <p style="color: var(--text-main); font-weight: 800; font-size: 2rem; margin:0;">₹199</p>
+            </div>
+            
+            <ul style="text-align: left; margin-bottom: 30px; list-style: none; padding: 0; font-size: 1.05rem;">
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Full 25-Module Masterclass</li>
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Verified Professional Certificate</li>
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Lifetime Access & Updates</li>
+            </ul>
+            
+            <button id="pay-razorpay-btn" class="btn" style="font-size: 1.1rem; padding: 18px;">
+                Pay Securely Now
+            </button>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                100% Encrypted & Safe
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard-screen" class="screen">
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600;">
+            <span>Course Progress</span>
+            <span id="progress-text" style="color: var(--primary);">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+        </div>
+        <div style="margin-top: -5px; margin-bottom: 30px; font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
+            Course: HR Management Masterclass
+        </div>
+
+        <div id="module-list-container"></div>
+        
+        <div id="quiz-unlock-banner" style="display:none; margin-top: 30px;">
+            <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
+                <h3 style="color: var(--success);">🎉 Curriculum Complete!</h3>
+                <p style="color: #064e3b; font-size: 0.95rem;">Take the final 10-question exam to earn your certificate.</p>
+                <button id="start-quiz-btn" class="btn btn-success">Start Final Exam</button>
+            </div>
+        </div>
+
+        <div id="certificate-access-banner" style="display:none; margin-top: 30px;">
+            <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
+                <h3 style="color: var(--success);">🏆 Masterclass Certified</h3>
+                <p style="color: #064e3b; font-size: 0.95rem;">You have successfully completed this course and earned your certificate.</p>
+                <button onclick="viewCertificate()" class="btn btn-success">View Certificate</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="module-viewer-screen" class="screen">
+        <button onclick="goToDashboard()" style="background:none; border:none; color:var(--text-muted); font-weight:600; cursor:pointer; padding: 0 0 20px 0; display:flex; align-items:center; gap:5px; font-size: 1rem;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"></path></svg> Back
+        </button>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
+            <div class="lang-switch-bar" style="margin-bottom: 0;">
+                <button class="lang-btn active" id="btn-en" onclick="setContentLang('en')">English</button>
+                <button class="lang-btn" id="btn-ta" onclick="setContentLang('ta')">தமிழ்</button>
+            </div>
+            
+            <button id="tts-btn" class="btn btn-outline" style="width: auto; padding: 8px 20px; border-radius: 20px; border-color: var(--primary); color: var(--primary); margin-top: 0; background: var(--success-bg);" onclick="toggleTTS()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5 10v4a2 2 0 002 2h2l4 4V4L9 8H7a2 2 0 00-2 2z"></path></svg>
+                <span id="tts-text">Listen</span>
+            </button>
+        </div>
+
+        <img id="viewer-img" class="mod-hero-img" src="" alt="Module Hero" onerror="this.style.display='none'">
+        <h1 id="viewer-title" style="color: var(--primary); font-size: 1.8rem;"></h1>
+        <div class="content-body" id="viewer-content" style="font-size: 1.05rem; margin-bottom: 40px; color: var(--text-main);"></div>
+        
+        <button id="mark-complete-btn" class="btn">Mark Completed & Next</button>
+    </div>
+
+    <div id="quiz-screen" class="screen">
+        <h2>Certification Exam</h2>
+        <p>Answer 10 questions. You need 70% (7/10) to pass.</p>
+        <div id="quiz-container"></div>
+        <button id="submit-quiz-btn" class="btn">Submit Exam</button>
+    </div>
+
+    <div id="cert-screen" class="screen" style="max-width: 100%;">
+        <div id="cert-pdf-view" style="display:none; width: 100%;">
+            
+            <div class="cert-scroll-container">
+                <div class="certificate-wrapper" id="printable-cert">
+                    <div class="cert-content">
+                        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 55px; height: 55px; object-fit: contain; margin-bottom: 5px; border-radius: 50%; box-shadow: var(--shadow-md);">
+                        
+                        <div class="cert-header">Goorac Learn</div>
+                        <div style="font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">from Goorac Corporation</div>
+                        <div class="cert-sub">Certificate of Professional Mastery</div>
+                        <div class="cert-body">This document officially certifies that</div>
+                        
+                        <div class="cert-name" id="cert-name-display">Student Name</div>
+                        
+                        <div class="cert-body" style="margin-bottom: 15px;">
+                            has successfully completed all 25 advanced modules and passed the comprehensive final examination for the<br>
+                            <span style="font-size: 1.3em; font-weight: 800; color: #0f172a; display: inline-block; margin-top: 8px;">HR Management Masterclass</span>
+                        </div>
+                        
+                        <div class="cert-date" id="cert-date-display" style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #475569; font-size: 0.95rem; background: #f1f5f9; padding: 6px 16px; border-radius: 20px; border: 1px solid #cbd5e1;">Date of Issue</div>
+                        
+                        <div style="margin-top: 15px; border-top: 2px dashed #e2e8f0; padding-top: 10px; width: 100%; max-width: 600px;">
+                            <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Valid & Recognized By</div>
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 25px;">
+                                <img src="images/google.png" alt="Google" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="images/microsoft.png" alt="Microsoft" crossorigin="anonymous" style="height: 20px; object-fit: contain;">
+                                <img src="images/amazon.png" alt="Amazon" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="images/zoho.png" alt="Zoho" crossorigin="anonymous" style="height: 18px; object-fit: contain;">
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="cert-footer">
+                        <div class="cert-qr-container">
+                            <img id="cert-qr-img" class="cert-qr" src="" alt="Verified QR" crossorigin="anonymous">
+                            <div style="font-size: clamp(0.5rem, 1vw, 0.75rem); color: #10b981; margin-top: 5px; font-weight: 800; letter-spacing: 1px;">✓ VERIFIED</div>
+                        </div>
+                        
+                        <div class="cert-badge">
+                            OFFICIAL<br>CERTIFIED
+                        </div>
+
+                        <div class="cert-signature-block">
+                            <div class="cert-signature multi-color-sig">Dr. Jonathan Reynolds</div>
+                            <div style="font-size: clamp(0.6rem, 1.2vw, 0.9rem); color: #64748b; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Director of Human Capital</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; max-width: 400px; margin: 0 auto;">
+                <button id="download-pdf-btn" class="btn btn-success">Download High-Res PDF</button>
+                <button onclick="goToDashboard()" class="btn btn-outline">Back to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDeXk6z_5mYQZi_xIsQsN935KxuIBxAM3w",
+            authDomain: "gooraclearn.firebaseapp.com",
+            projectId: "gooraclearn",
+            storageBucket: "gooraclearn.firebasestorage.app",
+            messagingSenderId: "221459932053",
+            appId: "1:221459932053:web:af713811da7edd113e0c9c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        const CURRENT_COURSE_ID = "hr-management";
+
+        let contentLang = 'en';
+        let currentUserData = null; 
+        let viewingModuleId = 1;
+        let isSpeaking = false; 
+
+        window.showToast = (msg) => {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        };
+
+        window.copyCode = (btn) => {
+            const codeText = btn.parentElement.parentElement.querySelector('pre').innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                btn.innerText = "Copied!";
+                btn.classList.add('copied');
+                setTimeout(() => { btn.innerText = "Copy"; btn.classList.remove('copied'); }, 2000);
+            });
+        };
+
+        window.stopTTS = () => {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            isSpeaking = false;
+            const ttsText = document.getElementById('tts-text');
+            if (ttsText) ttsText.innerText = "Listen";
+        };
+
+        window.toggleTTS = () => {
+            if (!window.speechSynthesis) return showToast("Audio playback not supported on this browser.");
+            
+            if (isSpeaking) {
+                window.stopTTS();
+                return;
+            }
+
+            const title = document.getElementById('viewer-title').innerText;
+            const contentNode = document.getElementById('viewer-content').cloneNode(true);
+            
+            contentNode.querySelectorAll('.copy-btn, .code-label').forEach(el => el.remove());
+            const contentText = contentNode.innerText;
+            
+            const fullText = title + ". " + contentText;
+            const utterance = new SpeechSynthesisUtterance(fullText);
+            
+            utterance.lang = contentLang === 'ta' ? 'ta-IN' : 'en-US';
+            utterance.rate = 0.90; 
+
+            utterance.onend = () => {
+                isSpeaking = false;
+                document.getElementById('tts-text').innerText = "Listen";
+            };
+
+            utterance.onerror = (e) => {
+                console.warn("TTS Processing Error", e);
+                window.stopTTS();
+            };
+
+            isSpeaking = true;
+            document.getElementById('tts-text').innerText = "Stop Playing";
+            window.speechSynthesis.speak(utterance);
+        };
+
+        window.showScreen = (screenId, pushHistory = true) => {
+            window.stopTTS(); 
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active-screen'));
+            document.getElementById(screenId).classList.add('active-screen');
+            window.scrollTo(0,0);
+            if(pushHistory) {
+                try {
+                    history.pushState({ screen: screenId }, '', '#' + screenId);
+                } catch(e) {
+                    console.warn("History API prevented:", e);
+                }
+            }
+        };
+
+        window.goBack = () => { 
+            window.stopTTS(); 
+            goToDashboard();
+        };
+        
+        window.addEventListener('popstate', (e) => {
+            window.stopTTS();
+            if(e.state && e.state.screen) showScreen(e.state.screen, false);
+            else if(currentUserData) routeUser(false);
+        });
+
+        window.goToDashboard = () => {
+            renderDashboard();
+            showScreen('dashboard-screen', true);
+        };
+
+        window.viewCertificate = () => {
+            showCertificate();
+            showScreen('cert-screen', true);
+        };
+
+        // ==========================================
+        // UI HELPERS FOR PREMIUM CODE AND OUTPUT BLOCKS
+        // ==========================================
+        const generateCodeBox = (label, code) => `
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-label">${label}</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>${code}</code></pre>
+            </div>`;
+
+        const generatePromptAndOutput = (label, code, output) => `
+            <div class="code-wrapper" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom: 0; border-bottom: none;">
+                <div class="code-header">
+                    <span class="code-label">${label}</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>${code}</code></pre>
+            </div>
+            <div style="background: var(--code-bg); border: 1px solid var(--border-color); border-top: 1px dashed #334155; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 16px 20px; margin-bottom: 24px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #34d399; white-space: pre-wrap; box-shadow: var(--shadow-md);">
+                <div style="font-size: 0.7rem; text-transform: uppercase; color: #94a3b8; margin-bottom: 8px; font-weight: bold; letter-spacing: 1px;">Execution & Output Summary</div>${output}</div>`;
+
+        // ==========================================
+        // 25 HIGHLY DETAILED HR MANAGEMENT MODULES 
+        // ==========================================
+        const courseData = [
+            {
+                id: 1, icon: "🏢", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80",
+                title_en: "1. The Modern HR Ecosystem & Strategic Alignment", title_ta: "1. நவீன மனிதவள மேலாண்மை மற்றும் நிறுவன வடிவமைப்பு",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Running a company without a strategic HR ecosystem is like building an expensive sports car with completely mismatched gears. The engine might rev powerfully, but without synchronized systems working together, it will spin out, grind to a halt, or break down on the track. HR provides the architecture that converts raw operational force into smooth business momentum.</div>
+                    <p>Welcome to the premium masterclass on Strategic Human Resource Management. In contemporary enterprise environments, Human Resources has completely shifted away from traditional paper-pushing or administrative bookkeeping. Today, it functions as a core structural anchor that aligns human potential directly with a company's financial growth and overarching business goals.</p>
+                    <p>To architect a functional corporate machine, an executive must recognize that workers are not passive resources. They represent complex, non-linear variables. Strategic alignment means that every policy, compliance rule, performance review, and salary package must systematically support the broader company mission.</p>
+                    <h3>The Anatomy of the Ecosystem</h3>
+                    <p>The operational framework of any human capital network relies on highly calculated layers:</p>
+                    <ul>
+                        <li><b>Structural Engineering:</b> Designing clear organizational patterns where authority and data flow seamlessly without friction.</li>
+                        <li><b>Data Grounding:</b> Moving away from emotional guessing or intuition to evaluate company velocity using robust workforce performance metadata.</li>
+                        <li><b>Compliance Safeguards:</b> Constructing bulletproof corporate regulations that shield the enterprise from toxic liabilities and legal vulnerability.</li>
+                    </ul>
+                    <p>When these variables are properly balanced, employee efficiency spikes, overhead drops, and turnover is contained. Throughout this blueprint, you will master the mechanics used by top corporate architects to scale elite teams safely.</p>
+                    \${generatePromptAndOutput('Ecosystem Metric Model', 'Calculate Alignment Velocity Index (AVI):\nAVI = (Strategic Initiatives Executed / Total Core Priorities) * Employee Engagement Rate\n\nVariables:\n- Core Priorities: 5\n- Strategic Initiatives Executed: 4\n- Employee Engagement Rate: 0.82', 'AVI Calculation:\nAVI = (4 / 5) * 0.82 = 0.80 * 0.82 = 0.656\nAlignment Rating: Optimal Structural Velocity [Target Baseline > 0.60]')}\`
+                `,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> முறையான மனிதவள கட்டமைப்பு இல்லாத நிறுவனம், தவறான கியர்கள் கொண்ட விலையுயர்ந்த கார் போன்றது. என்ஜின் எவ்வளவு வேகமாக சுழன்றாலும் கியர்கள் சரியாக பொருந்தாவிட்டால் கார் நகராது அல்லது உடைந்துவிடும். மனிதவள மேலாண்மை நிறுவனத்தை சீராக இயக்கும் கியர் பாக்ஸ் ஆகும்.</div>
+                    <p>நவீன மனிதவள மேலாண்மை (HR Management) மாஸ்டர்கிளாஸிற்கு உங்களை வரவேற்கிறோம். இன்றைய கார்ப்பரேட் உலகில், மனிதவளத் துறை என்பது வெறும் சம்பளப் பட்டியலைத் தயாரிப்பதோ அல்லது விடுப்புப் படிவங்களைச் சரிபார்ப்பதோ அல்ல. அது நிறுவனத்தின் பொருளாதார வளர்ச்சியையும் இலக்குகளையும் ஊழியர்களின் திறமையோடு நேரடியாக இணைக்கும் ஒரு மிக முக்கியமான தூணாகும்.</p>
+                    <p>ஊழியர்கள் என்பவர்கள் வெறும் உழைப்புக்கான கருவிகள் அல்ல; அவர்கள் ஒரு நிறுவனத்தின் வெற்றியைத் தீர்மானிக்கும் ஆழமான தர்க்கரீதியான மாறிகள் (Variables) ஆவர். ஒவ்வொரு மனிதவளக் கொள்கையும் நிறுவனத்தின் குறிக்கோள்களுக்கு வலுசேர்க்கும் வகையில் துல்லியமாக வடிவமைக்கப்பட வேண்டும்.</p>
+                    <h3>மனிதவள கட்டமைப்பின் முக்கிய கூறுகள்</h3>
+                    <p>ஒரு நிறுவனத்தின் மனிதவளக் கட்டமைப்பு மூன்று முக்கிய நிலைகளை அடிப்படையாகக் கொண்டது:</p>
+                    <ul>
+                        <li><b>முறைப்படுத்தப்பட்ட கட்டமைப்பு (Structural Engineering):</b> அதிகாரமும் தகவல்களும் எந்தவிதத் தடங்கலும் இன்றி ஊழியர்களிடையே பரவுவதை உறுதி செய்தல்.</li>
+                        <li><b>தரவு சார்ந்த முடிவுகள் (Data Grounding):</b> வெறும் யூகங்களின் அடிப்படையில் முடிவெடுக்காமல், ஊழியர்களின் செயல்திறன் தரவுகளை (Performance Data) ஆராய்ந்து முடிவெடுத்தல்.</li>
+                        <li><b>பாதுகாப்பு விதிகள் (Compliance Safeguards):</b> நிறுவனத்தைச் சட்டரீதியான சிக்கல்களில் இருந்தும், தேவையற்ற இழப்புகளில் இருந்தும் பாதுகாக்கும் கொள்கைகளை உருவாக்குதல்.</li>
+                    </ul>
+                    <p>இந்த கூறுகள் சரியாக இருக்கும்போது, நிறுவனத்தின் உற்பத்தித் திறன் அதிகரிக்கிறது, ஊழியர்கள் வெளியேறுவது குறைகிறது. இந்த பாடத்திட்டத்தில், உலகளாவிய நிறுவனங்கள் பின்பற்றும் சிறந்த உத்திகளை நீங்கள் முழுமையாகக் கற்றுக்கொள்வீர்கள்.</p>
+                    \${generatePromptAndOutput('Ecosystem Metric Model', 'AVI கணக்கீடு (Alignment Velocity Index):\nAVI = (நிறைவேற்றப்பட்ட இலக்குகள் / மொத்த முன்னுரிமைகள்) * ஊழியர் ஈடுபாடு\n\nதரவுகள்:\n- மொத்த முன்னுரிமைகள்: 5\n- நிறைவேற்றப்பட்ட இலக்குகள்: 4\n- ஊழியர் ஈடுபாடு: 0.82', 'AVI விடை:\nAVI = (4 / 5) * 0.82 = 0.80 * 0.82 = 0.656\nநிலை: உகந்த நிறுவன வேகம் [Optimal Velocity Baseline > 0.60]')}\`
+                `
+            },
+            {
+                id: 2, icon: "🏗️", img: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
+                title_en: "2. Organizational Design for Scaling Enterprises", title_ta: "2. நிறுவன வடிவமைப்பு மற்றும் ஆளுமை மேலாண்மை",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Think of organizational design like constructing a skyscraper. If you build too many heavy intermediate management floors without a solid steel cross-braced foundation, the entire skyscraper will collapse under its own structural weight. You must balance span of control with execution velocity.</div>
+                    <p>Organizational design is the art of structuring an enterprise to match its scaling velocity. As a company expands, it naturally faces coordination friction. If you lack structured governance, communication pipelines split, departments silo, and speed breaks down entirely.</p>
+                    <p>To design an elite matrix, an executive must optimize the <b>Span of Control</b>—the number of direct reports assigned to a single manager. If the span is too wide, the manager becomes a bottleneck. If it is too narrow, the organization becomes bloated, vertical, and top-heavy with micromanagers.</p>
+                    <h3>Structural Modeling Parameters</h3>
+                    <p>Modern workforce architects track structural topology metrics closely:</p>
+                    <ul>
+                        <li><b>Hierarchical Depth:</b> The total number of organizational layers between the CEO and the frontline worker. Lower depth keeps the firm agile.</li>
+                        <li><b>Functional Silo Index:</b> The measure of cross-departmental isolation. High isolation leads to duplicate work and broken products.</li>
+                    </ul>
+                    ${generatePromptAndOutput('Span of Control Modeler', 'Evaluate Span Ratio (SR):\nSR = Total Frontline Personnel / Total Operational Managers\n\nData:\n- Frontline Personnel: 120\n- Operational Managers: 15', 'SR Output:\nSR = 120 / 15 = 8.0\nStructure Classification: Healthy Agile Matrix [Standard Baseline: 6.0 - 10.0 per manager]')}`
+                `,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> நிறுவன வடிவமைப்பு என்பது ஒரு வானளாவிய கட்டிடத்தை எழுப்புவது போன்றது. அடித்தளத்தை வலுப்படுத்தாமல், நடுவில் அதிகப்படியான மேலாண்மை அடுக்குகளைக் கட்டினால், கட்டிடம் தன் சொந்த எடையினாலேயே இடிந்து விழுந்துவிடும்.</div>
+                    <p>நிறுவனங்கள் வளரும்போது அவற்றின் கட்டமைப்பு மிகவும் சிக்கலானது. முறையான திட்டமிடல் இல்லையெனில், துறைகளுக்கு இடையே தொடர்பு அற்றுப் போய், நிறுவனத்தின் வேகம் முடங்கிவிடும். இதைச் சீரமைப்பதே நிறுவன வடிவமைப்பு (Organizational Design) ஆகும்.</p>
+                    <h3>கட்டமைப்பின் முக்கியத்துவம்</h3>
+                    <p>ஒரு சீனியர் மேலாளராக, நீங்கள் நிறுவனத்தின் அமைப்பைத் துல்லியமாக வடிவமைக்க வேண்டும்:</p>
+                    <ul>
+                        <li><b>பதவிப் படிநிலை (Hierarchy):</b> அதிகப்படியான மேலாளர்களை உருவாக்குவதைத் தவிர்க்க வேண்டும், இது முடிவெடுக்கும் வேகத்தைக் குறைக்கும்.</li>
+                        <li><b>தகவல் தொடர்பு:</b> மேல் மட்ட முடிவுகள் கீழ் மட்ட ஊழியர்களுக்கு எவ்விதத் தாமதமும் இன்றிச் சென்றடைவதை உறுதி செய்தல்.</li>
+                    </ul>
+                    ${generatePromptAndOutput('Span of Control Modeler', 'SR கணக்கீடு (Span Ratio):\nSR = மொத்த அடிமட்ட ஊழியர்கள் / மொத்த செயல்பாட்டு மேலாளர்கள்\n\nதரவுகள்:\n- அடிமட்ட ஊழியர்கள்: 120\n- மேலாளர்கள்: 15', 'SR விடை:\nSR = 120 / 15 = 8.0\nநிலை: ஆரோக்கியமான மேலாண்மை விகிதம் [Healthy Agile Matrix Base: 6.0 - 10.0]')}`
+                `
+            },
+            {
+                id: 3, icon: "🎯", img: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&q=80",
+                title_en: "3. Job Analysis & Crafting Bulletproof Job Descriptions", title_ta: "3. வேலை பகுப்பாய்வு மற்றும் துல்லியமான பணி விவரக்குறிப்புகள்",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Writing a generic job description is like ordering a custom circuit board by saying "make it electronic". You will receive a useless piece of green plastic. You must give the manufacturer exact technical specs, input/output limits, and voltage constraints so it fits your hardware perfectly.</div>
+                    <p>Every bad hire traces back to an inaccurate Job Description (JD). If you use fluff words like "rockstar developer" or "marketing ninja," you attract random talent that creates heavy friction inside your existing team framework.</p>
+                    <p>Professional JD engineering relies on strict <b>KSAOs</b> (Knowledge, Skills, Abilities, and Other characteristics). You must observe the role systematically before posting it online.</p>
+                    <h3>The JD Matrix Structural Layout</h3>
+                    <ul>
+                        <li><b>Core Deliverables:</b> What must this role physically execute daily? Define metrics, not theories.</li>
+                        <li><b>Boundary Conditions:</b> What tools, databases, and dependencies will this person control directly?</li>
+                    </ul>
+                    ${generatePromptAndOutput('JD Keyword Match Engine', 'Evaluate Job Description Score (JDS) via Keyword Density:\nJDS = (Technical Tool Keywords / Total Descriptive Words) * 100\n\nData:\n- Tool Keywords (SQL, Python, Excel): 8\n- Total Words: 160', 'JDS Output:\nJDS = (8 / 160) * 100 = 5.0%\nClassification: High-Precision JD [Target Range: 4% - 6% for technical roles]')}`
+                `,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> தெளிவற்ற பணி விவரக்குறிப்பை (Job Description) எழுதுவது, ஒரு கடையில் "ஏதாவது எலக்ட்ரானிக் பொருள் கொடுங்கள்" என்று கேட்பது போன்றது. உங்களுக்கு என்ன தேவை என்பதை வோல்டேஜ் மற்றும் துல்லியமான அளவீடுகளுடன் குறிப்பிட்டால் மட்டுமே சரியான பொருள் கிடைக்கும்.</div>
+                    <p>நிறுவனங்களில் நடக்கும் தவறான நியமனங்களுக்கு (Bad Hires) முக்கியக் காரணம் தெளிவற்ற பணி விவரக்குறிப்புகள்தான். "மார்க்கெட்டிங் கிங்" அல்லது "கோடிங் நிஞ்ஜா" போன்ற தேவையற்ற வார்த்தைகளைப் பயன்படுத்தினால் தகுதியற்ற விண்ணப்பங்களே வந்து சேரும்.</p>
+                    <p>ஒரு தொழில்முறை பணி விவரக்குறிப்பு என்பது ஊழியரின் அறிவு, திறன் மற்றும் திறமைகளை (KSAOs) துல்லியமாக விவரிக்க வேண்டும்.</p>
+                    ${generatePromptAndOutput('JD Keyword Match Engine', 'JDS கணக்கீடு (Job Description Score):\nJDS = (தொழில்நுட்ப வார்த்தைகள் / மொத்த வார்த்தைகள்) * 100\n\nதரவுகள்:\n- தொழில்நுட்ப வார்த்தைகள் (SQL, Python): 8\n- மொத்த வார்த்தைகள்: 160', 'JDS விடை:\nJDS = (8 / 160) * 100 = 5.0%\nநிலை: துல்லியமான பணி விவரக்குறிப்பு [High-Precision Base: 4% - 6%]')}`
+                `
+            },
+            {
+                id: 4, icon: "📜", img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&q=80",
+                title_en: "4. Essential Labor Laws & Corporate Compliance", title_ta: "4. தொழிலாளர் சட்டங்கள் மற்றும் கார்ப்பரேட் விதிமுறைகள்",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Compliance is like the electrical grounding wire in an industrial machine. You don't think about it when the machine runs smoothly every day, but if a sudden voltage spike (a lawsuit or labor dispute) hits and that wire is missing, the entire factory will burn down in minutes.</div>
+                    <p>A brilliant HR manager must act as a strict regulatory shield for the enterprise. Labor laws and statutory compliance ensure that the company operates within national and local legal frameworks, preventing catastrophic fines and reputational destruction.</p>
+                    <p>In India, you must master frameworks like the Factories Act, the Industrial Disputes Act, and modern statutory benefits configurations like EPF (Employees' Provident Fund) and ESI (Employees' State Insurance).</p>
+                    <h3>Statutory Mechanics Matrix</h3>
+                    <ul>
+                        <li><b>Severance & Separation Matrix:</b> Managing legal notice periods and termination clauses flawlessly to prevent wrongful dismissal lawsuits.</li>
+                        <li><b>Wage Regulations:</b> Strict compliance with minimum wage frameworks and structured overtime calculation algorithms.</li>
+                    </ul>
+                    ${generateCodeBox('EPF Deduction Configuration', 'const calculateEPF = (basicSalary) => {\n  const cap = 15000;\n  const eligibleSalary = Math.min(basicSalary, cap);\n  const employeeShare = eligibleSalary * 0.12; // 12% standard\n  const employerShare = eligibleSalary * 0.12;\n  return { employeeShare, employerShare };\n};')}`
+                `,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சட்ட விதிமுறைகளைப் பின்பற்றுவது (Compliance) என்பது ஒரு தொழிற்சாலையில் உள்ள எர்த் ஒயர் (Grounding wire) போன்றது. இயந்திரம் ஓடும்போது அதன் முக்கியத்துவம் தெரியாது, ஆனால் எப்போதாவது விபத்து (வழக்கு அல்லது சச்சரவு) ஏற்படும்போது இந்த ஒயர் இல்லையென்றால் தொழிற்சாலையே சாம்பலாகிவிடும்.</div>
+                    <p>ஒரு சிறந்த மனிதவள மேலாளர் நிறுவனத்திற்குச் சட்டப் பாதுகாப்பு அரணாக விளங்க வேண்டும். தொழிலாளர் சட்டங்களைச் சரியாகப் பின்பற்றுவது நிறுவனத்தைப் பெரும் அபராதங்களில் இருந்தும், நீதிமன்றச் சிக்கல்களில் இருந்தும் பாதுகாக்கும்.</p>
+                    <p>PF (Provident Fund), ESI (State Insurance) மற்றும் தொழிலாளர் நலச் சட்டங்களை அனலிஸ்ட்கள் துல்லியமாகக் கணக்கிட வேண்டும்.</p>
+                    ${generateCodeBox('EPF Deduction Configuration', 'const calculateEPF = (basicSalary) => {\n  const cap = 15000;\n  const eligibleSalary = Math.min(basicSalary, cap);\n  const employeeShare = eligibleSalary * 0.12; // 12% வழக்கம்\n  const employerShare = eligibleSalary * 0.12;\n  return { employeeShare, employerShare };\n};')}`
+                `
+            },
+            {
+                id: 5, icon: "🤝", img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80",
+                title_en: "5. The Psychology of Workplace Culture & Ethics", title_ta: "5. பணியிட கலாச்சாரம் மற்றும் கார்ப்பரேட் நெறிமுறைகள்",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Culture is the software operating system running in the background of your company. If your code is corrupted with hidden bugs (toxic behavior, backstabbing, or zero trust), even the most powerful hardware (laptops, offices, and funding) will lag and eventually freeze completely.</div>
+                    <p>Workplace culture is not about putting a foosball table in the breakroom or offering free snacks. Culture is the shared mental architecture that dictates how your team behaves when no manager is watching them.</p>
+                    <p>HR architects manipulate behavior by establishing strict ethical boundaries and psychological safety loops. High safety loops mean workers can flag mistakes instantly without fear of immediate retaliation, optimizing error-correction speed.</p>
+                    <h3>The Ethics Matrix Check</h3>
+                    <ul>
+                        <li><b>Whistleblower Mechanics:</b> Building absolute anonymous lines where data breaches or fraud can be reported directly to audit layers safely.</li>
+                        <li><b>Toxicity Screening:</b> Tracking attrition patterns across specific teams to isolate and neutralize toxic management variables before they cause mass employee flight.</li>
+                    </ul>
+                    ${generatePromptAndOutput('Culture Attrition Calculator', 'Evaluate Team Health Vector (THV):\nTHV = 1.0 - (Team Attrition Rate / Company Average Attrition Rate)\n\nVariables:\n- Team Attrition: 0.35\n- Company Average: 0.14', 'THV Output:\nTHV = 1.0 - (0.35 / 0.14) = 1.0 - 2.5 = -1.5\nStatus: CRITICAL ALARM [Negative Vector Indicates Poisonous Micro-Culture]')}`
+                `,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> நிறுவனக் கலாச்சாரம் என்பது கம்ப்யூட்டரின் ஆப்பரேட்டிங் சிஸ்டம் (OS) போன்றது. அதனுள் வைரஸ் அல்லது பக்ஸ் (நச்சுத்தன்மை, நம்பிக்கையின்மை) இருந்தால், நீங்கள் எவ்வளவு விலை உயர்ந்த லேப்டாப் மற்றும் ஆபீஸ் வைத்திருந்தாலும் சிஸ்டம் கிராஷ் ஆகிவிடும்.</div>
+                    <p>நிறுவனக் கலாச்சாரம் என்பது சலுகைகள் கொடுப்பது மட்டுமல்ல, அது மேலாளர் இல்லாதபோது ஊழியர்கள் எவ்வாறு நடந்துகொள்கிறார்கள் என்பதைத் தீர்மானிக்கும் ஒரு பொதுவான தார்மீக ஒழுக்கம் ஆகும்.</p>
+                    <p>பணியிடத்தில் ஊழியர்கள் தங்களின் கருத்துக்களையும் தவறுகளையும் பயமின்றிப் பகிர்ந்துகொள்ளும் சூழலை (Psychological Safety) உருவாக்க வேண்டும்.</p>
+                    ${generatePromptAndOutput('Culture Attrition Calculator', 'THV கணக்கீடு (Team Health Vector):\nTHV = 1.0 - (குறிப்பிட்ட குழுவின் விலகல் / நிறுவனத்தின் சராசரி விலகல்)\n\nதரவுகள்:\n- குழுவின் விலகல் விகிதம்: 0.35\n- நிறுவன சராசரி: 0.14', 'THV விடை:\nTHV = 1.0 - (0.35 / 0.14) = -1.5\nநிலை: ஆபத்தான நிலை [உடனடி நடவடிக்கை தேவை, நச்சு மேலாண்மை உள்ளதை உணர்த்துகிறது]')}`
+                `
+            },
+            {
+                id: 6, icon: "📢", img: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80",
+                title_en: "6. Employer Branding & Digital Sourcing Strategy", title_ta: "6. எம்பிளாயர் பிராண்டிங் மற்றும் டிஜிட்டல் ஆட்சேர்ப்பு",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Traditional recruitment is like hunting for fish with a single spear in a dark ocean—it takes massive effort for low reward. Employer Branding is like building a massive, glowing lighthouse with a perfectly tuned net. Top talent sees your culture from miles away and actively swims toward you.</div>
+                    <p>In a hyper-competitive job market, top talent has infinite options. If your company looks boring, invisible, or ancient online, you will only attract desperate, low-skill applicants. <b>Employer Branding</b> is the art of treating candidates like consumers and marketing your company as an elite workplace.</p>
+                    <h3>The Sourcing Funnel</h3>
+                    <p>You must stop treating recruitment as a passive waiting game. Professional sourcing treats recruitment like a digital marketing engine:</p>
+                    <ul>
+                        <li><b>Inbound Talent Pipelines:</b> Creating open-source tech blogs, sharing engineering wins on LinkedIn, and showcasing company culture to make elite developers apply directly without recruiters hunting them.</li>
+                        <li><b>Candidate Experience (CX):</b> Treating candidates with absolute respect. A clunky, 10-page job application form creates high friction and drives top-tier candidates away. Keep the intake funnel smooth and responsive.</li>
+                    </ul>
+                    ${generateCodeBox('Sourcing Funnel Conversion Matrix', 'Conversion Metrics Tracker:\nTotal Page Views on Job Post: 10,000\nApplications Submitted: 500 (Conversion Rate: 5%)\nScreened Candidates Passed: 50\nFinal Offers Extended: 5\nOffers Accepted: 3\n\nMetric Analysis: If your application conversion is below 5%, your form is too long or your employer brand looks weak. Optimize the checkout flow of your hiring funnel.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சாதாரண ஆட்சேர்ப்பு என்பது இருண்ட கடலில் ஒரு ஈட்டியால் மீன் பிடிப்பது போன்றது. Employer Branding என்பது கடலில் ஒரு பெரிய கலங்கரை விளக்கத்தை அமைத்து, மீன்களைத் தானே ஈர்ப்பது போன்றது. சிறந்த திறமையாளர்கள் உங்களைத் தேடி வருவார்கள்.</div>
+                    <p>இன்றைய போட்டி நிறைந்த சந்தையில், சிறந்த ஊழியர்களுக்குப் பல வாய்ப்புகள் உள்ளன. உங்கள் நிறுவனம் ஆன்லைனில் ஈர்க்கும் வகையில் இல்லை எனில் தகுதியானவர்கள் விண்ணப்பிக்க மாட்டார்கள். <b>Employer Branding</b> என்பது வாடிக்கையாளர்களை ஈர்ப்பது போல ஊழியர்களை ஈர்க்கும் கலையாகும்.</p>
+                    <p>விண்ணப்பப் படிவங்கள் எளிமையாகவும், வேகமாகவும் இருக்க வேண்டும். கடினமான படிவங்கள் திறமையானவர்களை வெளியேற்றிவிடும்.</p>
+                    ${generateCodeBox('Sourcing Funnel Conversion Matrix', 'ஆட்சேர்ப்பு மார்க்கெட்டிங் அளவீடு:\nமொத்தப் பார்வை: 10,000\nவிண்ணப்பித்தவர்கள்: 500 (மாற்று விகிதம்: 5%)\nதேர்வானவர்கள்: 50\nவேலை வாய்ப்பு பெற்றவர்கள்: 5\n\nபகுப்பாய்வு: படிவங்கள் எளிமையாக இருக்கும்போது மட்டுமே தகுதியானவர்கள் முழுமையாக விண்ணப்பிப்பார்கள்.')}`
+                `
+            },
+            {
+                id: 7, icon: "🔍", img: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80",
+                title_en: "7. The Recruitment Funnel: Sourcing to Screening", title_ta: "7. ஆட்சேர்ப்பு மேலாண்மை: விண்ணப்பங்கள் முதல் தேர்வு வரை",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Sifting through thousands of resumes manually is like panning for gold with an ordinary kitchen spoon—it wastes days and ruins focus. An advanced screening matrix is a professional industrial refinery that instantly filters away the mud and leaves you with raw, verified gold bars.</div>
+                    <p>When you post a job online, you will often receive 1,000+ resumes. 90% of them will be completely irrelevant or generated by generic AI tools. If you read them one by one, your time-to-hire will skyrocket, and your company will miss business targets due to empty chairs.</p>
+                    <h3>The Pipeline Stages</h3>
+                    <p>Modern talent acquisition acts as a multi-tier programmatic filter:</p>
+                    <ol>
+                        <li><b>Keyword Isolation:</b> Filtering resumes using strict semantic strings related to your KSAOs.</li>
+                        <li><b>Asynchronous Screening:</b> Using 5-minute automated screening questions to verify core technical skills before booking human interview slots.</li>
+                    </ol>
+                    ${generatePromptAndOutput('Resume Filtering Log', 'Filter Constraint: Experience > 3 Years AND Skills contains ("SQL", "Python")\n\nIncoming Resumes: 1,200\nResumes passing filter: 120\nTime saved: 36 Hours of manual tracking', 'Refinery Output:\nSuccessfully discarded 1,080 non-matching candidate blocks.\nPipeline efficiency increased by 90%.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பல ஆயிரம் ரெஸ்யூம்களை (Resumes) மனிதனே கைகளால் சரிபார்ப்பது சமையலறை கரண்டியால் தங்கத்தைத் தேடுவது போன்றது. ஒரு சிறந்த வடிகட்டும் சிஸ்டம் (Screening matrix) களிமண்ணை நீக்கிவிட்டு சுத்தமான தங்கத்தை மட்டும் பிரித்தெடுக்கும் இயந்திரம் போன்றது.</div>
+                    <p>ஒரு வேலைக்கு விளம்பரம் செய்யும்போது ஆயிரக்கணக்கான விண்ணப்பங்கள் வரும். அவற்றில் 90% தகுதியற்றவையாக இருக்கும். அவற்றை ஒவ்வொன்றாகப் படித்தால் நேரம் வீணாகும்.</p>
+                    <p>கணினி மூலம் முக்கிய வார்த்தைகளை (Keywords) வடிகட்டி, தகுதியானவர்களை மட்டும் அடுத்த கட்டத்திற்கு அனுப்ப வேண்டும்.</p>
+                    ${generatePromptAndOutput('Resume Filtering Log', 'விதி: அனுபவம் > 3 வருடங்கள் மற்றும் திறமை ("SQL", "Python")\n\nமொத்த விண்ணப்பங்கள்: 1,200\nதகுதி பெற்றவை: 120\nமிச்சப்படுத்தப்பட்ட நேரம்: 36 மணிநேரம்', 'Refinery Output:\n1,080 தகுதியற்ற விண்ணப்பங்கள் தானியங்கியாக நீக்கப்பட்டன.\nவேகம் 90% அதிகரித்துள்ளது.')}`
+                `
+            },
+            {
+                id: 8, icon: "🎯", img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80",
+                title_en: "8. Advanced Behavioral Interviewing Techniques", title_ta: "8. நேர்காணல் உத்திகள் மற்றும் நடத்தை பகுப்பாய்வு",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Asking a candidate "Are you a hard worker?" is completely useless—everyone says yes. Instead, force them to give you a historical data point using the STAR framework. It's like checking a programmer's actual compiled code history rather than just listening to them brag about their ideas.</div>
+                    <p>Candidates memorize textbook answers for common interview questions. To break past this superficial defense, you must master **Behavioral Interviewing**. The core scientific philosophy is simple: Past behavior is the single greatest predictor of future performance.</p>
+                    <h3>The STAR Matrix</h3>
+                    <p>Force every interview answer into this strict structural matrix:</p>
+                    <ul>
+                        <li><b>S - Situation:</b> What was the exact challenge or context?</li>
+                        <li><b>T - Task:</b> What was their specific responsibility?</li>
+                        <li><b>A - Action:</b> What did they *physically execute* to solve it?</li>
+                        <li><b>R - Result:</b> What was the data-driven outcome? (e.g., "reduced latency by 40%").</li>
+                    </ul>
+                    ${generateCodeBox('STAR Evaluation Matrix', '{\n  "candidateId": "CAN_8812",\n  "evaluation": {\n    "situationScore": 8,\n    "actionPrecision": 9,\n    "metricResultValidated": true,\n    "notes": "Candidate successfully demonstrated resolving database locks during traffic spikes using STAR framework."\n  }\n}')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒருவரிடம் "நீங்கள் கடினமாக உழைப்பீர்களா?" என்று கேட்டால் அனைவரும் "ஆமாம்" என்றே சொல்வார்கள். அதற்குப் பதிலாக, "உங்கள் கடந்த கால வேலையில் நீங்கள் தீர்த்த ஒரு பெரிய சிக்கலைக் கூறுங்கள் (STAR முறை)" எனக் கேட்க வேண்டும். இது வெறும் பேச்சைக் கேட்காமல் அவர்களின் உண்மையான உழைப்பை ஆராய்வது போன்றது.</div>
+                    <p>நேர்காணலில் பலர் பதில்களை மனப்பாடம் செய்து வருவார்கள். அதை உடைக்க <b>Behavioral Interviewing (நடத்தை நேர்காணல்)</b> உத்திகளைப் பயன்படுத்த வேண்டும். கடந்த காலச் செயல்பாடே எதிர்காலச் செயல்திறனைக் கணிக்கும் சிறந்த அளவுகோலாகும்.</p>
+                    <p>STAR (Situation, Task, Action, Result) முறையைப் பயன்படுத்தி அவர்களின் உண்மையான திறனை எண்களின் அடிப்படையில் மதிப்பீடு செய்ய வேண்டும்.</p>
+                    ${generateCodeBox('STAR Evaluation Matrix', '{\n  "candidateId": "CAN_8812",\n  "evaluation": {\n    "situationScore": 8,\n    "actionPrecision": 9,\n    "metricResultValidated": true,\n    "notes": "STAR முறையைப் பயன்படுத்தி டேட்டாபேஸ் பிழையைச் சரிசெய்ததை நிரூபித்துள்ளார்."\n  }\n}')}`
+                `
+            },
+            {
+                id: 9, icon: "🛡️", img: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=800&q=80",
+                title_en: "9. Mitigating Unconscious Bias in Hiring", title_ta: "9. நேர்காணல் சார்புகளைத் தவிர்த்தல் (Bias Mitigation)",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Unconscious bias is like a corrupted filter in an image processing algorithm. It automatically darkens certain colors or overemphasizes others without you realizing it, distorting the final picture. Blind screening strips away this corruption, forcing your algorithm to look only at pure, mathematical metrics.</div>
+                    <p>Human brains are hardwired to look for shortcuts. Recruiters naturally fall into **Similarity Bias** (hiring people who went to the same college or talk like them) and **Halo Effect** (assuming someone is a genius just because they worked at a famous company).</p>
+                    <h3>De-Biasing the Pipeline</h3>
+                    <p>To eliminate these systemic logic failures, build an objective firewall around your hiring metrics:</p>
+                    <ul>
+                        <li><b>Blind Resume Screening:</b> Stripping names, gender markers, ages, and locations from profiles before they reach the review manager. Force them to judge purely based on KSAOs.</li>
+                        <li><b>Structured Rubrics:</b> Score every candidate on a pre-defined scale from 1 to 5 for specific skills. Never rely on "culture fit" or "gut feelings".</li>
+                    </ul>
+                    ${generatePromptAndOutput('De-Biased Evaluation Data', 'Reviewing Candidate: CAN_9912\n- Technical SQL Skills: 4/5\n- Python Competency: 5/5\n- Communication Vector: 4/5\n- Gut Feeling Metric: [DISREGARDED BY SYSTEM POLICY]', 'Evaluation Matrix Result:\nCandidate approved for immediate hire based strictly on structural metrics.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> நேர்காணல் சார்பு (Bias) என்பது கேமராவில் உள்ள பழுதடைந்த பில்டர் போன்றது. அது சில வண்ணங்களை அதிகமாகவோ அல்லது குறைவாகவோ காட்டி உண்மையான படத்தை மாற்றிவிடும். நடுநிலையான மதிப்பீடு இந்த பில்டரை நீக்கிவிட்டு உண்மையான தரத்தை மட்டும் காட்டும்.</div>
+                    <p>மனித மனம் பொதுவாகத் தனக்கு நெருக்கமான அல்லது தன்னைப்போலப் பேசுபவர்களைத் தேர்ந்தெடுக்கும் தவறைச் செய்யும் (Similarity Bias). இதைத் தவிர்க்க நேர்காணல் முறையில் கடுமையான பாதுகாப்பு வளையங்களை அமைக்க வேண்டும்.</p>
+                    <p>ரெஸ்யூம்களில் இருந்து பெயர், பாலினம், ஊர் போன்ற விவரங்களை நீக்கிவிட்டு திறமையை மட்டும் பார்த்துத் தேர்ந்தெடுக்கும் (Blind Screening) முறையைப் பின்பற்ற வேண்டும்.</p>
+                    ${generatePromptAndOutput('De-Biased Evaluation Data', 'பயனர் குறியீடு: CAN_9912\n- SQL திறமை: 4/5\n- Python திறமை: 5/5\n- தகவல் தொடர்பு: 4/5\n- சொந்த விருப்பம் (Gut Feeling): [விதிகளின்படி நிராகரிக்கப்பட்டது]', 'முடிவு:\nஊழியர் அவரது திறமையின் அடிப்படையில் மட்டுமே தேர்வு செய்யப்பட்டுள்ளார்.')}`
+                `
+            },
+            {
+                id: 10, icon: "🚀", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
+                title_en: "10. Strategic Onboarding: The Critical First 90 Days", title_ta: "10. புதிய ஊழியர்களை வரவேற்றல் (Onboarding Matrix)",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Dropping a new employee into a company without a structured 90-day onboarding plan is like launching a brand new software application directly into production without running a setup script or configuring the database parameters. It will immediately freeze, error out, and crash.</div>
+                    <p>The highest churn risk occurs within the first 90 days of an employee's lifecycle. If a worker arrives on Day 1 and lacks a laptop, a clear seating slot, or access to the codebase, they immediately lose trust in your organizational efficiency.</p>
+                    <h3>The 30-60-90 Day Blueprint</h3>
+                    <p>Systematize their operational intake flow completely:</p>
+                    <ul>
+                        <li><b>Days 1-30 (Learn):</b> Focus entirely on knowledge ingestion, architecture tracking, and safety loops.</li>
+                        <li><b>Days 31-60 (Contribute):</b> Assign low-risk, micro-tasks to test execution precision without breaking core systems.</li>
+                        <li><b>Days 61-90 (Own):</b> Full autonomous feature ownership with tracked KPI vectors.</li>
+                    </ul>
+                    ${generateCodeBox('Onboarding Automation Schema', 'const triggerOnboardingPipeline = (employeeId) => {\n  createEnterpriseAccount(employeeId);\n  provisionDatabaseCredentials(employeeId, ["READ_ONLY"]);\n  assignMentorBuddy(employeeId);\n  sendWelcomeEmail(employeeId);\n};')}`
+                `,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> புதிய ஊழியரை முறையான திட்டமிடல் இல்லாமல் வேலைக்குள் இறக்குவது, ஒரு சாஃப்ட்வேரை இன்ஸ்டால் செய்யாமல் நேரடியாக ரன் (Run) செய்ய முயற்சிப்பது போன்றது. சிஸ்டம் எரர் (Error) காட்டி நின்றுவிடும். 90-நாள் திட்டம் என்பது அந்த சாஃப்ட்வேருக்கான செட்டப் ஸ்கிரிப்ட் போன்றது.</div>
+                    <p>ஒரு ஊழியர் வேலையை விட்டு விலக அதிக வாய்ப்புள்ள காலம் முதல் 90 நாட்கள் ஆகும். முதல் நாளில் அவருக்குத் தேவையான லேப்டாப், சாஃப்ட்வேர் லாகின் போன்றவற்றைத் தயாராக வைத்திருப்பது நிறுவனத்தின் மீதான நம்பிக்கையைக் கூட்டும்.</p>
+                    <p>30-60-90 நாள் திட்டத்தின் மூலம் ஊழியரைப் படிப்படியாக நிறுவனத்தின் லாஜிக்கிற்குள் கொண்டு வர வேண்டும்.</p>
+                    ${generateCodeBox('Onboarding Automation Schema', 'const triggerOnboardingPipeline = (employeeId) => {\n  createEnterpriseAccount(employeeId);\n  provisionDatabaseCredentials(employeeId, ["READ_ONLY"]);\n  assignMentorBuddy(employeeId);\n  sendWelcomeEmail(employeeId);\n};')}`
+                `
+            },
+            {
+                id: 11, icon: "🎯", img: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80",
+                title_en: "11. Designing OKRs & KPIs Frameworks", title_ta: "11. OKR மற்றும் KPI இலக்குகளை வடிவமைத்தல்",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A KPI is your car's speedometer—it tells you exactly how fast you are moving right now. An OKR is your GPS navigation system—it tells you where you are trying to go and calculates the major checkpoints needed to reach the destination. You need both to avoid driving fast into a dead end.</div>
+                    <p>If you don't give employees clear, measurable metrics, you cannot blame them when productivity drops. Management by objectives requires establishing clear **OKRs** (Objectives and Key Results) and **KPIs** (Key Performance Indicators).</p>
+                    <h3>Structuring OKRs vs KPIs</h3>
+                    <ul>
+                        <li><b>Objective:</b> High-level, qualitative, inspiring goals. (e.g., "Build the fastest database engine in Asia").</li>
+                        <li><b>Key Results:</b> Quantitative, metric-grounded milestones that prove you reached the objective. (e.g., "Reduce query response time from 500ms to 50ms").</li>
+                    </ul>
+                    <p>KPIs track business-as-usual health vectors, whereas OKRs drive aggressive strategic expansion shifts.</p>
+                    ${generatePromptAndOutput('OKR Progression Log', 'Objective: Optimize Customer Support Database\nKey Result 1: Lower ticket resolve latency under 12 Minutes\n\nActual Live Attainment Data: 14 Minutes\nProgress Vector Calculation: (12 / 14) * 100', 'Metric Progress Summary:\nKey Result achieved at 85.7% efficiency. Variance boundary within tolerable operational metrics.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> KPI என்பது காரின் ஸ்பீடோமீட்டர் போன்றது - நீங்கள் எவ்வளவு வேகத்தில் செல்கிறீர்கள் என்று காட்டும். OKR என்பது ஜிபிஎஸ் (GPS) போன்றது - நீங்கள் எங்குச் செல்ல வேண்டும், அதற்கான முக்கிய வழிகள் என்ன என்பதைக் காட்டும். இலக்கு இல்லாமல் வேகமாக ஓட்டுவது வீண்.</div>
+                    <p>ஊழியர்களுக்குத் தெளிவான இலக்குகளை வழங்காவிட்டால் உற்பத்தித் திறன் குறையும். <b>OKRs</b> (Objectives and Key Results) மற்றும் <b>KPIs</b> (Key Performance Indicators) மூலம் இலக்குகளை எண்களாக மாற்ற வேண்டும்.</p>
+                    <p>KPI என்பது அன்றாட வேலையின் தரத்தைக் கண்காணிக்கும். OKR என்பது நிறுவனத்தின் பெரிய வளர்ச்சி மாற்றங்களை நோக்கி ஊழியர்களை வழிநடத்தும்.</p>
+                    ${generatePromptAndOutput('OKR Progression Log', 'இலக்கு: வாடிக்கையாளர் சேவை நேரத்தைக் குறைத்தல்\nமுக்கிய விடை 1: பதில் அளிக்கும் நேரம் < 12 நிமிடங்கள்\n\nதற்போதைய நிஜ வேகம்: 14 நிமிடங்கள்\nகணக்கீடு: (12 / 14) * 100', 'Metric Progress Summary:\nஇலக்கு 85.7% எட்டப்பட்டுள்ளது. அடுத்த வாரத்திற்குள் 12 நிமிட வரம்பை எட்ட வேண்டும்.')}`
+                `
+            },
+            {
+                id: 12, icon: "🔄", img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80",
+                title_en: "12. Continuous Performance Management Matrix", title_ta: "12. தொடர் செயல்திறன் மேலாண்மை மற்றும் PIP விதிகள்",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Waiting for the annual review to give an employee feedback is like a football coach staying completely silent during all 25 games of the season, and then screaming at the players during the end-of-year dinner for losing Game 2. Continuous feedback is real-time coaching.</div>
+                    <p>The traditional annual performance review is dead. It creates anxiety, breeds resentment, and relies on recency bias. Professional enterprise environments utilize **Continuous Feedback Loops** combined with structured quarterly touchpoints.</p>
+                    <h3>Managing Underperformance (The PIP Firewall)</h3>
+                    <p>When an employee's KPI vectors fall below the baseline threshold, you must initiate a formal **Performance Improvement Plan (PIP)**. A PIP is not a firing mechanism; it is a rigid legal and operational roadmap designed to recover performance debt safely.</p>
+                    <ul>
+                        <li><b>Pure Transparency:</b> Outline the exact gap between their actual metrics and required baselines clearly.</li>
+                        <li><b>Defensible Documentation:</b> Log weekly check-ins continuously to preserve data if separation becomes inevitable due to non-recovery.</li>
+                    </ul>
+                    ${generateCodeBox('PIP Tracking Matrix Structure', '{\n  "pipId": "PIP_2026_09",\n  "durationDays": 30,\n  "metricDeficit": "Code Error Rate at 8% (Target Baseline < 2%)",\n  "weeklyCheckins": [\n    { "week": 1, "errorRate": "5%", "status": "Improving" },\n    { "week": 2, "errorRate": "1.8%", "status": "Target Met" }\n  ]\n}')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> வருடத்திற்கு ஒருமுறை மட்டும் ஊழியருக்குப் பீட்பேக் (Feedback) கொடுப்பது, ஒரு கிரிக்கெட் பயிற்சியாளர் தொடரின் அனைத்துப் போட்டிகளிலும் அமைதியாக இருந்துவிட்டு, வருட இறுதியில் நடக்கும் பாராட்டு விழாவில் முதல் போட்டியில் தோற்றதற்காக வீரரைத் திட்டுவது போன்றது. பீட்பேக் என்பது உடனுக்குடன் வழங்கப்பட வேண்டும்.</div>
+                    <p>வருடாந்திர மதிப்பீட்டு முறைகள் காலாவதியாகிவிட்டன. அவை ஊழியர்களிடையே அதிருப்தியை உண்டாக்கும். நவீன நிறுவனங்கள் வாரம் அல்லது மாத அடிப்படையில் <b>தொடர் செயல்திறன் மேலாண்மையை (Continuous Feedback)</b> பயன்படுத்துகின்றன.</p>
+                    <p>ஒரு ஊழியரின் செயல்திறன் தொடர்ந்து குறையும்போது, அவருக்கு <b>PIP (Performance Improvement Plan)</b> என்ற மேம்பாட்டுத் திட்டத்தை வழங்கி, அதைச் சட்டப்பூர்வமாக ஆவணப்படுத்த வேண்டும்.</p>
+                    ${generateCodeBox('PIP Tracking Matrix Structure', '{\n  "pipId": "PIP_2026_09",\n  "durationDays": 30,\n  "metricDeficit": "பிழைகளின் விகிதம்: 8% (விதிமுறை < 2%)",\n  "weeklyCheckins": [\n    { "week": 1, "errorRate": "5%", "status": "Improving" },\n    { "week": 2, "errorRate": "1.8%", "status": "Target Met" }\n  ]\n}')}`
+                `
+            },
+            {
+                id: 13, icon: "📊", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80",
+                title_en: "13. Compensation Strategy & Market Benchmarking", title_ta: "13. சம்பளக் கட்டமைப்பு மற்றும் சந்தை ஒப்பீடு (Benchmarking)",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Pricing your job salaries based on guess-work is like buying stocks blindly without checking the live market ticker tape. If you underpay, your best assets will instantly leave for competitors. If you overpay randomly, you run out of capital runway. Benchmarking maps the exact market price.</div>
+                    <p>Compensation and Benefits (Comp & Ben) architecture dictates financial sustainability. To secure top talent without breaking the company runway, you must master **Market Benchmarking** and structural grading grids.</p>
+                    <h3>The Grading Grid Matrix</h3>
+                    <p>Salaries must be mapped to distinct internal bands (e.g., Grade 1 to Grade 5) balanced against external percentiles:</p>
+                    <ul>
+                        <li><b>Compa-Ratio Balance:</b> Measures how close an employee's salary is to the market midpoint. A compa-ratio of 1.0 means perfect alignment with market averages.</li>
+                        <li><b>Equity Adjustments:</b> Resolving internal compression bugs where new hires accidentally get paid more than veterans due to sudden market shifts.</li>
+                    </ul>
+                    ${generatePromptAndOutput('Compa-Ratio Formula Model', 'Calculate Compa-Ratio:\nCompa_Ratio = Current Employee Salary / Market Midpoint Base\n\nData:\n- Current Salary: 85,000\n- Market Midpoint: 100,000', 'Compa-Ratio Output:\nRatio = 85000 / 100000 = 0.85\nStatus: Under Market Baseline [Action Required: Budget salary adjustment adjustment bump up to 0.95 minimum]')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> தோராயமாகச் சம்பளத்தை நிர்ணயிப்பது, சந்தை விலையைச் சரிபார்க்காமல் பங்குகளைக் குருட்டுத்தனமாக வாங்குவது போன்றது. சம்பளம் குறைவாக இருந்தால் நல்ல ஊழியர்கள் விலகிவிடுவார்கள், அதிகமாக இருந்தால் நிறுவனத்தின் நிதி காலியாகிவிடும். மார்க்கெட் பெஞ்ச்மார்க்கிங் சரியான விலையைக் காட்டும்.</div>
+                    <p>சம்பளக் கட்டமைப்பு என்பது நிறுவனத்தின் நீண்டகால நிதியாதாரத்தைத் தீர்மானிக்கிறது. சந்தை நிலவரத்திற்கு ஏற்பச் சம்பளப் பட்டைகளை (Salary Bands) உருவாக்க வேண்டும்.</p>
+                    <p>Compa-Ratio மூலம் ஒரு ஊழியரின் சம்பளம் சந்தை சராசரிக்கு இணையாக உள்ளதா என்பதைக் கணக்கிட்டுச் சரிசெய்ய வேண்டும்.</p>
+                    ${generatePromptAndOutput('Compa-Ratio Formula Model', 'Compa-Ratio கணக்கீடு:\nCompa_Ratio = ஊழியரின் தற்போதைய சம்பளம் / சந்தை சராசரி\n\nதரவுகள்:\n- தற்போதைய சம்பளம்: 85,000\n- சந்தை சராசரி: 100,000', 'Compa-Ratio விடை:\nRatio = 85000 / 100000 = 0.85\nநிலை: சந்தை விலையை விடக் குறைவு [சம்பள உயர்வு தேவை]')}`
+                `
+            },
+            {
+                id: 14, icon: "🎁", img: "https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&q=80",
+                title_en: "14. Benefits, Perks, and Non-Monetary Rewards", title_ta: "14. ஊழியர் சலுகைகள் மற்றும் பணமில்லா ஊக்கத்தொகை",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Money gets an employee to log in on Monday, but non-monetary perks and benefits are the glue that stops them from reading recruiter emails on Friday night. Cash is transaction; perks are culture.</div>
+                    <p>Total Rewards strategy looks beyond the monthly bank deposit alert. To minimize churn vectors during aggressive competitor talent raids, you must optimize non-monetary frameworks and insurance structures.</p>
+                    <h3>Designing Perks with High Leverage</h3>
+                    <p>A master reward architect implements low-cost, high-value parameters:</p>
+                    <ul>
+                        <li><b>Health Matrix Security:</b> Group medical covers, preventive health screenings, and psychological support access lines.</li>
+                        <li><b>Autonomy Perks:</b> Flexible core hours and outcome-based asynchronous performance tracking models over mandatory desk-time policing.</li>
+                    </ul>
+                    ${generateCodeBox('Flexible Benefits Allocation', 'const allocateBenefitsTier = (grade) => {\n  const baseline = ["HEALTH_INSURANCE", "LEARNING_CREDIT"];\n  if (grade >= 4) {\n    baseline.push("WELLNESS_STIPEND", "EQUIPMENT_UPGRADE");\n  }\n  return baseline;\n};')}`
+                `,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பணம் ஒரு ஊழியரை திங்கட்கிழமை வேலைக்கு வரவழைக்கும், ஆனால் பணமில்லா சலுகைகளும் நல்ல சூழலுமே அவர் வெள்ளிக்கிழமை இரவு மாற்று வேலை தேடுவதைத் தடுக்கும் பசை போன்றது. பணம் ஒரு பரிவர்த்தனை; சலுகைகள் ஒரு கலாச்சாரம்.</div>
+                    <p>மொத்த வெகுமதி (Total Rewards) உத்தி என்பது வெறும் சம்பளப் பணத்தைத் தாண்டியது. சிறந்த ஊழியர்களைத் தக்கவைக்கக் காப்பீடு மற்றும் இதர சலுகைகளைச் சரியாக வடிவமைக்க வேண்டும்.</p>
+                    <p>நெகிழ்வான வேலை நேரம் (Flexible hours) மற்றும் மருத்துவக் காப்பீடுகள் ஊழியர்களின் மன அழுத்தத்தைக் குறைத்து உற்பத்தித் திறனைக் கூட்டும்.</p>
+                    ${generateCodeBox('Flexible Benefits Allocation', 'const allocateBenefitsTier = (grade) => {\n  const baseline = ["HEALTH_INSURANCE", "LEARNING_CREDIT"];\n  if (grade >= 4) {\n    baseline.push("WELLNESS_STIPEND", "EQUIPMENT_UPGRADE");\n  }\n  return baseline;\n};')}`
+                `
+            },
+            {
+                id: 15, icon: "🚫", img: "https://images.unsplash.com/photo-1507146426996-ef05306b995a?w=800&q=80",
+                title_en: "15. Offboarding, Offboarding Matrix & Separation Operations", title_ta: "15. பணிநீக்கம் மற்றும் ஊழியர் வெளியேற்ற மேலாண்மை (Offboarding)",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Deactivating a departing employee without a strict offboarding architecture is like deleting a core database column while the application is live. You leave massive security leaks, loose credentials, and broken processes behind. You need a perfect script to purge access cleanly.</div>
+                    <p>How an employee leaves your organization is just as critical as how they arrive. Messy, emotional, or legally flawed separations open the enterprise to destructive wrongful termination lawsuits and severe data leakage vulnerabilities.</p>
+                    <h3>The Security Offboarding Protocol</h3>
+                    <p>The separation vector requires execution of strict, non-negotiable operational checkpoints:</p>
+                    <ul>
+                        <li><b>Immediate Credential Revocation:</b> Silencing server access tokens, clearing corporate email lines, and recovering physical property instantly upon exit.</li>
+                        <li><b>The Structured Exit Interview:</b> Reverse-engineering the real reasons behind their departure to catch patterns of poor management or toxic micro-cultures before they spread.</li>
+                    </ul>
+                    ${generatePromptAndOutput('Exit Tracker Module', 'Action: Initiate Separation for Account: USER_4412\nRevoke Access Nodes: (GitHub, AWS, Slack, Gmail)', 'Offboarding Script Output:\n- GitHub Access: REVOKED\n- AWS Root Token: PURGED\n- Exit Survey Input: CAPTURED\nStatus: Secure Separation Complete')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு ஊழியர் வெளியேறும்போது முறையான Offboarding கட்டமைப்பு இல்லாமல் விடைபெறுவது, ஒரு சாஃப்ட்வேர் இயங்கிக்கொண்டிருக்கும்போதே அதன் முக்கிய லைனைத் துண்டிப்பது போன்றது. இது பாதுகாப்பு ஓட்டைகளையும் தரவு கசிவுகளையும் உண்டாக்கும். அத்தனை லாகின்களையும் சுத்தமாக நீக்க வேண்டும்.</div>
+                    <p>ஒரு ஊழியர் நிறுவனத்தை விட்டு வெளியேறும் விதம் (Offboarding) மிகவும் முக்கியமானது. தவறான முறையில் நீக்குவது சட்டரீதியான சிக்கல்களையும், நிறுவனத்தின் ரகசியத் தரவுகள் திருடப்படுவதற்கும் வழிவகுக்கும்.</p>
+                    <p>வெளியேறும் ஊழியரிடம் நடத்தப்படும் நேர்காணல் (Exit Interview) மூலம் நிறுவனம் தனது தவறுகளைத் திருத்திக்கொள்ள முடியும்.</p>
+                    ${generatePromptAndOutput('Exit Tracker Module', 'செயல்: பயனர் நீக்கம் - USER_4412\nRevoke Access Nodes: (GitHub, AWS, Slack, Gmail)', 'Offboarding Script Output:\n- GitHub லாகின்: நீக்கப்பட்டது\n- AWS டோக்கன்: அழிக்கப்பட்டது\n- Exit சர்வே: சேமிக்கப்பட்டது\nநிலை: பாதுகாப்பான வெளியேற்றம் நிறைவுற்றது')}`
+                `
+            },
+            {
+                id: 16, icon: "🎭", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
+                title_en: "16. Employee Experience (EX) Journey Mapping", title_ta: "16. ஊழியர் அனுபவம் மற்றும் பயண வரைபடம் (EX Mapping)",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Managing a team without mapping the Employee Experience is like designing a website product without tracking the User Journey. If the checkout button is broken or the signup causes friction, users quit. EX mapping treats the employee as the primary user of your company platform.</div>
+                    <p>High employee lifecycle values depend on intentional engineering. **Employee Experience (EX)** design is the systematic analysis of every intersection point between a worker and the corporate infrastructure—from their initial interview down to their final exit handshake.</p>
+                    <h3>Friction Point Analysis</h3>
+                    <p>Identify and debug the major operational emotional bottlenecks inside the company:</p>
+                    <ul>
+                        <li><b>The Tooling Bottleneck:</b> Slow laptops, lagging software networks, and bureaucratic approval lines decay motivation faster than low base pay. Optimize their operational tools.</li>
+                        <li><b>Moment That Matters (MTM):</b> Designing exceptional feedback loops around promotion alerts, work anniversaries, and personal milestones to build deep organizational trust.</li>
+                    </ul>
+                    ${generateCodeBox('EX Lifespan Vector Tracking', 'const trackEmployeeLifecycleStage = (tenureMonths) => {\n  if (tenureMonths <= 3) return "ONBOARDING_INITIAL_VELOCITY";\n  if (tenureMonths <= 12) return "CORE_CONTRIBUTOR_ENGAGED";\n  return "RETENTION_RISK_EVALUATION";\n};')}`
+                `,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஊழியர் அனுபவத்தைக் கவனிக்காமல் குழுவை நடத்துவது, பயனர் பயணத்தைக் (User Journey) கண்காணிக்காமல் வெப்சைட்டை டிசைன் செய்வது போன்றது. பொத்தான்கள் வேலை செய்யாவிட்டால் பயனர் வெளியேறிவிடுவார். ஊழியரை நிறுவனத்தின் முதன்மைப் பயனராகக் கருத வேண்டும்.</div>
+                    <p>ஊழியர் அனுபவம் (Employee Experience) என்பது ஒரு ஊழியர் நிறுவனத்திற்குள் நுழைந்தது முதல் வெளியேறும் வரை சந்திக்கும் அனைத்துத் தொடர்புகளின் ஒட்டுமொத்தத் தரமாகும்.</p>
+                    <p>மெதுவான லேப்டாப்கள், கடினமான அப்ரூவல் முறைகள் ஊழியர்களின் உத்வேகத்தை விரைவாகக் கெடுத்துவிடும். வேலைக்கான கருவிகளைச் சீராக வைத்திருப்பது அவசியம்.</p>
+                    ${generateCodeBox('EX Lifespan Vector Tracking', 'const trackEmployeeLifecycleStage = (tenureMonths) => {\n  if (tenureMonths <= 3) return "ONBOARDING_INITIAL_VELOCITY";\n  if (tenureMonths <= 12) return "CORE_CONTRIBUTOR_ENGAGED";\n  return "RETENTION_RISK_EVALUATION";\n};')}`
+                `
+            },
+            {
+                id: 17, icon: "📊", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+                title_en: "17. Measuring Engagement: eNPS & Pulse Surveys", title_ta: "17. ஊழியர் திருப்தி அளவீடு: eNPS மற்றும் கணக்கெடுப்புகள்",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Running an annual satisfaction survey is like checking a plane's altitude data only once every 12 months—if you are losing altitude fast in month three, you will crash long before the next check. Pulse surveys act as real-time sonar ping arrays tracking operational health constantly.</div>
+                    <p>You cannot fix what you do not measure. To catch internal cultural decay or toxic management trends before they cause mass attrition, you must deploy tracking systems like **eNPS** (Employee Net Promoter Score) and **Pulse Surveys** continuously.</p>
+                    <h3>The eNPS Matrix Mathematics</h3>
+                    <p>Ask the definitive baseline question: <i>"On a scale of 0 to 10, how likely are you to recommend this company as an elite place to work?"</i></p>
+                    <ul>
+                        <li><b>Promoters (9-10):</b> Your highest-leverage assets who actively drive culture velocity.</li>
+                        <li><b>Passives (7-8):</b> Vulnerable, unmotivated assets easily poached by competitors.</li>
+                        <li><b>Detractors (0-6):</b> Actively disengaged assets spreading cultural toxicity inside teams.</li>
+                    </ul>
+                    ${generatePromptAndOutput('eNPS Calculator Module', 'Calculate eNPS:\nPromoters = 60%, Detractors = 15%, Passives = 25%\neNPS = % Promoters - % Detractors', 'eNPS Output:\neNPS = 60 - 15 = +45\nClassification: High-Health Culture Ecosystem [Standard Target Base > +30]')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> வருடத்திற்கு ஒருமுறை மட்டும் ஊழியர் திருப்தியைக் கணக்கெடுப்பது, விமானத்தின் உயரத்தை 12 மாதத்திற்கு ஒருமுறை மட்டும் சரிபார்ப்பது போன்றது - நடுவில் உயரம் குறைந்தால் விமானம் நொறுங்கிவிடும். Pulse சர்வேக்கள் என்பது தொடர்ந்து உயரத்தைக் காட்டும் ரேடார் போன்றது.</div>
+                    <p>அளவிட முடியாத எதையும் சரிசெய்ய முடியாது. ஊழியர்களின் மனநிலையை அறிய <b>eNPS (Employee Net Promoter Score)</b> மற்றும் சிறு கணக்கெடுப்புகளை (Pulse Surveys) வாரந்தோறும் நடத்த வேண்டும்.</p>
+                    <p>eNPS மூலம் நிறுவனத்தை ஆதரிப்பவர்கள் (Promoters) மற்றும் அதிருப்தியில் உள்ளவர்களைத் (Detractors) துல்லியமாகப் பிரித்தறியலாம்.</p>
+                    ${generatePromptAndOutput('eNPS Calculator Module', 'eNPS கணக்கீடு:\nஆதரவாளர்கள் = 60%, எதிர்ப்பாளர்கள் = 15%\neNPS = ஆதரவாளர்கள்% - எதிர்ப்பாளர்கள்%', 'eNPS விடை:\neNPS = 60 - 15 = +45\nநிலை: ஆரோக்கியமான நிறுவன சூழல் [Target Base > +30]')}`
+                `
+            },
+            {
+                id: 18, icon: "⚖️", img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&q=80",
+                title_en: "18. Conflict Resolution & Mediation Frameworks", title_ta: "18. சச்சரவு மேலாண்மை மற்றும் தீர்வு வழிமுறைகள்",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Interpersonal conflict in a team is like carbon residue building up inside an internal combustion engine cylinder. If you ignore it, the friction builds up, the cylinder jams, and the entire engine locks up. A mediator is the industrial solvent that dissolves the carbon buildup to restore smooth firing velocity.</div>
+                    <p>Wherever non-linear human variables collide under high stress, conflict is mathematically inevitable. An elite HR executive does not avoid conflict; they possess the exact structural mediation frameworks required to resolve it without breaking team focus.</p>
+                    <h3>The Thomas-Kilmann Matrix Loop</h3>
+                    <p>Evaluate behavior across two axes: Assertiveness vs. Cooperativeness. Train management layers to navigate conflicts using structured mediation channels, moving teams away from toxic defensive posturing toward collaborative integration loops.</p>
+                    <ul>
+                        <li><b>Objective Grounding:</b> Force conflicting parties to argue based on objective project data, stripping emotional vocabulary out of the investigation entirely.</li>
+                    </ul>
+                    ${generateCodeBox('Conflict Mediation Tracker Case', '{\n  "caseId": "CON_9981",\n  "parties": ["ENG_LEAD", "PROD_MGR"],\n  "frameworkApplied": "Thomas-Kilmann Collaboration Loop",\n  "resolutionStatus": "RESOLVED_AGREED_ON_OBJECTIVE_METRICS"\n}')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> குழுவிற்குள் ஏற்படும் சச்சரவுகள் என்பது என்ஜினுக்குள் கக்கன் (Carbon) படிவது போன்றது. அதை அப்படியே விட்டால் உராய்வு அதிகமாகி என்ஜின் ஜாம் ஆகிவிடும். மனிதவள மேலாளர் அந்த கக்கனை நீக்கி என்ஜினை சீராக இயக்கும் சுத்திகரிப்பு திரவம் போன்றவர்.</div>
+                    <p>மனிதர்கள் இணைந்து வேலை செய்யும்போது கருத்து வேறுபாடுகள் ஏற்படுவது இயல்பு. அதைத் தவிர்ப்பதை விட, <b>சச்சரவு மேலாண்மை (Conflict Resolution)</b> விதிகளின்படி அதைத் தர்க்கரீதியாகத் தீர்ப்பதே மேலாளரின் திறமையாகும்.</p>
+                    <p>உணர்ச்சிகளுக்கு இடம் கொடுக்காமல், பிசினஸ் தரவுகளின் அடிப்படையில் விவாதங்களை நடத்தித் தீர்வுகளை எட்ட வேண்டும்.</p>
+                    ${generateCodeBox('Conflict Mediation Tracker Case', '{\n  "caseId": "CON_9981",\n  "parties": ["ENG_LEAD", "PROD_MGR"],\n  "frameworkApplied": "Thomas-Kilmann Collaboration Loop",\n  "resolutionStatus": "RESOLVED_AGREED_ON_OBJECTIVE_METRICS"\n}')}`
+                `
+            },
+            {
+                id: 19, icon: "🧘", img: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80",
+                title_en: "19. Burnout Prevention & Employee Wellbeing", title_ta: "19. மன அழுத்தம் மற்றும் சோர்வு தடுப்பு முறைகள் (Burnout)",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Running your best workers at 100% capacity continuously without rest cycles is like redlining a motorcycle engine at 14,000 RPM across a desert highway. The pistons will melt, the oil will dry up, and you will permanently blow up an incredibly expensive asset to save a few minutes.</div>
+                    <p>In high-velocity technical domains, burnout is an extreme operational liability. Burnout is not an individual worker's weakness; it is an organizational failure of workload structural design.</p>
+                    <h3>Identifying the Deficit Redline</h3>
+                    <p>Track the signs of systemic velocity failure across operations:</p>
+                    <ul>
+                        <li><b>The Asynchronous Boundaries Safeguard:</b> Enforcing hard boundaries against after-hours messaging chains to protect recovery baselines completely.</li>
+                        <li><b>Mental Runway Optimization:</b> Providing mandatory scheduled rest windows after high-intensity code deployments or product releases to empty cognitive load caches.</li>
+                    </ul>
+                    ${generatePromptAndOutput('Burnout Risk Indexer', 'Evaluate Overtime Risk Factor (ORF):\nORF = (Weekly Work Hours Over Baseline / Standard Weekly Base) * Churn Probability\n\nVariables:\n- Overtime Hours: 20\n- Base Hours: 40\n- Churn Prob: 0.60', 'ORF Output:\nORF = (20 / 40) * 0.60 = 0.50 * 0.60 = 0.30\nStatus: SEVERE RISK ALERT [Overtime Vector Predicts High Attrition Infiltration]')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சிறந்த ஊழியர்களை ஓய்வில்லாமல் தொடர்ந்து வேலை வாங்கிக்கொண்டே இருப்பது, ஒரு பைக்கை பாலைவனத்தில் 14,000 RPM வேகத்தில் தொடர்ந்து ஓட்டுவது போன்றது. இன்ஜின் உருகி, பைக் நிரந்தரமாகப் பழுதாகிவிடும். சோர்வு (Burnout) என்பது ஊழியரின் பலவீனம் அல்ல, அது நிறுவனத்தின் திட்டமிடல் குறைபாடு.</div>
+                    <p>வேலை பளுவால் ஊழியர்கள் சோர்வடைவது நிறுவனத்திற்குப் பெரிய இழப்பாகும். வேலை நேரத்திற்குப் பின் மெசேஜ் அனுப்புவதைத் தடுத்து அவர்களின் ஓய்வு நேரத்தை மதிக்க வேண்டும்.</p>
+                    <p>கடினமான ப்ராஜெக்ட் முடிந்த பிறகு கட்டாய ஓய்வு நாட்களை வழங்குவது அவர்களின் உற்பத்தித் திறனை மீண்டும் புதுப்பிக்கும்.</p>
+                    ${generatePromptAndOutput('Burnout Risk Indexer', 'ORF கணக்கீடு (Overtime Risk Factor):\nORF = (கூடுதல் வேலை நேரம் / சாதாரண வேலை நேரம்) * வெளியேறும் வாய்ப்பு\n\nதரவுகள்:\n- கூடுதல் நேரம்: 20 மணிநேரம்\n- சாதாரண நேரம்: 40 மணிநேரம்\n- வெளியேறும் வாய்ப்பு: 0.60', 'ORF விடை:\nORF = (20 / 40) * 0.60 = 0.30\nநிலை: அதிக சோர்வு அபாயம் [ஊழியர் விலக அதிக வாய்ப்புள்ளது]')}`
+                `
+            },
+            {
+                id: 20, icon: "🛡️", img: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80",
+                title_en: "20. Retention Strategies for High-Performing Talent", title_ta: "20. திறமையான ஊழியர்களைத் தக்கவைக்கும் உத்திகள் (Retention)",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Retaining elite talent is like maintaining gravity around a planet. If your gravity field (growth opportunities, competitive rewards, and exceptional leadership) weakens even a little bit, your top atmosphere (your senior architects) will float away into the vacuum of space, leaving you with a barren, un-executable rock.</div>
+                    <p>Losing an elite senior architect or high-converting product lead costs a company up to 200% of that position's annual salary in lost documentation, replacement recruitment marketing fees, and onboarding latency. **Retention Engineering** is highly strategic protection math.</p>
+                    <h3>The Stay Interview Protocol</h3>
+                    <p>Don't wait for the exit interview to learn why people are unhappy. Conduct systematic **Stay Interviews** with your top 20% high-leverage assets:</p>
+                    <ul>
+                        <li><b>Analyse Leverage Drivers:</b> Ask directly: <i>"What would make you immediately reply to a competitor's recruiter on LinkedIn?"</i> Fix those specific friction variables preemptively.</li>
+                    </ul>
+                    ${generateCodeBox('Retention Risk Profiler', 'const evaluateRetentionRisk = (compaRatio, tenureYears, performanceRating) => {\n  if (compaRatio < 0.85 && performanceRating >= 4) return "CRITICAL_RETENTION_RISK";\n  return "STABLE_ASSET";\n};')}`
+                `,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> திறமையானவர்களைத் தக்கவைப்பது என்பது ஒரு கிரகத்தின் புவியீர்ப்பு விசையைப் போன்றது. உங்கள் நிறுவனத்தின் புவியீர்ப்பு விசை (வளர்ச்சி வாய்ப்பு, நல்ல சம்பளம்) குறைந்தால், வளிமண்டலம் போன்ற சிறந்த ஊழியர்கள் விண்வெளியில் பறந்துவிடுவார்கள். உங்களிடம் வெறும் வெற்றுப் பாறை மட்டுமே மிஞ்சும்.</div>
+                    <p>ஒரு சிறந்த சீனியர் ஊழியர் விலகினால், அவரைப் போன்ற ஒருவரை மீண்டும் எடுக்கவும், அவருக்குப் பயிற்சி அளிக்கவும் அந்தச் சம்பளத்தைப் போல இரண்டு மடங்கு செலவாகும். எனவே <b>Retention Engineering (தக்கவைத்தல் கலை)</b> மிகவும் முக்கியமான நிதிக் கணக்கீடாகும்.</p>
+                    <p>அவர்கள் விலகும் வரை காத்திருக்காமல், "உங்களை மாற்று வேலைக்குச் செல்லத் தூண்டும் காரணி எது?" என முன்கூட்டியே கேட்டு அதை நிவர்த்தி செய்ய வேண்டும்.</p>
+                    ${generateCodeBox('Retention Risk Profiler', 'const evaluateRetentionRisk = (compaRatio, tenureYears, performanceRating) => {\n  if (compaRatio < 0.85 && performanceRating >= 4) return "CRITICAL_RETENTION_RISK";\n  return "STABLE_ASSET";\n};')}`
+                `
+            },
+            {
+                id: 21, icon: "📊", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+                title_en: "21. Introduction to People Analytics & HR Dashboards", title_ta: "21. மனிதவள தரவு பகுப்பாய்வு (People Analytics)",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Managing workforce metrics without a People Analytics dashboard is like piloting a massive passenger plane at night without an instrument cluster dashboard. You are blindly guessing your speed and heading based on raw feeling, completely unaware that you are stalling and losing altitude fast.</div>
+                    <p>Welcome to the modern shift of data-grounded HR. **People Analytics** replaces corporate guess-work with robust, mathematical tracking metrics. We evaluate organizational health by visualizing active workforce properties on clean executive dashboards.</p>
+                    <h3>Key Metrics to Monitor</h3>
+                    <ul>
+                        <li><b>Time-to-Hire Latency:</b> The total days elapsed from opening a position pipeline to signed contract receipt. High latency blocks expansion velocity.</li>
+                        <li><b>Revenue-per-Employee (RPE):</b> Total company net revenue divided by full-time equivalent headcount. This tracks macroeconomic efficiency perfectly.</li>
+                    </ul>
+                    ${generatePromptAndOutput('RPE Efficiency Calculator', 'Calculate RPE Matrix:\nRevenue = $5,000,000\nTotal Full-Time Headcount = 50', 'RPE Output:\nRPE = 5,000,000 / 50 = $100,000 per employee\nStatus: High Operational Leverage [Benchmark Standard Target > $80k]')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> People Analytics டேஷ்போர்டு இல்லாமல் நிறுவனத்தை நடத்துவது, இருட்டில் ஹெலிகாப்டரை எந்த ஒரு ரேடாரும் இல்லாமல் ஓட்டுவது போன்றது. நீங்கள் எவ்வளவு உயரத்தில் பறக்கிறீர்கள் என்று தெரியாமல் திடீரென மலையில் மோதிவிடுவீர்கள். தரவு டேஷ்போர்டு தான் உங்கள் ரேடார்.</div>
+                    <p>மனிதவளத் துறையைத் தரவுகளுடன் இணைப்பதே <b>People Analytics (மக்கள் தரவு பகுப்பாய்வு)</b> ஆகும். இது வெறும் யூகங்களைத் தவிர்த்துவிட்டு, எண்களின் அடிப்படையில் முடிவுகளை எடுக்க உதவுகிறது.</p>
+                    <p>ஒரு ஊழியருக்கான வருவாய் விகிதம் (Revenue-per-Employee) போன்ற அளவீடுகளைக் கொண்டு நிறுவனத்தின் ஒட்டுமொத்த வளர்ச்சியைத் துல்லியமாகக் கண்காணிக்கலாம்.</p>
+                    ${generatePromptAndOutput('RPE Efficiency Calculator', 'RPE கணக்கீடு (Revenue-per-Employee):\nமொத்த வருவாய் = $5,000,000\nமொத்த ஊழியர்கள் = 50', 'RPE விடை:\nRPE = 5,000,000 / 50 = $100,000 (ஒரு ஊழியருக்கான வருவாய்)\nநிலை: மிகச் சிறந்த உற்பத்தித் திறன் [Standard Target > $80k]')}`
+                `
+            },
+            {
+                id: 22, icon: "🖥️", img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
+                title_en: "22. HRIS Implementation & Core Architecture", title_ta: "22. HRIS மென்பொருள் மேலாண்மை (HRIS Architecture)",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Managing HR with scattered Excel files, paper receipts, and WhatsApp chats is like hosting a web app where user data is saved on separate text files scattered across 10 different personal laptops. It is insecure, disconnected, and non-scalable. An HRIS is your centralized production SQL database.</div>
+                    <p>To scale past 100+ rows of employee data safely, an enterprise requires an integrated **HRIS (Human Resource Information System)** like Workday, Zoho People, or BambooHR. An HRIS functions as the centralized system of record for all employee lifecycle state mutations.</p>
+                    <h3>Database Consolidation Architecture</h3>
+                    <p>An HRIS merges separate workforce pipelines into a single data schema, ensuring absolute state tracking synchronization across payroll, leave records, performance logs, and contractual documents cleanly.</p>
+                    ${generateCodeBox('HRIS Schema Mapping Definition', 'const employeeSchema = {\n  "uid": "EMP_0091",\n  "demographics": { "name": "Siva M.", "wa": "+919876543210" },\n  "governance": { "grade": 3, "compaRatio": 0.92 },\n  "state": { "currentModule": 1, "isOnboardingComplete": true }\n};')}`
+                `,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> வாட்ஸ்அப் மெசேஜ்கள், எக்செல் ஷீட்கள் மூலம் மனிதவளத் துறையை நடத்துவது, ஒரு இணையதளத்தின் ரகசிய வாடிக்கையாளர் விவரங்களை 10 வெவ்வேறு லேப்டாப்களில் சாதாரண டெக்ஸ்ட் ஃபைலாகச் சேமிப்பது போன்றது. இது பாதுகாப்பற்றது. <b>HRIS</b> என்பது உங்கள் பிரதான பாதுகாப்பான டேட்டாபேஸ் ஆகும்.</div>
+                    <p>ஊழியர்களின் எண்ணிக்கை 100-ஐத் தாண்டும்போது, தரவுகளைப் பாதுகாக்க <b>HRIS (Human Resource Information System)</b> மென்பொருள் கட்டாயம் தேவைப்படுகிறது.</p>
+                    <p>இது சம்பளம், விடுப்பு நாட்கள், செயல்திறன் அறிக்கைகள் அனைத்தையும் ஒரே பாதுகாப்பான மையக் கட்டமைப்பில் (Centralized Schema) ஒருங்கிணைக்கிறது.</p>
+                    ${generateCodeBox('HRIS Schema Mapping Definition', 'const employeeSchema = {\n  "uid": "EMP_0091",\n  "demographics": { "name": "Siva M.", "wa": "+919876543210" },\n  "governance": { "grade": 3, "compaRatio": 0.92 },\n  "state": { "currentModule": 1, "isOnboardingComplete": true }\n};')}`
+                `
+            },
+            {
+                id: 23, icon: "📉", img: "https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&q=80",
+                title_en: "23. Data-Driven Attrition & Predictive Churn Mechanics", title_ta: "23. ஊழியர் விலகல் கணிப்பு (Predictive Attrition)",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Waiting for an employee to submit a formal resignation letter before acting is like waiting for a factory water pipe to completely explode before fixing a massive leak that was dripping for 6 months. Predictive churn tracks the pressure gauges to fix the leak early.</div>
+                    <p>Elite analytics groups don't just calculate historical attrition (what percentage of people left last year). They build **Predictive Attrition Models** to identify flight-risk assets *before* they resign, giving management time to resolve friction variables.</p>
+                    <h3>Predictive Flight Markers</h3>
+                    <p>Data models track behavioral and structural anomalies that correlate mathematically with high churn vectors:</p>
+                    <ul>
+                        <li><b>The Stagnation Index:</b> Employee hasn't received a salary bump or promotion band shift in over 18 Months.</li>
+                        <li><b>Engagement Decay Rate:</b> A sudden, sharp drop in eNPS survey participation frequencies or login velocity vectors.</li>
+                    </ul>
+                    ${generatePromptAndOutput('Predictive Attrition Engine', 'Run Churn Probability Model for: USER_1109\n- Compa-Ratio: 0.78 (Low)\n- Months Since Last Promotion: 22\n- Survey Engagement Vector: Dropped by 60%', 'Predictive Output Result:\nChurn Probability Index: 88.4%\nStatus: HIGH FLIGHT RISK [System Alert: Trigger immediate executive stay interview loop]')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு ஊழியர் ராஜினாமா கடிதம் கொடுக்கும் வரை காத்திருப்பது, தொழிற்சாலை தண்ணீர் குழாய் வெடித்துச் சிதறும் வரை 6 மாதமாக ஒழுகிக் கொண்டிருந்த ஓட்டையை அடைக்காமல் வேடிக்கை பார்ப்பது போன்றது. முன்கணிப்பு (Predictive churn) என்பது ஓட்டை சிறியதாக இருக்கும்போதே அதைச் சரிசெய்வதாகும்.</div>
+                    <p>சிறந்த நிறுவனங்கள் கடந்த கால இழப்புகளை மட்டும் கணக்கிடுவதில்லை. அவர்கள் <b>Predictive Attrition (விலகல் முன்கணிப்பு)</b> மூலம் யார் விலகப் போகிறார்கள் என்பதை முன்கூட்டியே கண்டறிவார்கள்.</p>
+                    <p>சம்பளக் குறைவு, நீண்ட நாட்களாகப் பதவி உயர்வு இல்லாமை, கணக்கெடுப்புகளில் பங்கேற்காமல் இருப்பது போன்ற அறிகுறிகளை வைத்து இதைக் கணினியே கணித்துக் காட்டும்.</p>
+                    ${generatePromptAndOutput('Predictive Attrition Engine', 'விலகல் கணிப்பு மாடல் இயக்கம்: USER_1109\n- Compa-Ratio: 0.78 (குறைவு)\n- பதவி உயர்வு தள்ளிப்போன நாட்கள்: 22 மாதங்கள்\n- ஈடுபாடு: 60% குறைந்துள்ளது', 'Predictive Output Result:\nவிலகுவதற்கான வாய்ப்பு: 88.4%\nநிலை: ஆபத்தான நிலை [உடனடியாக ஊழியருடன் பேசிச் சிக்கலைத் தீர்க்கவும்]')}`
+                `
+            },
+            {
+                id: 24, icon: "⚡", img: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80",
+                title_en: "24. Change Management & Navigating Transitions", title_ta: "24. நிறுவன மாற்றங்களை நிர்வகித்தல் (Change Management)",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Upgrading your company's core software infrastructure overnight without prepping your workforce is like shifting an express train gears into reverse while traveling at 200 KM/H. The transmission will violently shear off and flip the train. You must construct a gradual deceleration track.</div>
+                    <p>Enterprises are not static blocks; they are dynamic, shifting realities. When a company executes a pivot—like changing its core database stack, restructuring departments, or merging with another firm—it faces heavy internal human resistance.</p>
+                    <p><b>Change Management</b> is the programmatic framework used to guide human variables safely through organizational transformations using proven structures like the Kotter Change Phase Matrix.</p>
+                    <h3>The Execution Strategy</h3>
+                    <ul>
+                        <li><b>Over-Communication Loop:</b> Silencing rumors by broadcasting transparent data updates early and often to eliminate trust friction.</li>
+                        <li><b>Friction Node Elimination:</b> Identifying and coaching stubborn resistant variables before they block the pipeline velocity of the entire firm.</li>
+                    </ul>
+                    ${generateCodeBox('Change Execution Blueprint', 'const executeChangePhase = (phaseId) => {\n  const stages = ["BUILD_URGENCY", "FORM_COALITION", "COMMUNICATE_VISION", "EMPOWER_ACTION"];\n  return stages.includes(phaseId) ? "STAGE_VALIDATED" : "LOGICAL_HALT_REQD";\n};')}`
+                `,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஊழியர்களைத் தயார்படுத்தாமல் நிறுவனத்தின் முக்கியச் சாஃப்ட்வேரை ஒரே நாளில் மாற்றுவது, 200 KM/H வேகத்தில் செல்லும் ரயிலை ஒரே நொடியில் ரிவர்ஸ் கியர் (Reverse) போட முயற்சிப்பது போன்றது. கியர் பாக்ஸ் உடைந்து ரயில் கவிழ்ந்துவிடும். மாற்றங்கள் படிப்படியாக நடக்க வேண்டும்.</div>
+                    <p>நிறுவனங்கள் வளரும்போது புதிய தொழில்நுட்பங்கள் அல்லது புதிய கொள்கைகளைக் கொண்டுவர வேண்டியிருக்கும் (Change Management). இதற்குக் கடுமையான ஊழியர் எதிர்ப்பு எழும்.</p>
+                    <p>மாற்றங்களைக் கொண்டுவரும் முன், அதன் அவசியத்தை ஊழியர்களுக்குத் தெளிவாக விளக்கி, அவர்களின் அச்சத்தைப் போக்க வேண்டும்.</p>
+                    ${generateCodeBox('Change Execution Blueprint', 'const executeChangePhase = (phaseId) => {\n  const stages = ["BUILD_URGENCY", "FORM_COALITION", "COMMUNICATE_VISION", "EMPOWER_ACTION"];\n  return stages.includes(phaseId) ? "STAGE_VALIDATED" : "LOGICAL_HALT_REQD";\n};')}`
+                `
+            },
+            {
+                id: 25, icon: "🚀", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "25. Managing Remote Teams & Enterprise Scale Analytics", title_ta: "25. தொலைதூரக் குழுக்களை நிர்வகித்தல் (Remote Teams Management)",
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Managing a global remote team without clear asynchronous data pipelines is like trying to choreograph a complex dance crew across 5 continents where no one can hear the music at the same time. Asynchronous documentation is the global rhythm track that keeps everyone in perfect sync.</div>
+                    <p>Congratulations on reaching the final module of the masterclass. The modern enterprise boundary has permanently fractured. Top talent no longer lives within driving distance of your office building. Managing elite distributed remote teams requires entirely new performance metrics.</p>
+                    <h3>Shifting from Hours to Outcomes</h3>
+                    <p>Stop monitoring desk-time or tracking webcam movement—this destroys psychological safety loops instantly. Professional remote HR architecture evaluates workers purely based on **Asynchronous Output Deliverables**.</p>
+                    <ul>
+                        <li><b>The Documentation First Rule:</b> If a policy or task is not explicitly documented in your internal wiki (Notion/Confluence), it technically does not exist. Documentation eliminates timezone friction limits completely.</li>
+                        <li><b>Global Compliance Matrix:</b> Managing international remote contracts safely using professional employer organizations (PEOs like Deel or Remote) to handle cross-border tax code variables flawlessly.</li>
+                    </ul>
+                    <p>By mastering these 25 advanced modules, you possess the entire technical, mathematical, and legal architecture required to engineer world-class human capital ecosystems. Go forth and design high-velocity winning teams.</p>
+                    ${generateCodeBox('Global Headcount Schema Execution', 'const completeMasterclassMatrix = (studentId) => {\n  console.log("Generating Official Verified Diploma for HR Capital Architecture Mastery...");\n  return { studentId, status: "CREDENTIAL_ISSUED", verificationStatus: "VERIFIED" };\n};')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> உலகெங்கும் சிதறியுள்ள ரிமோட் (Remote) குழுவை முறையான ஆவணங்கள் இன்றி நடத்துவது, 5 கண்டங்களில் உள்ள நடனக் கலைஞர்களை ஒரே நேரத்தில் ஒரே இசையைக் கேட்க வைக்காமல் ஆடச் சொல்வது போன்றது. தெளிவான ஆன்லைன் ஆவணங்களே (Documentation) உலகளாவிய இசைக் கோர்வை ஆகும்.</div>
+                    <p>மனிதவள மேலாண்மை மாஸ்டர்கிளாஸின் இறுதிப் பகுதிக்கு வாழ்த்துகள்! இன்றைய காலகட்டத்தில் சிறந்த திறமையாளர்கள் உலகம் முழுவதும் பரவி ரிமோட் முறையில் வேலை செய்கிறார்கள். இவர்களை நிர்வகிக்க புதிய உத்திகள் தேவை.</p>
+                    <p>அவர்கள் எத்தனை மணிநேரம் லேப்டாப் முன்னால் உட்கார்ந்திருக்கிறார்கள் என்று உளவு பார்க்கக் கூடாது, அது அவர்களின் நம்பிக்கையை உடைக்கும். அவர்களின் **உற்பத்தித் திறன் மற்றும் இறுதி முடிவுகளை (Outcomes)** மட்டுமே எண்களின் அடிப்படையில் அளவிட வேண்டும்.</p>
+                    <p>அனைத்து விதிகளும் ஆன்லைனில் தெளிவாக எழுதப்பட்டிருக்க வேண்டும் (Documentation). இந்த 25 தொகுதிகளையும் வெற்றிகரமாகக் கற்றதன் மூலம், நீங்கள் ஒரு உலகத்தரம் வாய்ந்த மனிதவள கட்டமைப்பை உருவாக்கும் தகுதியைப் பெற்றுள்ளீர்கள்.</p>
+                    ${generateCodeBox('Global Headcount Schema Execution', 'const completeMasterclassMatrix = (studentId) => {\n  console.log("Generating Official Verified Diploma for HR Capital Architecture Mastery...");\n  return { studentId, status: "CREDENTIAL_ISSUED", verificationStatus: "VERIFIED" };\n};')}`
+            }
+        ];
+
+        // ==========================================
+        // 10-QUESTION HR MANAGEMENT QUIZ
+        // ==========================================
+        const quizData = [
+            { q: "What does the 'A' in the STAR interview evaluation matrix stand for?", opts: ["Ability", "Action", "Assessment", "Allocation"], ans: 1 },
+            { q: "A Compa-Ratio calculation result of 0.85 generally indicates that the employee is paid:", opts: ["Exactly at market midpoint", "Above market averages", "Below market midpoint", "At maximum policy boundary"], ans: 2 },
+            { q: "In database architecture design, an HRIS functions primarily as a centralized:", opts: ["Temporary text log", "System of record for lifecycle transformations", "Marketing ad canvas", "Frontend rendering loop"], ans: 1 },
+            { q: "Which tool type maps out facts and dimensions around a central metric engine?", opts: ["Excel spreadsheet formulas", "Subquery filter code", "Star Schema relational data model", "List comprehension structure"], ans: 2 },
+            { q: "A performance tracking plan implemented to formally manage deficit metrics is known as a:", opts: ["PIP", "OKR", "eNPS", "MDS"], ans: 0 },
+            { q: "An employee survey designed to measure high-frequency engagement metrics over short periods is called a:", opts: ["Annual evaluation", "Pulse Survey", "Exit interview", "Blind resume query"], ans: 1 },
+            { q: "Kotter\'s change matrix framework is optimized primarily for managing what business property?", opts: ["Database indexing", "Workforce transition and change management", "Statutory EPF cap allocations", "Salary benchmarking calculations"], ans: 1 },
+            { q: "If an eNPS score calculation yields a final metric score of +45, the corporate culture is evaluated as:", opts: ["Highly toxic", "Unstable baseline deficit", "High-health optimal ecosystem", "Inconclusive random noise"], ans: 2 },
+            { q: "What metric is optimized by tracking total marketing expenses against new worker volumes acquired?", opts: ["LTV", "RPE", "CAC", "Attrition Index"], ans: 2 },
+            { q: "Managing high-velocity distributed remote teams effectively requires shifting focus from hours to:", opts: ["Webcam motion logs", "Desk-time attendance grids", "Asynchronous outcome deliverables", "Manual intermediate checkpoints"], ans: 2 }
+        ];
+
+        // ==========================================
+        // UI & ROUTING
+        // ==========================================
+        window.setContentLang = (lang) => {
+            window.stopTTS(); 
+            contentLang = lang;
+            document.getElementById('btn-en').className = `lang-btn \${lang === 'en' ? 'active' : ''}`;
+            document.getElementById('btn-ta').className = `lang-btn \${lang === 'ta' ? 'active' : ''}`;
+            
+            const mod = courseData.find(m => m.id === viewingModuleId);
+            const imgEl = document.getElementById('viewer-img');
+            imgEl.style.display = 'block'; 
+            imgEl.src = mod.img;
+            document.getElementById('viewer-title').innerText = lang === 'en' ? mod.title_en : mod.title_ta;
+            document.getElementById('viewer-content').innerHTML = lang === 'en' ? mod.content_en : mod.content_ta;
+        };
+
+        document.getElementById('primary-auth-btn').onclick = async () => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch(error) {
+                console.error("Login Error:", error);
+                showToast("Sign In Failed: " + error.message);
+            }
+        };
+
+        // --- FIXED PREMIUM AUTO-OPT-IN BACKEND GATEKEEPER LOGIC ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const photoUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=random`;
+                document.getElementById('nav-profile').innerHTML = `<img src="\${photoUrl}" alt="Profile" style="width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; box-shadow: var(--shadow-sm);">`;
+                document.getElementById('nav-profile').style.display = 'flex';
+                
+                try {
+                    const docSnap = await getDoc(doc(db, "users", user.uid));
+                    if (docSnap.exists()) {
+                        currentUserData = docSnap.data();
+                        
+                        let dbNeedsUpdate = false;
+                        
+                        if (!currentUserData.courses) {
+                            currentUserData.courses = {};
+                            dbNeedsUpdate = true;
+                        }
+                        if (!currentUserData.courses[CURRENT_COURSE_ID]) {
+                            currentUserData.courses[CURRENT_COURSE_ID] = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
+                            dbNeedsUpdate = true;
+                        }
+                        
+                        // Fire-and-forget background synchronization prevents loading latency
+                        if (dbNeedsUpdate) {
+                            setDoc(doc(db, "users", user.uid), { 
+                                courses: {
+                                    [CURRENT_COURSE_ID]: currentUserData.courses[CURRENT_COURSE_ID]
+                                }
+                            }, { merge: true }).catch(e => console.error("Auto-opt background write skipped:", e));
+                        }
+                        
+                        routeUser(true);
+                    } else {
+                        currentUserData = { 
+                            fullName: "",
+                            whatsappNumber: "",
+                            courses: {
+                                [CURRENT_COURSE_ID]: { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false }
+                            }
+                        };
+                        showScreen('profile-screen', true);
+                    }
+                } catch (error) {
+                    console.error("Firestore initialization read fault:", error);
+                    currentUserData = { courses: { [CURRENT_COURSE_ID]: { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false } } };
+                    showScreen('profile-screen', true);
+                }
+            } else {
+                document.getElementById('nav-profile').style.display = 'none';
+                showScreen('login-screen', true);
+            }
+        });
+
+        function routeUser(pushHistory = true) {
+            if (!currentUserData.fullName) return showScreen('profile-screen', pushHistory);
+            if (currentUserData.courses[CURRENT_COURSE_ID].paymentStatus !== 'paid') return showScreen('payment-screen', pushHistory);
+            
+            if (currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                showCertificate();
+                return showScreen('cert-screen', pushHistory);
+            }
+            
+            renderDashboard();
+            showScreen('dashboard-screen', pushHistory);
+        }
+
+        // ==========================================
+        // FORMS & PROGRESS
+        // ==========================================
+        document.getElementById('save-profile-btn').onclick = async () => {
+            const name = document.getElementById('prof-name').value;
+            const wa = document.getElementById('prof-wa').value;
+            if(!name || !wa) return showToast("Name and WhatsApp required!");
+
+            currentUserData.fullName = name;
+            currentUserData.whatsappNumber = wa;
+            
+            if (!currentUserData.courses) currentUserData.courses = {};
+            if (!currentUserData.courses[CURRENT_COURSE_ID]) {
+                currentUserData.courses[CURRENT_COURSE_ID] = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
+            }
+            
+            try {
+                await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
+            } catch(e) { console.error("Profile save error:", e); }
+            
+            routeUser(true);
+        };
+
+        document.getElementById('pay-razorpay-btn').onclick = async () => {
+            const user = auth.currentUser;
+            if (!user) return showToast("Please sign in first.");
+
+            const btn = document.getElementById('pay-razorpay-btn');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "Initializing Secure Gateway...";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('https://goolearn-payment.hf.space/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        userId: user.uid,
+                        courseId: CURRENT_COURSE_ID 
+                    })
+                });
+                
+                if (!response.ok) throw new Error("Order creation failed on backend");
+                const orderData = await response.json();
+
+                const options = {
+                    "key": "rzp_live_T1HpoAe39yK0FV", 
+                    "amount": orderData.amount, 
+                    "currency": "INR",
+                    "name": "Goorac Learn",
+                    "description": "Unlock HR Management Masterclass",
+                    "order_id": orderData.id, 
+                    "handler": async function (response) {
+                        showToast("Payment Successful! Unlocking curriculum...");
+                        
+                        currentUserData.courses[CURRENT_COURSE_ID].paymentStatus = 'paid';
+                        
+                        try {
+                            await setDoc(doc(db, "users", user.uid), { 
+                                courses: {
+                                    [CURRENT_COURSE_ID]: { paymentStatus: 'paid' }
+                                }
+                            }, { merge: true });
+                        } catch(e) { console.warn("Local cache sync bypass, relying on secure webhooks."); }
+                        
+                        routeUser(true);
+                    },
+                    "prefill": {
+                        "name": currentUserData.fullName || "",
+                        "contact": currentUserData.whatsappNumber || ""
+                    },
+                    "theme": { 
+                        "color": "#059669" 
+                    },
+                    "modal": {
+                        "ondismiss": function(){
+                            btn.innerText = originalText;
+                            btn.disabled = false;
+                        }
+                    }
+                };
+
+                const rzp = new window.Razorpay(options);
+                
+                rzp.on('payment.failed', function (response){
+                    showToast("Payment Failed: " + response.error.description);
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                });
+                
+                rzp.open();
+
+            } catch (error) {
+                console.error("Payment initiation failed:", error);
+                showToast("Could not connect to payment gateway. Try again.");
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        };
+
+        function renderDashboard() {
+            const container = document.getElementById('module-list-container');
+            container.innerHTML = '';
+            
+            let progressMod = currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+            if(progressMod > 25) progressMod = 25;
+            const percentage = Math.round(((progressMod - 1) / 25) * 100);
+            
+            if (currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                document.getElementById('progress-bar').style.width = '100%';
+                document.getElementById('progress-text').innerText = '100% - Certified';
+            } else {
+                document.getElementById('progress-bar').style.width = percentage + '%';
+                document.getElementById('progress-text').innerText = percentage + '%';
+            }
+
+            courseData.forEach(mod => {
+                const isCompleted = mod.id < currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+                const isUnlocked = mod.id <= currentUserData.courses[CURRENT_COURSE_ID].currentModule || currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz;
+                
+                container.innerHTML += `
+                    <div class="module-item \${isUnlocked ? '' : 'locked'} \${isCompleted ? 'completed' : ''}" onclick="\${isUnlocked ? \`loadModule(\${mod.id})\` : ''}">
+                        <div class="mod-icon">\${mod.icon}</div>
+                        <div class="mod-details">
+                            <div class="mod-title">\${mod.title_en}</div>
+                            <div class="mod-status">\${isCompleted ? '✅ Completed' : (isUnlocked ? '📖 Ready' : '🔒 Locked')}</div>
+                        </div>
+                    </div>`;
+            });
+
+            if (currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                document.getElementById('quiz-unlock-banner').style.display = 'none';
+                document.getElementById('certificate-access-banner').style.display = 'block';
+            } else if (currentUserData.courses[CURRENT_COURSE_ID].currentModule > 25) {
+                document.getElementById('quiz-unlock-banner').style.display = 'block';
+                document.getElementById('certificate-access-banner').style.display = 'none';
+            } else {
+                document.getElementById('quiz-unlock-banner').style.display = 'none';
+                document.getElementById('certificate-access-banner').style.display = 'none';
+            }
+        }
+
+        window.loadModule = (id) => {
+            viewingModuleId = id;
+            setContentLang(contentLang);
+            const btn = document.getElementById('mark-complete-btn');
+            
+            if (id === currentUserData.courses[CURRENT_COURSE_ID].currentModule && !currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                btn.style.display = 'flex';
+                btn.innerText = id === 25 ? "Finish Curriculum & Take Exam" : "Mark Completed & Next";
+                btn.onclick = async () => {
+                    window.stopTTS();
+                    viewingModuleId = currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+                    currentUserData.courses[CURRENT_COURSE_ID].currentModule += 1;
+                    
+                    renderDashboard();
+                    
+                    try {
+                        await setDoc(doc(db, "users", auth.currentUser.uid), { 
+                            courses: {
+                                [CURRENT_COURSE_ID]: { currentModule: currentUserData.courses[CURRENT_COURSE_ID].currentModule }
+                            }
+                        }, { merge: true });
+                    } catch(e) { console.error("Progress save error:", e); }
+                    
+                    showToast("Module Completed!");
+                    if (id < 25) {
+                        loadModule(id + 1); 
+                        window.scrollTo(0,0);
+                    } else {
+                        routeUser(true);
+                    }
+                };
+            } else if (id < currentUserData.courses[CURRENT_COURSE_ID].currentModule || currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                btn.style.display = 'flex';
+                btn.innerText = id === 25 ? "Back to Dashboard" : "Next Module";
+                btn.onclick = () => {
+                    window.stopTTS();
+                    if (id === 25) { 
+                        goToDashboard(); 
+                    } else { 
+                        loadModule(id + 1); 
+                        window.scrollTo(0,0); 
+                    }
+                };
+            } else { 
+                btn.style.display = 'none'; 
+            }
+            const isAlreadyViewing = document.getElementById('module-viewer-screen').classList.contains('active-screen');
+            showScreen('module-viewer-screen', !isAlreadyViewing); 
+        }
+
+        // ==========================================
+        // QUIZ & CERTIFICATE
+        // ==========================================
+        document.getElementById('start-quiz-btn').onclick = () => {
+            const qc = document.getElementById('quiz-container');
+            qc.innerHTML = quizData.map((q, i) => `
+                <div class="quiz-question">
+                    <h3>\${i+1}. \${q.q}</h3>
+                    \${q.opts.map((opt, oIdx) => `
+                        <label class="quiz-option">
+                            <input type="radio" name="q\${i}" value="\${oIdx}">
+                            \${opt}
+                        </label>
+                    `).join('')}
+                </div>
+            `).join('');
+            showScreen('quiz-screen', true);
+        };
+
+        document.getElementById('submit-quiz-btn').onclick = async () => {
+            let score = 0;
+            quizData.forEach((q, i) => {
+                const selected = document.querySelector(`input[name="q\${i}"]:checked`);
+                if(selected && parseInt(selected.value) === q.ans) score++;
+            });
+
+            if (score >= 7) {
+                currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz = true;
+                
+                try {
+                    await setDoc(doc(db, "users", auth.currentUser.uid), { 
+                        courses: {
+                            [CURRENT_COURSE_ID]: { hasPassedQuiz: true }
+                        }
+                    }, { merge: true });
+                } catch(e) { console.error("Exam save error:", e); }
+                
+                showToast("Exam Passed! Generating Certificate...");
+                setTimeout(() => routeUser(true), 1500);
+            } else {
+                showToast(`Score: \${score}/10. You need 7 to pass. Try again!`);
+            }
+        };
+
+        function showCertificate() {
+            if (currentUserData.courses[CURRENT_COURSE_ID].paymentStatus === 'paid') {
+                document.getElementById('cert-pdf-view').style.display = 'block';
+                document.getElementById('cert-name-display').innerText = currentUserData.fullName;
+                
+                const issueDate = new Date();
+                const formattedDate = issueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                document.getElementById('cert-date-display').innerText = "Issued on: " + formattedDate;
+                
+                const encodedData = encodeURIComponent(`VERIFIED CREDENTIAL\nName: \${currentUserData.fullName}\nCourse: HR Management Masterclass\nIssuer: Goorac Learn (Goorac Corporation)\nDate: \${formattedDate}\nStatus: VERIFIED`);
+                document.getElementById('cert-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=\${encodedData}`;
+            }
+        }
+
+        document.getElementById('download-pdf-btn').onclick = () => {
+            const btn = document.getElementById('download-pdf-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Generating PDF...";
+            
+            const element = document.getElementById('printable-cert');
+            const fileName = currentUserData.fullName ? `\${currentUserData.fullName.replace(/\\s+/g, '_')}_HR_Management_Certificate.pdf` : 'HR_Management_Certificate.pdf';
+            
+            const opt = {
+                margin:       0,
+                filename:     fileName,
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 3, useCORS: true, allowTaint: true, scrollY: 0, scrollX: 0, windowWidth: 1122 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerText = originalText;
+                showToast("PDF Downloaded Successfully!");
+            }).catch(err => {
+                console.error("PDF generation error: ", err);
+                btn.innerText = originalText;
+                showToast("Error generating PDF");
+            });
+        };
+
+        try {
+            history.replaceState({ screen: 'splash-screen' }, '', '#splash-screen');
+        } catch(e) {
+            console.warn("History API prevented:", e);
+        }
+    </script>
+</body>
+</html>
