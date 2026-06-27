@@ -340,6 +340,111 @@
         .course-card:hover::before {
             opacity: 0.15;
         }
+
+        /* Modal Styles - Professional Mobile-Friendly */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background: var(--surface-color);
+            max-width: 700px;
+            width: 100%;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: var(--surface-color);
+            z-index: 10;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: var(--text-main);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--text-muted);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        
+        .modal-close:hover {
+            background: #f1f5f9;
+            color: var(--text-main);
+        }
+        
+        .modal-body {
+            padding: 24px;
+            line-height: 1.7;
+            color: var(--text-main);
+        }
+        
+        .modal-body h3 {
+            margin-top: 28px;
+            margin-bottom: 12px;
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+        
+        .modal-body p, .modal-body li {
+            margin-bottom: 12px;
+            color: var(--text-muted);
+        }
+        
+        .modal-body ul {
+            padding-left: 20px;
+        }
+        
+        /* Back button simulation for mobile feel */
+        .modal-back {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .modal-back {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                color: var(--primary);
+                font-weight: 600;
+                cursor: pointer;
+                margin-bottom: 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -430,6 +535,31 @@
                         <a href="prompt-engineering.html" class="btn">View More</a>
                     </div>
                 </div>
+                
+                <!-- Added New Course - Grok AI & Advanced Prompt Mastery (My Profession as Grok by xAI) -->
+                <div class="course-card">
+                    <div class="course-header" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+                        <div>
+                            <h3>Grok AI Mastery</h3>
+                        </div>
+                        <div class="course-badge">25 Modules</div>
+                    </div>
+                    <div class="course-body">
+                        <p style="color: var(--text-muted); margin-bottom: 20px;">Advanced AI Interaction &amp; Reasoning with Grok by xAI. Master next-generation prompt engineering, truth-seeking systems, and real-world AI problem solving.</p>
+                        
+                        <div class="price">₹149 <span>/ one-time</span></div>
+                        
+                        <ul class="features-list">
+                            <li>✅ Advanced Reasoning &amp; Logic Chains</li>
+                            <li>✅ Grok System Prompt Mastery</li>
+                            <li>✅ Truth-Seeking AI Workflows</li>
+                            <li>✅ Multimodal &amp; Tool Integration</li>
+                            <li>✅ Capstone Project + Certificate</li>
+                        </ul>
+                        
+                        <a href="#" onclick="alert('Grok AI Mastery course coming soon!');" class="btn">View More</a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -483,8 +613,8 @@
                 </div>
                 <div>
                     <strong style="color: white;">Legal</strong><br><br>
-                    <a href="#" onclick="alert('Privacy Policy content would open here');" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Privacy Policy</a>
-                    <a href="#" onclick="alert('Terms of Service content would open here');" style="color: #cbd5e1; text-decoration: none; display: block;">Terms of Service</a>
+                    <a href="#" onclick="showModal('privacyModal')" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Privacy Policy</a>
+                    <a href="#" onclick="showModal('termsModal')" style="color: #cbd5e1; text-decoration: none; display: block;">Terms of Service</a>
                 </div>
             </div>
 
@@ -493,6 +623,84 @@
             </div>
         </div>
     </footer>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Privacy Policy</h2>
+                <button onclick="closeModal('privacyModal')" class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-back" onclick="closeModal('privacyModal')">
+                    ← Back
+                </div>
+                <p><strong>Last updated: June 27, 2026</strong></p>
+                
+                <p>Goorac Corporation ("we", "our", or "us") respects your privacy and is committed to protecting your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and purchase our courses.</p>
+                
+                <h3>1. Information We Collect</h3>
+                <p>We collect information you provide directly, such as when you create an account, make a purchase, or contact us. This includes name, email address, payment information, and course progress data.</p>
+                
+                <h3>2. How We Use Your Information</h3>
+                <ul>
+                    <li>To provide and improve our services</li>
+                    <li>To process transactions and send receipts</li>
+                    <li>To communicate with you about updates and offers</li>
+                    <li>To generate certificates and track progress</li>
+                </ul>
+                
+                <h3>3. Data Sharing</h3>
+                <p>We do not sell your personal data. We may share data with service providers who assist in operating our platform (e.g., payment processors, hosting services) under strict confidentiality agreements.</p>
+                
+                <h3>4. Cookies and Tracking</h3>
+                <p>We use essential cookies to enable core functionality and analytics cookies to understand user behavior and improve the learning experience.</p>
+                
+                <h3>5. Your Rights</h3>
+                <p>You have the right to access, correct, or delete your personal data. Contact us at support@goorac.com to exercise these rights.</p>
+                
+                <p>For the full policy, please contact us.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms and Conditions Modal -->
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Terms of Service</h2>
+                <button onclick="closeModal('termsModal')" class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-back" onclick="closeModal('termsModal')">
+                    ← Back
+                </div>
+                <p><strong>Last updated: June 27, 2026</strong></p>
+                
+                <p>Welcome to Goorac Learn. By accessing or using our services, you agree to be bound by these Terms of Service.</p>
+                
+                <h3>1. Use of Services</h3>
+                <p>Our courses are for personal, non-commercial educational use. You may not redistribute, resell, or share course materials without explicit permission.</p>
+                
+                <h3>2. Accounts and Payments</h3>
+                <p>You are responsible for maintaining the confidentiality of your account. All payments are final and non-refundable unless otherwise stated in our refund policy.</p>
+                
+                <h3>3. Intellectual Property</h3>
+                <p>All course content, including videos, documents, and certificates, is owned by Goorac Corporation and protected by copyright laws.</p>
+                
+                <h3>4. User Conduct</h3>
+                <p>You agree not to engage in any activity that disrupts the service or infringes on the rights of others.</p>
+                
+                <h3>5. Termination</h3>
+                <p>We reserve the right to terminate accounts that violate these terms.</p>
+                
+                <h3>6. Limitation of Liability</h3>
+                <p>Our liability is limited to the amount you paid for the course. We are not liable for indirect, incidental, or consequential damages.</p>
+                
+                <p>These terms are governed by the laws of India. For questions, contact support@goorac.com.</p>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Automatically set current year
@@ -509,6 +717,41 @@
                 }
             });
         });
+        
+        // Modal Functions
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'flex';
+            // Prevent background scroll
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'none';
+            document.body.style.overflow = 'visible';
+        }
+        
+        // Close modals when clicking outside the content
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModal(modal.id);
+                }
+            });
+        });
+        
+        // Keyboard support - ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === "Escape") {
+                const openModals = document.querySelectorAll('.modal[style*="flex"]');
+                openModals.forEach(modal => {
+                    closeModal(modal.id);
+                });
+            }
+        });
+        
+        // Enhanced mobile back button simulation already handled in modal HTML
     </script>
 </body>
 </html>
