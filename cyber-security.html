@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta name="title" content="Advanced Cyber Security | Goorac Learn">
+    <meta name="description" content="Master the future of Cyber Security with Goorac Learn. Bridge the gap between basic IT and professional security engineering with our 25-module certification course.">
+    <meta name="keywords" content="Cyber Security, Security Certification, Goorac Learn, Goorac Corporation, Ethical Hacking, Penetration Testing, SOC, InfoSec">
+    <meta name="author" content="Goorac Corporation">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.yourwebsite.com/index.html"> 
+    <meta property="og:title" content="Advanced Cyber Security | Goorac Learn">
+    <meta property="og:description" content="A flagship educational certification initiative from Goorac Corporation. Learn the systemic, data-driven methods used by elite security professionals to protect enterprise networks.">
+    <meta property="og:image" content="https://www.yourwebsite.com/icon.png"> 
+    <meta property="og:image:secure_url" content="https://www.yourwebsite.com/icon.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Goorac Learn">
+
+    <meta property="twitter:card" content="summary_large_image"> 
+    <meta property="twitter:url" content="https://www.yourwebsite.com/index.html"> 
+    <meta property="twitter:title" content="Advanced Cyber Security | Goorac Learn">
+    <meta property="twitter:description" content="A flagship educational certification initiative from Goorac Corporation. Learn the systemic, data-driven methods used by elite security professionals to protect enterprise networks.">
+    <meta property="twitter:image" content="https://www.yourwebsite.com/icon.png"> 
+    <title>Advanced Cyber Security | Goorac Learn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Premium SaaS Theme Variables - Emerald & Midnight Blue */
+        :root {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #059669; /* Emerald Green */
+            --primary-hover: #047857;
+            --border-color: #e2e8f0;
+            --code-bg: #0f172a; /* Midnight Blue */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #020617; /* Deep Midnight Blue */
+                --surface-color: #0f172a;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --border-color: #1e293b;
+                --code-bg: #000000;
+            }
+        }
+
+        /* Global Reset */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: var(--bg-color); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; line-height: 1.6;
+            -webkit-font-smoothing: antialiased; overflow-x: hidden;
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        /* Typography & Utilities */
+        h1, h2, h3 { font-weight: 800; line-height: 1.2; letter-spacing: -0.5px; }
+        p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 20px; }
+        .text-primary { color: var(--primary); }
+        .text-center { text-align: center; }
+        
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; width: 100%; }
+        .section { padding: 80px 0; }
+
+        /* Navigation */
+        .top-nav {
+            background-color: rgba(var(--surface-color), 0.9); border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); backdrop-filter: blur(10px);
+        }
+        .brand { font-size: 22px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; text-decoration: none; display: flex; align-items: center; gap: 10px;}
+        .brand-logo { width: 32px; height: 32px; border-radius: 8px; box-shadow: var(--shadow-sm); }
+        .nav-link { color: var(--text-main); font-weight: 600; text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+        .nav-link:hover { color: var(--primary); }
+
+        /* Hero Section */
+        .hero { text-align: center; padding: 100px 20px 60px; }
+        .hero-logo { width: 100px; height: 100px; border-radius: 50%; box-shadow: var(--shadow-lg); margin-bottom: 24px; border: 4px solid var(--surface-color); }
+        /* Adjusted font size clamp for the longer text to fit gracefully */
+        .hero h1 { font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 16px; color: var(--text-main); }
+        .hero p { max-width: 600px; margin: 0 auto 32px; font-size: 1.2rem; }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+            background-color: var(--primary); color: white; border: none; text-decoration: none;
+            border-radius: var(--radius-lg); padding: 16px 32px; font-size: 1.1rem;
+            font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px 0 rgba(5, 150, 105, 0.39);
+        }
+        .btn:hover { background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4); }
+        .btn:active { transform: translateY(0); }
+
+        /* Trusted By Section */
+        .trusted-section { padding: 40px 0; background: var(--surface-color); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); text-align: center; }
+        .trusted-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); font-weight: 700; margin-bottom: 24px; }
+        .logo-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 40px; opacity: 0.7; filter: grayscale(100%); transition: 0.3s; }
+        .logo-grid:hover { filter: grayscale(0%); opacity: 1; }
+        .logo-grid img { height: 28px; object-fit: contain; }
+
+        /* Features Grid */
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 40px; }
+        .feature-card {
+            background: var(--surface-color); border-radius: var(--radius-xl); padding: 32px;
+            border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--primary); }
+        .icon-wrapper { width: 56px; height: 56px; background: rgba(5, 150, 105, 0.1); color: var(--primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+        .icon-wrapper svg { width: 28px; height: 28px; }
+        .feature-card h3 { font-size: 1.25rem; margin-bottom: 12px; }
+        .feature-card p { font-size: 0.95rem; margin-bottom: 0; }
+
+        /* Curriculum Table */
+        .table-wrapper { background: var(--surface-color); border-radius: var(--radius-xl); border: 1px solid var(--border-color); overflow: hidden; box-shadow: var(--shadow-md); margin-top: 40px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: rgba(5, 150, 105, 0.05); padding: 16px 24px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--primary); letter-spacing: 0.05em; border-bottom: 1px solid var(--border-color); }
+        td { padding: 20px 24px; font-size: 0.95rem; border-bottom: 1px solid var(--border-color); color: var(--text-main); font-weight: 500; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: var(--bg-color); }
+        .module-num { font-family: 'JetBrains Mono', monospace; color: var(--text-muted); font-size: 0.85rem; margin-right: 12px; font-weight: 600; }
+
+        /* Pricing Section */
+        .pricing-card {
+            background: var(--surface-color); border-radius: var(--radius-xl); padding: 40px;
+            border: 2px solid var(--primary); box-shadow: var(--shadow-lg);
+            max-width: 450px; margin: 40px auto 0; text-align: center; position: relative;
+        }
+        .pricing-card::before {
+            content: "Most Popular"; position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+            background: var(--primary); color: white; font-size: 0.8rem; font-weight: 700;
+            padding: 4px 16px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .pricing-header h3 { font-size: 1.4rem; margin-bottom: 12px; }
+        .price { font-size: 3.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; line-height: 1; }
+        .price span { font-size: 1rem; color: var(--text-muted); font-weight: 500; }
+        .pricing-header p { font-size: 0.95rem; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 24px; }
+        .pricing-features { list-style: none; text-align: left; margin-bottom: 32px; }
+        .pricing-features li { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; font-size: 1rem; font-weight: 500; }
+        .pricing-features li svg { color: var(--primary); flex-shrink: 0; }
+
+        /* Footer */
+        footer { background: var(--code-bg); color: #94a3b8; padding: 40px 20px; text-align: center; margin-top: auto; }
+        .footer-brand { font-size: 1.5rem; font-weight: 800; color: white; margin-bottom: 10px; display: inline-block; }
+        .footer-brand span { color: var(--primary); }
+        .footer-links { display: flex; justify-content: center; gap: 24px; margin: 20px 0; }
+        .footer-links a { color: #cbd5e1; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; cursor: pointer; }
+        .footer-links a:hover { color: white; }
+        .copyright { font-size: 0.85rem; opacity: 0.7; }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: var(--surface-color); border-radius: var(--radius-xl);
+            width: 90%; max-width: 700px; max-height: 85vh;
+            box-shadow: var(--shadow-lg); display: flex; flex-direction: column;
+            transform: translateY(20px); transition: all 0.3s ease;
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .modal-header {
+            padding: 24px; border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-header h2 { font-size: 1.5rem; margin: 0; color: var(--text-main); }
+        .close-modal {
+            background: none; border: none; color: var(--text-muted); cursor: pointer;
+            font-size: 1.8rem; line-height: 1; transition: color 0.2s;
+        }
+        .close-modal:hover { color: var(--primary); }
+        .modal-body {
+            padding: 24px; overflow-y: auto; color: var(--text-muted); font-size: 0.95rem; text-align: left;
+        }
+        .modal-body h3 { color: var(--text-main); font-size: 1.1rem; margin: 24px 0 12px; }
+        .modal-body p { margin-bottom: 16px; font-size: 0.95rem; }
+        .modal-body ul { margin-left: 20px; margin-bottom: 16px; }
+        .modal-body li { margin-bottom: 8px; }
+        .modal-body strong { color: var(--text-main); }
+        
+        /* --- ADDED: IG/Browser Detection Modal Styles --- */
+        #igBrowserModal .modal-content { max-width: 400px; text-align: center; padding: 40px 24px; align-items: center;}
+        .browser-icon { width: 56px; height: 56px; margin-bottom: 20px; color: #4285F4; background: rgba(66, 133, 244, 0.1); padding: 12px; border-radius: 50%;}
+        .chrome-btn {
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            background-color: #4285F4; color: white; border: none; border-radius: var(--radius-lg);
+            padding: 16px 24px; font-weight: 700; font-size: 1.05rem; cursor: pointer; text-decoration: none;
+            margin-top: 24px; width: 100%; transition: all 0.2s; box-shadow: 0 4px 14px 0 rgba(66, 133, 244, 0.39);
+        }
+        .chrome-btn:hover { background-color: #3367D6; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4); }
+        .chrome-btn svg { width: 22px; height: 22px; }
+
+        /* --- NEW: IG/Browser Top Banner Styles --- */
+        #igBrowserBanner {
+            display: none;
+            background-color: #4285F4;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 0.95rem;
+            position: sticky;
+            top: 0;
+            z-index: 1001; /* Above modal overlays if any */
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            box-shadow: var(--shadow-md);
+        }
+        #igBrowserBanner.active {
+            display: flex;
+            animation: slideDown 0.3s ease-out forwards;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+        .banner-text { flex-grow: 1; text-align: left; }
+        .banner-btn {
+            background: white;
+            color: #4285F4;
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.2s;
+        }
+        .banner-btn:hover { background: #f8fafc; }
+        .dismiss-banner {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.5rem;
+            line-height: 1;
+            opacity: 0.8;
+            padding: 0 5px;
+            transition: opacity 0.2s;
+        }
+        .dismiss-banner:hover { opacity: 1; }
+
+        @media (max-width: 600px) {
+            #igBrowserBanner { flex-direction: column; gap: 10px; text-align: center; }
+            .banner-text { text-align: center; }
+            .dismiss-banner { position: absolute; top: 10px; right: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="igBrowserBanner">
+        <span class="banner-text"><strong>Action Required:</strong> Instagram's browser restricts enrollment. Open in Chrome for the best experience.</span>
+        <button onclick="forceOpenChrome()" class="banner-btn">Open in Chrome</button>
+        <button onclick="dismissBanner()" class="dismiss-banner">&times;</button>
+    </div>
+
+    <header class="hero container">
+        <img src="icon.png" alt="Goorac Logo" class="hero-logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23059669\'/><text x=\'50\' y=\'65\' font-size=\'50\' font-family=\'sans-serif\' font-weight=\'bold\' fill=\'white\' text-anchor=\'middle\'>G</text></svg>'">
+        <h1>Master the Future of <br><span class="text-primary">Cyber Security</span></h1>
+        <p>A flagship educational certification initiative from <strong>Goorac Corporation</strong>. We bridge the gap between basic IT and professional security engineering.</p>
+        <a href="cybersecurity.html" class="btn">
+            Enroll in Certificate Course
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+        </a>
+    </header>
+
+    <section class="trusted-section">
+        <div class="container">
+            <div class="trusted-label">Curriculum Backed & Recognized By</div>
+            <div class="logo-grid">
+                <img src="images/google.png" alt="Google" onerror="this.style.display='none'">
+                <img src="images/amazon.png" alt="Amazon" onerror="this.style.display='none'">
+                <img src="images/microsoft.png" alt="Microsoft" onerror="this.style.display='none'">
+                <img src="images/zoho.png" alt="Zoho" onerror="this.style.display='none'">
+                
+                <span style="font-weight: 800; font-size: 1.2rem; color: var(--text-main);">Google</span>
+                <span style="font-weight: 800; font-size: 1.2rem; color: var(--text-main);">Amazon</span>
+                <span style="font-weight: 800; font-size: 1.2rem; color: var(--text-main);">Microsoft</span>
+                <span style="font-weight: 800; font-size: 1.2rem; color: var(--text-main);">Zoho</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section container">
+        <h2 class="text-center">Cyber Security Course Highlights</h2>
+        <p class="text-center" style="max-width: 600px; margin: 0 auto;">Move beyond basic antivirus tools. Learn the systemic, data-driven methods used by elite security professionals to protect enterprise networks and earn your verified credentials.</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                </div>
+                <h3>Threat Architecture</h3>
+                <p>Learn to design robust Zero Trust networks, establish strict access controls, and mitigate vulnerabilities for enterprise systems.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                </div>
+                <h3>Proactive Defense</h3>
+                <p>Command modern tools to output highly effective, production-ready defensive protocols (EDR, SIEM, Penetration Testing) with high efficiency.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                </div>
+                <h3>Official Certification</h3>
+                <p>Pass the final 10-question exam to earn a verifiable, multi-color digital certificate backed by the Goorac Corporation.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section container" style="padding-top: 0;">
+        <h2 class="text-center">Comprehensive 25-Module Curriculum</h2>
+        
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Key Topics Covered</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="module-num">01-05</span> Security Foundations & Network Architecture</td>
+                        <td>OSI Model, TCP/IP Suite, Hashing, Cryptography, and Identity Access Management (IAM).</td>
+                    </tr>
+                    <tr>
+                        <td><span class="module-num">06-10</span> System Admin & Perimeter Defense</td>
+                        <td>Linux/Windows Hardening, Bash/Python Scripting, Firewalls, IDS/IPS, and Honeypots.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="module-num">11-15</span> Offensive Security & Ethical Hacking</td>
+                        <td>Nmap OSINT, OWASP Top 10, Metasploit, Wi-Fi Exploitation, and Social Engineering Tactics.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="module-num">16-20</span> Defensive Operations & SOC</td>
+                        <td>SIEM Management, Digital Forensics (DFIR), Malware Analysis, EDR, and Threat Hunting.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="module-num">21-25</span> Cloud, DevSecOps & AI Security</td>
+                        <td>AWS/Azure Security, Shift-Left, GRC Compliance, Adversarial AI, and Zero Trust Architecture.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section container" style="padding-top: 0;">
+        <h2 class="text-center">Simple, Transparent Pricing</h2>
+        <p class="text-center" style="max-width: 600px; margin: 0 auto;">Invest in your future with full access to our comprehensive cyber security certification.</p>
+        
+        <div class="pricing-card">
+            <div class="pricing-header">
+                <h3>Full Certification Course</h3>
+                <div class="price">₹249<span> / one-time</span></div>
+                <p>Lifetime access to all 25 modules and updates.</p>
+            </div>
+            <ul class="pricing-features">
+                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> 25 Comprehensive Modules</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> Official Verifiable Certificate</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> Real-world AI Integration Projects</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> Lifetime Access & Updates</li>
+            </ul>
+            <a href="cybersecurity.html" class="btn" style="width: 100%;">Enroll Now for ₹249</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-brand">Goorac <span>Learn</span></div>
+        <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 0;">Empowering the next generation of cybersecurity professionals.</p>
+        
+        <div class="footer-links">
+            <a href="cybersecurity.html">Course Access</a>
+            <a onclick="openModal('privacyModal')">Privacy Policy</a>
+            <a onclick="openModal('termsModal')">Terms of Service</a>
+        </div>
+        
+        <div class="copyright">
+            &copy; <span id="year"></span> Goorac Corporation. All rights reserved.
+        </div>
+    </footer>
+
+    <div id="privacyModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Privacy Policy</h2>
+                <button class="close-modal" onclick="closeModal('privacyModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Effective Date:</strong> January 1, 2024</p>
+                <p>Goorac Corporation ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use the Goorac Learn platform.</p>
+                
+                <h3>1. Information We Collect</h3>
+                <p>We may collect personal information that you voluntarily provide to us when you register for the Advanced Cyber Security Course, express an interest in obtaining information about us, or otherwise contact us. This includes:</p>
+                <ul>
+                    <li><strong>Personal Data:</strong> Name, email address, billing address, and payment information.</li>
+                    <li><strong>Usage Data:</strong> Course progress, quiz scores, and interaction times on our platform.</li>
+                </ul>
+
+                <h3>2. How We Use Your Information</h3>
+                <p>Having accurate information about you permits us to provide you with a smooth, efficient, and customized experience. Specifically, we may use your information to:</p>
+                <ul>
+                    <li>Process transactions and generate your digital certificate upon course completion.</li>
+                    <li>Email you regarding your account, course updates, and new security curriculum additions.</li>
+                    <li>Monitor and analyze usage and trends to improve your experience.</li>
+                </ul>
+
+                <h3>3. Data Security</h3>
+                <p>We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable.</p>
+
+                <h3>4. Contact Us</h3>
+                <p>If you have questions or comments about this Privacy Policy, please contact us at legal@goorac.com.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="termsModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Terms of Service</h2>
+                <button class="close-modal" onclick="closeModal('termsModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Last Updated:</strong> January 1, 2024</p>
+                <p>Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the Goorac Learn website operated by Goorac Corporation.</p>
+                
+                <h3>1. Acceptance of Terms</h3>
+                <p>By accessing or using our platform, you agree to be bound by these Terms. If you disagree with any part of the terms, then you may not access the course material or certification system.</p>
+
+                <h3>2. Intellectual Property License</h3>
+                <p>Upon enrollment, Goorac Corporation grants you a revocable, non-exclusive, non-transferable, limited license to access and view the course content for your personal, non-commercial educational purposes. You may not:</p>
+                <ul>
+                    <li>Reproduce, duplicate, copy, sell, or resell any part of the curriculum.</li>
+                    <li>Share your login credentials with unauthorized third parties.</li>
+                    <li>Reverse engineer the certification exam mechanism.</li>
+                </ul>
+
+                <h3>3. User Conduct</h3>
+                <p>You agree to use the platform only for lawful purposes. You are prohibited from using the site to engage in any prompt injection attacks against our systems, scraping data, or violating the security of any computer network.</p>
+
+                <h3>4. Limitation of Liability</h3>
+                <p>In no event shall Goorac Corporation, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.</p>
+
+                <h3>5. Governing Law</h3>
+                <p>These Terms shall be governed and construed in accordance with the laws of the jurisdiction in which Goorac Corporation is registered, without regard to its conflict of law provisions.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="igBrowserModal" class="modal-overlay">
+        <div class="modal-content">
+            <svg class="browser-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 10a3 3 0 106 0m-6 0a3 3 0 116 0m-6 0H3m15 0h-3m-6 4v5m0-5v-5" />
+            </svg>
+            <h2 style="font-size: 1.4rem; margin-bottom: 8px; color: var(--text-main);">For the Best Experience</h2>
+            <p style="font-size: 1rem; color: var(--text-muted); margin-bottom: 24px;">Instagram's built-in browser might restrict enrollment. Please open this page in Google Chrome.</p>
+            <button onclick="forceOpenChrome()" class="chrome-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.844 5.372a.5.5 0 0 1-.397.608l-1.92.384a.5.5 0 1 1-.192-.98l1.32-.264-1.28-1.28A6.97 6.97 0 0 0 8 1.018a6.97 6.97 0 0 0-4.938 2.052L4.01 4.02l.264 1.32a.5.5 0 0 1-.98.192l-.384-1.92a.5.5 0 0 1 .608-.608l1.92.384 1.28-1.28A8.02 8.02 0 0 1 8 0c2.21 0 4.21.896 5.662 2.348l1.28 1.28 1.28-1.28a.5.5 0 0 1 .808.536l-1.12 5.6a.5.5 0 0 1-.58.39l-5.6-1.12a.5.5 0 0 1 .192-.98l1.32.264-1.28-1.28A6.97 6.97 0 0 0 8 1.018a6.97 6.97 0 0 0-4.938 2.052l1.28 1.28.264-1.32a.5.5 0 1 1 .98.192l-.384 1.92a.5.5 0 0 1-.608.608l-1.92-.384a.5.5 0 1 1 .192-.98l1.32-.264 1.28-1.28A8.02 8.02 0 0 1 8 0a8.02 8.02 0 0 1 5.662 2.348z"/>
+                </svg>
+                Open in Chrome
+            </button>
+            <p style="font-size: 0.85rem; margin-top: 20px; margin-bottom: 0; color: var(--text-muted);">
+                Or tap the <strong>3 dots</strong> (top right) and select<br><strong>"Open in system browser"</strong>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Automatically set the current copyright year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Modal Logic
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = ''; // Restore background scrolling
+        }
+
+        // Close modal when clicking outside the modal content
+        window.onclick = function(event) {
+            // Note: Preventing click-outside for IG modal so they don't accidentally close it
+            if (event.target.classList.contains('modal-overlay') && event.target.id !== 'igBrowserModal') {
+                event.target.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // --- NEW: Dismiss banner logic ---
+        function dismissBanner() {
+            document.getElementById('igBrowserBanner').classList.remove('active');
+        }
+
+        // --- ADDED: Instagram Detection & Auto-Redirect Logic ---
+        function isInstagramBrowser() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            return (ua.indexOf('Instagram') > -1);
+        }
+
+        function forceOpenChrome() {
+            const currentUrl = window.location.href;
+            const isAndroid = /android/i.test(navigator.userAgent);
+            const isIOS = /ipad|iphone|ipod/i.test(navigator.userAgent);
+
+            if (isAndroid) {
+                // Uses Android Intent to force open Chrome
+                const intentUrl = `intent://${window.location.host}${window.location.pathname}${window.location.search}#Intent;scheme=https;package=com.android.chrome;end;`;
+                window.location.href = intentUrl;
+            } else if (isIOS) {
+                // Uses googlechrome:// scheme for iOS devices
+                const iosUrl = currentUrl.replace(/^https?:\/\//i, 'googlechrome://');
+                window.location.href = iosUrl;
+            } else {
+                window.open(currentUrl, '_blank');
+            }
+        }
+
+        // Check on load
+        window.addEventListener('load', function() {
+            if (isInstagramBrowser()) {
+                // NEW: Show top banner instead of the intrusive modal
+                document.getElementById('igBrowserBanner').classList.add('active');
+
+                // NEW: Intercept clicks on the enroll buttons strictly requiring them to open Chrome
+                const enrollBtns = document.querySelectorAll('a.btn');
+                enrollBtns.forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault(); // Stop standard link behavior
+                        forceOpenChrome();  // Force open in Chrome instead
+                    });
+                });
+
+                // --- ORIGINAL MODAL LOGIC (Commented out as requested instead of removed) ---
+                // Show the modal
+                // openModal('igBrowserModal');
+                
+                // Try automatically redirecting after 1.5 seconds (fulfills your "auto redirect" requirement)
+                // Note: IG occasionally blocks auto-redirects, which is why the modal is there as a fallback!
+                // setTimeout(forceOpenChrome, 1500); 
+            }
+        });
+    </script>
+</body>
+</html>
