@@ -44,6 +44,7 @@
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-glow: 0 0 20px rgba(5, 150, 105, 0.4);
             --radius-md: 8px;
             --radius-lg: 12px;
             --radius-xl: 16px;
@@ -57,6 +58,7 @@
                 --text-muted: #94a3b8;
                 --border-color: #1e293b;
                 --code-bg: #000000;
+                --shadow-glow: 0 0 20px rgba(5, 150, 105, 0.2);
             }
         }
 
@@ -78,7 +80,7 @@
 
         /* Navigation */
         .top-nav {
-            background-color: rgba(var(--surface-color), 0.95); 
+            background-color: rgba(var(--surface-color), 0.85); 
             border-bottom: 1px solid var(--border-color);
             padding: 16px 20px; 
             display: flex; 
@@ -88,7 +90,8 @@
             top: 0; 
             z-index: 100; 
             box-shadow: var(--shadow-sm); 
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
         .brand { 
             font-size: 24px; 
@@ -100,18 +103,21 @@
             align-items: center; 
             gap: 10px;
             white-space: nowrap;
+            transition: transform 0.3s ease;
         }
+        .brand:hover { transform: scale(1.02); }
         .brand-logo { 
             width: 36px; 
             height: 36px; 
             border-radius: 8px; 
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 900;
             font-size: 20px;
+            box-shadow: var(--shadow-sm);
         }
         .nav-links { display: flex; gap: 24px; align-items: center; }
         .nav-link { 
@@ -119,35 +125,57 @@
             font-weight: 600; 
             text-decoration: none; 
             font-size: 0.98rem; 
-            transition: color 0.2s; 
+            transition: color 0.2s, transform 0.2s; 
+            display: inline-block;
         }
-        .nav-link:hover { color: var(--primary); }
+        .nav-link:hover { color: var(--primary); transform: translateY(-1px); }
+
+        /* Advanced Animated Background for Hero */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
         /* Hero */
         .hero { 
             text-align: center; 
             padding: 120px 20px 80px; 
-            background: linear-gradient(135deg, var(--surface-color) 0%, rgba(5,150,105,0.05) 100%);
+            background: linear-gradient(-45deg, var(--surface-color), rgba(5,150,105,0.08), rgba(14,165,233,0.08), var(--surface-color));
+            background-size: 400% 400%;
+            animation: gradientShift 12s ease infinite;
+            position: relative;
         }
         .hero-logo { 
             width: 110px; 
             height: 110px; 
             border-radius: 50%; 
-            box-shadow: var(--shadow-lg); 
+            box-shadow: var(--shadow-glow); 
             margin-bottom: 24px; 
             border: 6px solid var(--surface-color);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hero-logo:hover {
+            transform: rotate(360deg) scale(1.05);
         }
         .hero h1 { 
             font-size: clamp(2.8rem, 5.5vw, 4.2rem); 
             margin-bottom: 20px; 
             line-height: 1.1;
+            animation: slideUp 0.8s ease-out;
         }
-        .hero .highlight { color: var(--primary); }
+        .hero .highlight { 
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            background-image: linear-gradient(135deg, var(--primary), var(--accent));
+        }
         .hero p { 
-            max-width: 680px; 
+            max-width: 780px; 
             margin: 0 auto 40px; 
             font-size: 1.25rem; 
             color: var(--text-muted);
+            animation: slideUp 1s ease-out;
         }
 
         /* Course Cards */
@@ -163,15 +191,33 @@
             overflow: hidden;
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow-md);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             height: 100%;
             display: flex;
             flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: var(--radius-xl);
+            padding: 2px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
         }
         .course-card:hover {
             transform: translateY(-12px);
             box-shadow: var(--shadow-lg);
-            border-color: var(--primary);
+        }
+        .course-card:hover::before {
+            opacity: 1;
         }
         .course-header {
             height: 200px;
@@ -182,11 +228,26 @@
             color: white;
             padding: 20px;
             text-align: center;
+            overflow: hidden;
+        }
+        .course-header::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            animation: shine 6s infinite;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
         }
         .course-header h3 {
             font-size: 1.85rem;
             font-weight: 800;
             text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 2;
         }
         .course-badge {
             position: absolute;
@@ -198,6 +259,8 @@
             border-radius: 9999px;
             font-size: 0.8rem;
             font-weight: 700;
+            z-index: 2;
+            box-shadow: var(--shadow-sm);
         }
         .course-body {
             padding: 32px;
@@ -211,7 +274,7 @@
             color: var(--text-main);
             margin: 12px 0 20px;
         }
-        .price span { font-size: 1rem; color: var(--text-muted); }
+        .price span { font-size: 1rem; color: var(--text-muted); font-weight: 500; }
         .features-list {
             list-style: none;
             margin: 0 0 32px;
@@ -229,7 +292,7 @@
             justify-content: center;
             align-items: center;
             gap: 10px;
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
             color: white;
             border: none;
             text-decoration: none;
@@ -238,12 +301,14 @@
             font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             margin-top: auto;
+            box-shadow: 0 4px 14px 0 rgba(5, 150, 105, 0.39);
         }
         .btn:hover {
-            background-color: var(--primary-hover);
             transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.23);
+            background: linear-gradient(135deg, var(--primary-hover), var(--primary));
         }
         
         /* Benefits */
@@ -255,6 +320,11 @@
         .benefit-card {
             text-align: center;
             padding: 32px 20px;
+            border-radius: var(--radius-lg);
+            transition: background 0.3s ease;
+        }
+        .benefit-card:hover {
+            background: rgba(5, 150, 105, 0.03);
         }
         .benefit-icon {
             width: 68px;
@@ -266,6 +336,22 @@
             align-items: center;
             justify-content: center;
             color: var(--primary);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .benefit-card:hover .benefit-icon {
+            transform: scale(1.15) rotate(5deg);
+            background: rgba(5,150,105,0.2);
+        }
+
+        /* Scroll Reveal Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* Footer */
@@ -274,6 +360,14 @@
             color: #94a3b8;
             padding: 60px 20px 30px;
             margin-top: auto;
+            position: relative;
+            overflow: hidden;
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
         }
         .footer-brand {
             font-size: 1.8rem;
@@ -287,6 +381,13 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 40px;
             margin-top: 40px;
+        }
+        .footer-grid a {
+            transition: color 0.2s, padding-left 0.2s;
+        }
+        .footer-grid a:hover {
+            color: var(--primary) !important;
+            padding-left: 6px;
         }
         .copyright {
             text-align: center;
@@ -326,12 +427,17 @@
             height: 100%;
             background-color: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             align-items: center;
             justify-content: center;
             padding: 20px;
             overflow-y: auto;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        
+        .modal.show {
+            opacity: 1;
+        }
         .modal-content {
             background: var(--surface-color);
             max-width: 700px;
@@ -341,8 +447,12 @@
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
         .modal-header {
             padding: 20px 24px;
             border-bottom: 1px solid var(--border-color);
@@ -379,6 +489,7 @@
         .modal-close:hover {
             background: #f1f5f9;
             color: var(--text-main);
+            transform: rotate(90deg);
         }
         
         .modal-body {
@@ -418,6 +529,12 @@
                 margin-bottom: 16px;
             }
         }
+        
+        /* Entrance Animations */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -438,9 +555,10 @@
         <div class="container">
             <img src="icon.png" alt="Goorac Logo" class="hero-logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23059669\'/><text x=\'50\' y=\'65\' font-size=\'55\' font-family=\'sans-serif\' font-weight=\'bold\' fill=\'white\' text-anchor=\'middle\'>G</text></svg>'">
             <h1>Master Tomorrow's <span class="highlight">Skills</span> Today</h1>
-            <p>Industry-leading professional certification programs designed to advance your career in data intelligence, artificial intelligence, digital growth, and strategic human resource management.</p>
             
-            <div style="margin-top: 20px;">
+            <p>Empower your professional journey with universally recognized Goorac Certificate Programs. Tailored to match your unique career details and aspirations, our overarching curriculum ensures you master the critical skills shaping the future, all under one unified global standard.</p>
+            
+            <div style="margin-top: 20px; animation: slideUp 1.2s ease-out;">
                 <a href="#courses" class="btn" style="width: auto; display: inline-flex; padding-left: 48px; padding-right: 48px;">
                     Explore Our Courses
                 </a>
@@ -450,13 +568,13 @@
 
     <section id="courses" class="section" style="background: var(--bg-color); padding-top: 40px;">
         <div class="container">
-            <div style="text-align: center; max-width: 700px; margin: 0 auto 60px;">
+            <div class="reveal" style="text-align: center; max-width: 700px; margin: 0 auto 60px;">
                 <h2 style="font-size: 2.6rem; margin-bottom: 16px;">Our Flagship Certifications</h2>
                 <p style="font-size: 1.2rem; color: var(--text-muted);">Choose your path. All programs include lifetime access, hands-on projects, and official certificates.</p>
             </div>
 
             <div class="courses-grid">
-                <div class="course-card">
+                <div class="course-card reveal">
                     <div class="course-header" style="background: linear-gradient(135deg, #059669, #10b981);">
                         <h3>Prompt Engineering</h3>
                         <div class="course-badge">25 Modules</div>
@@ -474,7 +592,7 @@
                     </div>
                 </div>
 
-                <div class="course-card">
+                <div class="course-card reveal" style="transition-delay: 100ms;">
                     <div class="course-header" style="background: linear-gradient(135deg, #0ea5e9, #3b82f6);">
                         <h3>Data Analytics</h3>
                         <div class="course-badge">25 Modules</div>
@@ -492,7 +610,7 @@
                     </div>
                 </div>
 
-                <div class="course-card">
+                <div class="course-card reveal" style="transition-delay: 200ms;">
                     <div class="course-header" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
                         <h3>HR Management</h3>
                         <div class="course-badge">25 Modules</div>
@@ -510,7 +628,7 @@
                     </div>
                 </div>
                 
-                <div class="course-card">
+                <div class="course-card reveal" style="transition-delay: 300ms;">
                     <div class="course-header" style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">
                         <h3>Digital Marketing</h3>
                         <div class="course-badge">25 Modules</div>
@@ -533,24 +651,24 @@
 
     <section class="section" style="background: var(--surface-color);">
         <div class="container">
-            <h2 class="text-center" style="margin-bottom: 60px;">Why Professionals Choose Goorac Learn</h2>
+            <h2 class="text-center reveal" style="margin-bottom: 60px; text-align: center;">Why Professionals Choose Goorac Learn</h2>
             
             <div class="benefits-grid">
-                <div class="benefit-card">
+                <div class="benefit-card reveal">
                     <div class="benefit-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                     </div>
                     <h3>Verifiable Certificates</h3>
                     <p>Shareable digital certificates recognized by industry leaders.</p>
                 </div>
-                <div class="benefit-card">
+                <div class="benefit-card reveal" style="transition-delay: 150ms;">
                     <div class="benefit-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25"><path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894L18 21H6l-2.236-8.106A2 2 0 015.236 10H10" /></svg>
                     </div>
                     <h3>Lifetime Access</h3>
                     <p>All future updates included. Learn at your own pace forever.</p>
                 </div>
-                <div class="benefit-card">
+                <div class="benefit-card reveal" style="transition-delay: 300ms;">
                     <div class="benefit-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 01-2-2H7a2 2 0 01-2 2v16m14 0h-4m-6 0H5" /></svg>
                     </div>
@@ -562,7 +680,7 @@
     </section>
 
     <footer>
-        <div class="container">
+        <div class="container reveal">
             <div class="footer-brand">Goorac <span>Learn</span></div>
             <p>Professional certification programs for the digital era.</p>
 
@@ -622,6 +740,7 @@
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
         
+        // Smooth scrolling for anchors
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 if (this.getAttribute('href') === '#courses') {
@@ -631,14 +750,23 @@
             });
         });
         
+        // Advanced Modal Logic with CSS Transitions
         function showModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'flex';
+            // Trigger reflow
+            void modal.offsetWidth; 
+            modal.classList.add('show');
             document.body.style.overflow = 'hidden';
         }
         
         function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-            document.body.style.overflow = 'visible';
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'visible';
+            }, 300); // Matches CSS transition duration
         }
         
         document.querySelectorAll('.modal').forEach(modal => {
@@ -646,6 +774,22 @@
                 if (e.target === modal) closeModal(modal.id);
             });
         });
+
+        // Advanced Scroll Reveal Logic
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        // Trigger reveal on load for elements already in viewport
+        reveal();
     </script>
 </body>
 </html>
