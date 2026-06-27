@@ -52,6 +52,7 @@ const coursePrices = {
     "prompt-engineering": 14900, // ₹149.00
     "data-analytics": 14900,     // ₹149.00 (Example for future)
     "hr-management": 19900,     // ₹199.00 (Example for future)
+    "digital-marketing": 19900, // ₹199.00
     "default": 14900             // Fallback safeguard
 };
 
