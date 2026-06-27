@@ -251,7 +251,7 @@
         <div id="nav-profile" style="display:none; align-items: center; gap: 8px; cursor: pointer;" onclick="window.location.href='profile.html'"></div>
     </div>
 
-    <div id="splash-screen" class="screen active-screen">
+    <div id="splash-screen" class="screen active-screen" style="justify-content: center; align-items: center; text-align: center;">
         <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 20px; border-radius: 50%; box-shadow: var(--shadow-md);">
         <h1 style="color: var(--primary); margin-bottom: 8px; font-size: 2rem;">Goorac Learn</h1>
         <p style="color: var(--text-muted); font-weight: 500; font-size: 1rem;">Initializing HR management workspace...</p>
@@ -554,8 +554,7 @@
                         <li><b>Compliance Safeguards:</b> Constructing bulletproof corporate regulations that shield the enterprise from toxic liabilities, lawsuits, and regulatory destruction.</li>
                     </ul>
                     <p>When these core variables are properly balanced and maintained, employee efficiency spikes exponentially, overhead drops due to reduced errors, and turnover is safely contained. Throughout this extensive blueprint, you will master the exact mechanics used by top-tier corporate architects to scale elite teams safely across global markets.</p>
-                    ${generatePromptAndOutput('Ecosystem Metric Model', 'Calculate Alignment Velocity Index (AVI):\nAVI = (Strategic Initiatives Executed / Total Core Priorities) * Employee Engagement Rate\n\nVariables:\n- Core Priorities: 5\n- Strategic Initiatives Executed: 4\n- Employee Engagement Rate: 0.82', 'AVI Calculation:\nAVI = (4 / 5) * 0.82 = 0.80 * 0.82 = 0.656\nAlignment Rating: Optimal Structural Velocity [Target Baseline > 0.60]')}`
-                `,
+                    ${generatePromptAndOutput('Ecosystem Metric Model', 'Calculate Alignment Velocity Index (AVI):\nAVI = (Strategic Initiatives Executed / Total Core Priorities) * Employee Engagement Rate\n\nVariables:\n- Core Priorities: 5\n- Strategic Initiatives Executed: 4\n- Employee Engagement Rate: 0.82', 'AVI Calculation:\nAVI = (4 / 5) * 0.82 = 0.80 * 0.82 = 0.656\nAlignment Rating: Optimal Structural Velocity [Target Baseline > 0.60]')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> முறையான மனிதவள கட்டமைப்பு இல்லாத நிறுவனம், தவறான கியர்கள் கொண்ட விலையுயர்ந்த கார் போன்றது. என்ஜின் எவ்வளவு வேகமாக சுழன்றாலும் கியர்கள் சரியாக பொருந்தாவிட்டால் கார் நகராது அல்லது உடைந்துவிடும். மனிதவள மேலாண்மை என்பது நிறுவனத்தை சீராக இயக்கும் கியர் பாக்ஸ் ஆகும்.</div>
                     <p>நவீன மனிதவள மேலாண்மை (HR Management) மாஸ்டர்கிளாஸிற்கு உங்களை வரவேற்கிறோம். இன்றைய கார்ப்பரேட் உலகில், மனிதவளத் துறை என்பது வெறும் சம்பளப் பட்டியலைத் தயாரிப்பதோ அல்லது விடுப்புப் படிவங்களைச் சரிபார்ப்பதோ அல்ல. அது நிறுவனத்தின் பொருளாதார வளர்ச்சியையும் இலக்குகளையும் ஊழியர்களின் திறமையோடு நேரடியாக இணைக்கும் ஒரு மிக முக்கியமான தூணாகும்.</p>
@@ -569,7 +568,6 @@
                     </ul>
                     <p>இந்தக் கூறுகள் சரியாக இருக்கும்போது, நிறுவனத்தின் உற்பத்தித் திறன் பல மடங்கு அதிகரிக்கிறது, பிழைகள் குறைவதால் செலவுகள் குறைகின்றன, மற்றும் ஊழியர்கள் வெளியேறுவது தடுக்கப்படுகிறது. இந்த பாடத்திட்டத்தில், உலகளாவிய நிறுவனங்கள் பின்பற்றும் சிறந்த உத்திகளை நீங்கள் முழுமையாகக் கற்றுக்கொள்வீர்கள்.</p>
                     ${generatePromptAndOutput('Ecosystem Metric Model', 'AVI கணக்கீடு (Alignment Velocity Index):\nAVI = (நிறைவேற்றப்பட்ட இலக்குகள் / மொத்த முன்னுரிமைகள்) * ஊழியர் ஈடுபாடு\n\nதரவுகள்:\n- மொத்த முன்னுரிமைகள்: 5\n- நிறைவேற்றப்பட்ட இலக்குகள்: 4\n- ஊழியர் ஈடுபாடு: 0.82', 'AVI விடை:\nAVI = (4 / 5) * 0.82 = 0.80 * 0.82 = 0.656\nநிலை: உகந்த நிறுவன வேகம் [Optimal Velocity Baseline > 0.60]')}`
-                `
             },
             {
                 id: 2, icon: "🏗️", img: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
@@ -586,8 +584,7 @@
                         <li><b>Agile Squad Mapping:</b> Moving away from rigid waterfall departments to cross-functional "pods" or "squads" containing product, engineering, and marketing assets working on a single unified goal.</li>
                     </ul>
                     <p>By restructuring the matrix regularly during hyper-growth phases, HR leaders prevent the company from choking on its own internal bureaucracy. This is the difference between a startup that scales smoothly into a unicorn and one that implodes at 150 employees.</p>
-                    ${generatePromptAndOutput('Span of Control Modeler', 'Evaluate Span Ratio (SR):\nSR = Total Frontline Personnel / Total Operational Managers\n\nData:\n- Frontline Personnel: 120\n- Operational Managers: 15\n- Executive Layers: 4', 'SR Output:\nSR = 120 / 15 = 8.0\nStructure Classification: Healthy Agile Matrix [Standard Baseline: 6.0 - 10.0 per manager]\nLayer Warning: 4 layers is optimal for 135 total headcount.')}`
-                `,
+                    ${generatePromptAndOutput('Span of Control Modeler', 'Evaluate Span Ratio (SR):\nSR = Total Frontline Personnel / Total Operational Managers\n\nData:\n- Frontline Personnel: 120\n- Operational Managers: 15\n- Executive Layers: 4', 'SR Output:\nSR = 120 / 15 = 8.0\nStructure Classification: Healthy Agile Matrix [Standard Baseline: 6.0 - 10.0 per manager]\nLayer Warning: 4 layers is optimal for 135 total headcount.')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> நிறுவன வடிவமைப்பு என்பது ஒரு வானளாவிய கட்டிடத்தை எழுப்புவது போன்றது. அடித்தளத்தை வலுப்படுத்தாமல், நடுவில் அதிகப்படியான மேலாண்மை அடுக்குகளைக் கட்டினால், கட்டிடம் தன் சொந்த எடையினாலேயே இடிந்து விழுந்துவிடும். மேலாளர்களின் கட்டுப்பாட்டு எல்லையைச் சரியாகத் தீர்மானிக்க வேண்டும்.</div>
                     <p>நிறுவனங்கள் வளரும்போது அவற்றின் கட்டமைப்பு மிகவும் சிக்கலானது. 10 பேராக இருந்த நிறுவனம் 100 அல்லது 1000 பேராக மாறும்போது தொடர்பாடலில் பெரும் இடைவெளி ஏற்படும். முறையான திட்டமிடல் இல்லையெனில், துறைகளுக்கு இடையே தொடர்பு அற்றுப் போய், நிறுவனத்தின் வேகம் முழுமையாக முடங்கிவிடும். இதைச் சீரமைப்பதே நிறுவன வடிவமைப்பு (Organizational Design) ஆகும்.</p>
@@ -601,7 +598,6 @@
                     </ul>
                     <p>இந்தக் கட்டமைப்பைத் தொடர்ந்து கண்காணித்து மாற்றுவதன் மூலமே ஒரு நிறுவனம் தடையின்றி வளர முடியும்.</p>
                     ${generatePromptAndOutput('Span of Control Modeler', 'SR கணக்கீடு (Span Ratio):\nSR = மொத்த அடிமட்ட ஊழியர்கள் / மொத்த செயல்பாட்டு மேலாளர்கள்\n\nதரவுகள்:\n- அடிமட்ட ஊழியர்கள்: 120\n- மேலாளர்கள்: 15\n- மேலாண்மை அடுக்குகள்: 4', 'SR விடை:\nSR = 120 / 15 = 8.0\nநிலை: ஆரோக்கியமான மேலாண்மை விகிதம் [Healthy Agile Matrix Base: 6.0 - 10.0]\nஅடுக்கு நிலை: 135 பேருக்கு 4 அடுக்குகள் சரியானது.')}`
-                `
             },
             {
                 id: 3, icon: "🎯", img: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&q=80",
@@ -618,10 +614,9 @@
                         <li><b>Reporting Architecture:</b> Who do they report to? Who reports to them? Who are their lateral peers? This immediately sets psychological and structural expectations.</li>
                     </ul>
                     <p>When you engineer a JD with this level of mathematical precision, candidates self-filter. Unqualified candidates look at the strict deliverables and back away, saving your screening team hundreds of hours of wasted interview time.</p>
-                    ${generatePromptAndOutput('JD Keyword Match Engine', 'Evaluate Job Description Score (JDS) via Keyword Density:\nJDS = (Technical Tool Keywords / Total Descriptive Words) * 100\n\nData:\n- Tool Keywords (SQL, Python, Excel, Pandas, React): 8\n- Total Words: 160\n- Fluff Words ("Ninja", "Rockstar"): 0', 'JDS Output:\nJDS = (8 / 160) * 100 = 5.0%\nFluff Index = 0%\nClassification: High-Precision JD [Target Range: 4% - 6% for technical roles]')}`
-                `,
+                    ${generatePromptAndOutput('JD Keyword Match Engine', 'Evaluate Job Description Score (JDS) via Keyword Density:\nJDS = (Technical Tool Keywords / Total Descriptive Words) * 100\n\nData:\n- Tool Keywords (SQL, Python, Excel, Pandas, React): 8\n- Total Words: 160\n- Fluff Words ("Ninja", "Rockstar"): 0', 'JDS Output:\nJDS = (8 / 160) * 100 = 5.0%\nFluff Index = 0%\nClassification: High-Precision JD [Target Range: 4% - 6% for technical roles]')}`,
                 content_ta: `
-                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> தெளிவற்ற பணி விவரக்குறிப்பை (Job Description) எழுதுவது, ஒரு கடையில் "ஏதாவது எலக்ட்ரானிக் பொருள் கொடுங்கள்" என்று கேட்பது போன்றது. உங்களுக்கு என்ன தேவை என்பதை வோல்டேஜ் மற்றும் துல்லியமான அளவீடுகளுடன் குறிப்பிட்டால் மட்டுமே சரியான பொருள் கிடைக்கும்.</div>
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> தெளிவற்ற பணி விவரக்குறிப்பை (Job Description) எழுதுவது, ஒரு கடையில் "ஏதாவது எலக்ட்ரானிக் பொருள் கொடுங்கள்" என்று கேட்பது போன்றது. உங்களுக்கு என்ன தேவை என்பதை வோல்டேஜ் மற்றும் துல்லியமான அளவீடுகৃতல் குறிப்பிட்டால் மட்டுமே சரியான பொருள் கிடைக்கும்.</div>
                     <p>நிறுவனங்களில் நடக்கும் தவறான நியமனங்களுக்கு (Bad Hires) மற்றும் தேவையற்ற பணிநீக்கங்களுக்கு முக்கியக் காரணம் தெளிவற்ற மற்றும் சோம்பேறித்தனமான பணி விவரக்குறிப்புகள்தான். "மார்க்கெட்டிங் கிங்", "கோடிங் நிஞ்ஜா" அல்லது "சுறுசுறுப்பானவர்" போன்ற தேவையற்ற வார்த்தைகளைப் பயன்படுத்தினால், நிறுவனத்தின் கலாச்சாரத்திற்குச் சற்றும் பொருந்தாத தகுதியற்ற விண்ணப்பங்களே வந்து சேரும்.</p>
                     <p>ஒரு தொழில்முறை பணி விவரக்குறிப்பு என்பது வேலை பகுப்பாய்வு (Job Analysis) என்ற அறிவியல் பூர்வமான முறையை அடிப்படையாகக் கொண்டது. வேலையை ஆன்லைனில் பதிவிடும் முன், அந்த வேலைக்குத் தேவையான ஊழியரின் அறிவு, திறன் மற்றும் திறமைகளை (KSAOs) துல்லியமாக வரைபடமாக்க வேண்டும்.</p>
                     <h3>பணி விவரக்குறிப்பின் கட்டமைப்பு</h3>
@@ -633,7 +628,6 @@
                     </ul>
                     <p>இந்த அளவு துல்லியமாக நீங்கள் வேலையை விவரிக்கும்போது, தகுதியற்றவர்கள் தாமாகவே விண்ணப்பிப்பதைத் தவிர்த்துவிடுவார்கள். இது உங்கள் நேரத்தை மிகப் பெரிய அளவில் மிச்சப்படுத்தும்.</p>
                     ${generatePromptAndOutput('JD Keyword Match Engine', 'JDS கணக்கீடு (Job Description Score):\nJDS = (தொழில்நுட்ப வார்த்தைகள் / மொத்த வார்த்தைகள்) * 100\n\nதரவுகள்:\n- தொழில்நுட்ப வார்த்தைகள் (SQL, Python, React): 8\n- மொத்த வார்த்தைகள்: 160\n- தேவையற்ற வார்த்தைகள் ("Ninja"): 0', 'JDS விடை:\nJDS = (8 / 160) * 100 = 5.0%\nFluff Index = 0%\nநிலை: துல்லியமான பணி விவரக்குறிப்பு [High-Precision Base: 4% - 6%]')}`
-                `
             },
             {
                 id: 4, icon: "📜", img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&q=80",
@@ -650,8 +644,7 @@
                         <li><b>Anti-Harassment Frameworks:</b> Implementing and actively enforcing strict POSH (Prevention of Sexual Harassment) committees, ensuring anonymous reporting lines are always active and legally compliant.</li>
                     </ul>
                     <p>By automating these compliance checklists inside your HRIS database, you eliminate human error and ensure the enterprise remains fully legally insulated at all times, allowing founders to focus purely on growth.</p>
-                    ${generateCodeBox('EPF Deduction Configuration Engine', 'const calculateEPF = (basicSalary, optInHigherPension = false) => {\n  const statutoryCap = 15000;\n  // If opted in, calculate on full basic, otherwise cap it\n  const eligibleSalary = optInHigherPension ? basicSalary : Math.min(basicSalary, statutoryCap);\n  \n  const employeeShare = eligibleSalary * 0.12; // 12% standard deduction\n  const employerShareEPF = eligibleSalary * 0.0367; // 3.67% to EPF\n  const employerShareEPS = eligibleSalary * 0.0833; // 8.33% to Pension Scheme\n  \n  return {\n    totalDeduction: employeeShare,\n    companyContribution: employerShareEPF + employerShareEPS,\n    isCompliant: true\n  };\n};')}`
-                `,
+                    ${generateCodeBox('EPF Deduction Configuration Engine', 'const calculateEPF = (basicSalary, optInHigherPension = false) => {\n  const statutoryCap = 15000;\n  // If opted in, calculate on full basic, otherwise cap it\n  const eligibleSalary = optInHigherPension ? basicSalary : Math.min(basicSalary, statutoryCap);\n  \n  const employeeShare = eligibleSalary * 0.12; // 12% standard deduction\n  const employerShareEPF = eligibleSalary * 0.0367; // 3.67% to EPF\n  const employerShareEPS = eligibleSalary * 0.0833; // 8.33% to Pension Scheme\n  \n  return {\n    totalDeduction: employeeShare,\n    companyContribution: employerShareEPF + employerShareEPS,\n    isCompliant: true\n  };\n};')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சட்ட விதிமுறைகளைப் பின்பற்றுவது (Compliance) என்பது ஒரு தொழிற்சாலையில் உள்ள எர்த் ஒயர் (Grounding wire) போன்றது. இயந்திரம் ஓடும்போது அதன் முக்கியத்துவம் தெரியாது, ஆனால் எப்போதாவது பெரும் மின்கசிவு விபத்து (வழக்கு அல்லது சச்சரவு) ஏற்படும்போது இந்த ஒயர் இல்லையென்றால் தொழிற்சாலையே சாம்பலாகிவிடும்.</div>
                     <p>ஒரு சிறந்த மனிதவள மேலாளர் நிறுவனத்திற்குச் சட்டப் பாதுகாப்பு அரணாக விளங்க வேண்டும். தொழிலாளர் சட்டங்களைச் சரியாகப் பின்பற்றுவது நிறுவனத்தைப் பெரும் அபராதங்களில் இருந்தும், நீதிமன்றச் சிக்கல்களில் இருந்தும், நற்பெயர் கெடுவதில் இருந்தும் பாதுகாக்கும் அரணாகும்.</p>
@@ -665,7 +658,6 @@
                     </ul>
                     <p>இந்தச் சட்ட விதிமுறைகளை HRIS சாஃப்ட்வேரில் தானியங்கியாக (Automate) அமைப்பதன் மூலம் மனிதத் தவறுகளைத் தவிர்க்கலாம்.</p>
                     ${generateCodeBox('EPF Deduction Configuration Engine', 'const calculateEPF = (basicSalary, optInHigherPension = false) => {\n  const statutoryCap = 15000;\n  const eligibleSalary = optInHigherPension ? basicSalary : Math.min(basicSalary, statutoryCap);\n  \n  const employeeShare = eligibleSalary * 0.12; // 12% ஊழியர் பங்கு\n  const employerShareEPF = eligibleSalary * 0.0367; // 3.67% நிறுவனத்தின் EPF பங்கு\n  const employerShareEPS = eligibleSalary * 0.0833; // 8.33% நிறுவனத்தின் பென்ஷன் பங்கு\n  \n  return { employeeShare, employerShareEPF, employerShareEPS };\n};')}`
-                `
             },
             {
                 id: 5, icon: "🤝", img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80",
@@ -682,8 +674,7 @@
                         <li><b>Reward Alignment:</b> Ensuring you do not accidentally reward toxic behavior. If your top salesperson is a known bully but gets promoted anyway, you have just officially codified bullying as your true company culture.</li>
                     </ul>
                     <p>When you engineer a culture of extreme ownership and psychological safety, your retention metrics stabilize organically without needing massive salary bumps.</p>
-                    ${generatePromptAndOutput('Culture Attrition Calculator', 'Evaluate Team Health Vector (THV):\nTHV = 1.0 - (Target Team Attrition Rate / Global Company Average Attrition Rate)\n\nVariables:\n- Marketing Team Attrition: 0.35 (35%)\n- Global Company Average: 0.14 (14%)', 'THV Output:\nTHV = 1.0 - (0.35 / 0.14) = 1.0 - 2.5 = -1.5\nStatus: CRITICAL ALARM [Negative Vector (-1.5) Indicates Severe Poisonous Micro-Culture in Marketing Team. Initiate emergency management audit immediately.]')}`
-                `,
+                    ${generatePromptAndOutput('Culture Attrition Calculator', 'Evaluate Team Health Vector (THV):\nTHV = 1.0 - (Target Team Attrition Rate / Global Company Average Attrition Rate)\n\nVariables:\n- Marketing Team Attrition: 0.35 (35%)\n- Global Company Average: 0.14 (14%)', 'THV Output:\nTHV = 1.0 - (0.35 / 0.14) = 1.0 - 2.5 = -1.5\nStatus: CRITICAL ALARM [Negative Vector (-1.5) Indicates Severe Poisonous Micro-Culture in Marketing Team. Initiate emergency management audit immediately.]')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> நிறுவனக் கலாச்சாரம் என்பது கம்ப்யூட்டரின் ஆப்பரேட்டிங் சிஸ்டம் (OS) போன்றது. அதனுள் வைரஸ் அல்லது பக்ஸ் (நச்சுத்தன்மை, நம்பிக்கையின்மை, முதுகில் குத்துதல்) இருந்தால், நீங்கள் எவ்வளவு விலை உயர்ந்த லேப்டாப் மற்றும் ஆடம்பரமான ஆபீஸ் வைத்திருந்தாலும் சிஸ்டம் கிராஷ் ஆகிவிடும். கலாச்சாரமே நிறுவனத்தின் வேகம்.</div>
                     <p>நிறுவனக் கலாச்சாரம் என்பது ஆபீஸில் ஒரு கேரம் போர்டு வைப்பதோ அல்லது வெள்ளிக்கிழமைகளில் இலவச ஸ்நாக்ஸ் கொடுப்பதோ அல்ல. சுவரில் எழுதி வைக்கப்படும் வாசகங்களும் அல்ல. கலாச்சாரம் என்பது, மேலாளர் இல்லாதபோது ஊழியர்கள் ஒருவரையொருவர் எவ்வாறு நடத்துகிறார்கள் மற்றும் வேலைகளை எப்படிப் பார்க்கிறார்கள் என்பதைத் தீர்மானிக்கும் ஆழமான மன அமைப்பாகும்.</p>
@@ -697,7 +688,6 @@
                     </ul>
                     <p>ஊழியர்களுக்குப் பாதுகாப்பான மனநிலையை உருவாக்கும்போது, அதிகச் சம்பளம் கொடுக்காமலேயே அவர்களைத் தக்கவைக்க முடியும்.</p>
                     ${generatePromptAndOutput('Culture Attrition Calculator', 'THV கணக்கீடு (Team Health Vector):\nTHV = 1.0 - (குறிப்பிட்ட குழுவின் விலகல் / நிறுவனத்தின் சராசரி விலகல்)\n\nதரவுகள்:\n- மார்க்கெட்டிங் குழுவின் விலகல் விகிதம்: 0.35 (35%)\n- நிறுவன சராசரி: 0.14 (14%)', 'THV விடை:\nTHV = 1.0 - (0.35 / 0.14) = 1.0 - 2.5 = -1.5\nநிலை: ஆபத்தான நிலை [நெகட்டிவ் மதிப்பு (-1.5) அந்த குறிப்பிட்ட குழுவில் உள்ள மோசமான மேலாண்மையை உணர்த்துகிறது. உடனடியாக தணிக்கை செய்யவும்.]')}`
-                `
             },
             {
                 id: 6, icon: "📢", img: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80",
@@ -728,7 +718,6 @@
                     </ul>
                     <p>இந்த எம்பிளாயர் பிராண்டிங் வலுவாக இருக்கும்போது, ஏஜென்சிகளுக்குக் கொடுக்கும் பல லட்சம் ரூபாய் மிச்சமாகும்.</p>
                     ${generateCodeBox('Sourcing Funnel Conversion Matrix', 'ஆட்சேர்ப்பு மார்க்கெட்டிங் அளவீடு (Q3):\nமொத்தப் பார்வை: 10,000\nவிண்ணப்பித்தவர்கள்: 500 (மாற்று விகிதம்: 5%)\nதேர்வானவர்கள்: 50\nவேலை வாய்ப்பு பெற்றவர்கள்: 5\n\nபகுப்பாய்வு: 10,000 பேர் பார்த்து வெறும் 500 பேர் மட்டுமே விண்ணப்பிக்கிறார்கள் (5%) என்றால், உங்கள் விண்ணப்பப் படிவம் மிகவும் கடினமாக உள்ளது என்று அர்த்தம். அதை உடனே எளிமையாக்க வேண்டும்.')}`
-                `
             },
             {
                 id: 7, icon: "🔍", img: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80",
@@ -759,7 +748,6 @@
                     </ol>
                     <p>இந்த முறையைப் பின்பற்றுவதன் மூலம், உங்கள் நிறுவனத்தின் சீனியர் மேலாளர்கள் மிகச் சிறந்த 2% திறமையாளர்களிடம் மட்டுமே நேர்காணல் செய்து தங்கள் நேரத்தை மிச்சப்படுத்துவார்கள்.</p>
                     ${generatePromptAndOutput('Resume Filtering Log', 'விதிமுறை:\nஅனுபவம் > 3 வருடங்கள் மற்றும் திறமை ("SQL", "Python") கண்டிப்பாக இருக்க வேண்டும்.\n\nமொத்த விண்ணப்பங்கள்: 1,200\nதகுதி பெற்றவை: 120\nமிச்சப்படுத்தப்பட்ட நேரம்: 36 மணிநேரம்', 'Refinery Output:\n1,080 தகுதியற்ற விண்ணப்பங்கள் உடனடியாக நிராகரிக்கப்பட்டன.\nவேகம் 90% அதிகரித்துள்ளது.\nதேர்வான 120 பேரை மட்டும் மனிதர்கள் சரிபார்க்க அனுப்பப்பட்டுள்ளது.')}`
-                `
             },
             {
                 id: 8, icon: "🎯", img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80",
@@ -792,7 +780,6 @@
                     </ul>
                     <p>முடிவை எண்களில் சொல்லத் தெரியாதவர்கள் பெரும்பாலும் உண்மையை மிகைப்படுத்திக் கூறுகிறார்கள் என்று அர்த்தம்.</p>
                     ${generateCodeBox('STAR Evaluation Matrix', '{\n  "candidateId": "CAN_8812",\n  "evaluator": "Senior Eng Lead",\n  "evaluation": {\n    "situationComplexityScore": 8,\n    "actionPrecision": 9,\n    "metricResultValidated": true,\n    "redFlags": "இல்லை. அவர் 'நாங்கள்' என்பதற்குப் பதிலாக 'நான்' செய்தேன் என்று சரியாகக் குறிப்பிட்டார்.",\n    "notes": "STAR முறையைப் பயன்படுத்தி டேட்டாபேஸ் பிழையைத் தனியாகச் சரிசெய்ததை எண்களுடன் நிரூபித்துள்ளார்."\n  }\n}')}`
-                `
             },
             {
                 id: 9, icon: "🛡️", img: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=800&q=80",
@@ -823,7 +810,6 @@
                     </ul>
                     <p>"என் மனதுக்கு இவர் சரியானவர் எனப் படுகிறது (Gut feeling)" என்பதை ஒருபோதும் நம்பக் கூடாது. அது சார்புநிலையின் மறுஉருவமே.</p>
                     ${generatePromptAndOutput('De-Biased Evaluation Data', 'பயனர் குறியீடு: CAN_9912\n- SQL திறமை: 4/5\n- Python திறமை: 5/5\n- ஆர்க்கிடெக்சர் திறன்: 4/5\n- மேலாளரின் சொந்த விருப்பம் (Gut Feeling): [விதிகளின்படி நிராகரிக்கப்பட்டது]', 'முடிவு:\nஊழியர் அவரது திறமையின் அடிப்படையில் மட்டுமே தேர்வு செய்யப்பட்டுள்ளார். சார்புகள் தவிர்க்கப்பட்டன.')}`
-                `
             },
             {
                 id: 10, icon: "🚀", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
@@ -840,8 +826,7 @@
                         <li><b>Days 61-90 (The Own Phase):</b> Full autonomous feature ownership with actively tracked KPI vectors. By day 90, they should be a fully integrated, high-velocity contributor.</li>
                     </ul>
                     <p>By automating the IT and Admin setup before Day 1, HR ensures the employee spends their first week actually learning the business, not fighting with IT to get a Slack password.</p>
-                    ${generateCodeBox('Onboarding Automation Schema', 'const triggerOnboardingPipeline = async (employeeId) => {\n  // Pre-Day 1 Operations (Zero human intervention required)\n  await createEnterpriseAccount(employeeId);\n  await provisionDatabaseCredentials(employeeId, ["READ_ONLY"]);\n  await orderMacBookProvisioning(employeeId);\n  \n  // Day 1 Operations\n  assignCultureMentor(employeeId);\n  sendExecutiveWelcomeEmail(employeeId);\n  \n  return "PIPELINE_COMPLETE_READY_FOR_DAY_ONE";\n};')}`
-                `,
+                    ${generateCodeBox('Onboarding Automation Schema', 'const triggerOnboardingPipeline = async (employeeId) => {\n  // Pre-Day 1 Operations (Zero human intervention required)\n  await createEnterpriseAccount(employeeId);\n  await provisionDatabaseCredentials(employeeId, ["READ_ONLY"]);\n  await orderMacBookProvisioning(employeeId);\n  \n  // Day 1 Operations\n  assignCultureMentor(employeeId);\n  sendExecutiveWelcomeEmail(employeeId);\n  \n  return "PIPELINE_COMPLETE_READY_FOR_DAY_ONE";\n};')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> புதிய ஊழியரை முறையான திட்டமிடல் இல்லாமல் வேகமான வேலைக்குள் இறக்குவது, ஒரு சாஃப்ட்வேரை இன்ஸ்டால் செய்யாமல் நேரடியாக லைவ் சர்வரில் ரன் (Run) செய்ய முயற்சிப்பது போன்றது. எந்த டேட்டாபேஸ் இணைப்பும் இல்லாமல் சிஸ்டம் எரர் (Error) காட்டி நின்றுவிடும். 90-நாள் திட்டம் என்பது அந்த சாஃப்ட்வேருக்கான முழுமையான செட்டப் ஸ்கிரிப்ட் போன்றது.</div>
                     <p>ஒரு ஊழியர் வேலையை விட்டு விலக அதிக வாய்ப்புள்ள ஆபத்தான காலம் அவர் சேர்ந்த முதல் 90 நாட்கள் ஆகும். ஒரு சீனியர் ஊழியர் முதல் நாள் வேலைக்கு வரும்போது அவருக்கு லேப்டாப் இல்லை, எங்கு உட்காருவது என்று தெரியவில்லை, சாஃப்ட்வேர் லாகின் இல்லை என்றால், நிறுவனத்தின் மீதான அவரின் முழு நம்பிக்கையும் முதல் நாளிலேயே உடைந்துவிடும். உங்களை ஒரு சாதாரண கம்பெனியாகவே பார்ப்பார்.</p>
@@ -855,7 +840,6 @@
                     </ul>
                     <p>ஐடி (IT) மற்றும் லாகின் வேலைகளை முதல் நாளுக்கு முன்பே முடித்துவிடுவதன் மூலம், முதல் வாரத்தை வீணாக்காமல் நிறுவனத்தைப் பற்றிக் கற்கப் பயன்படுத்தலாம்.</p>
                     ${generateCodeBox('Onboarding Automation Schema', 'const triggerOnboardingPipeline = async (employeeId) => {\n  // முதல் நாளுக்கு முன்பே நடக்கும் ஆட்டோமேஷன்\n  await createEnterpriseAccount(employeeId);\n  await provisionDatabaseCredentials(employeeId, ["READ_ONLY"]);\n  await orderMacBookProvisioning(employeeId);\n  \n  // முதல் நாள் வேலைகள்\n  assignCultureMentor(employeeId);\n  sendExecutiveWelcomeEmail(employeeId);\n  \n  return "PIPELINE_COMPLETE_READY_FOR_DAY_ONE";\n};')}`
-                `
             },
             {
                 id: 11, icon: "🎯", img: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80",
@@ -884,7 +868,6 @@
                     </ul>
                     <p>இந்த இலக்குகள் மேலிருந்து கீழாகப் பகிரப்பட வேண்டும். CEO-வின் இலக்கை அடைய மேலாளரும், மேலாளரின் இலக்கை அடைய ஊழியரும் உழைக்க வேண்டும். அப்போதுதான் அனைவரின் உழைப்பும் சரியான திசையில் செல்லும்.</p>
                     ${generatePromptAndOutput('OKR Progression Log', 'இலக்கு: வாடிக்கையாளர் சேவை வேகத்தை அதிகரித்தல்\nமுக்கிய விடை 1: பதில் அளிக்கும் நேரத்தை 12 நிமிடங்களுக்குள் கொண்டுவருதல்\n\nதற்போதைய நிஜ வேகம்: 14 நிமிடங்கள்\nகணக்கீடு: (12 / 14) * 100', 'Metric Progress Summary:\nஇலக்கு 85.7% எட்டப்பட்டுள்ளது. \nஇது ஓரளவுக்குச் சரியான வேகம் என்றாலும், 12 நிமிடங்களை எட்ட சாஃப்ட்வேரில் சிறு மாற்றங்கள் தேவை.')}`
-                `
             },
             {
                 id: 12, icon: "🔄", img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80",
@@ -913,7 +896,6 @@
                     </ul>
                     <p>ஒரு சிறந்த PIP, ஊழியரை மீண்டும் வெற்றிப்பாதைக்குத் திருப்பி, நிறுவனத்தின் ஆட்சேர்ப்புச் செலவுகளைக் குறைக்கும்.</p>
                     ${generateCodeBox('PIP Tracking Matrix Structure', '{\n  "pipId": "PIP_2026_09",\n  "employee": "DEV_331",\n  "durationDays": 30,\n  "metricDeficit": "பிழைகளின் விகிதம்: 8% (நிறுவன விதிமுறை < 2%)",\n  "companySupport": "வாரத்திற்கு இருமுறை சீனியர் டெவலப்பருடன் இணைந்து வேலை செய்தல்",\n  "weeklyCheckins": [\n    { "week": 1, "errorRate": "5%", "status": "Improving Vector" },\n    { "week": 2, "errorRate": "1.8%", "status": "Target Met & Sustained" }\n  ]\n}')}`
-                `
             },
             {
                 id: 13, icon: "📊", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80",
@@ -944,7 +926,6 @@
                     </ul>
                     <p>சம்பள விஷயத்தில் வெளிப்படைத்தன்மை இருக்கும்போது, நிறுவனத்தின் மீதான ஊழியர்களின் நம்பிக்கை அதிகரிக்கும்.</p>
                     ${generatePromptAndOutput('Compa-Ratio Formula Model', 'Compa-Ratio கணக்கீடு:\nCR = ஊழியரின் தற்போதைய சம்பளம் / அந்த வேலைக்கான சந்தை சராசரி\n\nதரவுகள்:\n- சீனியர் டெவலப்பரின் தற்போதைய சம்பளம்: ₹8,50,000\n- சந்தை சராசரி: ₹10,00,000\n- ஊழியரின் செயல்திறன்: 4.5/5 (மிக நன்று)', 'Compa-Ratio விடை:\nRatio = 8.5 / 10 = 0.85\nநிலை: அதிக ஆபத்து. சிறந்த ஊழியர் சந்தை விலையை விட 15% குறைவான சம்பளம் பெறுகிறார்.\n[உடனடி நடவடிக்கை: அவரைத் தக்கவைக்கச் சம்பளத்தை 0.95 அளவிற்காவது உயர்த்த வேண்டும்]')}`
-                `
             },
             {
                 id: 14, icon: "🎁", img: "https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&q=80",
@@ -961,8 +942,7 @@
                         <li><b>Aggressive Upskilling:</b> Dedicated personal learning stipends and completely paid certifications (like AWS or Google Cloud). When you invest directly in their future market value, they stay longer to utilize those exact skills.</li>
                     </ul>
                     <p>By personalizing the benefits matrix, HR ensures that different demographics (like young singles vs. new parents) receive exactly what keeps them securely anchored to the firm.</p>
-                    ${generateCodeBox('Flexible Benefits Allocation Logic', 'const allocateBenefitsTier = (employeeGrade, lifestylePreference) => {\n  let baselinePerks = ["PREMIUM_HEALTH_INSURANCE", "LEARNING_CREDIT_500"];\n  \n  if (employeeGrade >= 4) {\n    baselinePerks.push("EXECUTIVE_WELLNESS_STIPEND", "HOME_OFFICE_UPGRADE");\n  }\n  \n  if (lifestylePreference === "PARENT") {\n    baselinePerks.push("CHILDCARE_SUBSIDY", "FLEX_FRIDAYS");\n  }\n  \n  return baselinePerks;\n};')}`
-                `,
+                    ${generateCodeBox('Flexible Benefits Allocation Logic', 'const allocateBenefitsTier = (employeeGrade, lifestylePreference) => {\n  let baselinePerks = ["PREMIUM_HEALTH_INSURANCE", "LEARNING_CREDIT_500"];\n  \n  if (employeeGrade >= 4) {\n    baselinePerks.push("EXECUTIVE_WELLNESS_STIPEND", "HOME_OFFICE_UPGRADE");\n  }\n  \n  if (lifestylePreference === "PARENT") {\n    baselinePerks.push("CHILDCARE_SUBSIDY", "FLEX_FRIDAYS");\n  }\n  \n  return baselinePerks;\n};')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பணம் ஒரு ஊழியரை திங்கட்கிழமை வேலைக்கு வரவழைக்கும், ஆனால் சிறப்பான பணமில்லா சலுகைகளும் நல்ல சூழலுமே அவர் வெள்ளிக்கிழமை இரவு மாற்று வேலை தேடுவதைத் தடுக்கும் பசை போன்றது. பணம் என்பது வெறும் பரிவர்த்தனை; சலுகைகள் என்பது உங்கள் கலாச்சாரம்.</div>
                     <p>மொத்த வெகுமதி (Total Rewards) உத்தி என்பது வெறும் சம்பளப் பணத்தைத் தாண்டியது. போட்டி நிறுவனங்கள் உங்கள் சிறந்த ஊழியர்களைத் திருட நினைக்கும்போது, அவர்களைத் தக்கவைக்கக் காப்பீடு மற்றும் இதர வாழ்க்கைமுறைச் சலுகைகளைச் சரியாக வடிவமைக்க வேண்டும்.</p>
@@ -976,7 +956,6 @@
                     </ul>
                     <p>ஒவ்வொருவரின் தேவைக்கேற்ப (இளைஞர்கள் vs பெற்றோர்கள்) சலுகைகளை மாற்றியமைப்பதன் மூலம் அனைவரையும் திருப்திப்படுத்தலாம்.</p>
                     ${generateCodeBox('Flexible Benefits Allocation Logic', 'const allocateBenefitsTier = (employeeGrade, lifestylePreference) => {\n  let baselinePerks = ["PREMIUM_HEALTH_INSURANCE", "LEARNING_CREDIT_500"];\n  \n  if (employeeGrade >= 4) {\n    baselinePerks.push("EXECUTIVE_WELLNESS_STIPEND", "HOME_OFFICE_UPGRADE");\n  }\n  \n  if (lifestylePreference === "PARENT") {\n    baselinePerks.push("CHILDCARE_SUBSIDY", "FLEX_FRIDAYS");\n  }\n  \n  return baselinePerks;\n};')}`
-                `
             },
             {
                 id: 15, icon: "🚫", img: "https://images.unsplash.com/photo-1507146426996-ef05306b995a?w=800&q=80",
@@ -1007,7 +986,6 @@
                     </ul>
                     <p>இதைச் சரியாகச் செய்தால், வெளியேறும் ஊழியர்கள் உங்கள் பிராண்டின் தூதர்களாக மாறுவார்கள். தவறாகச் செய்தால், அவர்கள் ஆபத்தான எதிரிகளாக மாறுவார்கள்.</p>
                     ${generatePromptAndOutput('Exit Tracker Security Module', 'செயல் தேவை: பயனர் நீக்கம் - USER_4412\nகட்டளை: Revoke Access Nodes: (GitHub, AWS, Slack, Gmail, VPN)\nநிலை: கட்டாயப் பணிநீக்கம் (Terminated)', 'Offboarding Script Output:\n- GitHub லாகின்: வெற்றிகரமாக நீக்கப்பட்டது\n- AWS டோக்கன்: அழிக்கப்பட்டது\n- Slack/Email: முடக்கப்பட்டது\n- Exit சர்வே: பொருந்தாது\nநிலை: பாதுகாப்பான வெளியேற்றம் நிறைவுற்றது. தரவுக் கசிவு ஏதுமில்லை.')}`
-                `
             },
             {
                 id: 16, icon: "🎭", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
@@ -1024,8 +1002,7 @@
                         <li><b>The Feedback Void:</b> If an employee finishes a massive project and hears nothing but silence, their EX drops to zero. Build automated recognition loops.</li>
                     </ul>
                     <p>A flawless EX journey directly reduces CAC (Cost to Acquire Customers) because happy, highly-tooled employees organically produce much better external products.</p>
-                    ${generateCodeBox('EX Lifespan Vector Tracking Logic', 'const trackEmployeeLifecycleStage = (tenureMonths, engagementScore) => {\n  if (tenureMonths <= 3) return "ONBOARDING_INITIAL_VELOCITY";\n  \n  if (tenureMonths > 3 && tenureMonths <= 18) {\n    if (engagementScore > 8) return "CORE_CONTRIBUTOR_ENGAGED";\n    return "EARLY_DISENGAGEMENT_WARNING";\n  }\n  \n  if (tenureMonths > 18 && engagementScore < 7) return "RETENTION_RISK_EVALUATION";\n  \n  return "VETERAN_STABILIZED";\n};')}`
-                `,
+                    ${generateCodeBox('EX Lifespan Vector Tracking Logic', 'const trackEmployeeLifecycleStage = (tenureMonths, engagementScore) => {\n  if (tenureMonths <= 3) return "ONBOARDING_INITIAL_VELOCITY";\n  \n  if (tenureMonths > 3 && tenureMonths <= 18) {\n    if (engagementScore > 8) return "CORE_CONTRIBUTOR_ENGAGED";\n    return "EARLY_DISENGAGEMENT_WARNING";\n  }\n  \n  if (tenureMonths > 18 && engagementScore < 7) return "RETENTION_RISK_EVALUATION";\n  \n  return "VETERAN_STABILIZED";\n};')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஊழியர் அனுபவத்தைக் கவனிக்காமல் குழுவை நடத்துவது, பயனர் பயணத்தைக் (User Journey) கண்காணிக்காமல் பெரிய வெப்சைட்டை டிசைன் செய்வது போன்றது. பணம் செலுத்தும் பொத்தான் (Checkout) வேலை செய்யாவிட்டால் வாடிக்கையாளர் வெளியேறிவிடுவார். அதைப்போலவே, ஊழியரை நிறுவனத்தின் முதன்மைப் பயனராகக் கருதி அவர்களின் அனுபவத்தைச் சரிசெய்ய வேண்டும்.</div>
                     <p>ஊழியர்களின் சிறந்த செயல்பாடுகள் தானாக நடந்துவிடுவதில்லை; அது மிகத் துல்லியமான திட்டமிடலால் மட்டுமே சாத்தியம். **ஊழியர் அனுபவம் (Employee Experience - EX)** என்பது ஒரு ஊழியர் நிறுவனத்திற்குள் நுழைந்தது முதல் வெளியேறும் வரை சந்திக்கும் அனைத்துத் தொடர்புகளின் ஒட்டுமொத்தத் தரத்தை ஆராய்வதாகும்.</p>
@@ -1039,7 +1016,6 @@
                     </ul>
                     <p>சிறந்த ஊழியர் அனுபவம், சிறந்த தயாரிப்புகளை உருவாக்கும். இதனால் நிறுவனத்தின் லாபம் தானாகவே அதிகரிக்கும்.</p>
                     ${generateCodeBox('EX Lifespan Vector Tracking Logic', 'const trackEmployeeLifecycleStage = (tenureMonths, engagementScore) => {\n  if (tenureMonths <= 3) return "ONBOARDING_INITIAL_VELOCITY";\n  \n  if (tenureMonths > 3 && tenureMonths <= 18) {\n    if (engagementScore > 8) return "CORE_CONTRIBUTOR_ENGAGED";\n    return "EARLY_DISENGAGEMENT_WARNING";\n  }\n  \n  if (tenureMonths > 18 && engagementScore < 7) return "RETENTION_RISK_EVALUATION";\n  \n  return "VETERAN_STABILIZED";\n};')}`
-                `
             },
             {
                 id: 17, icon: "📊", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
@@ -1072,7 +1048,6 @@
                     </ul>
                     <p>இந்த eNPS எண்களுடன், அவர்களின் ரகசியக் கருத்துக்களையும் சேர்த்து AI மூலம் ஆராய்ந்தால், உங்கள் நிறுவனத்தின் உண்மையான நாடித் துடிப்பை அறியலாம்.</p>
                     ${generatePromptAndOutput('eNPS Calculator Module', 'eNPS கணக்கீடு:\nமொத்த பதில்கள்: 200\nஆதரவாளர்கள் (9-10): 120 (60%)\nஎதிர்ப்பாளர்கள் (0-6): 30 (15%)\nநடுநிலையாளர்கள் (7-8): 50 (25%)\n\neNPS சூத்திரம் = ஆதரவாளர்கள்% - எதிர்ப்பாளர்கள்%', 'eNPS விடை:\neNPS = 60 - 15 = +45\nநிலை: மிகவும் ஆரோக்கியமான நிறுவன சூழல் [Industry Target Base > +30]\nகுறிப்பு: நடுநிலையாளர்களின் சதவீதம் கணக்கீட்டில் எடுத்துக்கொள்ளப்படாது.')}`
-                `
             },
             {
                 id: 18, icon: "⚖️", img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&q=80",
@@ -1103,7 +1078,6 @@
                     </ul>
                     <p>இந்தக் கலையைக் கற்றுக்கொள்வது, சிறு சிறு சண்டைகள் பெரிய சட்டப் பிரச்சனைகளாக மாறுவதைத் தடுக்கும்.</p>
                     ${generateCodeBox('Conflict Mediation Tracker Case', '{\n  "caseId": "CON_9981",\n  "partiesInvolved": ["ENG_LEAD_JASON", "PROD_MGR_SARAH"],\n  "identifiedFriction": "Q3 திட்டத்தின் காலக்கெடு மீதான கருத்து வேறுபாடு",\n  "frameworkApplied": "Thomas-Kilmann Collaboration Loop",\n  "resolutionStatus": "RESOLVED_AGREED_ON_OBJECTIVE_METRICS",\n  "structuralFix": "அனுமதியின்றி ப்ராஜெக்ட் அளவை மாற்றுவதைத் தடுக்க Jira விதிகளில் மாற்றம் செய்யப்பட்டது."\n}')}`
-                `
             },
             {
                 id: 19, icon: "🧘", img: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80",
@@ -1133,7 +1107,6 @@
                     </ul>
                     <p>ஊழியர்களின் மனநலத்தைப் பாதுகாப்பது என்பது இறுதியில் நிறுவனத்தின் உற்பத்தியைப் பாதுகாப்பதே ஆகும்.</p>
                     ${generatePromptAndOutput('Burnout Risk Indexer', 'ORF கணக்கீடு (Overtime Risk Factor):\nORF = (கூடுதல் வேலை நேரம் / சாதாரண வேலை நேரம்) * வெளியேறும் வாய்ப்பு\n\nதரவுகள்:\n- கூடுதல் நேரம்: 20 மணிநேரம்\n- சாதாரண நேரம்: 40 மணிநேரம்\n- வெளியேறும் வாய்ப்பு: 0.60\n- கடந்த 6 மாதங்களில் எடுத்த விடுப்பு: 0 நாட்கள்', 'ORF விடை:\nORF = (20 / 40) * 0.60 = 0.30\nநிலை: அதிதீவிர சோர்வு அபாயம் [ஊழியர் விலக அதிக வாய்ப்புள்ளது]\nநடவடிக்கை: உடனடியாக 3 நாட்கள் கட்டாய விடுப்பு வழங்கவும்.')}`
-                `
             },
             {
                 id: 20, icon: "🛡️", img: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80",
@@ -1150,8 +1123,7 @@
                         <li><b>Career Pathing:</b> Elite talent leaves when they cannot clearly see their next two promotions inside your company. Build a documented 24-month roadmap showing exactly what skills they need to reach the next tier.</li>
                     </ul>
                     <p>Retention is cheaper than recruitment. A $10,000 preemptive raise is always cheaper than a $30,000 headhunter fee plus 3 months of empty desk downtime.</p>
-                    ${generateCodeBox('Retention Risk Profiler Engine', 'const evaluateRetentionRisk = (compaRatio, tenureYears, performanceRating, lastPromoMonths) => {\n  // High performer, paid below market, hasn\\'t been promoted in 1.5 years\n  if (compaRatio < 0.85 && performanceRating >= 4.5 && lastPromoMonths > 18) {\n    return "CRITICAL_FLIGHT_RISK_TRIGGER_STAY_INTERVIEW";\n  }\n  \n  if (performanceRating < 3) return "LOW_IMPACT_ATTRITION_ACCEPTABLE";\n  \n  return "STABLE_ASSET";\n};')}`
-                `,
+                    ${generateCodeBox('Retention Risk Profiler Engine', 'const evaluateRetentionRisk = (compaRatio, tenureYears, performanceRating, lastPromoMonths) => {\n  // High performer, paid below market, hasn\\'t been promoted in 1.5 years\n  if (compaRatio < 0.85 && performanceRating >= 4.5 && lastPromoMonths > 18) {\n    return "CRITICAL_FLIGHT_RISK_TRIGGER_STAY_INTERVIEW";\n  }\n  \n  if (performanceRating < 3) return "LOW_IMPACT_ATTRITION_ACCEPTABLE";\n  \n  return "STABLE_ASSET";\n};')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> திறமையானவர்களைத் தக்கவைப்பது என்பது ஒரு கிரகத்தின் புவியீர்ப்பு விசையைப் போன்றது. உங்கள் நிறுவனத்தின் புவியீர்ப்பு விசை (வளர்ச்சி வாய்ப்பு, நல்ல சம்பளம், சிறந்த தலைமை) கொஞ்சம் குறைந்தாலும், வளிமண்டலம் போன்ற சிறந்த சீனியர் ஊழியர்கள் விண்வெளியில் பறந்து வேறு கம்பெனிக்குச் சென்றுவிடுவார்கள். உங்களிடம் வெறும் வெற்றுப் பாறை மட்டுமே மிஞ்சும்.</div>
                     <p>ஒரு சிறந்த சீனியர் ஊழியர் அல்லது சிறந்த விற்பனையாளர் நிறுவனத்தை விட்டு விலகினால், அவரைப் போன்ற ஒருவரை மீண்டும் எடுக்கவும், பயிற்சி அளிக்கவும், அந்த இடைவெளியில் ஏற்படும் பிசினஸ் நஷ்டத்தையும் கணக்கிட்டால், அது அவரது வருடச் சம்பளத்தைப் போல இரண்டு மடங்கு செலவாகும். எனவே <b>Retention Engineering (தக்கவைத்தல் கலை)</b> என்பது நிறுவனத்தைப் பாதுகாக்கும் மிக முக்கியமான கணக்கீடாகும்.</p>
@@ -1165,7 +1137,6 @@
                     </ul>
                     <p>ஆட்சேர்ப்பை விடத் தக்கவைப்பது மலிவானது. ஏஜென்சிக்கு ₹3 லட்சம் கொடுப்பதை விட, சிறந்த ஊழியருக்கு முன்கூட்டியே ₹1 லட்சம் சம்பள உயர்வு கொடுப்பதே புத்திசாலித்தனம்.</p>
                     ${generateCodeBox('Retention Risk Profiler Engine', 'const evaluateRetentionRisk = (compaRatio, tenureYears, performanceRating, lastPromoMonths) => {\n  // அதிக திறமைசாலி, குறைந்த சம்பளம், 18 மாதமாகப் பதவி உயர்வு இல்லை\n  if (compaRatio < 0.85 && performanceRating >= 4.5 && lastPromoMonths > 18) {\n    return "CRITICAL_FLIGHT_RISK_TRIGGER_STAY_INTERVIEW"; // அதிக ஆபத்து\n  }\n  \n  if (performanceRating < 3) return "LOW_IMPACT_ATTRITION_ACCEPTABLE";\n  \n  return "STABLE_ASSET";\n};')}`
-                `
             },
             {
                 id: 21, icon: "📊", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
@@ -1194,7 +1165,6 @@
                     </ul>
                     <p>நவீன மனிதவள நிபுணர்கள் Tableau அல்லது PowerBI போன்ற கருவிகளைப் பயன்படுத்தி இந்த எண்களைத் துல்லியமாக ஆராயத் தெரிந்திருக்க வேண்டும்.</p>
                     ${generatePromptAndOutput('RPE Efficiency Calculator', 'RPE கணக்கீடு (Revenue-per-Employee):\nமொத்த நிகர வருவாய் = $5,000,000\nமொத்த ஊழியர்கள் = 50\nகடந்த ஆண்டு RPE = $90,000', 'RPE விடை:\nதற்போதைய RPE = 5,000,000 / 50 = $100,000 (ஒரு ஊழியருக்கான வருவாய்)\nவளர்ச்சி: +11.1% (ஆண்டுக்கு ஆண்டு)\nநிலை: மிகச் சிறந்த உற்பத்தித் திறன் [Standard Target > $80k]. தேவையற்ற ஆட்களின்றி நிறுவனம் லாபகரமாக வளர்கிறது.')}`
-                `
             },
             {
                 id: 22, icon: "🖥️", img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
@@ -1211,8 +1181,7 @@
                         <li><b>Compliance Auditing:</b> Storing legally binding signed contracts, tax declarations, and IP-assignment documents securely with role-based access control (RBAC).</li>
                     </ul>
                     <p>Garbage in, garbage out. If you implement a million-dollar HRIS but your underlying HR processes (from Module 1) are broken, you just have a very expensive, broken robot.</p>
-                    ${generateCodeBox('HRIS Schema Mapping Definition', 'const employeeSchemaCore = {\n  "uid": "EMP_0091",\n  "demographics": { "name": "Siva M.", "contact": "+919876543210", "taxId": "ENCRYPTED_HASH" },\n  "governance": { "department": "Data Engineering", "grade": 3, "compaRatio": 0.92 },\n  "state": { "isActive": true, "isOnboardingComplete": true, "currentModuleId": 14 },\n  "accessControl": ["DB_READ", "JIRA_WRITE"]\n};')}`
-                `,
+                    ${generateCodeBox('HRIS Schema Mapping Definition', 'const employeeSchemaCore = {\n  "uid": "EMP_0091",\n  "demographics": { "name": "Siva M.", "contact": "+919876543210", "taxId": "ENCRYPTED_HASH" },\n  "governance": { "department": "Data Engineering", "grade": 3, "compaRatio": 0.92 },\n  "state": { "isActive": true, "isOnboardingComplete": true, "currentModuleId": 14 },\n  "accessControl": ["DB_READ", "JIRA_WRITE"]\n};')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> வாட்ஸ்அப் மெசேஜ்கள், பல எக்செல் ஷீட்கள், மற்றும் காகிதங்கள் மூலம் மனிதவளத் துறையை நடத்துவது, ஒரு வங்கியின் வாடிக்கையாளர் விவரங்களை 10 வெவ்வேறு லேப்டாப்களில் சாதாரண டெக்ஸ்ட் ஃபைலாகச் சேமிப்பது போன்றது. இது பாதுகாப்பற்றது, பிழைகள் மலிந்தது. <b>HRIS</b> என்பது உங்கள் பிரதான பாதுகாப்பான டேட்டாபேஸ் (SQL) ஆகும்.</div>
                     <p>ஊழியர்களின் எண்ணிக்கை 100-ஐத் தாண்டும்போது, தரவுகளைப் பாதுகாப்பாக நிர்வகிக்க <b>HRIS (Human Resource Information System)</b> மென்பொருள் (Workday, Zoho People போன்றவை) கட்டாயம் தேவைப்படுகிறது. ஒரு ஊழியரின் நிறுவனம் சார்ந்த அனைத்துத் தரவுகளும் இந்த ஒற்றை மையத்தில்தான் பாதுகாப்பாகப் பதிவு செய்யப்படும்.</p>
@@ -1226,7 +1195,6 @@
                     </ul>
                     <p>உங்கள் அடிப்படை மனிதவளக் கொள்கைகள் தவறாக இருந்தால், பல லட்சம் மதிப்பிலான HRIS-ஐ வாங்கினாலும் அது குப்பையாகவே செயல்படும்.</p>
                     ${generateCodeBox('HRIS Schema Mapping Definition', 'const employeeSchemaCore = {\n  "uid": "EMP_0091",\n  "demographics": { "name": "Siva M.", "contact": "+919876543210", "taxId": "ENCRYPTED_HASH" },\n  "governance": { "department": "Data Engineering", "grade": 3, "compaRatio": 0.92 },\n  "state": { "isActive": true, "isOnboardingComplete": true, "currentModuleId": 14 },\n  "accessControl": ["DB_READ", "JIRA_WRITE"]\n};')}`
-                `
             },
             {
                 id: 23, icon: "📉", img: "https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&q=80",
@@ -1255,7 +1223,6 @@
                     </ul>
                     <p>வதந்திகளுக்காகக் காத்திருக்காமல், தரவுகளின் அடிப்படையில் உடனடியாகச் செயல்பட்டு சிறந்தவர்களைத் தக்கவைக்கலாம்.</p>
                     ${generatePromptAndOutput('Predictive Attrition Engine', 'விலகல் கணிப்பு மாடல் இயக்கம்: USER_1109 (Senior Backend Dev)\n- Compa-Ratio: 0.78 (சந்தை விலையை விட மிகக் குறைவு)\n- பதவி உயர்வு தள்ளிப்போன நாட்கள்: 22 மாதங்கள்\n- ஈடுபாடு: 6 வாரங்களில் 60% குறைந்துள்ளது\n- மேலாளர் நிலை: 14 நாட்களுக்கு முன் ராஜினாமா செய்தார்', 'Predictive Output Result:\nவிலகுவதற்கான வாய்ப்பு: 88.4%\nநிலை: அதிதீவிர ஆபத்தான நிலை\n[உடனடி நடவடிக்கை: ஊழியருடன் பேசிச் சிக்கலைத் தீர்க்கவும். 15% சம்பள உயர்வு வழங்கத் தயாராக இருக்கவும்.]')}`
-                `
             },
             {
                 id: 24, icon: "⚡", img: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80",
@@ -1272,8 +1239,7 @@
                         <li><b>Friction Node Elimination:</b> Proactively identifying and coaching stubborn, resistant variables (employees who refuse to use the new system) before they block the pipeline velocity of the entire firm.</li>
                     </ul>
                     <p>Failed change management leads to plummeting eNPS scores and massive talent flight. Successful change management makes the company highly agile and future-proof.</p>
-                    ${generateCodeBox('Change Execution Blueprint', 'const executeChangePhase = (phaseId) => {\n  const kotterStages = [\n    "BUILD_URGENCY", \n    "FORM_COALITION", \n    "COMMUNICATE_VISION", \n    "REMOVE_OBSTACLES", \n    "EMPOWER_ACTION"\n  ];\n  return kotterStages.includes(phaseId) ? "STAGE_VALIDATED_PROCEED" : "LOGICAL_HALT_REQD";\n};')}`
-                `,
+                    ${generateCodeBox('Change Execution Blueprint', 'const executeChangePhase = (phaseId) => {\n  const kotterStages = [\n    "BUILD_URGENCY", \n    "FORM_COALITION", \n    "COMMUNICATE_VISION", \n    "REMOVE_OBSTACLES", \n    "EMPOWER_ACTION"\n  ];\n  return kotterStages.includes(phaseId) ? "STAGE_VALIDATED_PROCEED" : "LOGICAL_HALT_REQD";\n};')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஊழியர்களைத் தயார்படுத்தாமல் நிறுவனத்தின் முக்கியச் சாஃப்ட்வேரை ஒரே இரவில் மாற்றுவது, 200 KM/H வேகத்தில் செல்லும் ரயிலை ஒரே நொடியில் ரிவர்ஸ் கியர் (Reverse) போட முயற்சிப்பது போன்றது. கியர் பாக்ஸ் உடைந்து ரயில் தடம் புரண்டுவிடும். மாற்றங்கள் படிப்படியாகவும் திட்டமிட்டும் நடக்க வேண்டும்.</div>
                     <p>நவீன நிறுவனங்கள் ஒரே இடத்தில் நிற்பதில்லை; அவை தொடர்ந்து மாறிக்கொண்டே இருக்கும். ஒரு நிறுவனம் தனது தொழில்நுட்பத்தை மாற்றும்போதோ, துறைகளை இணைக்கும்போதோ அல்லது வீட்டிலிருந்து வேலை (WFH) செய்யும் முறையை மாற்றி அலுவலகத்திற்கு வரச் சொல்லும்போதோ (RTO), ஊழியர்களிடமிருந்து கடுமையான எதிர்ப்பு எழும்.</p>
@@ -1287,7 +1253,6 @@
                     </ul>
                     <p>தவறான மாற்ற மேலாண்மை சிறந்த ஊழியர்களை வெளியேற்றிவிடும். சரியான மேலாண்மை நிறுவனத்தை எதிர்காலத்திற்குத் தயார்படுத்தும்.</p>
                     ${generateCodeBox('Change Execution Blueprint', 'const executeChangePhase = (phaseId) => {\n  const kotterStages = [\n    "BUILD_URGENCY", \n    "FORM_COALITION", \n    "COMMUNICATE_VISION", \n    "REMOVE_OBSTACLES", \n    "EMPOWER_ACTION"\n  ];\n  return kotterStages.includes(phaseId) ? "STAGE_VALIDATED_PROCEED" : "LOGICAL_HALT_REQD";\n};')}`
-                `
             },
             {
                 id: 25, icon: "🌍", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
@@ -1386,11 +1351,13 @@
                         
                         // Fire-and-forget background synchronization prevents loading latency
                         if (dbNeedsUpdate) {
-                            setDoc(doc(db, "users", user.uid), { 
-                                courses: {
-                                    [CURRENT_COURSE_ID]: currentUserData.courses[CURRENT_COURSE_ID]
-                                }
-                            }, { merge: true }).catch(e => console.error("Auto-opt background write skipped:", e));
+                            try {
+                                await setDoc(doc(db, "users", user.uid), { 
+                                    courses: {
+                                        [CURRENT_COURSE_ID]: currentUserData.courses[CURRENT_COURSE_ID]
+                                    }
+                                }, { merge: true });
+                            } catch(e) { console.error("Auto-init save error:", e); }
                         }
                         
                         routeUser(true);
