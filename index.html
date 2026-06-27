@@ -249,27 +249,8 @@
             transform: translateY(-3px);
         }
 
-        /* Trusted By */
-        .trusted-section {
-            padding: 50px 0;
-            background: var(--surface-color);
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-        }
-        .logo-grid {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 48px;
-            opacity: 0.75;
-        }
-        .logo-grid span {
-            font-weight: 800;
-            font-size: 1.35rem;
-            color: var(--text-main);
-        }
-
+        /* Trusted By - REMOVED for cleaner flow and immediate focus on courses */
+        
         /* Benefits */
         .benefits-grid {
             display: grid;
@@ -338,6 +319,27 @@
                 gap: 20px;
             }
         }
+
+        /* Enhanced Psychology-Driven Styles */
+        .course-card {
+            position: relative;
+        }
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            z-index: -1;
+            border-radius: var(--radius-xl);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .course-card:hover::before {
+            opacity: 0.15;
+        }
     </style>
 </head>
 <body>
@@ -370,21 +372,8 @@
         </div>
     </header>
 
-    <!-- Trusted By -->
-    <section class="trusted-section">
-        <div class="container">
-            <div style="text-align:center; margin-bottom: 20px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); font-weight: 700;">Trusted &amp; Recognized By</div>
-            <div class="logo-grid">
-                <span>Google</span>
-                <span>Amazon</span>
-                <span>Microsoft</span>
-                <span>Zoho</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Courses Section -->
-    <section id="courses" class="section" style="background: var(--bg-color);">
+    <!-- Courses Section - Moved immediately after hero for maximum visibility and psychological momentum (people scan top-down and want quick value) -->
+    <section id="courses" class="section" style="background: var(--bg-color); padding-top: 40px;">
         <div class="container">
             <div style="text-align: center; max-width: 700px; margin: 0 auto 60px;">
                 <h2 style="font-size: 2.6rem; margin-bottom: 16px;">Our Flagship Certifications</h2>
