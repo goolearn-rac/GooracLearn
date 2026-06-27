@@ -25,4 +25,4 @@ Goorac Learn empowers professionals and students by providing high-quality, indu
 
 ---
 
-*© 2026 Goorac Corporation. All Rights Reserved.*
+*©  Goorac Corporation. All Rights Reserved.*
