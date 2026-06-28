@@ -49,13 +49,13 @@ const razorpay = new Razorpay({
 // 🚀 DYNAMIC COURSE PRICING ENGINE (NEW)
 // ==========================================
 const coursePrices = {
-    "prompt-engineering": 14900, // ₹149.00
-    "data-analytics": 14900,     // ₹149.00 (Example for future)
-    "hr-management": 19900,     // ₹199.00 (Example for future)
-    "digital-marketing": 19900, // ₹199.00
-    "cyber-security": 24900,    // ₹249.00
-    "internship": 24900,        // ₹249.00
-    "default": 14900            // Fallback safeguard
+    "prompt-engineering": 14900,  // ₹149.00
+    "data-analytics": 14900,      // ₹149.00 (Example for future)
+    "hr-management": 19900,       // ₹199.00 (Example for future)
+    "digital-marketing": 19900,   // ₹199.00
+    "cyber-security": 24900,      // ₹249.00
+    "product-management": 24900,  // ₹249.00
+    "default": 14900              // Fallback safeguard
 };
 
 /**
