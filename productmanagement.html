@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Goorac Learn | Advanced Product Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        /* Premium SaaS & App Theme Variables - Emerald/Teal */
+        :root {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #059669; /* Emerald Green */
+            --primary-hover: #047857; /* Darker Emerald */
+            --border-color: #e2e8f0;
+            --success: #10b981;
+            --success-bg: #ecfdf5; /* Emerald Light BG */
+            --locked-bg: #f1f5f9;
+            --code-bg: #0f172a; /* Midnight Blue */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #020617; /* Deep Midnight Blue */
+                --surface-color: #0f172a;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --border-color: #1e293b;
+                --locked-bg: #0b1120;
+                --success-bg: #064e3b; /* Dark Emerald BG */
+                --code-bg: #000000;
+            }
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: var(--bg-color); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; line-height: 1.6;
+            -webkit-font-smoothing: antialiased; overflow-x: hidden;
+        }
+
+        .top-nav {
+            background-color: var(--surface-color); border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px); background-color: rgba(var(--surface-color), 0.9);
+        }
+        .brand { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; cursor: pointer; }
+
+        .screen { display: none; flex: 1; padding: 30px 20px 80px 20px; max-width: 640px; margin: 0 auto; width: 100%; min-height: 100vh;}
+        .active-screen { display: block; animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(15px); } to { opacity: 1; transform: translateX(0); } }
+
+        #splash-screen.active-screen { display: flex; flex-direction: column; }
+        .spinner { 
+            width: 40px; height: 40px; border: 4px solid var(--border-color); 
+            border-top-color: var(--primary); border-radius: 50%; 
+            animation: spin 1s linear infinite; margin-top: 20px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        h1, h2, h3 { font-weight: 700; margin-bottom: 12px; line-height: 1.2; letter-spacing: -0.5px; }
+        p { margin-bottom: 20px; color: var(--text-muted); font-size: 1.05rem; }
+        
+        .card {
+            background: var(--surface-color); border-radius: var(--radius-xl);
+            border: 1px solid var(--border-color); padding: 24px;
+            box-shadow: var(--shadow-md); margin-bottom: 24px;
+        }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main); }
+        .input-group input {
+            width: 100%; padding: 16px; border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); background-color: var(--bg-color); 
+            color: var(--text-main); font-size: 1rem; transition: 0.2s; outline: none;
+            appearance: none; 
+        }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); }
+
+        .btn {
+            background-color: var(--primary); color: white; border: none;
+            border-radius: var(--radius-lg); padding: 16px; width: 100%; font-size: 1rem;
+            font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none !important; }
+        .btn:active:not(:disabled) { transform: scale(0.98); } 
+        .btn-success { background-color: var(--success); }
+        .btn-outline { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
+
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
+            text-align: center; border-radius: 30px; padding: 16px 24px;
+            position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%);
+            font-size: 15px; font-weight: 500; box-shadow: var(--shadow-lg);
+            opacity: 0; transition: opacity 0.3s, bottom 0.3s;
+        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
+        .progress-bar-bg { background: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px; margin-bottom: 10px;}
+        .progress-bar-fill { background: var(--primary); height: 100%; width: 0%; transition: width 0.8s ease-out; }
+
+        .module-item {
+            background-color: var(--surface-color); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; transition: 0.2s; box-shadow: var(--shadow-sm);
+        }
+        .module-item:active:not(.locked) { transform: scale(0.98); background: var(--bg-color); }
+        .module-item.locked { background-color: var(--locked-bg); opacity: 0.6; cursor: not-allowed; }
+        .module-item.completed { border-left: 4px solid var(--success); }
+        
+        .mod-icon { font-size: 24px; width: 44px; height: 44px; background: var(--bg-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
+        .mod-details { flex: 1; }
+        .mod-title { font-weight: 600; font-size: 1rem; color: var(--text-main); margin-bottom: 2px; }
+        .mod-status { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
+
+        .mod-hero-img { width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .content-body h3 { margin-top: 30px; margin-bottom: 15px; font-size: 1.25rem; color: var(--primary); border-bottom: 1px solid var(--border-color); padding-bottom: 5px;}
+        .content-body ul, .content-body ol { margin-bottom: 20px; padding-left: 20px; color: var(--text-muted); }
+        .content-body li { margin-bottom: 10px; }
+        .content-body mark { background-color: rgba(5, 150, 105, 0.2); padding: 2px 4px; border-radius: 4px; color: var(--primary); font-weight: 600; }
+        .content-body strong { color: var(--text-main); }
+        
+        .analogy-box {
+            background: rgba(5, 150, 105, 0.05); border-left: 4px solid var(--primary);
+            padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 24px 0; font-size: 1.05rem; color: var(--text-main);
+        }
+        
+        .code-wrapper {
+            position: relative; background: var(--code-bg); border-radius: var(--radius-lg);
+            margin: 24px 0; border: 1px solid var(--border-color); overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        .code-header {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.05); padding: 8px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .code-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; font-weight: 600;}
+        .copy-btn {
+            background: transparent; color: #cbd5e1; border: 1px solid #475569; border-radius: 4px;
+            padding: 4px 10px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; font-weight: 600;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .copy-btn.copied { background: var(--success); border-color: var(--success); color: white; }
+        .code-wrapper pre {
+            padding: 20px; margin: 0; overflow-x: auto; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem; color: #f8fafc; white-space: pre-wrap; line-height: 1.5;
+        }
+
+        .lang-switch-bar { display: flex; background: var(--locked-bg); padding: 4px; border-radius: 30px; width: fit-content; }
+        .lang-btn { background: transparent; border: none; padding: 8px 24px; border-radius: 20px; cursor: pointer; font-weight: 600; color: var(--text-muted); transition: 0.2s; }
+        .lang-btn.active { background: var(--surface-color); color: var(--primary); box-shadow: var(--shadow-sm); }
+
+        .quiz-question { margin-bottom: 40px; }
+        .quiz-option {
+            display: block; padding: 16px; border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg); margin-bottom: 12px; cursor: pointer;
+            transition: 0.2s; font-weight: 500; background: var(--surface-color);
+        }
+        .quiz-option input[type="radio"] { display: none; }
+        .quiz-option:has(input:checked) { border-color: var(--primary); background: rgba(5, 150, 105, 0.05); color: var(--primary); }
+
+        .cert-scroll-container {
+            width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px; border-radius: 12px; background: rgba(0,0,0,0.02);
+            padding: 10px; border: 1px solid var(--border-color);
+        }
+        
+        .certificate-wrapper {
+            background: #ffffff;
+            background-image: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            border: 0px solid transparent; 
+            padding: 50px 60px; 
+            text-align: center;
+            border-radius: 0px; 
+            box-shadow: none; 
+            color: #0f172a;
+            margin: 0 auto;
+            position: relative; 
+            overflow: hidden;
+            width: 100%;
+            min-width: 900px; 
+            max-width: 1122px; 
+            aspect-ratio: 1.414; 
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .certificate-wrapper::before {
+            content: ''; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 6px double #059669; /* Emerald Green */
+            pointer-events: none; z-index: 1;
+        }
+        .certificate-wrapper::after {
+            content: 'PRODUCT'; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: clamp(60px, 15vw, 180px); color: rgba(0,0,0,0.03); font-weight: 900;
+            pointer-events: none; z-index: 0;
+        }
+        .cert-content { z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding-top: 15px;}
+        .cert-header { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4.5vw, 3.2rem); color: #1e293b; margin-bottom: 0; font-weight: 800;}
+        .cert-sub { font-size: clamp(0.7rem, 1.5vw, 1.1rem); color: #059669; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; font-weight: bold; }
+        .cert-name { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4.5vw, 3rem); font-weight: 700; border-bottom: 2px solid #059669; padding-bottom: 8px; margin: 0 auto 15px; display: inline-block; min-width: 60%; color: #047857; line-height: 1.2;}
+        .cert-body { font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #475569; margin-bottom: 10px; max-width: 85%; margin-left: auto; margin-right: auto; line-height: 1.5;}
+        
+        .multi-color-sig { color: #047857; font-weight: 800; }
+
+        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; z-index: 2; position: relative; margin-top: auto; padding-bottom: 15px;}
+        .cert-qr-container { text-align: center; }
+        .cert-qr { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); border: 3px solid #fff; box-shadow: var(--shadow-md); border-radius: 6px; background: white;}
+        .cert-badge { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); background: radial-gradient(circle, #059669, #047857); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: clamp(0.5rem, 1vw, 0.75rem); border: 2px dashed white; line-height: 1.2;}
+        .cert-signature-block { text-align: center; }
+        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.2rem, 3vw, 2.2rem); border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 150px; }
+
+        @media print {
+            @page { size: A4 landscape; margin: 0; }
+            body { background: white; margin: 0; }
+            body * { visibility: hidden; }
+            #cert-pdf-view, #cert-pdf-view * { visibility: visible; }
+            #cert-pdf-view { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh;}
+            .cert-scroll-container { border: none; background: transparent; padding: 0; overflow: visible; }
+            .certificate-wrapper { 
+                width: 297mm !important; height: 210mm !important; 
+                margin: 0 !important; border: 0px solid transparent !important; 
+                max-width: none !important; min-width: 0 !important; aspect-ratio: auto !important;
+                -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-shadow: none !important;
+            }
+            .cert-content { padding-top: 0 !important; }
+            .cert-footer { padding-bottom: 0 !important; }
+            .btn { display: none !important; }
+            .top-nav { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast">Message</div>
+
+    <div class="top-nav">
+        <div class="brand" onclick="window.location.href='index.html'">Goorac <span style="color:var(--text-main)">Learn</span></div>
+        <div id="nav-profile" style="display:none; align-items: center; gap: 8px; cursor: pointer;" onclick="window.location.href='profile.html'"></div>
+    </div>
+
+    <div id="splash-screen" class="screen active-screen" style="justify-content: center; align-items: center; text-align: center;">
+        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 20px; border-radius: 50%; box-shadow: var(--shadow-md);">
+        <h1 style="color: var(--primary); margin-bottom: 8px; font-size: 2rem;">Goorac Learn</h1>
+        <p style="color: var(--text-muted); font-weight: 500; font-size: 1rem;">Initializing product workspace...</p>
+        <div class="spinner"></div>
+    </div>
+
+    <div id="login-screen" class="screen">
+        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80" alt="Product Management" style="width:100%; height:180px; object-fit:cover; border-radius: var(--radius-xl); margin-bottom: 24px;">
+        <h1 style="font-size: 2.2rem;">Master Product Management</h1>
+        <p>Transform your career by mastering product thinking, Agile execution, strategy, and PLG across 25 comprehensive Modules. Get officially certified.</p>
+        
+        <button id="primary-auth-btn" class="btn" style="background: #0f172a; margin-top: 20px;">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Sign in with Google
+        </button>
+    </div>
+
+    <div id="profile-screen" class="screen">
+        <h2>Certificate Setup</h2>
+        <p>Enter your details exactly as they should appear on your final diploma.</p>
+        <div class="card">
+            <div class="input-group">
+                <label>Full Legal Name</label>
+                <input type="text" id="prof-name" placeholder="E.g., Jane Smith">
+            </div>
+            <div class="input-group">
+                <label>WhatsApp Number</label>
+                <input type="tel" id="prof-wa" placeholder="+91 9876543210">
+            </div>
+            <button id="save-profile-btn" class="btn">Continue</button>
+        </div>
+    </div>
+
+    <div id="payment-screen" class="screen">
+        <h2 style="font-size: 2.2rem; margin-bottom: 10px;">Unlock Premium Access</h2>
+        <p>Get lifetime access to our 25 advanced Product Management modules, AI prompt templates, strategic frameworks, and your verified official certificate.</p>
+        
+        <div class="card" style="text-align: center; border: 2px solid var(--primary); padding: 30px 20px;">
+            <div style="background: var(--success-bg); padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:10px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <h3 style="color: var(--primary); margin-bottom: 5px;">Secure One-Time Payment</h3>
+                <p style="color: var(--text-main); font-weight: 800; font-size: 2rem; margin:0;">₹249</p>
+            </div>
+            
+            <ul style="text-align: left; margin-bottom: 30px; list-style: none; padding: 0; font-size: 1.05rem;">
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Full 25-Module Masterclass</li>
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Verified Professional Certificate</li>
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Lifetime Access & Updates</li>
+            </ul>
+            
+            <button id="pay-razorpay-btn" class="btn" style="font-size: 1.1rem; padding: 18px;">
+                Pay Securely Now
+            </button>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                100% Encrypted & Safe
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard-screen" class="screen">
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600;">
+            <span>Course Progress</span>
+            <span id="progress-text" style="color: var(--primary);">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+        </div>
+        <div style="margin-top: -5px; margin-bottom: 30px; font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
+            Course: Product Management Masterclass
+        </div>
+
+        <div id="module-list-container"></div>
+        
+        <div id="quiz-unlock-banner" style="display:none; margin-top: 30px;">
+            <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
+                <h3 style="color: var(--success);">🎉 Curriculum Complete!</h3>
+                <p style="color: #064e3b; font-size: 0.95rem;">Take the final 10-question exam to earn your certificate.</p>
+                <button id="start-quiz-btn" class="btn btn-success">Start Final Exam</button>
+            </div>
+        </div>
+
+        <div id="certificate-access-banner" style="display:none; margin-top: 30px;">
+            <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
+                <h3 style="color: var(--success);">🏆 Masterclass Certified</h3>
+                <p style="color: #064e3b; font-size: 0.95rem;">You have successfully completed this course and earned your certificate.</p>
+                <button onclick="viewCertificate()" class="btn btn-success">View Certificate</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="module-viewer-screen" class="screen">
+        <button onclick="goToDashboard()" style="background:none; border:none; color:var(--text-muted); font-weight:600; cursor:pointer; padding: 0 0 20px 0; display:flex; align-items:center; gap:5px; font-size: 1rem;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"></path></svg> Back
+        </button>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
+            <div class="lang-switch-bar" style="margin-bottom: 0;">
+                <button class="lang-btn active" id="btn-en" onclick="setContentLang('en')">English</button>
+                <button class="lang-btn" id="btn-ta" onclick="setContentLang('ta')">தமிழ்</button>
+            </div>
+            
+            <button id="tts-btn" class="btn btn-outline" style="width: auto; padding: 8px 20px; border-radius: 20px; border-color: var(--primary); color: var(--primary); margin-top: 0; background: var(--success-bg);" onclick="toggleTTS()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5 10v4a2 2 0 002 2h2l4 4V4L9 8H7a2 2 0 00-2 2z"></path></svg>
+                <span id="tts-text">Listen</span>
+            </button>
+        </div>
+
+        <img id="viewer-img" class="mod-hero-img" src="" alt="Module Hero" onerror="this.style.display='none'">
+        <h1 id="viewer-title" style="color: var(--primary); font-size: 1.8rem;"></h1>
+        <div class="content-body" id="viewer-content" style="font-size: 1.05rem; margin-bottom: 40px; color: var(--text-main);"></div>
+        
+        <button id="mark-complete-btn" class="btn">Mark Completed & Next</button>
+    </div>
+
+    <div id="quiz-screen" class="screen">
+        <h2>Certification Exam</h2>
+        <p>Answer 10 questions. You need 70% (7/10) to pass.</p>
+        <div id="quiz-container"></div>
+        <button id="submit-quiz-btn" class="btn">Submit Exam</button>
+    </div>
+
+    <div id="cert-screen" class="screen" style="max-width: 100%;">
+        <div id="cert-pdf-view" style="display:none; width: 100%;">
+            
+            <div class="cert-scroll-container">
+                <div class="certificate-wrapper" id="printable-cert">
+                    <div class="cert-content">
+                        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 55px; height: 55px; object-fit: contain; margin-bottom: 5px; border-radius: 50%; box-shadow: var(--shadow-md);">
+                        
+                        <div class="cert-header">Goorac Learn</div>
+                        <div style="font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">from Goorac Corporation</div>
+                        <div class="cert-sub">Certificate of Professional Mastery</div>
+                        <div class="cert-body">This document officially certifies that</div>
+                        
+                        <div class="cert-name" id="cert-name-display">Student Name</div>
+                        
+                        <div class="cert-body" style="margin-bottom: 15px;">
+                            has successfully completed all 25 advanced modules and passed the comprehensive final examination for the<br>
+                            <span style="font-size: 1.3em; font-weight: 800; color: #0f172a; display: inline-block; margin-top: 8px;">Product Management Masterclass</span>
+                        </div>
+                        
+                        <div class="cert-date" id="cert-date-display" style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #475569; font-size: 0.95rem; background: #f1f5f9; padding: 6px 16px; border-radius: 20px; border: 1px solid #cbd5e1;">Date of Issue</div>
+                        
+                        <div style="margin-top: 15px; border-top: 2px dashed #e2e8f0; padding-top: 10px; width: 100%; max-width: 600px;">
+                            <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Valid & Recognized By</div>
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 25px;">
+                                <img src="images/google.png" alt="Google" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="images/microsoft.png" alt="Microsoft" crossorigin="anonymous" style="height: 20px; object-fit: contain;">
+                                <img src="images/amazon.png" alt="Amazon" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="images/zoho.png" alt="Zoho" crossorigin="anonymous" style="height: 18px; object-fit: contain;">
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="cert-footer">
+                        <div class="cert-qr-container">
+                            <img id="cert-qr-img" class="cert-qr" src="" alt="Verified QR" crossorigin="anonymous">
+                            <div style="font-size: clamp(0.5rem, 1vw, 0.75rem); color: #10b981; margin-top: 5px; font-weight: 800; letter-spacing: 1px;">✓ VERIFIED</div>
+                        </div>
+                        
+                        <div class="cert-badge">
+                            OFFICIAL<br>CERTIFIED
+                        </div>
+
+                        <div class="cert-signature-block">
+                            <div class="cert-signature multi-color-sig">Dr. Sarah Jenkins</div>
+                            <div style="font-size: clamp(0.6rem, 1.2vw, 0.9rem); color: #64748b; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Chief Product Officer</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; max-width: 400px; margin: 0 auto;">
+                <button id="download-pdf-btn" class="btn btn-success">Download High-Res PDF</button>
+                <button onclick="goToDashboard()" class="btn btn-outline">Back to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDeXk6z_5mYQZi_xIsQsN935KxuIBxAM3w",
+            authDomain: "gooraclearn.firebaseapp.com",
+            projectId: "gooraclearn",
+            storageBucket: "gooraclearn.firebasestorage.app",
+            messagingSenderId: "221459932053",
+            appId: "1:221459932053:web:af713811da7edd113e0c9c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        const CURRENT_COURSE_ID = "product-management";
+
+        let contentLang = 'en';
+        let currentUserData = null; 
+        let viewingModuleId = 1;
+        let isSpeaking = false; 
+
+        window.showToast = (msg) => {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        };
+
+        window.copyCode = (btn) => {
+            const codeText = btn.parentElement.parentElement.querySelector('pre').innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                btn.innerText = "Copied!";
+                btn.classList.add('copied');
+                setTimeout(() => { btn.innerText = "Copy"; btn.classList.remove('copied'); }, 2000);
+            });
+        };
+
+        window.stopTTS = () => {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            isSpeaking = false;
+            const ttsText = document.getElementById('tts-text');
+            if (ttsText) ttsText.innerText = "Listen";
+        };
+
+        window.toggleTTS = () => {
+            if (!window.speechSynthesis) return showToast("Audio playback not supported on this browser.");
+            
+            if (isSpeaking) {
+                window.stopTTS();
+                return;
+            }
+
+            const title = document.getElementById('viewer-title').innerText;
+            const contentNode = document.getElementById('viewer-content').cloneNode(true);
+            
+            contentNode.querySelectorAll('.copy-btn, .code-label').forEach(el => el.remove());
+            const contentText = contentNode.innerText;
+            
+            const fullText = title + ". " + contentText;
+            const utterance = new SpeechSynthesisUtterance(fullText);
+            
+            utterance.lang = contentLang === 'ta' ? 'ta-IN' : 'en-US';
+            utterance.rate = 0.90; 
+
+            utterance.onend = () => {
+                isSpeaking = false;
+                document.getElementById('tts-text').innerText = "Listen";
+            };
+
+            utterance.onerror = (e) => {
+                console.warn("TTS Processing Error", e);
+                window.stopTTS();
+            };
+
+            isSpeaking = true;
+            document.getElementById('tts-text').innerText = "Stop Playing";
+            window.speechSynthesis.speak(utterance);
+        };
+
+        window.showScreen = (screenId, pushHistory = true) => {
+            window.stopTTS(); 
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active-screen'));
+            document.getElementById(screenId).classList.add('active-screen');
+            window.scrollTo(0,0);
+            if(pushHistory) {
+                try {
+                    history.pushState({ screen: screenId }, '', '#' + screenId);
+                } catch(e) {
+                    console.warn("History API prevented:", e);
+                }
+            }
+        };
+
+        window.goBack = () => { 
+            window.stopTTS(); 
+            goToDashboard();
+        };
+        
+        window.addEventListener('popstate', (e) => {
+            window.stopTTS();
+            if(e.state && e.state.screen) showScreen(e.state.screen, false);
+            else if(currentUserData) routeUser(false);
+        });
+
+        window.goToDashboard = () => {
+            renderDashboard();
+            showScreen('dashboard-screen', true);
+        };
+
+        window.viewCertificate = () => {
+            showCertificate();
+            showScreen('cert-screen', true);
+        };
+
+        const generatePromptBox = (label, code) => `
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-label">${label}</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy Prompt</button>
+                </div>
+                <pre><code>${code}</code></pre>
+            </div>`;
+
+        // ==========================================
+        // 25 HIGHLY DETAILED PRODUCT MANAGEMENT MODULES 
+        // ==========================================
+        const courseData = [
+            { 
+                id: 1, icon: "🎯", img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
+                title_en: "1. The Role of the Modern Product Manager", title_ta: "1. நவீன தயாரிப்பு மேலாளரின் பங்கு (Product Manager)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A Product Manager is like the conductor of an orchestra. You do not play the violin (engineering) or the flute (design), but it is your job to ensure everyone plays from the same sheet of music to create a beautiful symphony.</div>
+                    <p>Welcome to Phase 1: Foundations & Ideation. The role of a modern Product Manager (PM) is often misunderstood. You are not a project manager ticking off a checklist, nor are you the "CEO of the Product" who bosses people around. You lead by influence, not by authority.</p>
+                    <p>A great PM sits at the intersection of Business, Technology, and User Experience (UX). You must understand the business goals to ensure the product makes money, grasp technical constraints so you do not ask engineers for the impossible, and empathize deeply with the user.</p>
+                    <h3>The Core Pillars</h3>
+                    <ul>
+                        <li><b>Business:</b> Aligning the product with company OKRs, defining monetization strategies, and ensuring market viability.</li>
+                        <li><b>Technology:</b> Understanding system architecture, technical debt, and sprint cycles to work effectively with engineers.</li>
+                        <li><b>UX:</b> Conducting user research, wireframing, and advocating for an intuitive customer journey.</li>
+                    </ul>
+                    <p>The biggest myth in product management is that you have absolute power. In reality, you must constantly build consensus across sales, marketing, engineering, and design. Your primary tool is communication, and your primary responsibility is answering the question: "Why are we building this?"</p>
+                    ${generatePromptBox('ChatGPT Prompt: PM Interview Prep', 'Act as an Expert Product Management Interviewer. Ask me a behavioral question about a time I had to align disagreeing stakeholders (e.g., Engineering wanting to refactor code vs. Sales wanting a new feature). Wait for my response, then critique my answer based on empathy, business logic, and communication skills.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு ப்ராடக்ட் மேனேஜர் (PM) என்பவர் இசைக்குழுவை வழிநடத்துபவர் போன்றவர். நீங்கள் வயலின் (இன்ஜினியரிங்) அல்லது புல்லாங்குழல் (டிசைன்) வாசிப்பதில்லை, ஆனால் அனைவரும் இணைந்து அழகாக இசைப்பதை உறுதிசெய்வது உங்கள் பொறுப்பு.</div>
+                    <p>ப்ராடக்ட் மேனேஜ்மென்ட் உலகிற்கு உங்களை வரவேற்கிறோம். ஒரு PM-இன் வேலை வெறும் செக்லிஸ்ட்டை (Checklist) முடிப்பது அல்ல. அதேசமயம் நீங்கள் 'ப்ராடக்ட்டின் CEO' என நினைத்து அனைவரையும் அதிகாரம் செய்யவும் முடியாது. உங்கள் பேச்சாற்றல் மூலமே அனைவரையும் அரவணைத்துச் செல்ல வேண்டும்.</p>
+                    <p>வியாபாரம், தொழில்நுட்பம், மற்றும் வாடிக்கையாளர் அனுபவம் (UX) ஆகிய மூன்றையும் இணைக்கும் புள்ளியே PM.</p>
+                    <h3>3 முக்கியத் தூண்கள்</h3>
+                    <ul>
+                        <li><b>வியாபாரம் (Business):</b> கம்பெனியின் இலக்கைப் புரிந்து கொண்டு, லாபம் தரும் வகையில் ப்ராடக்ட்டை உருவாக்குவது.</li>
+                        <li><b>தொழில்நுட்பம் (Technology):</b> இன்ஜினியர்களுக்குப் புரியும் மொழியில் பேசுவது மற்றும் தொழில்நுட்பச் சவால்களை அறிந்துகொள்வது.</li>
+                        <li><b>பயனர் அனுபவம் (UX):</b> வாடிக்கையாளர்களின் தேவையை உணர்ந்து எளிமையான வடிவமைப்பை உருவாக்குவது.</li>
+                    </ul>
+                    <p>உண்மையில் ஒரு PM-க்கு எவ்வித அதிகாரமும் கிடையாது. டிசைன், சேல்ஸ் மற்றும் இன்ஜினியரிங் என அனைவரையும் ஒருங்கிணைத்து, "இதை நாம் ஏன் உருவாக்குகிறோம்?" என்ற கேள்விக்கு விடையளிப்பதே உங்கள் வேலை.</p>
+                    ${generatePromptBox('ChatGPT Prompt: PM Role Clarity', 'நான் ஒரு புதிய ப்ராடக்ட் மேனேஜராகப் பொறுப்பேற்றுள்ளேன். இன்ஜினியரிங் டீமுக்கும் (Engineering) எனக்கும் இடையிலான வேலைகளை எப்படிப் பிரித்துக்கொள்வது என்று ஒரு தெளிவான பட்டியலை உருவாக்கு.')}`
+            },
+            { 
+                id: 2, icon: "🔍", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+                title_en: "2. Market Research & Customer Discovery", title_ta: "2. சந்தை ஆய்வு & வாடிக்கையாளர் தேவையை அறிதல்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Building a product without market research is like building a massive bridge without checking if there is a city on the other side. Customer discovery is checking the map before pouring the concrete.</div>
+                    <p>Great products are not born from sudden moments of genius in a boardroom; they are built by deeply understanding the market. Your first step as a PM is determining if there is a large enough market that actually wants what you plan to build.</p>
+                    <h3>Total Addressable Market (TAM)</h3>
+                    <p>TAM represents the total revenue opportunity available if your product achieved 100% market share. Investors use this to see if the idea is worth funding. (e.g., The TAM for ride-sharing is massive, but the TAM for left-handed golf clubs for toddlers is tiny). You must also define SAM (Serviceable Available Market) and SOM (Serviceable Obtainable Market).</p>
+                    <h3>Qualitative vs. Quantitative Research</h3>
+                    <ul>
+                        <li><b>Qualitative (The "Why"):</b> Conducting 1-on-1 user interviews, asking open-ended questions, and observing users. This helps uncover unarticulated needs.</li>
+                        <li><b>Quantitative (The "What"):</b> Sending out mass surveys, analyzing Google Analytics, and looking at usage metrics. This gives you statistical confidence.</li>
+                    </ul>
+                    <p>The goal of discovery is not to ask users what features they want. As Henry Ford allegedly said, "If I had asked people what they wanted, they would have said faster horses." Your job is to understand their underlying pain points.</p>
+                    ${generatePromptBox('Customer Interview Script Builder', 'Act as a Senior User Researcher. I am building a mobile app that helps freelance writers manage their invoices. Generate a list of 5 open-ended, non-leading questions I can ask freelancers during a 15-minute discovery call to uncover their biggest pain points regarding getting paid.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சந்தையை (Market) ஆராயாமல் ஒரு பொருளை உருவாக்குவது, அந்தப் பக்கம் ஊர் இருக்கிறதா என்று பார்க்காமலேயே ஆற்றின் குறுக்கே பாலம் கட்டுவது போன்றது.</div>
+                    <p>சிறந்த ப்ராடக்ட்டுகள் மீட்டிங் அறையில் திடீரெனத் தோன்றுவதில்லை. அவை சந்தையை ஆழமாகப் புரிந்துகொள்வதன் மூலமே உருவாகின்றன. நீங்கள் உருவாக்க நினைக்கும் பொருளுக்குப் போதிய மக்கள் தேவை இருக்கிறதா என்பதை முதலில் கண்டுபிடிக்க வேண்டும்.</p>
+                    <h3>TAM (Total Addressable Market)</h3>
+                    <p>இந்த உலகில் 100% மக்கள் உங்கள் ப்ராடக்ட்டை வாங்கினால் எவ்வளவு வருமானம் கிடைக்கும் என்பதே TAM. இதை வைத்துத்தான் முதலீட்டாளர்கள் பணத்தைத் தருவார்கள்.</p>
+                    <h3>இரண்டு வகையான ஆய்வுகள்</h3>
+                    <ul>
+                        <li><b>Qualitative (ஏன்?):</b> வாடிக்கையாளர்களிடம் நேரடியாகப் பேசி, அவர்களின் உண்மையான பிரச்சினைகளைப் புரிந்துகொள்வது.</li>
+                        <li><b>Quantitative (என்ன?):</b> சர்வே (Survey) மற்றும் டேட்டாவை வைத்து எத்தனை பேருக்கு இந்தப் பிரச்சினை உள்ளது எனக் கணக்கிடுவது.</li>
+                    </ul>
+                    <p>வாடிக்கையாளர்களிடம் "உங்களுக்கு என்ன வேண்டும்?" எனக் கேட்கக் கூடாது. அவர்கள் பிரச்சினையை மட்டுமே சொல்வார்கள், அதற்கான தீர்வை நீங்கள்தான் கண்டுபிடிக்க வேண்டும்.</p>
+                    ${generatePromptBox('Customer Interview Script Builder', 'நான் ஃப்ரீலான்சர்களுக்கான (Freelancers) ஒரு பில்லிங் ஆப் உருவாக்கப் போகிறேன். அவர்களிடம் பேசும்போது நான் கேட்க வேண்டிய 5 சிறந்த திறந்த கேள்விகளை (Open-ended questions) உருவாக்கிக் கொடு. அவர்கள் தாமாகவே தங்கள் பிரச்சினைகளைக் கூறும்படி கேள்விகள் இருக்க வேண்டும்.')}`
+            },
+            { 
+                id: 3, icon: "🧩", img: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=800&q=80",
+                title_en: "3. Problem Space vs. Solution Space", title_ta: "3. பிரச்சனை (Problem) vs தீர்வு (Solution)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> The problem space is "My back hurts from sitting all day." The solution space is "An ergonomic standing desk." Fall in love with the back pain, because the solution might actually be a yoga mat, not a desk.</div>
+                    <p>One of the most common mistakes junior PMs make is jumping straight into the Solution Space. They immediately start drawing wireframes for an AI-powered chatbot before validating if the user actually needs a chatbot.</p>
+                    <h3>Falling in Love with the Problem</h3>
+                    <p>Your job is to stay in the Problem Space for as long as possible. You must become an expert on the user's pain. If you lock yourself into a specific solution too early, you risk building a product nobody wants.</p>
+                    <h3>The "5 Whys" Framework</h3>
+                    <p>Developed by Toyota, this framework helps you find the root cause of a problem instead of just treating the symptom.</p>
+                    <ul>
+                        <li><b>Problem:</b> Users are abandoning their shopping carts.</li>
+                        <li><i>Why?</i> Because the shipping page takes too long to load.</li>
+                        <li><i>Why?</i> Because we are querying a slow third-party API.</li>
+                        <li><i>Why?</i> Because we haven't implemented local caching.</li>
+                        <li><i>Why?</i> Because the engineering team prioritized a new UI over backend stability.</li>
+                    </ul>
+                    <p>By asking "Why" five times, the PM realizes the solution isn't redesigning the cart UI; the solution is paying down technical debt on the backend.</p>
+                    ${generatePromptBox('Problem Framing Exercise', 'Prompt: "Act as a Product Coach. I have an idea for a solution: \'An app that tracks how much water you drink.\' Force me to step back into the Problem Space. Ask me challenging questions to define the actual problem I am solving, the target audience, and why existing solutions (like a simple water bottle) fail."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> "நாள் முழுவதும் உட்கார்ந்திருப்பதால் எனக்கு முதுகு வலிக்கிறது" என்பது பிரச்சனை (Problem Space). "நிற்கும் மேசை (Standing desk)" என்பது தீர்வு (Solution Space). பிரச்சனையை மட்டும் காதலியுங்கள், ஏனென்றால் அதற்கான சரியான தீர்வு ஒரு யோகா மேட்டாகவும் இருக்கலாம்!</div>
+                    <p>புதிய PM-கள் செய்யும் பெரிய தவறு, உடனே தீர்வுக்குச் சென்றுவிடுவது. பயனருக்கு நிஜமாகவே சாட்பாட் (Chatbot) தேவையா என்று ஆராயாமல், சாட்பாட்டுக்கான டிசைனை வரையத் தொடங்கிவிடுவார்கள்.</p>
+                    <h3>பிரச்சனையைக் காதலித்தல்</h3>
+                    <p>நீங்கள் பிரச்சனையில்தான் அதிக நேரம் செலவிட வேண்டும். ஆரம்பத்திலேயே ஒரு தீர்வை முடிவு செய்துவிட்டால், யாருக்கும் தேவையில்லாத ஒரு பொருளை நீங்கள் உருவாக்க நேரிடும்.</p>
+                    <h3>"5 Whys" (5 ஏன்?) தத்துவம்</h3>
+                    <p>டொயோட்டா (Toyota) நிறுவனம் உருவாக்கிய இந்த முறை, ஒரு பிரச்சனையின் ஆணிவேரைக் கண்டுபிடிக்க உதவும். பயனர்கள் ஏன் பொருளை வாங்காமல் செல்கிறார்கள்? "ஏனென்றால் வெப்சைட் மெதுவாக உள்ளது". ஏன் மெதுவாக உள்ளது? "சர்வர் சரியில்லை". இப்படி 5 முறை 'ஏன்' என்று கேட்பதன் மூலம், உண்மையான காரணத்தைக் கண்டறியலாம்.</p>
+                    ${generatePromptBox('Problem Framing Exercise', 'AI Prompt: "நான் தண்ணீர் குடிப்பதைக் கணக்கிடும் ஒரு ஆப் (App) உருவாக்க நினைக்கிறேன். இதை ஒரு தீர்வாக (Solution) பார்க்காமல், நிஜமான பிரச்சனை என்ன என்று என்னைக் கேள்விகள் கேட்டுத் தூண்டு. இதற்கு ஒரு சாதாரண வாட்டர் பாட்டிலே போதுமே, ஏன் ஆப் வேண்டும் என்று என்னைக் கேள்விகேள்."')}`
+            },
+            { 
+                id: 4, icon: "👤", img: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=800&q=80",
+                title_en: "4. User Personas & Empathy Mapping", title_ta: "4. யூசர் பெர்சோனா (User Personas) & எம்பதி மேப்பிங்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Trying to build a product for "everyone" is like cooking a single meal for a family where one person is vegan, one loves spicy food, and one hates vegetables. You end up with a bland bowl of white rice. Build for a specific persona.</div>
+                    <p>Once you understand the problem, you must clearly define *who* experiences it. User Personas are semi-fictional characters representing your target audience. They are not just demographics (Age 25-34); they are psychographics (Fears, Goals, Daily Habits).</p>
+                    <h3>Building Realistic Personas</h3>
+                    <p>A good persona is backed by data, not guesswork. "Marketing Mary" shouldn't just be a picture of a smiling woman; her profile should detail that she is overwhelmed by weekly reporting and relies heavily on Excel shortcuts.</p>
+                    <h3>Jobs to be Done (JTBD)</h3>
+                    <p>The JTBD framework focuses on the underlying "job" a user is trying to accomplish. People don't buy a 1/4-inch drill bit because they want a drill bit; they buy it because they need a 1/4-inch hole in the wall. Focus on the outcome.</p>
+                    <h3>Empathy Mapping</h3>
+                    <p>An empathy map is a quadrant that helps the team step into the user's shoes during a specific scenario:</p>
+                    <ul>
+                        <li><b>Says:</b> What the user explicitly states ("I hate entering data manually").</li>
+                        <li><b>Thinks:</b> What they consider but might not say ("I hope my boss doesn't think I'm slow").</li>
+                        <li><b>Does:</b> Their physical actions (Copies and pastes between two screens).</li>
+                        <li><b>Feels:</b> Their emotional state (Frustrated, anxious).</li>
+                    </ul>
+                    ${generatePromptBox('JTBD Persona Generator', 'Prompt: "Act as a Product Strategist. Generate a highly detailed \'Jobs to be Done\' (JTBD) profile and Empathy Map for a user trying to learn a new language for an upcoming vacation. Break down their emotional state, what they \'Hire\' a language app to do, and their primary frustrations with traditional textbooks."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> "அனைவருக்கும்" சேர்த்து ஒரு பொருளை உருவாக்குவது, வெவ்வேறு உணவுப் பழக்கம் கொண்ட ஒரு பெரிய குடும்பத்திற்கு ஒரே உணவைச் சமைப்பது போன்றது. இறுதியில் அது யாருக்கும் பிடிக்காத வெறும் சோறாக மாறிவிடும். எனவே, குறிப்பிட்ட ஒருவருக்காக (Persona) உருவாக்குங்கள்.</div>
+                    <p>பிரச்சனை என்னவென்று தெரிந்தவுடன், அது 'யாருக்கு' வருகிறது என்பதைத் தெளிவாக வரையறுக்க வேண்டும். யூசர் பெர்சோனா (User Persona) என்பது உங்கள் வாடிக்கையாளரைப் பிரதிபலிக்கும் ஒரு கற்பனை கதாபாத்திரம். இது வெறும் வயது அல்லது ஊர் அல்ல; அவர்களின் பயம், இலக்குகள், அன்றாடப் பழக்கவழக்கங்கள் ஆகியவற்றை உள்ளடக்கியது.</p>
+                    <h3>Jobs to be Done (JTBD)</h3>
+                    <p>மக்கள் ட்ரில் (Drill) மெஷினை வாங்குவது மெஷினுக்காக அல்ல, சுவரில் ஓட்டை போடுவதற்காக. இதுவே JTBD தத்துவம். அவர்கள் எந்த 'வேலையை' முடிக்க உங்கள் பொருளை வாங்குகிறார்கள் என்பதில் கவனம் செலுத்துங்கள்.</p>
+                    <h3>எம்பதி மேப்பிங் (Empathy Mapping)</h3>
+                    <p>இது வாடிக்கையாளரின் மனநிலையைப் புரிந்துகொள்ள உதவும் 4 கட்டங்களாகும்:</p>
+                    <ul>
+                        <li><b>சொல்வது (Says):</b> "இந்த சாஃப்ட்வேர் மிகவும் கடினமாக உள்ளது."</li>
+                        <li><b>நினைப்பது (Thinks):</b> "என் வேலை போய்விடுமோ."</li>
+                        <li><b>செய்வது (Does):</b> மீண்டும் மீண்டும் ஒரே பட்டனை அழுத்துவது.</li>
+                        <li><b>உணர்வது (Feels):</b> கோபம், விரக்தி.</li>
+                    </ul>
+                    ${generatePromptBox('JTBD Persona Generator', 'AI Prompt: "நான் ஒரு மொழி கற்கும் (Language learning) ஆப் உருவாக்கப் போகிறேன். ஒரு நபர் சுற்றுலா செல்வதற்காகப் புதிய மொழியைக் கற்கிறார் என்றால், அவனுக்கான JTBD (Jobs to be Done) பெர்சோனாவை உருவாக்கு. அவனது பயம் என்ன, அவன் எதற்காக எனது ஆப்பைத் தேர்ந்தெடுக்க வேண்டும் என விவரி."')}`
+            },
+            { 
+                id: 5, icon: "📊", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+                title_en: "5. Competitor Analysis & Market Positioning", title_ta: "5. போட்டியாளர் ஆய்வு (Competitor Analysis)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Competitor analysis is like scouting the opposing football team before a match. You don't copy their plays; you identify their weak left flank so you can send your fastest striker exactly where they are unprotected.</div>
+                    <p>No product exists in a vacuum. Even if you invent something entirely new, you are competing against the "status quo" (what users are currently doing). A PM must deeply analyze the competitive landscape.</p>
+                    <h3>Direct vs. Indirect Competitors</h3>
+                    <ul>
+                        <li><b>Direct:</b> Offer the same solution to the same problem (e.g., Uber vs. Lyft).</li>
+                        <li><b>Indirect:</b> Offer a different solution to the same problem (e.g., Uber vs. Public Buses or Bicycles).</li>
+                    </ul>
+                    <h3>SWOT Analysis</h3>
+                    <p>This classic framework evaluates your product's <b>Strengths, Weaknesses, Opportunities, and Threats</b> against the market. If your competitor has massive funding (Threat), but their app is notoriously buggy and slow (Weakness), your Opportunity is building a hyper-fast, highly stable alternative.</p>
+                    <h3>Finding Your Moat & UVP</h3>
+                    <p>Your Unique Value Proposition (UVP) is a clear statement describing the specific benefit you offer, how you solve the user's needs, and what distinguishes you from the competition. Your "Moat" is your defensible barrier against competitors—this could be a strong brand, network effects (like Facebook), high switching costs, or proprietary technology.</p>
+                    ${generatePromptBox('Competitive Strategy Generator', 'Prompt: "Act as a Market Analyst. Conduct a concise SWOT analysis for a new, indie email client competing against Gmail and Outlook. Define what the \'Unique Value Proposition\' (UVP) should be to carve out a niche audience, rather than trying to beat Google at its own game."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> போட்டியாளர்களை ஆராய்வது, கால்பந்து போட்டிக்கு முன் எதிரணியைக் கவனிப்பது போன்றது. அவர்களின் உத்திகளை நீங்கள் காப்பியடிக்கக் கூடாது; அவர்களின் பலவீனமான பகுதியைக் கண்டுபிடித்து, அங்கே உங்கள் சிறந்த ஆட்டக்காரரை இறக்க வேண்டும்.</div>
+                    <p>எந்தப் பொருளும் தனியாகச் செயல்படுவதில்லை. நீங்கள் ஒரு புதிய பொருளைக் கண்டுபிடித்தாலும், மக்கள் தற்போது பயன்படுத்தும் பழைய முறைக்கு எதிராகத்தான் நீங்கள் போட்டியிட வேண்டும்.</p>
+                    <h3>நேரடி vs மறைமுகப் போட்டியாளர்கள்</h3>
+                    <ul>
+                        <li><b>நேரடி:</b> ஒரே பிரச்சனைக்கு, ஒரே தீர்வைத் தருபவர்கள் (உ-ம்: Uber vs Ola).</li>
+                        <li><b>மறைமுக:</b> ஒரே பிரச்சனைக்கு, வேறு தீர்வைத் தருபவர்கள் (உ-ம்: Uber vs அரசுப் பேருந்து).</li>
+                    </ul>
+                    <h3>SWOT பகுப்பாய்வு</h3>
+                    <p>இது உங்கள் ப்ராடக்ட்டின் <b>பலம் (Strengths), பலவீனம் (Weaknesses), வாய்ப்புகள் (Opportunities) மற்றும் ஆபத்துகளை (Threats)</b> ஆராயும் முறையாகும். போட்டியாளர் பெரிய நிறுவனமாக இருக்கலாம், ஆனால் அவர்களின் ஆப் மிகவும் மெதுவாக இருந்தால், அதுவே நீங்கள் வேகமாகச் செயல்படும் ஆப்பை உருவாக்குவதற்கான வாய்ப்பாகும்.</p>
+                    <h3>உங்கள் தனித்துவம் (UVP)</h3>
+                    <p>உங்கள் ப்ராடக்ட்டை மக்கள் ஏன் வாங்க வேண்டும் என்பதைத் தெளிவாகக் கூறுவதே UVP (Unique Value Proposition). போட்டியாளர்கள் எளிதில் காப்பியடிக்க முடியாத உங்கள் பலமே (Moat) உங்கள் நிறுவனத்தைக் காப்பாற்றும்.</p>
+                    ${generatePromptBox('Competitive Strategy Generator', 'AI Prompt: "நான் Gmail மற்றும் Outlook-க்கு எதிராக ஒரு புதிய ஈமெயில் (Email) ஆப் உருவாக்கப் போகிறேன். Google-ஐ வீழ்த்துவது கடினம் என்பதால், எனக்கான ஒரு தனித்துவமான இடத்தை (Niche) எப்படி உருவாக்குவது? அதற்கான SWOT பகுப்பாய்வைச் செய்து என் தனித்துவத்தைக் (UVP) கூறு."')}`
+            },
+            { 
+                id: 6, icon: "🔭", img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
+                title_en: "6. Defining the Product Vision & Strategy", title_ta: "6. ப்ராடக்ட் தொலைநோக்கு (Vision) & வியூகம் (Strategy)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> The Vision is the shining star on the horizon you are sailing toward. The Strategy is the map and the route you will take to get there. The Roadmap (Phase 2) is the specific list of supplies and daily miles you need to travel.</div>
+                    <p>We are now entering Phase 2: Strategy & Planning. The absolute core of product leadership is setting the direction. If you do not have a strong vision, your team will end up building a "Franken-product"—a disconnected mess of random feature requests.</p>
+                    <h3>The Product Vision</h3>
+                    <p>The vision is an aspirational, emotional, long-term statement (usually 3-5 years out) describing the future world you are trying to create. It does not mention specific features.</p>
+                    <ul>
+                        <li><i>Tesla's Vision:</i> "To accelerate the world's transition to sustainable energy."</li>
+                        <li><i>LinkedIn's Vision:</i> "Create economic opportunity for every member of the global workforce."</li>
+                    </ul>
+                    <h3>The Product Strategy</h3>
+                    <p>The strategy connects the Vision to execution. It outlines *how* you will achieve the vision given your current resources, market conditions, and competitors. It involves making hard choices and explicitly stating what you will *not* do.</p>
+                    <p>A good strategy clearly states: "We will win the enterprise market by focusing purely on data security and compliance integrations, ignoring the small-business sector for the next 18 months."</p>
+                    ${generatePromptBox('Vision Statement Workshop', 'Prompt: "I am building a B2B SaaS platform that automates payroll and taxes for remote, global teams using AI. Generate 3 distinct Product Vision statements (one emotional, one action-oriented, one disruptive). Then, draft a 2-paragraph Product Strategy explaining how we will win against legacy competitors."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> தொலைநோக்கு (Vision) என்பது நீங்கள் அடைய விரும்பும் அடிவானத்தில் ஒளிரும் நட்சத்திரம் போன்றது. வியூகம் (Strategy) என்பது அங்கு செல்வதற்கான வரைபடமும் பாதையும் ஆகும்.</div>
+                    <p>Phase 2: திட்டமிடல். ஒரு ப்ராடக்ட்டுக்குத் தெளிவான இலக்கு இல்லையென்றால், அது பல்வேறு பயனற்ற அம்சங்களைக் கொண்ட ஒரு குப்பையாக மாறிவிடும். ஒரு PM-ஆக நீங்கள் திசையைக் காட்ட வேண்டும்.</p>
+                    <h3>ப்ராடக்ட் தொலைநோக்கு (Vision)</h3>
+                    <p>இது 3 முதல் 5 வருடங்களில் நீங்கள் என்னவாகப் போகிறீர்கள் என்பதைக் குறிக்கும் உணர்வுபூர்வமான வாசகமாகும். இதில் ஆப் (App) அம்சங்களைப் பற்றிப் பேசக் கூடாது.</p>
+                    <ul>
+                        <li><i>Tesla:</i> "உலகை நிலையான ஆற்றலுக்கு (Sustainable energy) மாற்றுவதை வேகப்படுத்துவது."</li>
+                        <li><i>LinkedIn:</i> "உலகில் உள்ள ஒவ்வொரு பணியாளருக்கும் பொருளாதார வாய்ப்பை உருவாக்குவது."</li>
+                    </ul>
+                    <h3>வியூகம் (Strategy)</h3>
+                    <p>தொலைநோக்கை எப்படி அடையப் போகிறோம் என்பதே வியூகம். எந்தெந்த விஷயங்களை நாம் <b>செய்ய மாட்டோம்</b> என்று முடிவெடுப்பதும் இதில் அடங்கும். "அடுத்த 1 வருடத்திற்கு நாம் சிறிய நிறுவனங்களை விட்டுவிட்டு, பெரிய கார்ப்பரேட் நிறுவனங்களுக்கு மட்டுமே ப்ராடக்ட்டை விற்கப் போகிறோம்" என்பது ஒரு தெளிவான வியூகம்.</p>
+                    ${generatePromptBox('Vision Statement Workshop', 'AI Prompt: "நான் வெளிநாடுகளில் வேலை செய்யும் ஊழியர்களுக்கான சம்பளம் மற்றும் வரியைத் தானாகக் கணக்கிடும் (AI Payroll) சாஃப்ட்வேர் ஒன்றை உருவாக்குகிறேன். இதற்கு உணர்வுபூர்வமான மற்றும் ஆழமான 3 தொலைநோக்கு வாசகங்களை (Vision statements) உருவாக்கிக் கொடு."')}`
+            },
+            { 
+                id: 7, icon: "📈", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+                title_en: "7. OKRs, KPIs, and Success Metrics", title_ta: "7. OKR-கள், KPI-கள் மற்றும் வெற்றி அளவீடுகள்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> The OKR is the destination ("Drive to New York"). The Key Result is the milestone ("Pass through Philadelphia by 3 PM"). The KPI is your dashboard ("Current Speed: 65 MPH").</div>
+                    <p>Data drives product management. Without metrics, you are just a person with an opinion. You must define exactly how you will measure success before a single line of code is written.</p>
+                    <h3>OKRs (Objectives and Key Results)</h3>
+                    <p>A framework used by Google and Intel to set ambitious goals. The <b>Objective</b> is qualitative and inspirational ("Delight our users with lightning-fast onboarding"). The <b>Key Results</b> are quantitative and measurable ("Reduce onboarding time from 5 minutes to 90 seconds by Q3").</p>
+                    <h3>KPIs (Key Performance Indicators)</h3>
+                    <p>These are the ongoing metrics that indicate the health of your product (e.g., Monthly Recurring Revenue, Churn Rate, Daily Active Users).</p>
+                    <h3>The North Star Metric</h3>
+                    <p>This is the single metric that best captures the core value your product delivers to its customers. For Airbnb, it's "Nights Booked." For WhatsApp, it's "Messages Sent." If this metric goes up, the business naturally grows.</p>
+                    <h3>Beware of Vanity Metrics</h3>
+                    <p>Vanity metrics look good on paper but mean nothing. "Total Registered Accounts" is a vanity metric; a million people could have signed up three years ago and never logged in again. Focus on actionable metrics like "Weekly Active Users" (WAU).</p>
+                    ${generatePromptBox('Metric Definition Prompt', 'Prompt: "Act as a Data-Driven CPO. We are launching a new Spotify competitor focused strictly on independent, undiscovered artists. Define our North Star Metric. Then, outline 3 specific OKRs for our launch quarter, ensuring the Key Results are strictly quantitative and avoid vanity metrics."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> OKR என்பது உங்கள் இலக்கு ("சென்னைக்குச் செல்ல வேண்டும்"). Key Result என்பது மைல்கல் ("மதியம் 3 மணிக்குள் திருச்சியைத் தாண்ட வேண்டும்"). KPI என்பது உங்கள் காரின் ஸ்பீடோமீட்டர் ("வேகம்: 60 KMPH").</div>
+                    <p>ப்ராடக்ட் மேனேஜ்மென்ட் முழுவதுமே டேட்டாவை (Data) அடிப்படையாகக் கொண்டது. டேட்டா இல்லாமல் பேசுவது வெறும் கருத்து மட்டுமே. ஒரு அம்சத்தை உருவாக்குவதற்கு முன்பே, அது வெற்றியடைந்ததா என்பதை எப்படி அளவிடப் போகிறோம் என முடிவு செய்ய வேண்டும்.</p>
+                    <h3>OKRs (Objectives & Key Results)</h3>
+                    <p>இது கூகுள் (Google) பயன்படுத்தும் முறை. <b>Objective</b> என்பது பெரிய ஆசை ("பயனர்களுக்கு மிக வேகமாக லாகின் செய்யும் வசதியைத் தருவது"). <b>Key Results</b> என்பது அளவிடக்கூடியது ("லாகின் நேரத்தை 5 நிமிடத்திலிருந்து 90 விநாடிகளாகக் குறைப்பது").</p>
+                    <h3>North Star Metric (வடக்கு நட்சத்திர அளவீடு)</h3>
+                    <p>உங்கள் ப்ராடக்ட்டின் உண்மையான மதிப்பைக் குறிக்கும் ஒற்றை அளவீடு இது. Airbnb-க்கு இது "புக் செய்யப்பட்ட அறைகள்". WhatsApp-க்கு "அனுப்பப்பட்ட மெசேஜ்கள்". இந்த அளவீடு உயர்ந்தால், உங்கள் வியாபாரம் வளர்கிறது என்று அர்த்தம்.</p>
+                    <h3>வீண் அளவீடுகள் (Vanity Metrics)</h3>
+                    <p>"மொத்த டவுன்லோடுகள்" அல்லது "மொத்த அக்கவுண்ட்கள்" என்பவை வீணான அளவீடுகள். 10 லட்சம் பேர் டவுன்லோட் செய்துவிட்டு ஆப்பைத் திறக்காமலேயே இருக்கலாம். எனவே, "தினமும் ஆப்பைப் பயன்படுத்துபவர்கள் (DAU)" போன்ற உண்மையான அளவீடுகளையே கவனிக்க வேண்டும்.</p>
+                    ${generatePromptBox('Metric Definition Prompt', 'AI Prompt: "நான் Spotify-க்குப் போட்டியாக ஒரு புதிய மியூசிக் ஆப் (Music App) வெளியிடுகிறேன். இதற்குச் சரியான North Star Metric என்னவாக இருக்கும்? அடுத்த 3 மாதங்களுக்கான 3 முக்கியமான OKR-களை உருவாக்கு."')}`
+            },
+            { 
+                id: 8, icon: "🗺️", img: "https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&q=80",
+                title_en: "8. Crafting the Product Roadmap", title_ta: "8. ப்ராடக்ட் ரோட்மேப் (Product Roadmap)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A traditional roadmap is a train schedule promising you will arrive at exactly 4:02 PM. An outcome-based roadmap is a compass promising we are heading North to find water, and we will adjust the path if we hit a mountain.</div>
+                    <p>A Product Roadmap is a strategic communication tool that visually maps out the vision and direction of the product over time. It aligns the entire organization (Sales, Marketing, Dev) on what is being built and why.</p>
+                    <h3>Feature-Based vs. Outcome-Based Roadmaps</h3>
+                    <ul>
+                        <li><b>Feature-Based (Old Way):</b> A Gantt chart promising specific features by specific dates (e.g., "Chatbot by Q2"). This is dangerous. If the chatbot doesn't solve the user's problem, you wasted Q2.</li>
+                        <li><b>Outcome-Based (Modern Way):</b> Organized by themes and goals. Instead of promising a "Chatbot", you commit to the outcome: "Reduce customer support ticket resolution time by 20% in Q2." This gives engineering the flexibility to build a chatbot, an FAQ page, or tooltips to achieve the goal.</li>
+                    </ul>
+                    <h3>Time Horizons</h3>
+                    <p>Modern roadmaps use "Now, Next, Later" instead of strict release dates. <b>Now:</b> What the team is actively coding. <b>Next:</b> What is currently in discovery and design. <b>Later:</b> Strategic bets for the future that remain highly flexible.</p>
+                    ${generatePromptBox('Roadmap Theme Generation', 'Prompt: "Act as a VP of Product. I am transforming our feature-based roadmap into an outcome-based roadmap for our E-commerce platform. Convert these 3 features into Outcome/Theme-based roadmap items: 1) Apple Pay Integration, 2) 'Customers also bought' carousel, 3) Automated email receipts."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பழைய ரோட்மேப் என்பது, சரியாக 4:02-க்கு ரயில் வரும் எனச் சொல்லும் கால அட்டவணை. நவீன ரோட்மேப் என்பது, நாம் தண்ணீரைத் தேடி வடக்கு நோக்கிச் செல்கிறோம், நடுவில் மலை வந்தால் பாதையை மாற்றிக்கொள்வோம் எனச் சொல்லும் திசைகாட்டி (Compass).</div>
+                    <p>ப்ராடக்ட் ரோட்மேப் என்பது, நிறுவனம் எந்தத் திசையை நோக்கிச் செல்கிறது என்பதை அனைவருக்கும் காட்டும் ஒரு வரைபடமாகும். இது சேல்ஸ், மார்க்கெட்டிங் மற்றும் இன்ஜினியரிங் என அனைவரையும் ஒரே நேர்கோட்டில் இணைக்கிறது.</p>
+                    <h3>அம்சங்கள் vs முடிவுகள் (Outcome-Based)</h3>
+                    <ul>
+                        <li><b>பழைய முறை:</b> தேதி குறித்து குறிப்பிட்ட அம்சங்களை உறுதியளிப்பது (உ-ம்: ஜூன் மாதம் Chatbot வரும்). ஒருவேளை Chatbot பயனரின் பிரச்சனையைத் தீர்க்காவிட்டால் அந்த மாதமே வீணாகிவிடும்.</li>
+                        <li><b>நவீன முறை (Outcome-based):</b> "வாடிக்கையாளர் சேவையின் நேரத்தை 20% குறைப்போம்" என்று முடிவை (Outcome) உறுதியளிப்பது. இதை அடைய இன்ஜினியர்கள் Chatbot-உம் செய்யலாம் அல்லது ஒரு நல்ல FAQ பக்கத்தையும் உருவாக்கலாம். இது அவர்களுக்குச் சுதந்திரத்தைத் தரும்.</li>
+                    </ul>
+                    <h3>Now, Next, Later</h3>
+                    <p>நவீன ரோட்மேப்களில் தேதிகள் இருக்காது. <b>Now (இப்போது):</b> தற்போது கோட் எழுதப்படும் வேலைகள். <b>Next (அடுத்து):</b> டிசைன் செய்யப்படும் வேலைகள். <b>Later (பிறகு):</b> எதிர்காலத் திட்டங்கள்.</p>
+                    ${generatePromptBox('Roadmap Theme Generation', 'AI Prompt: "நான் ஒரு ஈ-காமர்ஸ் (E-commerce) வெப்சைட்டின் PM. 1) Apple Pay, 2) Related Products, 3) Auto-Emails ஆகிய 3 அம்சங்களை, பழைய முறையில் சொல்லாமல், Outcome-based ரோட்மேப்பிற்கு ஏற்றவாறு மாற்றி எழுது."')}`
+            },
+            { 
+                id: 9, icon: "⚖️", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+                title_en: "9. Prioritization Frameworks", title_ta: "9. முன்னுரிமை அளிக்கும் முறைகள் (Prioritization)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Prioritization is like packing a lifeboat. You can't bring the grand piano (high effort, low survival value), even if the CEO really likes music. You must bring the water rations (high survival value, low effort).</div>
+                    <p>A Product Manager's default word is "No." Stakeholders will constantly demand new features. If you build everything they ask for, the product becomes bloated and unusable. You must use mathematical frameworks to defend your decisions.</p>
+                    <h3>The RICE Framework</h3>
+                    <p>Created by Intercom, RICE evaluates ideas mathematically:</p>
+                    <ul>
+                        <li><b>Reach:</b> How many users will this feature affect in a given timeframe?</li>
+                        <li><b>Impact:</b> How much will this increase our North Star metric? (Massive=3, High=2, Medium=1, Low=0.5).</li>
+                        <li><b>Confidence:</b> How sure are we about these numbers? (Have we done research, or are we guessing?)</li>
+                        <li><b>Effort:</b> How many weeks of engineering time will this take?</li>
+                    </ul>
+                    <p><i>Formula: (Reach × Impact × Confidence) ÷ Effort = RICE Score.</i> Build the highest score first.</p>
+                    <h3>The MoSCoW Method</h3>
+                    <p>Used to lock in scope for a specific release: <b>M</b>ust have (critical), <b>S</b>hould have (important but not critical), <b>C</b>ould have (nice to have), <b>W</b>on't have (explicitly excluded for now).</p>
+                    <h3>The Kano Model</h3>
+                    <p>Plots features on a graph of Customer Satisfaction vs. Execution. It identifies "Delighters" (unexpected features that create joy) vs. "Basic Expectations" (if it's missing, users are furious; if it's there, they don't care—like resetting a password).</p>
+                    ${generatePromptBox('RICE Scoring Assistant', 'Prompt: "Act as an analytical Product Manager. I have two feature requests: 1) A dark mode UI toggle. 2) A backend database migration to AWS to improve load speeds by 2 seconds. Assign hypothetical but realistic RICE (Reach, Impact, Confidence, Effort) scores to both, calculate the final score, and tell me which one we build first and why."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> முன்னுரிமை அளிப்பது (Prioritization) என்பது, மூழ்கும் கப்பலில் இருந்து உயிர் காக்கும் படகில் பொருட்களை ஏற்றுவது போன்றது. சிஇஓ-வுக்கு (CEO) பிடிக்கும் என்பதற்காகப் பெரிய பியானோவை ஏற்ற முடியாது. சிறிய, ஆனால் உயிர்வாழத் தேவையான தண்ணீரைத்தான் ஏற்ற வேண்டும்.</div>
+                    <p>ஒரு PM-இன் முக்கிய வார்த்தையே "இல்லை (No)" என்பதுதான். அனைவரும் புதிய அம்சங்களைக் கேட்பார்கள். அனைத்தையும் உருவாக்கினால் ப்ராடக்ட் குப்பையாகிவிடும். உங்கள் முடிவுகளைக் கணிதரீதியாக நிரூபிக்க சில முறைகள் உள்ளன.</p>
+                    <h3>RICE Framework</h3>
+                    <p>கீழ்க்கண்ட 4 விஷயங்களை வைத்துக் கணக்கிடும் முறை:</p>
+                    <ul>
+                        <li><b>Reach (எத்தனை பேர்):</b> இந்த அம்சத்தால் எத்தனை பேர் பயன்பெறுவார்கள்?</li>
+                        <li><b>Impact (தாக்கம்):</b> இதனால் நம் வியாபாரம் எவ்வளவு வளரும்?</li>
+                        <li><b>Confidence (நம்பிக்கை):</b> இது வேலை செய்யும் என எவ்வளவு உறுதியாக நம்புகிறோம்?</li>
+                        <li><b>Effort (உழைப்பு):</b> இன்ஜினியர்களுக்கு இது எத்தனை வார வேலை?</li>
+                    </ul>
+                    <p><i>சூத்திரம்: (Reach × Impact × Confidence) ÷ Effort.</i> அதிக மதிப்பெண் பெறும் அம்சத்தையே முதலில் உருவாக்க வேண்டும்.</p>
+                    <h3>MoSCoW மற்றும் Kano Model</h3>
+                    <p><b>MoSCoW</b> என்பது: Must (கண்டிப்பாக வேண்டும்), Should (இருந்தால் நல்லது), Could (நேரம் இருந்தால் செய்யலாம்), Won't (இப்போதைக்குக் கிடையாது) எனப் பிரிப்பதாகும். <b>Kano Model</b> என்பது வாடிக்கையாளர்களை எந்த அம்சம் ஆச்சரியப்படுத்தும், எது சாதாரண எதிர்பார்ப்பு எனப் பிரிப்பதாகும்.</p>
+                    ${generatePromptBox('RICE Scoring Assistant', 'AI Prompt: "நான் இரண்டு அம்சங்களை உருவாக்க வேண்டும்: 1) Dark Mode, 2) வெப்சைட் வேகத்தை 2 விநாடிகள் அதிகரிக்கும் Backend வேலை. இதற்குத் தோராயமாக RICE ஸ்கோர்களை (Reach, Impact, Confidence, Effort) கொடுத்து, எதை முதலில் செய்ய வேண்டும் எனக் கணிதரீதியாக விளக்கு."')}`
+            },
+            { 
+                id: 10, icon: "📝", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80",
+                title_en: "10. Writing Epics & User Stories", title_ta: "10. எபிக்ஸ் (Epics) & யூசர் ஸ்டோரி எழுதுதல்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> The Roadmap is the picture of a completed house. The Epic is the blueprint for the kitchen. The User Story is the specific instruction to the plumber: "Install a 2-inch pipe here so the sink drains properly."</div>
+                    <p>You have your strategy and prioritization. Now you must translate that into actionable work for the engineering team. This is done through Epics and User Stories in tools like Jira or Linear.</p>
+                    <h3>The Epic</h3>
+                    <p>An Epic is a large body of work that can be broken down into smaller tasks. Example Epic: "Overhaul the User Onboarding Experience." This might take 2 months to complete and involves design, frontend, and backend work.</p>
+                    <h3>The User Story Format</h3>
+                    <p>Engineers do not want to be told *how* to code. They need to know *what* the user needs and *why*. We use standard syntax:</p>
+                    <p><i>"As a [type of user], I want to [perform an action], so that I can [achieve a specific goal/value]."</i></p>
+                    <p>Example: "As a frequent traveler, I want to save my credit card details, so that I can book future flights in under 30 seconds."</p>
+                    <h3>Acceptance Criteria</h3>
+                    <p>A User Story is incomplete without strict Acceptance Criteria (the Definition of Done). This tells the QA team exactly how to test it.<br>
+                    <i>- Given the user is on the checkout page.<br>
+                    - When they select 'Save Card'.<br>
+                    - Then the card is tokenized in Stripe and a success toast appears.</i></p>
+                    ${generatePromptBox('User Story Generator', 'Prompt: "Act as a Technical PM. Write a complete Jira ticket for a new feature: \'Two-Factor Authentication via SMS\'. Include the Epic name, the User Story using standard syntax, and 4 strict Acceptance Criteria using the Given/When/Then format. Include edge cases like what happens if the SMS fails to send."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ரோட்மேப் என்பது கட்டிமுடிக்கப்பட்ட வீட்டின் புகைப்படம். எபிக் (Epic) என்பது சமையலறைக்கான ப்ளூபிரிண்ட். யூசர் ஸ்டோரி (User Story) என்பது ப்ளம்பருக்குத் தரப்படும் வேலை: "சிங்க் தண்ணீர் சீராகச் செல்ல, இங்கே ஒரு பைப் போடுங்கள்."</div>
+                    <p>வியூகங்களை வகுத்தபின், அதை இன்ஜினியர்கள் செய்யும் வேலையாக மாற்ற வேண்டும். இதற்கு Jira போன்ற மென்பொருட்களில் Epics மற்றும் User Stories எழுத வேண்டும்.</p>
+                    <h3>எபிக் (Epic)</h3>
+                    <p>எபிக் என்பது ஒரு பெரிய ப்ராஜெக்ட். உ-ம்: "லாகின் பக்கத்தை முழுவதுமாக மாற்றுவது". இதை முடிக்கப் பல வாரங்கள் ஆகும்; இதில் டிசைன், பேக்எண்ட் எனப் பல வேலைகள் இருக்கும்.</p>
+                    <h3>யூசர் ஸ்டோரி (User Story)</h3>
+                    <p>இன்ஜினியர்களிடம் 'எப்படி' கோட் எழுத வேண்டும் என்று கூறக் கூடாது; பயனருக்கு 'என்ன' தேவை, 'ஏன்' தேவை என்று மட்டுமே கூற வேண்டும். இதற்கான வாக்கிய அமைப்பு:</p>
+                    <p><i>"ஒரு [பயனராக], நான் [இந்தச் செயலைச்] செய்ய விரும்புகிறேன், அதனால் எனக்கு [இந்தப் பலன்] கிடைக்கும்."</i></p>
+                    <p>உ-ம்: "ஒரு வாடிக்கையாளராக, நான் என் கார்டு விவரங்களைச் சேமிக்க விரும்புகிறேன், அதனால் அடுத்த முறை நான் 30 விநாடிகளுக்குள் புக்கிங் செய்ய முடியும்."</p>
+                    <h3>Acceptance Criteria (ஏற்பு விதிகள்)</h3>
+                    <p>இந்த வேலை முடிந்துவிட்டது (Done) என்பதை எதை வைத்து முடிவு செய்வது? அதற்கான டெஸ்டிங் (QA) விதிகளை Given/When/Then என்ற முறையில் தெளிவாக எழுத வேண்டும்.</p>
+                    ${generatePromptBox('User Story Generator', 'AI Prompt: "நான் ஒரு Technical PM. \'SMS மூலம் OTP லாகின்\' என்ற புதிய வசதிக்கான முழுமையான Jira டிக்கெட்டை எழுது. அதில் User Story மற்றும் 4 தெளிவான Acceptance Criteria (Given/When/Then முறைப்படி) இருக்க வேண்டும். OTP வராவிட்டால் என்ன நடக்கும் என்பதையும் சேர்."')}`
+            },
+            { 
+                id: 11, icon: "🎨", img: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80",
+                title_en: "11. UI/UX Fundamentals for Product Managers", title_ta: "11. UI/UX அடிப்படைகள்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> UI (User Interface) is the beautiful paint, leather seats, and dashboard of a car. UX (User Experience) is how it actually feels to drive the car—is the steering responsive? Can you reach the radio easily? A gorgeous car that stalls at every red light has terrible UX.</div>
+                    <p>Welcome to Phase 3: Design & User Experience. While you have Product Designers for the pixel-perfect work, a PM must have a sharp eye for UX. You must know how to give objective, constructive feedback rather than just saying, "Make it pop more."</p>
+                    <h3>Cognitive Load & Information Architecture</h3>
+                    <p>Users do not read screens; they scan them. <b>Cognitive Load</b> is the amount of mental effort required to use your app. If a screen has 15 different buttons of the exact same color, the cognitive load is extremely high. Good UX uses visual hierarchy (size, color, contrast) to guide the user's eye to the primary Call to Action (CTA) instantly.</p>
+                    <h3>UX Laws You Must Know</h3>
+                    <ul>
+                        <li><b>Hick's Law:</b> The time it takes to make a decision increases with the number and complexity of choices. (Don't give users 10 pricing tiers; give them 3).</li>
+                        <li><b>Fitts's Law:</b> The time to acquire a target is a function of the distance to and size of the target. (Make important buttons large and easy to reach on mobile).</li>
+                        <li><b>Jakob's Law:</b> Users spend most of their time on *other* sites. This means they prefer your site to work the same way as all the other sites they already know. (Don't reinvent the shopping cart icon).</li>
+                    </ul>
+                    ${generatePromptBox('UX Review Feedback', 'Prompt: "Act as a Lead Product Designer. I am a PM reviewing a new checkout screen. The designer put the \'Confirm Purchase\' button in a small grey font at the top left of the screen, and placed a giant red \'Cancel\' button in the bottom right. Write an objective, empathetic Slack message to the designer explaining why this violates standard UX principles (mentioning specific UX laws) and requesting an iteration."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> UI (User Interface) என்பது காரின் அழகான பெயிண்ட், லெதர் சீட் மற்றும் டேஷ்போர்டு. UX (User Experience) என்பது காரை ஓட்டும்போது கிடைக்கும் அனுபவம்—ஸ்டீயரிங் நன்றாகத் திரும்புகிறதா? பிரேக் சரியாகப் பிடிக்கிறதா? பார்க்க அழகாக இருந்து, ஓட்ட கடினமாக இருந்தால் அது மிக மோசமான UX.</div>
+                    <p>Phase 3: டிசைன். அழகான டிசைனை வரைய உங்களிடம் டிசைனர்கள் இருந்தாலும், ஒரு PM-க்கு UX பற்றிய தெளிவான அறிவு இருக்க வேண்டும். "பார்க்க நல்லா இல்ல, மாத்துங்க" என்று சொல்லாமல், என்ன தவறு என்று சுட்டிக்காட்டத் தெரிய வேண்டும்.</p>
+                    <h3>Cognitive Load (மூளைக்கான சுமை)</h3>
+                    <p>பயனர்கள் ஆப்பைப் படிப்பதில்லை; மேலோட்டமாகப் பார்ப்பார்கள் (Scan). ஒரே திரையில் 15 பட்டன்களை வைத்தால் மூளை குழம்பிவிடும் (Cognitive Load). வண்ணங்கள் மற்றும் அளவுகளைப் பயன்படுத்தி, முக்கிய பட்டனை (CTA) மட்டும் தனியாக எடுத்துக் காட்ட வேண்டும்.</p>
+                    <h3>PM தெரிந்துகொள்ள வேண்டிய UX விதிகள்</h3>
+                    <ul>
+                        <li><b>Hick's Law:</b> தேர்வுகளின் எண்ணிக்கை அதிகரிக்கும்போது, முடிவெடுக்கும் நேரமும் அதிகரிக்கும். (10 விலைப்பட்டியல்களைக் காட்டாமல் 3 மட்டும் காட்டுங்கள்).</li>
+                        <li><b>Fitts's Law:</b> முக்கியமான பட்டன்கள் பெரிதாகவும், மொபைலில் விரல் எட்டும் தூரத்திலும் இருக்க வேண்டும்.</li>
+                        <li><b>Jakob's Law:</b> மக்கள் மற்ற வெப்சைட்டுகளில்தான் அதிக நேரம் செலவிடுகிறார்கள். எனவே, அங்குள்ள அதே டிசைனையே (உ-ம்: ஷாப்பிங் கார்ட் ஐகான்) நீங்களும் பயன்படுத்த வேண்டும். புதுமையாகச் செய்கிறேன் என்று குழப்பக் கூடாது.</li>
+                    </ul>
+                    ${generatePromptBox('UX Review Feedback', 'AI Prompt: "டிசைனர் செக்-அவுட் பக்கத்தில் \'Confirm\' பட்டனைச் சிறியதாக மேலேயும், \'Cancel\' பட்டனைப் பெரியதாகக் கீழேயும் வைத்துள்ளார். ஒரு PM-ஆக நான் இதை எப்படி நாகரிகமாகச் சுட்டிக்காட்டி, UX விதிகளைக் (Hick\'s/Fitts\'s Law) குறிப்பிட்டு மெசேஜ் (Slack message) எழுதுவது?"')}`
+            },
+            { 
+                id: 12, icon: "📐", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+                title_en: "12. Wireframing & Rapid Prototyping", title_ta: "12. வயர்ஃபிரேமிங் (Wireframing) & புரோட்டோடைப்பிங்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Wireframing is sketching the skeleton of a building on a napkin. Prototyping is building a cardboard model of the house that people can walk through. You do both before you hire expensive engineers to pour concrete.</div>
+                    <p>Writing code is the most expensive and time-consuming part of product development. Therefore, you must test your ideas *before* any code is written. PMs use wireframes and prototypes to visualize concepts quickly.</p>
+                    <h3>Low-Fidelity Wireframes</h3>
+                    <p>These are basic, black-and-white sketches (often just boxes and lines) representing the layout of a screen. They contain no actual colors, fonts, or images. The goal is to agree on the Information Architecture and User Flow. Tools like Balsamiq or even pen and paper are perfect for this. It prevents stakeholders from getting distracted by button colors when you just want to agree on the page layout.</p>
+                    <h3>High-Fidelity Prototypes</h3>
+                    <p>Once the wireframes are approved, the Product Designer creates High-Fidelity mockups in tools like <b>Figma</b>. These look exactly like the final, coded product. Furthermore, you can link the screens together in Figma so that when a user clicks a button, it navigates to the next screen.</p>
+                    <p>This creates a clickable "Prototype"—a fake app that feels 100% real. You can put this on a user's phone and watch them use it, validating the entire product experience without writing a single line of backend logic.</p>
+                    ${generatePromptBox('User Flow Generation', 'Prompt: "I am building a food delivery app. Before I draw my wireframes, I need to map out the exact User Flow for the \'Checkout to Order Confirmed\' process. List step-by-step every screen, popup, and loading state the user will encounter from the moment they click \'Cart\' to the moment they see the \'Driver is on the way\' screen."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> வயர்ஃபிரேமிங் என்பது பேப்பரில் வீட்டின் வரைபடத்தை வரைவது போன்றது. புரோட்டோடைப்பிங் (Prototyping) என்பது அட்டைப்பெட்டியில் வீட்டின் மாடலைச் செய்து பார்ப்பது. அதிகச் சம்பளம் வாங்கும் இன்ஜினியர்களை வைத்து செங்கல் அடுக்குவதற்கு முன், இந்த இரண்டையும் செய்துபார்க்க வேண்டும்.</div>
+                    <p>சாஃப்ட்வேர் உருவாக்குவதில் அதிகச் செலவும் நேரமும் பிடிப்பது கோடிங் (Coding) எழுதுவதுதான். எனவே, கோட் எழுதுவதற்கு முன்பே உங்கள் ஐடியாவைச் சோதித்துப் பார்க்க வேண்டும். அதற்கு வயர்ஃபிரேம்கள் பயன்படுகின்றன.</p>
+                    <h3>Low-Fidelity வயர்ஃபிரேம்கள் (Wireframes)</h3>
+                    <p>இவை வெறும் கட்டங்களும் கோடுகளும் கொண்ட கருப்பு-வெள்ளை ஓவியங்கள். இதில் உண்மையான வண்ணங்களோ படங்களோ இருக்காது. ஆப் எந்த அமைப்பில் (Layout) இருக்க வேண்டும் என்பதை முடிவு செய்ய மட்டுமே இது பயன்படும். (Balsamiq அல்லது பேப்பர்-பேனா போதுமானது).</p>
+                    <h3>High-Fidelity புரோட்டோடைப் (Prototype)</h3>
+                    <p>வயர்ஃபிரேம் ஓகே ஆனதும், டிசைனர் <b>Figma</b> போன்ற கருவிகளில் உண்மையான ஆப் போலவே டிசைன் செய்வார். அதில் பட்டனைக் கிளிக் செய்தால் அடுத்த பக்கத்திற்குச் செல்லும் வசதியையும் (Clickable Prototype) இணைத்துவிடுவார்கள்.</p>
+                    <p>இதைப் பார்க்க 100% உண்மையான ஆப் போலவே இருக்கும். ஒரு வரி கோட் கூட எழுதாமல், இதை வாடிக்கையாளரின் மொபைலில் கொடுத்து அவர்கள் எப்படிப் பயன்படுத்துகிறார்கள் என்று சோதித்துப் பார்க்கலாம்.</p>
+                    ${generatePromptBox('User Flow Generation', 'AI Prompt: "நான் ஒரு உணவு டெலிவரி ஆப் (Food Delivery App) உருவாக்குகிறேன். வயர்ஃபிரேம் வரைவதற்கு முன், \'Cart\' பட்டனைக் கிளிக் செய்வதிலிருந்து \'Driver is on the way\' என்ற பக்கம் வரும் வரை, பயனர் எந்தெந்த ஸ்கிரீன்களை, பாப்-அப்களைக் கடந்து செல்வார் என்ற யூசர் ஃப்ளோவை (User Flow) படிநிலையாக எழுது."')}`
+            },
+            { 
+                id: 13, icon: "🔬", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+                title_en: "13. Conducting Usability Testing", title_ta: "13. பயன்பாட்டுச் சோதனை (Usability Testing)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Designing a product in isolation is like writing a joke alone in your room. Usability testing is going to a comedy club and telling the joke to an audience to see if they actually laugh, or if they just stare at you in confusion.</div>
+                    <p>You have a prototype. Now you must test it with real humans. This is where PMs face the harsh reality that users do not think the way tech professionals do.</p>
+                    <h3>Moderated vs. Unmoderated Testing</h3>
+                    <ul>
+                        <li><b>Moderated:</b> You sit with the user (via Zoom or in-person). You give them a scenario ("Try to reset your password") and watch them navigate the prototype. You can ask follow-up questions in real-time.</li>
+                        <li><b>Unmoderated:</b> You use tools like UserTesting.com. Users record their screen and speak their thoughts out loud while completing tasks on their own time. It is faster and cheaper, but you cannot ask clarifying questions.</li>
+                    </ul>
+                    <h3>The Golden Rule: Shut Up and Watch</h3>
+                    <p>The hardest skill in usability testing is silence. When a user clicks the wrong button, you will have a desperate urge to say, "No, click the blue icon on the right!" <b>Do not intervene.</b> Watch them fail. Their failure is data. Ask them to "think out loud" so you understand *why* they clicked the wrong button.</p>
+                    <p>Never ask leading questions like, "Did you find the checkout process easy?" Ask open questions: "Walk me through your experience during checkout."</p>
+                    ${generatePromptBox('Usability Test Script', 'Prompt: "Act as a UX Researcher. I am testing a Figma prototype for a new fitness app. Write a Moderated Usability Testing script. Include an introductory section to make the user comfortable, a scenario to set the context, and 3 specific tasks they need to complete (without telling them exactly which buttons to click). End with wrap-up questions."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> தனியாக ஒரு அறையில் அமர்ந்து ஜோக் எழுதுவது போன்றது டிசைன் செய்வது. பயன்பாட்டுச் சோதனை (Usability testing) என்பது, அந்த ஜோக்கை மேடையில் மைக்கைப் பிடித்து மக்களிடம் சொல்லி, அவர்கள் நிஜமாகவே சிரிக்கிறார்களா என்று பார்ப்பது.</div>
+                    <p>புரோட்டோடைப் தயாரானதும் அதை உண்மையான மனிதர்களிடம் சோதிக்க வேண்டும். சாஃப்ட்வேர் இன்ஜினியர்கள் சிந்திப்பது போலச் சாதாரண மக்கள் சிந்திக்க மாட்டார்கள் என்ற கசப்பான உண்மையை PM-கள் இங்கேதான் அறிந்துகொள்வார்கள்.</p>
+                    <h3>Moderated vs Unmoderated</h3>
+                    <ul>
+                        <li><b>Moderated:</b> நீங்களே பயனருடன் ஜூம் (Zoom) காலில் அமர்ந்து, "உங்கள் பாஸ்வேர்டை மாற்றிப் பாருங்கள்" என்று கூறி, அவர்கள் ஆப்பைப் பயன்படுத்துவதை நேரடியாகப் பார்ப்பது.</li>
+                        <li><b>Unmoderated:</b> UserTesting போன்ற கருவிகள் மூலம் பயனர்களைத் தாமாகவே ஆப்பைப் பயன்படுத்தச் சொல்லி, அவர்களின் ஸ்கிரீனை மட்டும் ரெக்கார்ட் செய்து பார்ப்பது.</li>
+                    </ul>
+                    <h3>தங்க விதி: அமைதியாகக் கவனியுங்கள்</h3>
+                    <p>டெஸ்டிங்கின்போது பயனர் தவறான பட்டனைக் கிளிக் செய்தால், "இல்லை இல்லை, வலதுபக்கம் உள்ள நீல நிறப் பட்டனை அழுத்துங்கள்" என்று சொல்லத் தோன்றும். <b>அப்படிச் செய்யக் கூடாது.</b> அவர்கள் தப்பு செய்வதை அமைதியாகப் பாருங்கள். அந்தத் தவறுதான் நமக்குத் தேவையான டேட்டா! அவர்கள் ஏன் குழம்புகிறார்கள் என்று தெரிந்துகொள்ள அவர்களைச் சத்தமாகச் சிந்திக்கச் சொல்லுங்கள் (Think out loud).</p>
+                    ${generatePromptBox('Usability Test Script', 'AI Prompt: "நான் ஒரு ஃபிட்னஸ் ஆப்பிற்கான (Fitness app) டிசைனை (Figma) மக்களிடம் சோதிக்கப் போகிறேன். அவர்களிடம் பேசுவதற்கான ஸ்கிரிப்டை எழுது. அவர்கள் எந்த பட்டனை அழுத்த வேண்டும் என்று நேரடியாகச் சொல்லாமல், ஒரு சூழலைக் கொடுத்து (Scenario) 3 டாஸ்க்குகளை (Tasks) முடிக்கச் சொல்லும் விதமாக ஸ்கிரிப்ட் இருக்க வேண்டும்."')}`
+            },
+            { 
+                id: 14, icon: "🚀", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
+                title_en: "14. The Minimum Viable Product (MVP)", title_ta: "14. குறைந்தபட்ச சாத்தியமான தயாரிப்பு (MVP)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If your vision is to build a car for someone who wants to commute faster, the MVP is NOT a single tire, nor is it a car without doors. The MVP is a skateboard. It solves the core problem (moving faster) immediately, allowing you to learn and build a bicycle, then a motorcycle, then a car.</div>
+                    <p>The term MVP is constantly abused. It does not mean "a crappy, half-finished version of the final product." It means the smallest, fastest thing you can build to prove your riskiest assumption is true.</p>
+                    <h3>Defining "Viable"</h3>
+                    <p>An MVP must deliver actual value. If it is broken, users will leave, and you won't learn if your idea was bad, or if your execution was just terrible.</p>
+                    <h3>Types of "Fake It Till You Make It" MVPs</h3>
+                    <ul>
+                        <li><b>The Concierge MVP:</b> You manually provide the service behind the scenes, acting as a personal assistant to the user. (e.g., Wealthfront started with the founders manually calculating investment portfolios on spreadsheets before writing any AI algorithms).</li>
+                        <li><b>The Wizard of Oz MVP:</b> The frontend looks like a fully automated tech product, but humans are doing the work manually on the backend. (e.g., Zappos started by taking photos of shoes in a local mall. When an online order came in, the founder bought the shoes at full price and mailed them).</li>
+                        <li><b>The Landing Page MVP:</b> A simple website explaining the product with a "Buy Now" button. If they click it, a popup says "Coming Soon - Enter Email." This proves people are willing to pay before you write any code.</li>
+                    </ul>
+                    ${generatePromptBox('MVP Scope Reduction', 'Prompt: "Act as a ruthless Product Manager. An over-ambitious founder wants to build an MVP for a \'Tinder for Dog Owners\' app. They want AI matching, an in-app chat with video, a map of local dog parks, and a premium subscription tier. Strip this down to the absolute bare-minimum Wizard of Oz or Concierge MVP to test the core assumption in 7 days for $0."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பயணத்தை வேகமாக்க ஒரு கார் உருவாக்குவது உங்கள் இலக்கு என்றால், MVP என்பது காரின் ஒற்றை டயரோ அல்லது கதவு இல்லாத காரோ அல்ல. MVP என்பது ஒரு ஸ்கேட்போர்டு (Skateboard). அது உடனடியாகப் பயணத்தை வேகமாக்குகிறது. அதன்பின் சைக்கிள், பைக், கார் என மேம்படுத்திக் கொள்ளலாம்.</div>
+                    <p>MVP (Minimum Viable Product) என்ற வார்த்தை பலரால் தவறாகப் புரிந்துகொள்ளப்படுகிறது. அரைகுறையாகச் செய்து முடிக்கும் ஆப் MVP அல்ல. உங்கள் ஐடியா வேலை செய்யுமா என்பதைச் சோதிக்க, மிகக் குறைந்த செலவில் உருவாக்கப்படும் மிகச் சிறிய வடிவமே MVP.</p>
+                    <h3>"Viable" (சாத்தியமான) என்றால் என்ன?</h3>
+                    <p>MVP பயனருக்கு உண்மையான பலனைத் தர வேண்டும். அது வேலை செய்யாமல் கிராஷ் (Crash) ஆனால், உங்களின் ஐடியா தவறா அல்லது நீங்கள் உருவாக்கிய விதம் தவறா என்று கண்டுபிடிக்க முடியாமல் போய்விடும்.</p>
+                    <h3>கோடிங் இல்லாத MVP முறைகள்</h3>
+                    <ul>
+                        <li><b>Concierge MVP:</b> எந்த சாஃப்ட்வேரும் இல்லாமல், நீங்களே ஒரு உதவியாளர் போல நேரடியாகச் சென்று வாடிக்கையாளரின் வேலையைச் செய்து கொடுப்பது.</li>
+                        <li><b>Wizard of Oz MVP:</b> வெப்சைட்டைப் பார்க்க பெரிய சாஃப்ட்வேர் போல இருக்கும், ஆனால் பின்புலத்தில் ஆட்களை வைத்து மேனுவலாக (Manual) வேலைகளைச் செய்வது. (உ-ம்: ஆரம்பகால Zappos ஷூ கம்பெனி).</li>
+                        <li><b>Landing Page MVP:</b> ஆப்பை உருவாக்கும் முன்பே, ஒரு வெப்சைட்டை உருவாக்கி "Buy Now" பட்டனை வைப்பது. அதை யாராவது கிளிக் செய்தால் "விரைவில் வருகிறது" எனக் காட்டி, நிஜமாகவே இதற்கு மார்க்கெட் உள்ளதா என்று கண்டுபிடிப்பது.</li>
+                    </ul>
+                    ${generatePromptBox('MVP Scope Reduction', 'AI Prompt: "ஒரு நிறுவனர் \'நாய்கள் வளர்ப்பவர்களுக்கான Tinder\' போன்ற பெரிய ஆப்பை, AI, வீடியோ கால் என அனைத்து வசதிகளுடனும் உருவாக்க நினைக்கிறார். ஒரு கண்டிப்பான PM-ஆக, 0 ரூபாய் செலவில் 7 நாட்களில் இந்த ஐடியாவைச் சோதிக்கக்கூடிய ஒரு மிகச் சிறிய (Wizard of Oz) MVP-ஐ எப்படி உருவாக்குவது என்று திட்டமிடு."')}`
+            },
+            { 
+                id: 15, icon: "🔄", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
+                title_en: "15. Iterative Design & Continuous Discovery", title_ta: "15. தொடர்ச்சியான கண்டுபிடிப்பு (Continuous Discovery)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A Waterfall product launch is like shooting a cannonball—once it fires, you cannot change its path. Iterative Design is like flying a drone—you launch quickly and constantly adjust the joysticks based on the live camera feed until you hit the exact target.</div>
+                    <p>Launching the MVP is not the end; it is the starting line. The build-measure-learn feedback loop is the heartbeat of modern product management.</p>
+                    <h3>The Build-Measure-Learn Loop</h3>
+                    <p>Popularized by Eric Ries in <i>The Lean Startup</i>, this loop dictates that you Build the MVP, Measure how users interact with it using analytics, and Learn from the data to inform your next iteration. You must spin this loop as fast as possible.</p>
+                    <h3>Continuous Discovery</h3>
+                    <p>Customer research doesn't stop after Phase 1. Teresa Torres pioneered the concept of <b>Continuous Discovery</b>. A modern product trio (PM, Designer, Tech Lead) should be talking to at least one real customer every single week. You map their feedback on an "Opportunity Solution Tree" to continuously find new ways to improve the North Star Metric.</p>
+                    <h3>Managing Feature Requests vs. Strategy</h3>
+                    <p>Once live, customers will flood you with feature requests. It is dangerous to just build what the loudest customer wants (the "Sales-Led" trap). You must categorize feedback, extract the underlying pain point (the "Why"), and map it back to your strategic OKRs. If it doesn't align with the current quarter's goals, it goes in the backlog.</p>
+                    ${generatePromptBox('Feedback Synthesis Prompt', 'Prompt: "Act as a Product Manager. We just launched an MVP for an online tutoring platform. Over the past week, 40 users submitted the exact same support ticket: \'Add a feature to record the video sessions.\' Instead of just adding this to the roadmap, synthesize this request. What is the underlying JTBD (Job to be Done)? What are 3 alternative, cheaper ways to solve this underlying need without building a massive cloud-video-recording infrastructure?"')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பழைய (Waterfall) முறையில் பொருளை வெளியிடுவது பீரங்கிக் குண்டைச் சுடுவது போன்றது—ஒருமுறை சுட்டபின் பாதையை மாற்ற முடியாது. தொடர்ச்சியான டிசைன் (Iterative Design) என்பது ட்ரோனை (Drone) பறக்க விடுவது போன்றது—பறக்கும்போதே கேமராவைப் பார்த்து இலக்கைச் சரியாக அடையப் பாதையை மாற்றிக்கொள்ளலாம்.</div>
+                    <p>MVP-ஐ வெளியிடுவது முடிவல்ல; அதுதான் ஆரம்பம். ஆப்பை வெளியிட்டபின், மக்கள் அதை எப்படிப் பயன்படுத்துகிறார்கள் என்ற டேட்டாவை வைத்து ஆப்பைத் தொடர்ந்து மேம்படுத்திக் கொண்டே இருக்க வேண்டும்.</p>
+                    <h3>Build-Measure-Learn (உருவாக்கு-அளவிடு-கற்றுக்கொள்)</h3>
+                    <p>இது லீன் ஸ்டார்ட்அப் (Lean Startup) தத்துவம். முதலில் சிறிய பொருளை உருவாக்குங்கள் (Build), மக்கள் எப்படிப் பயன்படுத்துகிறார்கள் என டேட்டாவை அளவிடுங்கள் (Measure), அந்த டேட்டாவிலிருந்து கற்றுக் கொண்டு (Learn) அடுத்த அப்டேட்டைக் கொடுங்கள். இந்தச் சக்கரம் வேகமாகச் சுழல வேண்டும்.</p>
+                    <h3>Continuous Discovery (தொடர் ஆய்வு)</h3>
+                    <p>முதல் கட்டத்தோடு வாடிக்கையாளர் ஆய்வு முடிந்துவிடாது. PM, டிசைனர் மற்றும் இன்ஜினியர் அடங்கிய குழு, வாரம் ஒருமுறையாவது ஒரு உண்மையான வாடிக்கையாளரிடம் நேரடியாகப் பேச வேண்டும்.</p>
+                    <h3>பயனர்களின் கோரிக்கைகளைக் கையாளுதல்</h3>
+                    <p>பயனர்கள் பல புதிய அம்சங்களைக் கேட்பார்கள். அதிகம் சத்தம் போடுபவர் கேட்பதையெல்லாம் செய்யக் கூடாது. அவர்கள் கேட்கும் வசதிக்குப் பின்னால் உள்ள உண்மையான வலி என்ன (Why) என்பதைக் கண்டுபிடித்து, அது உங்கள் கம்பெனியின் இலக்கோடு (OKR) ஒத்துப்போனால் மட்டுமே அதைச் செய்ய வேண்டும்.</p>
+                    ${generatePromptBox('Feedback Synthesis Prompt', 'AI Prompt: "நான் ஆன்லைன் டியூஷன் ஆப் (Tutoring App) ஒன்றை வெளியிட்டுள்ளேன். 40 பேர் \'வீடியோவை ரெக்கார்ட் செய்யும் வசதி வேண்டும்\' எனக் கேட்டுள்ளனர். இதைப் பார்த்தவுடன் ரோட்மேப்பில் சேர்ப்பதற்குப் பதிலாக, அவர்கள் ஏன் இதைக் கேட்கிறார்கள் (JTBD) என ஆராய்ந்து, க்ளவுட் ரெக்கார்டிங் (Cloud recording) என்ற பெரிய செலவு இல்லாமல் இந்தப் பிரச்சனையைத் தீர்க்க 3 மலிவான வழிகளைக் கூறு."')}`
+            },
+            { 
+                id: 16, icon: "🏃", img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
+                title_en: "16. Agile, Scrum, and Kanban Methodologies", title_ta: "16. அஜைல் (Agile), ஸ்க்ரம் (Scrum) & கான்பான் (Kanban)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Waterfall is ordering a 5-course meal and waiting 2 hours to eat it all at once (hoping the chef got the order right). Agile is getting a continuous stream of tapas plates every 15 minutes; if you don't like the spicy shrimp, you can cancel the next spicy dish immediately.</div>
+                    <p>Welcome to Phase 4: Execution & Agile Delivery. The days of "Waterfall" software development—where you write a 300-page requirement document and wait two years for engineers to build it—are over. Today, product teams operate using Agile methodologies.</p>
+                    <h3>The Agile Manifesto Core Principles</h3>
+                    <ul>
+                        <li>Individuals and interactions <i>over</i> processes and tools.</li>
+                        <li>Working software <i>over</i> comprehensive documentation.</li>
+                        <li>Customer collaboration <i>over</i> contract negotiation.</li>
+                        <li>Responding to change <i>over</i> following a plan.</li>
+                    </ul>
+                    <h3>Scrum vs. Kanban</h3>
+                    <p>Agile is the philosophy; Scrum and Kanban are the specific frameworks.</p>
+                    <p><b>Scrum:</b> Work is divided into fixed timeboxes called "Sprints" (usually 2 weeks). At the start of the Sprint, the team commits to a set of User Stories. Once the Sprint starts, the scope is locked. This is great for structured product development with clear milestones.</p>
+                    <p><b>Kanban:</b> There are no sprints. Work is a continuous flow moving across a board (To Do -> In Progress -> Code Review -> Done). It strictly limits "Work In Progress" (WIP) to prevent bottlenecks. Kanban is excellent for DevOps, IT support, or highly volatile startup environments where priorities shift daily.</p>
+                    ${generatePromptBox('Agile Framework Selector', 'Prompt: "Act as an Agile Coach. I am managing two different teams. Team A is building a brand new mobile app over the next 6 months. Team B handles live customer support bug fixes and server outages. Explain whether I should implement Scrum or Kanban for Team A, and Scrum or Kanban for Team B, and justify your reasoning based on predictability and workflow."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> வாட்டர்ஃபால் (Waterfall) முறை என்பது, ஹோட்டலில் பல வகையான உணவுகளை ஆர்டர் செய்துவிட்டு, அவை அனைத்தும் தயாராகும் வரை 2 மணிநேரம் காத்திருப்பது. அஜைல் (Agile) என்பது, ஒவ்வொரு 15 நிமிடத்திற்கும் சுடச்சுட ஒவ்வொரு உணவாக வருவது; முதல் உணவு பிடிக்கவில்லை என்றால் உடனே அடுத்ததை மாற்றி ஆர்டர் செய்து கொள்ளலாம்.</div>
+                    <p>Phase 4: எக்ஸிகியூஷன். ஒரு காலத்தில் 300 பக்கங்களுக்குச் சாஃப்ட்வேர் விதிகளை எழுதிவிட்டு, 2 வருடங்கள் கழித்து சாஃப்ட்வேரை வெளியிடும் வழக்கம் இருந்தது (Waterfall). அது இப்போது இல்லை. இன்று அனைத்தும் அஜைல் (Agile) முறைதான்.</p>
+                    <h3>அஜைல் (Agile) தத்துவங்கள்</h3>
+                    <ul>
+                        <li>பெரிய டாக்குமெண்ட்களை எழுதுவதைவிட, வேலை செய்யும் சாஃப்ட்வேரை உடனே தருவது முக்கியம்.</li>
+                        <li>ஆரம்பத் திட்டத்தையே பிடித்துத் தொங்காமல், சந்தை மாற்றங்களுக்கு ஏற்ப மாறுவது முக்கியம்.</li>
+                    </ul>
+                    <h3>Scrum மற்றும் Kanban</h3>
+                    <p>Agile என்பது ஒரு தத்துவம்; அதைச் செயல்படுத்தும் முறைகளே Scrum மற்றும் Kanban.</p>
+                    <p><b>Scrum:</b> 2 வாரங்களுக்கு ஒருமுறை (Sprint) வேலைகளைப் பிரித்துக் செய்வது. ஸ்ப்ரின்ட் தொடங்கியபின் இடையில் புது வேலையைச் சேர்க்கக் கூடாது. தெளிவான இலக்குகள் கொண்ட பெரிய ப்ராஜெக்ட்டுகளுக்கு இது சிறந்தது.</p>
+                    <p><b>Kanban:</b> இதில் ஸ்ப்ரின்ட் (Sprint) கிடையாது. வேலைகள் ஒரு போர்டில் (To Do -> In Progress -> Done) தொடர்ந்து நகர்ந்துகொண்டே இருக்கும். தினமும் முன்னுரிமை மாறும் சப்போர்ட் (Support) அல்லது பக்-ஃபிக்ஸிங் (Bug fixing) வேலைகளுக்கு இது சிறந்தது.</p>
+                    ${generatePromptBox('Agile Framework Selector', 'AI Prompt: "நான் இரண்டு டீம்களை நிர்வகிக்கிறேன். டீம் A அடுத்த 6 மாதங்களுக்கு ஒரு புதிய ஆப்பை உருவாக்குகிறது. டீம் B தினமும் வரும் கஸ்டமர் புகார்களையும் பக்-களையும் (Bugs) சரிசெய்கிறது. எந்த டீமுக்கு Scrum முறையையும், எந்த டீமுக்கு Kanban முறையையும் பயன்படுத்த வேண்டும் என ஒரு Agile Coach ஆக விளக்கு."')}`
+            },
+            { 
+                id: 17, icon: "🗓️", img: "https://images.unsplash.com/photo-1512758684632-4752b5ea912f?w=800&q=80",
+                title_en: "17. Sprint Planning & Backlog Grooming", title_ta: "17. ஸ்ப்ரின்ட் திட்டமிடல் & பேக்லாக் (Backlog) பராமரிப்பு", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> The Backlog is your messy garage full of every project you want to do eventually. Backlog Grooming is throwing out the junk and organizing the tools. Sprint Planning is selecting exactly which tools you need this week to build a specific doghouse.</div>
+                    <p>The PM is the owner of the Product Backlog. If the backlog is a messy list of 500 vague ideas, the engineering team will grind to a halt.</p>
+                    <h3>Backlog Grooming (Refinement)</h3>
+                    <p>Once a week, the PM and Tech Lead meet to "groom" the backlog. This involves prioritizing tickets, breaking large Epics into smaller User Stories, adding acceptance criteria, and ruthlessly deleting old tickets that will never be built. The goal is to ensure the top of the backlog is "ready for development."</p>
+                    <h3>Sprint Planning & Story Points</h3>
+                    <p>During Sprint Planning, the team decides what to pull from the top of the backlog into the 2-week Sprint. Engineers estimate the effort using <b>Story Points</b> (often based on the Fibonacci sequence: 1, 2, 3, 5, 8). Story points do not equal hours; they measure complexity, risk, and effort.</p>
+                    <p>If the team historically completes 30 story points per sprint (their "Velocity"), the PM cannot force them to take on 50 points. The team owns the estimate; the PM owns the priority.</p>
+                    <h3>Other Scrum Ceremonies</h3>
+                    <ul>
+                        <li><b>Daily Standup:</b> A 15-minute sync. What did I do yesterday? What am I doing today? Are there any blockers?</li>
+                        <li><b>Sprint Retrospective:</b> At the end of the sprint, the team reflects: What went well? What failed? How do we improve our process next sprint?</li>
+                    </ul>
+                    ${generatePromptBox('Story Point Estimation', 'Prompt: "Act as an Agile Scrum Master. Explain to a junior engineering team why we use the Fibonacci sequence (1, 2, 3, 5, 8, 13) for Story Point estimation instead of just estimating in \'Hours\'. How does it help account for complexity and the cone of uncertainty?"')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பேக்லாக் (Backlog) என்பது எப்போதாவது செய்ய நினைக்கும் வேலைகள் அனைத்தையும் போட்டுவைக்கும் குடோன் போன்றது. Grooming என்பது தேவையில்லாததைக் குப்பையில் போட்டுவிட்டு அடுக்கி வைப்பது. ஸ்ப்ரின்ட் பிளானிங் (Sprint Planning) என்பது, இந்த வாரம் நாய் வீடு கட்ட என்னென்ன கருவிகள் தேவை என்று சரியாக எடுத்து வைப்பது.</div>
+                    <p>Product Backlog-க்கு PM தான் முழுப் பொறுப்பு. அதில் 500 அரைகுறை ஐடியாக்கள் குப்பையாகக் கிடந்தால், இன்ஜினியர்களால் வேலை செய்ய முடியாது.</p>
+                    <h3>Backlog Grooming (பேக்லாக் சீரமைப்பு)</h3>
+                    <p>வாரம் ஒருமுறை PM மற்றும் Tech Lead இணைந்து பேக்லாக்கைச் சரிசெய்வார்கள். பெரிய வேலைகளைச் சிறியதாகப் பிரிப்பது, தேவையில்லாத பழைய வேலைகளை நீக்குவது மற்றும் எந்த வேலையை முதலில் செய்ய வேண்டும் என அடுக்கி வைப்பது இதில் அடங்கும்.</p>
+                    <h3>Sprint Planning & Story Points</h3>
+                    <p>2 வார ஸ்ப்ரின்ட்டில் என்னென்ன வேலைகளைச் செய்வது என்று இதில் முடிவெடுப்பார்கள். இன்ஜினியர்கள் ஒரு வேலையின் கடினத்தன்மையைக் குறிக்க <b>Story Points</b> (1, 2, 3, 5, 8) பயன்படுத்துவார்கள். இது 'மணிநேரம்' அல்ல; வேலையின் சிக்கலைக் குறிப்பது.</p>
+                    <p>ஒரு டீம் வழக்கமாக 30 பாயிண்ட் (Velocity) வேலை செய்கிறார்கள் என்றால், PM அவர்களை 50 பாயிண்ட் வேலை செய்யுமாறு கட்டாயப்படுத்தக் கூடாது. நேரத்தைக் கணக்கிடுவது இன்ஜினியர்களின் வேலை; முன்னுரிமை கொடுப்பது PM-இன் வேலை.</p>
+                    <h3>மற்ற ஸ்க்ரம் (Scrum) நிகழ்வுகள்</h3>
+                    <ul>
+                        <li><b>Daily Standup:</b> தினமும் 15 நிமிடம் கூடி, நேற்று என்ன செய்தேன், இன்று என்ன செய்யப்போகிறேன், தடைகள் ஏதும் உள்ளதா எனப் பேசுவது.</li>
+                        <li><b>Retrospective:</b> 2 வாரம் முடிந்ததும், என்னென்ன தவறுகள் நடந்தன, அடுத்த முறை அதை எப்படிச் சரிசெய்வது எனப் பேசுவது.</li>
+                    </ul>
+                    ${generatePromptBox('Story Point Estimation', 'AI Prompt: "ஒரு Agile Scrum Master ஆகச் செயல்படு. ஒரு வேலையைச் செய்து முடிக்க ஆகும் நேரத்தை, \'மணிநேரங்களில் (Hours)\' கணக்கிடாமல், ஏன் Fibonacci எண்களை (1, 2, 3, 5, 8) பயன்படுத்தி Story Points ஆகக் கணக்கிடுகிறோம் என்பதை ஜூனியர் இன்ஜினியர்களுக்கு விளக்கு."')}`
+            },
+            { 
+                id: 18, icon: "🤝", img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80",
+                title_en: "18. Cross-Functional Team Leadership", title_ta: "18. பல்வேறு குழுக்களை ஒருங்கிணைத்து வழிநடத்துதல்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A PM is like a translator at the United Nations. You must speak "Business" to the CEO, "Architecture" to the Engineering Lead, and "Empathy" to the Product Designer. If you use the wrong language with the wrong person, negotiations fail.</div>
+                    <p>Product Managers sit at the nexus of the organization. Your most critical soft skill is building high-trust relationships with cross-functional teams without having any direct managerial authority over them.</p>
+                    <h3>Working with Engineering</h3>
+                    <p>Engineers value logic, clarity, and protected focus time. Never treat engineers like "code monkeys" who just take orders. Involve the Tech Lead early in the discovery phase. If they understand *why* a problem needs solving, they will often architect a faster, more elegant solution than you could have imagined. Respect their technical constraints.</p>
+                    <h3>Working with Design</h3>
+                    <p>Designers value empathy and exploration. Give them problems to solve, not wireframes to color in. Do not say, "Put a dropdown menu here." Say, "The user needs a way to filter 500 items quickly without feeling overwhelmed. How might we design that?"</p>
+                    <h3>Working with Sales & Marketing</h3>
+                    <p>Sales cares about closing deals today; Marketing cares about messaging and leads. You must clearly explain the product's value proposition to them so they can sell it. You must also learn to politely say "No" when Sales demands a custom feature to close one specific enterprise deal, which would ruin the roadmap for the other 99% of users.</p>
+                    ${generatePromptBox('Conflict Resolution Simulator', 'Prompt: "Act as an angry VP of Sales. I just lost a $100k deal because our software lacks a specific PDF export feature. I am demanding you stop the current Sprint and build this feature immediately. I am threatening to escalate this to the CEO. You are the Product Manager. Respond to me. Defuse the situation, acknowledge my pain, but firmly protect the engineering sprint using data and the roadmap."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> PM என்பவர் ஐ.நா. சபையில் (UN) உள்ள மொழிபெயர்ப்பாளர் போன்றவர். CEO-விடம் 'வியாபார' மொழியிலும், இன்ஜினியரிடம் 'டெக்னிக்கல்' மொழியிலும், டிசைனரிடம் 'உணர்வுபூர்வமான' மொழியிலும் பேச வேண்டும். தவறான நபரிடம் தவறான மொழியில் பேசினால் வேலை நடக்காது.</div>
+                    <p>PM என்பவர் நிறுவனத்தின் மையப்புள்ளி. எந்த அதிகாரமும் இல்லாமல், மற்ற டிபார்ட்மெண்ட்களை அரவணைத்து வேலை வாங்குவதே உங்களின் மிக முக்கியத் திறமையாகும்.</p>
+                    <h3>இன்ஜினியர்களுடன் வேலை செய்தல்</h3>
+                    <p>இன்ஜினியர்களை வெறும் 'கோட் (Code) எழுதும் இயந்திரமாக' நடத்தக் கூடாது. ஒரு வேலையை ஆரம்பிக்கும் முன்பே Tech Lead-ஐ அழைத்துப் பேசுங்கள். "ஏன்" இந்தப் பிரச்சனை வருகிறது என்று அவர்களுக்குப் புரிந்தால், அவர்கள் மிகச் சிறந்த தீர்வைக் கண்டுபிடிப்பார்கள். அவர்களின் தொழில்நுட்பச் சவால்களை மதிக்க வேண்டும்.</p>
+                    <h3>டிசைனர்களுடன் வேலை செய்தல்</h3>
+                    <p>டிசைனர்களிடம் போய் "இங்கே இந்த பட்டனை வை" என்று கூறக் கூடாது. "வாடிக்கையாளர் 500 பொருட்களை எளிதாக ஃபில்டர் (Filter) செய்ய வேண்டும், அதை எப்படி டிசைன் செய்யலாம்?" என்று பிரச்சனையை மட்டும் கூறி, டிசைன் செய்யும் சுதந்திரத்தை அவர்களிடம் கொடுக்க வேண்டும்.</p>
+                    <h3>சேல்ஸ் & மார்க்கெட்டிங்</h3>
+                    <p>சேல்ஸ் டீம் இன்று ஒரு வியாபாரத்தை முடிப்பதிலேயே குறியாக இருப்பார்கள். ஒரு கஸ்டமருக்காகப் புதிய வசதியைக் கேட்டால், அது மற்ற 99% பயனர்களுக்குத் தேவையில்லை என்றால், நாசுக்காக "No" சொல்லக் கற்றுக்கொள்ள வேண்டும்.</p>
+                    ${generatePromptBox('Conflict Resolution Simulator', 'AI Prompt: "நீ ஒரு கோபமான VP of Sales ஆகப் பேசு. வெப்சைட்டில் PDF டவுன்லோட் வசதி இல்லாததால், 10 லட்சம் ரூபாய் டீல் கைநழுவி விட்டது என்று கோபப்படு. நடக்கும் ஸ்ப்ரின்ட்டை (Sprint) நிறுத்திவிட்டு உடனே இதைச் செய்யச் சொல்லிக் கட்டாயப்படுத்து. நான் PM ஆகப் பதிலளிக்கிறேன். என் பதிலில் நான் எப்படி உன்னைச் சமாதானப்படுத்தி, அதேசமயம் டேட்டாவை வைத்துக் கண்டிப்புடன் மறுக்கிறேன் என மதிப்பிடு."')}`
+            },
+            { 
+                id: 19, icon: "🗣️", img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
+                title_en: "19. Stakeholder Management & Communication", title_ta: "19. ஸ்டேக்ஹோல்டர் (Stakeholder) நிர்வாகம் & தகவல் தொடர்பு", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Stakeholder management is like being the pilot of a commercial airliner. You don't need to explain the aerodynamics of the engine to the passengers, but when you hit turbulence, you must turn on the intercom, confidently explain what is happening, and assure them you have a plan to land safely.</div>
+                    <p>A "Stakeholder" is anyone who has an interest in your product: the CEO, investors, customer support, or the legal team. Managing their expectations is 50% of a PM's job. If stakeholders are surprised, you have failed at communication.</p>
+                    <h3>Delivering Bad News</h3>
+                    <p>Software development is unpredictable. Servers crash, APIs break, and deadlines are missed. When a critical feature is delayed, do not hide it. Communicate early, take extreme ownership, and come with a mitigation plan.</p>
+                    <p><i>Bad Communication:</i> "The backend team is slow, so the feature is delayed."<br>
+                    <i>Good Communication:</i> "We hit an unexpected database scaling issue. We are pausing the UI work to fix it. The new release date is next Friday. Here is how we are ensuring it doesn't happen again."</p>
+                    <h3>The Product Alignment Meeting</h3>
+                    <p>Run monthly alignment meetings with department heads. Do not just read the roadmap off a slide. Tell a story. Show them a quote from a frustrated user, show the prototype that solves it, and share the metrics you are targeting. Align the room behind the *value*, not just the timeline.</p>
+                    ${generatePromptBox('Executive Summary Writer', 'Prompt: "Act as a Senior PM communicating with the CEO and Board of Directors. The highly anticipated \'AI Recommendation Engine\' feature has been delayed by 3 weeks because the machine learning model is generating biased, unsafe results. Draft a concise, confident, 3-paragraph executive summary email delivering this bad news, explaining the risk of launching early, and outlining the clear path forward."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஸ்டேக்ஹோல்டர்களைக் கையாளுவது விமான பைலட் (Pilot) வேலை போன்றது. இன்ஜின் எப்படி வேலை செய்கிறது என்று பயணிகளுக்கு விளக்க வேண்டியதில்லை. ஆனால் மோசமான வானிலையில் விமானம் ஆடும்போது, மைக்கில் தைரியமாகப் பேசிப் பயணிகளுக்கு நம்பிக்கை அளிக்க வேண்டும்.</div>
+                    <p>ஸ்டேக்ஹோல்டர் (Stakeholder) என்பவர் உங்கள் ப்ராடக்ட்டில் அக்கறை கொண்ட அனைவரும்—சிஇஓ (CEO), முதலீட்டாளர்கள், கஸ்டமர் சப்போர்ட் என அனைவருமே. இவர்களைச் சரியாகக் கையாள்வதே PM-இன் 50% வேலை. திடீரென ஒரு செய்தியைச் சொல்லி அவர்களை அதிர்ச்சியடைய வைப்பது ஒரு PM-க்கு அழகல்ல.</p>
+                    <h3>கெட்ட செய்திகளைக் கூறுதல்</h3>
+                    <p>சாஃப்ட்வேர் உலகில் எதுவும் நடக்கலாம். சொன்ன தேதியில் முடிக்க முடியாமல் போகலாம். அப்போது அத மறைக்கக் கூடாது. முன்கூட்டியே சொல்லி, பொறுப்பை ஏற்றுக்கொண்டு, மாற்று வழியைக் கூற வேண்டும்.</p>
+                    <p><i>மோசமான தொடர்பு:</i> "பேக்எண்ட் டீம் மெதுவாக வேலை செய்வதால் தாமதமாகிறது."<br>
+                    <i>சிறந்த தொடர்பு:</i> "டேட்டாபேஸில் ஒரு எதிர்பாராத சிக்கல் வந்துள்ளது. அதைச் சரிசெய்வதால் ரிலீஸ் தேதி அடுத்த வெள்ளிக்கு மாறுகிறது. இதை எப்படிச் சரிசெய்கிறோம் என்ற மாற்றுத் திட்டம் இதோ."</p>
+                    <h3>Product Alignment Meeting</h3>
+                    <p>மாதம் ஒருமுறை அனைத்து டிபார்ட்மெண்ட் தலைவர்களையும் சந்தித்துப் பேசுங்கள். வெறும் ரோட்மேப்பை (Roadmap) வாசிக்காமல், வாடிக்கையாளரின் ஒரு சோகமான கமெண்ட்டைக் காட்டி, அதை எப்படி உங்கள் புதிய அம்சம் தீர்க்கப் போகிறது என்று ஒரு கதையாகச் சொல்லி அனைவரையும் நம்ப வையுங்கள்.</p>
+                    ${generatePromptBox('Executive Summary Writer', 'AI Prompt: "பெரிதும் எதிர்பார்க்கப்பட்ட \'AI Recommendation\' அம்சம், சில தவறான பதில்களைத் தருவதால் 3 வாரங்கள் தாமதமாகிறது. இதை CEO மற்றும் போர்டு மெம்பர்களுக்கு (Board of directors) தெரிவிக்கும் ஒரு மின்னஞ்சலை (Email) எழுது. அரைகுறையாக வெளியிட்டால் வரும் ஆபத்தையும், அதை எப்படிச் சரிசெய்யப் போகிறோம் என்ற மாற்றுத் திட்டத்தையும் தைரியமாக 3 பத்திகளில் எழுது."')}`
+            },
+            { 
+                id: 20, icon: "🚧", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+                title_en: "20. Managing Scope Creep & Technical Debt", title_ta: "20. ஸ்கோப் கிரீப் (Scope Creep) & டெக்னிக்கல் டெப்ட்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Technical Debt is like using a credit card to buy a TV today. You get the TV fast, but you pay high interest. If you keep buying things on credit and never pay down the principal balance, eventually, your entire salary goes to interest, and you can't afford to buy groceries (new features).</div>
+                    <p>Two silent killers destroy great products: Scope Creep (from the business) and Technical Debt (from engineering). A PM must ruthlessly manage both.</p>
+                    <h3>Scope Creep</h3>
+                    <p>Scope creep happens when new requirements are continuously added to a project after it has started, without adjusting the deadline. "While you're building the checkout page, can you just add a quick crypto payment option?" If you say yes to every "quick addition," the release is delayed by months.</p>
+                    <p><b>How to say "No":</b> Never say, "No, I don't want to." Say, "Yes, we can add crypto payments, but that means we must drop Apple Pay from this sprint, or delay the launch by 2 weeks. Which tradeoff do you prefer?" Force the stakeholder to make the tradeoff.</p>
+                    <h3>Technical Debt</h3>
+                    <p>To hit a deadline, engineers often write "hacky," unscalable code. This is Technical Debt. Over time, the codebase becomes a brittle mess. If it takes 4 weeks to change a simple button color, your tech debt is bankrupting you. PMs must dedicate 15-20% of every Sprint's capacity specifically to refactoring code and paying down technical debt.</p>
+                    ${generatePromptBox('Scope Creep Defense', 'Prompt: "Act as a PM defending a Sprint. The CEO runs into your office on Tuesday and says: \'I just saw our competitor launch a dark mode. I need you to add dark mode to the release going out this Friday. It shouldn\'t be hard.\' Write exactly what you would say to respectfully decline, explain the danger of scope creep, and offer a data-driven alternative."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> டெக்னிக்கல் டெப்ட் (Technical Debt) என்பது கிரெடிட் கார்டு மூலம் இன்று டிவி வாங்குவது போன்றது. டிவி உடனே கிடைக்கும், ஆனால் வட்டி கட்ட வேண்டும். வட்டிகட்டிக்கொண்டே இருந்தால், கடைசியில் சம்பளம் முழுவதும் வட்டிக்குச் சென்று, சாப்பாடு வாங்கப் பணமிருக்காது (புதிய அம்சங்களை உருவாக்கவே முடியாது).</div>
+                    <p>இரண்டு அமைதியான கொலையாளிகள் சிறந்த ப்ராடக்ட்டுகளை அழித்துவிடும்: ஸ்கோப் கிரீப் (வியாபாரத் தரப்பிலிருந்து) மற்றும் டெக்னிக்கல் டெப்ட் (இன்ஜினியரிங் தரப்பிலிருந்து).</p>
+                    <h3>Scope Creep (வேலை கூடிக்கொண்டே போவது)</h3>
+                    <p>ஒரு வேலையைத் தொடங்கியபின், தேதியை மாற்றாமல் புதுப்புது வேலைகளைச் சேர்ப்பதே ஸ்கோப் கிரீப். "செக்-அவுட் பக்கத்தைச் செய்யும்போது, அப்படியே கிரிப்டோ (Crypto) பேமெண்ட்டையும் சேர்த்துவிடுங்களேன்?" என்று கேட்பார்கள். அனைத்திற்கும் தலையாட்டினால் ப்ராஜெக்ட் பல மாதங்கள் தாமதமாகும்.</p>
+                    <p><b>"No" சொல்வது எப்படி?</b> "முடியாது" என்று நேரடியாகச் சொல்லாதீர்கள். "கண்டிப்பாகச் செய்யலாம், ஆனால் இதைச் சேர்த்தால் Apple Pay-ஐ நிறுத்த வேண்டும், அல்லது ரிலீஸ் 2 வாரம் தாமதமாகும். இதில் எதைச் செய்யலாம்?" என்று அவர்களிடமே முடிவை விட்டுவிடுங்கள்.</p>
+                    <h3>Technical Debt (தொழில்நுட்பக் கடன்)</h3>
+                    <p>வேகமாக முடிக்க வேண்டும் என்பதற்காக இன்ஜினியர்கள் சில நேரங்களில் அரைகுறையாகக் கோட் (Code) எழுதுவார்கள். இதுவே டெக்னிக்கல் டெப்ட். ஒரு சிறிய பட்டன் கலரை மாற்ற 4 வாரங்கள் ஆகிறது என்றால், உங்கள் சாஃப்ட்வேர் குப்பையாகிவிட்டது என்று அர்த்தம். PM-கள் ஒவ்வொரு ஸ்ப்ரின்ட்டிலும் 15-20% நேரத்தை இந்தக் குப்பையைச் சுத்தம் செய்ய ஒதுக்க வேண்டும்.</p>
+                    ${generatePromptBox('Scope Creep Defense', 'AI Prompt: "நீ ஒரு PM. செவ்வாய்க்கிழமை CEO ஓடிவந்து, \'போட்டியாளர் Dark Mode கொண்டுவந்துவிட்டார். நாமும் இந்த வெள்ளிக்கிழமை ரிலீஸில் Dark Mode-ஐ சேர்க்க வேண்டும்\' என்கிறார். மரியாதையாக அவருக்கு எப்படி நோ (No) சொல்வாய்? Scope Creep-ஆல் வரும் ஆபத்தை விளக்கி, சரியான மாற்று வழியை எப்படி வழங்குவாய்?"')}`
+            },
+            { 
+                id: 21, icon: "📣", img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
+                title_en: "21. Go-To-Market (GTM) Strategy & Launch", title_ta: "21. கோ-டு-மார்க்கெட் (GTM) வியூகம் & வெளியீடு", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Building the product is baking the world's best cake. The GTM strategy is sending the invitations, decorating the hall, and making sure people actually show up to eat it. A great cake in an empty room is a failure.</div>
+                    <p>Welcome to Phase 5: Launch, Growth & Lifecycle. Your code is flawless and the UX is beautiful. But if nobody knows your product exists, it will fail. The Go-To-Market (GTM) strategy is the comprehensive plan for launching the product to the right audience.</p>
+                    <h3>Product Positioning & Messaging</h3>
+                    <p>You must work closely with Product Marketing Managers (PMMs). Positioning is defining where you sit in the market (e.g., "We are the premium, secure alternative for enterprise"). Messaging is exactly what the website copy says. The messaging must focus on the *benefit* to the user, not the technical *features*.</p>
+                    <p><i>Feature:</i> "We have a 256-bit AES encrypted API."<br>
+                    <i>Benefit:</i> "Sleep soundly knowing your customers' medical data is unhackable."</p>
+                    <h3>Internal vs. External Launch</h3>
+                    <p>A launch has two sides. <b>External:</b> Press releases, Product Hunt launches, webinars, and email blasts. <b>Internal:</b> Training the Sales team on how to sell the new feature, and giving Customer Support the FAQs and troubleshooting guides so they aren't overwhelmed on launch day.</p>
+                    ${generatePromptBox('GTM Positioning Framework', 'Prompt: "Act as a Product Marketing Manager. We are launching an AI-powered calendar app that automatically reschedules low-priority meetings when a high-priority client needs to talk. Generate a comprehensive Positioning Document. Include the Target Persona, the core Pain Point, the Value Proposition, and 3 Benefit-driven marketing slogans."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ப்ராடக்ட்டை உருவாக்குவது உலகின் சிறந்த கேக்கைச் சமைப்பது போன்றது. GTM வியூகம் என்பது, அழைப்பிதழ் அனுப்பி, மண்டபத்தை அலங்கரித்து, மக்கள் வந்து அந்த கேக்கைச் சாப்பிடுவதை உறுதிசெய்வது. யாருமே இல்லாத அறையில் உள்ள சிறந்த கேக் ஒரு தோல்வியே.</div>
+                    <p>Phase 5: வளர்ச்சி (Growth). உங்கள் சாஃப்ட்வேர் மிகச் சிறப்பாக இருக்கலாம். ஆனால், அது இருப்பதே உலகுக்குத் தெரியாவிட்டால் அது தோல்வியடையும். சரியான மக்களைச் சென்றடைவதற்கான திட்டமே GTM (Go-To-Market) வியூகம்.</p>
+                    <h3>ப்ராடக்ட் பொசிஷனிங் & மெசேஜிங் (Positioning)</h3>
+                    <p>உங்கள் பொருள் சந்தையில் எந்த இடத்தில் இருக்கிறது என்பதை முடிவு செய்ய வேண்டும் (உ-ம்: "நாங்கள் பெரிய கார்ப்பரேட்டுகளுக்கான விலை உயர்ந்த, பாதுகாப்பான சாஃப்ட்வேர்"). விளம்பர வாசகங்கள் (Messaging), உங்கள் சாஃப்ட்வேரின் தொழில்நுட்பத்தைப் பேசாமல், அது வாடிக்கையாளருக்கு எப்படிப் பயன்படும் என்பதைப் பேச வேண்டும்.</p>
+                    <p><i>தொழில்நுட்பம்:</i> "இதில் 256-bit AES Encryption உள்ளது."<br>
+                    <i>பலன்:</i> "உங்கள் நோயாளிகளின் டேட்டா திருடுபோகாது; நீங்கள் நிம்மதியாகத் தூங்கலாம்."</p>
+                    <h3>உள் மற்றும் வெளி வெளியீடு (Internal vs External)</h3>
+                    <p>வெளியீட்டில் இரண்டு உள்ளன. <b>வெளிப்புறம்:</b> பத்திரிகைச் செய்திகள், சோஷியல் மீடியா விளம்பரங்கள். <b>உள்புறம்:</b> இதை எப்படி விற்க வேண்டும் என Sales டீமுக்குக் கற்றுக்கொடுப்பது, மற்றும் லான்ச் அன்று வாடிக்கையாளர்கள் கேள்வி கேட்டால் எப்படிப் பதிலளிக்க வேண்டும் என Customer Support டீமைத் தயார்படுத்துவது.</p>
+                    ${generatePromptBox('GTM Positioning Framework', 'AI Prompt: "நாம் ஒரு புதிய AI Calendar ஆப்பை வெளியிடுகிறோம். முக்கிய நபர் மீட்டிங் கேட்டால், இது சாதாரண மீட்டிங்குகளைத் தானாகவே தள்ளிவைத்துவிடும். இதற்கான GTM பொசிஷனிங் (Positioning) ஆவணத்தை எழுது. யார் நமது வாடிக்கையாளர்? அவர்களின் வலி என்ன? இதைப் விளம்பரப்படுத்த 3 சிறந்த வாசகங்களை (Slogans) உருவாக்கு."')}`
+            },
+            { 
+                id: 22, icon: "🌱", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+                title_en: "22. Product-Led Growth (PLG)", title_ta: "22. தயாரிப்பு சார்ந்த வளர்ச்சி (Product-Led Growth - PLG)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Sales-Led Growth is paying a salesperson to knock on doors to sell a locked box of chocolate. Product-Led Growth (PLG) is leaving a bowl of free, unwrapped chocolate in the lobby; once people taste it and realize it's amazing, they voluntarily buy the whole box.</div>
+                    <p>In traditional SaaS, you had to talk to a salesperson, sign a 12-month contract, and pay $50,000 before you even saw the software. Today, the most successful companies (Slack, Zoom, Notion) use <b>Product-Led Growth (PLG)</b>. The product itself acts as the primary driver of acquisition, retention, and expansion.</p>
+                    <h3>The "Aha!" Moment</h3>
+                    <p>In PLG, the onboarding flow is critical. You must get the user to the "Aha!" moment (the moment they realize the core value of the product) as fast as humanly possible, completely friction-free. For Zoom, the Aha moment is sending a link and instantly seeing the other person's face without making them download a heavy desktop client.</p>
+                    <h3>Viral Loops & Network Effects</h3>
+                    <p>PLG products are designed to spread naturally. A "Viral Loop" is built into the UX. For example, Calendly is deeply viral. When I send you my Calendly link to book a meeting, I am forcing you to experience the product. If you like it, you sign up for your own account.</p>
+                    ${generatePromptBox('PLG Onboarding Audit', 'Prompt: "Act as a Growth Product Manager. We have a B2B project management tool. Currently, users sign up, confirm their email, watch a 3-minute tutorial, and are dropped into a blank dashboard. Our Day-1 churn is 70%. Design a new PLG onboarding flow that eliminates friction and drives the user to an immediate \'Aha!\' moment within 60 seconds of signing up."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> Sales-Led Growth என்பது, ஒரு பூட்டிய சாக்லேட் பெட்டியை விற்க சேல்ஸ்மேனுக்குச் சம்பளம் கொடுத்து வீடு வீடாக அனுப்புவது. PLG (Product-Led Growth) என்பது, சாக்லேட்டைத் திறந்து வரவேற்பறையில் இலவசமாக வைப்பது; ருசி பார்த்த மக்கள், அது நன்றாக இருப்பதை உணர்ந்து தாமாகவே முழுப் பெட்டியையும் காசு கொடுத்து வாங்குவார்கள்.</div>
+                    <p>முன்பெல்லாம் சாஃப்ட்வேர் வாங்க வேண்டுமென்றால் சேல்ஸ்மேனிடம் பேசி, பல லட்சங்கள் கட்டிவிட்டுத்தான் சாஃப்ட்வேரையே பார்க்க முடியும். இன்று Slack, Zoom, Notion போன்ற நிறுவனங்கள் <b>PLG (தயாரிப்பே தன்னை விற்றுக்கொள்வது)</b> முறையைப் பயன்படுத்துகின்றன.</p>
+                    <h3>தி "ஆஹா!" தருணம் ("Aha!" Moment)</h3>
+                    <p>PLG முறையில், வாடிக்கையாளர் உள்ளே வந்ததும் "ஆஹா, இது அருமையாக உள்ளதே!" என்று உணரும் தருணத்தை எவ்வளவு சீக்கிரம் தர முடியுமோ அவ்வளவு சீக்கிரம் தர வேண்டும். Zoom ஆப்பின் "ஆஹா" தருணம் என்பது, எந்த அக்கவுண்ட்டும் இல்லாமல் ஒரு லிங்க்கைக் கிளிக் செய்ததும் வீடியோவில் முகம் தெரிவது.</p>
+                    <h3>வைரல் லூப்ஸ் (Viral Loops)</h3>
+                    <p>PLG ப்ராடக்ட்டுகள் தாமாகவே பரவும்படி டிசைன் செய்யப்பட்டிருக்கும். உதாரணமாக, நான் என் மீட்டிங் நேரத்தை உங்களுக்கு அனுப்ப Calendly லிங்க்கை அனுப்புவேன். நீங்கள் அதைத் திறக்கும்போது உங்களுக்கே தெரியாமல் அந்த ஆப்பைப் பயன்படுத்துகிறீர்கள். பிடித்துப்போனால் நீங்களும் அதைப் பயன்படுத்தத் தொடங்குவீர்கள்.</p>
+                    ${generatePromptBox('PLG Onboarding Audit', 'AI Prompt: "நான் ஒரு ப்ராஜெக்ட் மேனேஜ்மென்ட் ஆப் வைத்திருக்கிறேன். மக்கள் சைன்-அப் (Sign up) செய்து, ஈமெயிலை உறுதிசெய்து, வீடியோ டுடோரியலைப் பார்த்துவிட்டு வெற்று டேஷ்போர்டுக்கு வருகிறார்கள். 70% பேர் முதல் நாளிலேயே ஆப்பை விட்டுச் சென்றுவிடுகிறார்கள். 60 விநாடிகளுக்குள் அவர்கள் \'ஆஹா\' தருணத்தை உணரும்படி புதிய PLG ஆன்போர்டிங் (Onboarding) முறையை டிசைன் செய்."')}`
+            },
+            { 
+                id: 23, icon: "⚖️", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+                title_en: "23. A/B Testing & Data-Driven Decisions", title_ta: "23. A/B டெஸ்டிங் & டேட்டா சார்ந்த முடிவுகள்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Without A/B testing, changing a website is like repainting a restaurant blindfolded based on a waiter's guess. A/B testing is painting half the restaurant red and half blue, and watching for two weeks to see which side makes customers order more dessert.</div>
+                    <p>Opinions are dangerous. "I think users will prefer a grid layout" is an opinion. A/B testing (Split Testing) turns opinions into statistical facts.</p>
+                    <h3>The A/B Testing Process</h3>
+                    <p>You divide your live traffic. 50% of users see the Control (the current design). 50% see the Variant (the new design). You run the test until you achieve <b>Statistical Significance</b>—meaning you have enough data points to mathematically prove the difference in performance is not just random luck.</p>
+                    <h3>Formulating a Strong Hypothesis</h3>
+                    <p>You don't just test random colors. A test must start with a hypothesis: "Because users are abandoning the cart at the shipping step, changing the 'Next' button to explicitly say 'Review Shipping Costs' will set better expectations and increase conversion by 5%."</p>
+                    <h3>Simpson's Paradox & Pitfalls</h3>
+                    <p>Data can be deceiving. If you run a test for only 2 days, you might see a massive spike in conversions, but it might just be the weekend traffic behaving differently. PMs must understand basic statistics to avoid declaring false winners.</p>
+                    ${generatePromptBox('A/B Test Hypothesis & Setup', 'Prompt: "Act as a Data Scientist working with a PM. We want to test a new pricing page design. The PM wants to test changing the headline, changing the price from $99 to $89, and removing the testimonial video all at the same time. Explain why this is a terrible testing strategy (multivariate vs A/B), and write a strict, single-variable hypothesis we should test instead."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> A/B டெஸ்டிங் இல்லாமல் வெப்சைட்டை மாற்றுவது, சர்வர் (Waiter) சொல்வதைக் கேட்டு கண்ணைக்கட்டிக்கொண்டு ஹோட்டலுக்குப் பெயிண்ட் அடிப்பது போன்றது. A/B டெஸ்டிங் என்பது, பாதி ஹோட்டலுக்குச் சிவப்பும், பாதிக்கு நீலமும் அடித்து, எந்தப் பக்கம் அமரும் வாடிக்கையாளர்கள் அதிக உணவு ஆர்டர் செய்கிறார்கள் என்று டேட்டாவைப் பார்த்து முடிவு செய்வது.</div>
+                    <p>சொந்தக் கருத்துகள் ஆபத்தானவை. "இந்த டிசைன் நன்றாக இருக்கும் என நான் நினைக்கிறேன்" என்பது ஒரு கருத்து. A/B டெஸ்டிங் அந்தக் கருத்தைத் துல்லியமான டேட்டாவாக (Data) மாற்றுகிறது.</p>
+                    <h3>A/B டெஸ்டிங் முறை</h3>
+                    <p>உங்கள் வெப்சைட்டிற்கு வரும் 50% பேருக்குப் பழைய டிசைனையும் (Control), மீதி 50% பேருக்குப் புதிய டிசைனையும் (Variant) காட்டுங்கள். எது அதிக விற்பனையைக் கொண்டுவருகிறதோ அதுவே வெற்றிபெறும். இதைச் சில நாட்கள் ஓடவிட்டு, வெற்றி உறுதியானது (Statistical Significance) என்று கணிதரீதியாக நிரூபிக்கப்படும் வரை காத்திருக்க வேண்டும்.</p>
+                    <h3>சரியான அனுமானத்தை உருவாக்குதல் (Hypothesis)</h3>
+                    <p>காரணமில்லாமல் கலரை மாற்றக் கூடாது. "ஷிப்பிங் பக்கத்தில் மக்கள் வெளியேறுவதால், பட்டனில் 'ஷிப்பிங் கட்டணத்தைப் பார்' என்று எழுதினால், விற்பனை 5% அதிகரிக்கும்" என்று ஒரு தர்க்கரீதியான அனுமானத்துடன் (Hypothesis) டெஸ்டிங்கைத் தொடங்க வேண்டும்.</p>
+                    ${generatePromptBox('A/B Test Hypothesis & Setup', 'AI Prompt: "நான் ஒரு PM. விலைப்பட்டியல் பக்கத்தில் ஒரே நேரத்தில் தலைப்பை மாற்றுவது, விலையை 99-ல் இருந்து 89 ஆகக் குறைப்பது, மற்றும் வீடியோவை நீக்குவது என அனைத்தையும் ஒரே A/B டெஸ்டில் செய்ய நினைக்கிறேன். இது ஏன் மிகப்பெரிய தப்பு (Multivariate vs A/B) என்று ஒரு டேட்டா சயின்டிஸ்ட்டாக விளக்கி, சரியான ஒற்றை-மாற்று (Single-variable) A/B டெஸ்டிங்கை உருவாக்கிக் கொடு."')}`
+            },
+            { 
+                id: 24, icon: "💰", img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&q=80",
+                title_en: "24. Pricing Strategy & Monetization Models", title_ta: "24. விலைய நிர்ணயம் & வருவாய் மாடல்கள் (Pricing Strategy)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Cost-plus pricing is selling a glass of lemonade for $1 because the lemons cost 50 cents. Value-based pricing is selling that exact same glass of lemonade for $10 in the middle of a desert because the person dying of thirst values it highly.</div>
+                    <p>Pricing is often the most neglected part of product management, yet it has the highest immediate impact on profitability. If you build a great product but price it wrong, the business fails.</p>
+                    <h3>Monetization Models</h3>
+                    <ul>
+                        <li><b>Freemium:</b> A basic version is free forever (e.g., Spotify Free). High top-of-funnel acquisition, but very low conversion rate (usually 2-5% upgrade).</li>
+                        <li><b>Free Trial:</b> Full access for 14 days. Creates urgency. Better conversion rate, but lower initial sign-ups.</li>
+                        <li><b>Tiered SaaS:</b> Good, Better, Best (e.g., $10 / $25 / $99). Capitalizes on the "Decoy Effect"—the middle tier is usually the target, and the high tier exists just to make the middle tier look affordable.</li>
+                    </ul>
+                    <h3>Value-Based Pricing</h3>
+                    <p>Never price your software based on how much it cost to build (Cost-plus). Price it based on the ROI (Return on Investment) it delivers to the customer. If your $50/month software saves an enterprise company $10,000 a month in accounting labor, your software is vastly underpriced.</p>
+                    <h3>Price Elasticity</h3>
+                    <p>PMs must test pricing. If you raise the price by 20%, does demand drop by 20%? If demand only drops by 5%, your product is "inelastic," meaning you were leaving money on the table.</p>
+                    ${generatePromptBox('Pricing Strategy Simulator', 'Prompt: "Act as a Monetization Expert. We have a B2B SaaS tool that automatically generates SEO blog posts using AI. We currently charge a flat $50/month. Draft a proposal to transition from a flat-rate model to a \'Value Metric\' usage-based model. Explain what the specific value metric should be (e.g., words generated, articles published, or traffic driven) and why that aligns our revenue with the customer\'s success."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> செலவை வைத்து விலை நிர்ணயிப்பது (Cost-plus), எலுமிச்சை 50 காசு என்பதால் ஜூஸை 1 ரூபாய்க்கு விற்பது. மதிப்பை வைத்து விலை நிர்ணயிப்பது (Value-based), அதே ஜூஸை பாலைவனத்தில் தாகத்தால் தவிப்பவரிடம் 10 ரூபாய்க்கு விற்பது (ஏனென்றால் அவருக்கு அதன் மதிப்பு அதிகம்).</div>
+                    <p>ஒரு பொருளுக்கு எப்படி விலை வைப்பது என்பது பல PM-களுக்குத் தெரிவதில்லை. ஆனால், லாபத்தை உடனே அதிகரிக்கும் சக்தி விலைக்குத்தான் உள்ளது. சிறந்த பொருளை உருவாக்கிவிட்டுத் தவறான விலை வைத்தால் வியாபாரம் காலியாகிவிடும்.</p>
+                    <h3>வருவாய் மாடல்கள்</h3>
+                    <ul>
+                        <li><b>Freemium:</b> அடிப்படை வசதிகள் எப்போதுமே இலவசம் (உ-ம்: Spotify). இதில் லட்சக்கணக்கானோர் வருவார்கள், ஆனால் 2-5% பேர் மட்டுமே பணம் கட்டுவார்கள்.</li>
+                        <li><b>Free Trial:</b> 14 நாட்களுக்கு முழு வசதிகளையும் தருவது. இது அவசரத்தை உருவாக்கிப் பணம் கட்ட வைக்கும்.</li>
+                        <li><b>3-அடுக்கு விலை (Good/Better/Best):</b> ₹100, ₹300, ₹1000 என வைப்பது. இதில் ₹1000 பேக்கேஜ், ₹300 பேக்கேஜை மலிவாகக் காட்டவே வைக்கப்படுகிறது (Decoy Effect).</li>
+                    </ul>
+                    <h3>Value-Based Pricing (மதிப்பு சார்ந்த விலை)</h3>
+                    <p>சாஃப்ட்வேரை உருவாக்க எவ்வளவு செலவானது என்பதை வைத்து விலை வைக்கக் கூடாது. வாடிக்கையாளருக்கு அதனால் எவ்வளவு லாபம் என்பதை வைத்து விலை வைக்க வேண்டும். உங்கள் ₹500 சாஃப்ட்வேர் ஒரு நிறுவனத்திற்கு ₹10,000 மிச்சப்படுத்துகிறது என்றால், நீங்கள் மிகக் குறைந்த விலைக்கு விற்கிறீர்கள் என்று அர்த்தம்.</p>
+                    ${generatePromptBox('Pricing Strategy Simulator', 'AI Prompt: "நாம் ஒரு AI மூலம் SEO கட்டுரை எழுதும் B2B சாஃப்ட்வேரை மாதம் $50-க்கு விற்கிறோம். இதை மாற்றி, அவர்கள் பயன்படுத்தும் அளவைப் பொருத்து (Usage-based value metric) பணம் வசூலிக்கும் முறைக்கு (உ-ம்: எத்தனை வார்த்தைகள் எழுதினார்கள் அல்லது எவ்வளவு ட்ராஃபிக் வந்தது) மாற்றுவதற்கான ஒரு திட்டத்தை எழுது. இது ஏன் இரு தரப்புக்கும் லாபம் என விளக்கு."')}`
+            },
+            { 
+                id: 25, icon: "🌅", img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
+                title_en: "25. Product Sunset, Pivots, and Lifecycle Management", title_ta: "25. ப்ராடக்ட்டை முடிவுக்குக் கொண்டுவருதல் (Sunset) & திசை திருப்புதல் (Pivots)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A strategic pivot is realizing your luxury cruise ship is sinking, so you break apart the wooden decks to build highly profitable lifeboats. Sunsetting is gracefully taking an old, rusting ship out of service before the engine explodes mid-voyage.</div>
+                    <p>We conclude this Masterclass with the hardest decisions a PM makes: killing a feature, killing a product, or fundamentally changing the company's direction. Great PMs know when to stop building.</p>
+                    <h3>The Strategic Pivot</h3>
+                    <p>If the market changes or the MVP proves your initial vision wrong, you must pivot. A pivot is a change in strategy without a change in vision. <b>Slack</b> started as a video game called Glitch. The game failed, but the internal chat tool the developers built to communicate was amazing. They pivoted, killed the game, and sold the chat tool. That is a brilliant pivot.</p>
+                    <h3>Sunsetting a Product (End of Life)</h3>
+                    <p>Legacy features cost money to maintain (Technical Debt) and clutter the UX. If a feature is only used by 1% of users, it must be sunset.</p>
+                    <p>Sunsetting is a delicate operation. You cannot just delete a feature overnight. You must:</p>
+                    <ul>
+                        <li><b>Communicate Early:</b> Give users 60-90 days' notice.</li>
+                        <li><b>Provide an Export Path:</b> Allow users to download their data securely so they do not feel held hostage.</li>
+                        <li><b>Offer an Alternative:</b> Recommend a competitor or a newer version of your tool.</li>
+                    </ul>
+                    <p>Saying "No" to the past is just as important as saying "No" to the future. By sunsetting the old, you free up your engineering team to build the next massive innovation.</p>
+                    ${generatePromptBox('Sunsetting Communication Plan', 'Prompt: "Act as a VP of Product. We are sunsetting our legacy \'Desktop App\' in 90 days to force all users onto our new, faster \'Web App\'. 5% of our enterprise clients still use the Desktop App and will be very angry. Write an empathetic, professional email to these enterprise users announcing the sunset, explaining the \'Why\' (better security, faster updates on the web), and outlining the 90-day transition plan."')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பிவட் (Pivot) என்பது, நீங்கள் செல்லும் சொகுசுக் கப்பல் மூழ்கும்போது, அதன் மரப்பலகைகளை உடைத்து அதிக விலைக்குப் போகும் லைஃப்-போட்டுகளை (Lifeboats) உருவாக்குவது. சன்செட் (Sunset) என்பது, துருப்பிடித்த பழைய கப்பல் நடுக்கடலில் வெடிப்பதற்கு முன், அதை மரியாதையாகச் சேவையிலிருந்து விலக்குவது.</div>
+                    <p>இந்த மாஸ்டர்கிளாஸின் இறுதிக் கட்டத்திற்கு வந்துவிட்டோம். ஒரு PM எடுக்கும் மிகக் கடினமான முடிவு: ஒரு அம்சத்தை அழிப்பது, ஒரு ப்ராடக்ட்டை மூடுவது அல்லது கம்பெனியின் திசையை முற்றிலும் மாற்றுவது.</p>
+                    <h3>பிவட் (Strategic Pivot)</h3>
+                    <p>சந்தை மாறினாலோ அல்லது உங்கள் ஐடியா தோற்றாலோ, திசையை மாற்ற வேண்டும் (Pivot). <b>Slack</b> நிறுவனம் ஆரம்பத்தில் ஒரு வீடியோ கேமாகத்தான் (Glitch) தொடங்கியது. கேம் தோல்வியடைந்தது, ஆனால் அதை உருவாக்கப் பயன்படுத்திய சாட்டிங் (Chat) டூல் நன்றாக இருந்தது. கேமை மூடிவிட்டு சாட்டிங் டூலை விற்கத் தொடங்கினார்கள். இதுவே மிகச் சிறந்த பிவட்.</p>
+                    <h3>சன்செட் (Sunsetting a Product)</h3>
+                    <p>பழைய அம்சங்களை வைத்துக்கொண்டே இருந்தால், அதை மெயின்டெய்ன் செய்ய அதிகப் பணம் செலவாகும் (Technical Debt). 1% மக்கள் மட்டுமே பயன்படுத்தும் அம்சத்தை நிரந்தரமாக அழிக்க வேண்டும்.</p>
+                    <p>ஆனால் அதை ஒரே இரவில் அழித்துவிட முடியாது:</p>
+                    <ul>
+                        <li><b>முன்கூட்டியே சொல்லுங்கள்:</b> 60-90 நாட்களுக்கு முன்பே வாடிக்கையாளர்களுக்கு நோட்டீஸ் அனுப்ப வேண்டும்.</li>
+                        <li><b>டேட்டா பேக்கப்:</b> அவர்கள் தங்கள் டேட்டாவை டவுன்லோட் செய்துகொள்ள வழிவகை செய்ய வேண்டும்.</li>
+                        <li><b>மாற்று வழி:</b> புதிய வெர்ஷனையோ அல்லது மாற்று வழியையோ பரிந்துரைக்க வேண்டும்.</li>
+                    </ul>
+                    <p>பழைய குப்பைகளை அழித்தால்தான், இன்ஜினியர்களால் புதிய எதிர்காலத்தை உருவாக்க முடியும்!</p>
+                    ${generatePromptBox('Sunsetting Communication Plan', 'AI Prompt: "நாம் நமது பழைய \'Desktop App\'-ஐ 90 நாட்களில் மூடிவிட்டு, அனைவரையும் புதிய \'Web App\'-க்கு மாற்றப் போகிறோம். இதைப் பயன்படுத்தும் 5% கார்ப்பரேட் வாடிக்கையாளர்கள் மிகவும் கோபப்படுவார்கள். அவர்களுக்கு இதைக் கண்ணியமாகத் தெரிவிக்கும் ஒரு ஈமெயில் எழுது. ஏன் மூடுகிறோம் (சிறந்த வேகம், பாதுகாப்பு), மற்றும் 90 நாள் பிளான் என்ன என்பதை விளக்கமாக எழுது."')}`
+            }
+        ];
+
+        // ==========================================
+        // 10-QUESTION QUIZ (PRODUCT MANAGEMENT)
+        // ==========================================
+        const quizData = [
+            { q: "What is the primary role of a Product Manager?", opts: ["A) To write all the code for the product.", "B) To act as the boss of the engineering team.", "C) To sit at the intersection of business, technology, and user experience, guiding the product to success.", "D) To manage the company's social media accounts."], ans: 2 },
+            { q: "Which prioritization framework uses the formula: (Reach × Impact × Confidence) ÷ Effort?", opts: ["A) MoSCoW", "B) RICE", "C) Kano Model", "D) Agile"], ans: 1 },
+            { q: "What does \"MVP\" stand for in product management?", opts: ["A) Maximum Value Pricing", "B) Minimum Viable Product", "C) Most Valuable Player", "D) Minimum Visual Prototype"], ans: 1 },
+            { q: "In Agile Scrum methodology, what is the purpose of a \"Retrospective\"?", opts: ["A) To plan what features will be built in the next year.", "B) To present the final product to the CEO.", "C) To review the past sprint, discuss what went well, what failed, and how the team can improve their process.", "D) To assign story points to new backlog items."], ans: 2 },
+            { q: "What is the correct format for a standard User Story?", opts: ["A) \"Build feature X by Tuesday.\"", "B) \"As a [user type], I want to [action], so that [benefit/value].\"", "C) \"The system must load in under 2 seconds.\"", "D) \"If the user clicks this, then show that.\""], ans: 1 },
+            { q: "Which metric is considered a \"Vanity Metric\"?", opts: ["A) Monthly Recurring Revenue (MRR)", "B) Customer Churn Rate", "C) Total registered accounts (including inactive users)", "D) Daily Active Users (DAU)"], ans: 2 },
+            { q: "In the MoSCoW prioritization method, what does the \"S\" stand for?", opts: ["A) Standard", "B) Scalable", "C) Should have", "D) Sprint"], ans: 2 },
+            { q: "What is the primary goal of a Go-To-Market (GTM) strategy?", opts: ["A) To write the backend database code.", "B) To successfully launch a product to the right audience, with the right messaging, at the right time.", "C) To calculate the technical debt of the engineering team.", "D) To design the user interface wireframes."], ans: 1 },
+            { q: "What is \"Technical Debt\"?", opts: ["A) The money a startup owes to its investors.", "B) The cost of hosting a product on cloud servers like AWS.", "C) The implied cost of future rework caused by choosing an easy, fast solution now instead of a better approach that would take longer.", "D) The budget allocated for buying new laptops for the engineering team."], ans: 2 },
+            { q: "What is the core philosophy behind Product-Led Growth (PLG)?", opts: ["A) Relying entirely on a massive sales team to close enterprise deals.", "B) Spending 90% of the budget on Google and Meta Ads.", "C) Using the product itself as the primary driver of user acquisition, retention, and expansion.", "D) Keeping the product entirely free forever."], ans: 2 }
+        ];
+
+        // ==========================================
+        // UI & ROUTING
+        // ==========================================
+        window.setContentLang = (lang) => {
+            window.stopTTS(); 
+            contentLang = lang;
+            document.getElementById('btn-en').className = `lang-btn ${lang === 'en' ? 'active' : ''}`;
+            document.getElementById('btn-ta').className = `lang-btn ${lang === 'ta' ? 'active' : ''}`;
+            
+            const mod = courseData.find(m => m.id === viewingModuleId);
+            const imgEl = document.getElementById('viewer-img');
+            imgEl.style.display = 'block'; 
+            imgEl.src = mod.img;
+            document.getElementById('viewer-title').innerText = lang === 'en' ? mod.title_en : mod.title_ta;
+            document.getElementById('viewer-content').innerHTML = lang === 'en' ? mod.content_en : mod.content_ta;
+        };
+
+        document.getElementById('primary-auth-btn').onclick = async () => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch(error) {
+                console.error("Login Error:", error);
+                showToast("Sign In Failed: " + error.message);
+            }
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const photoUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=random`;
+                document.getElementById('nav-profile').innerHTML = `<img src="${photoUrl}" alt="Profile" style="width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; box-shadow: var(--shadow-sm);">`;
+                document.getElementById('nav-profile').style.display = 'flex';
+                
+                try {
+                    const docSnap = await getDoc(doc(db, "users", user.uid));
+                    if (docSnap.exists()) {
+                        currentUserData = docSnap.data();
+                        
+                        let dbNeedsUpdate = false;
+                        
+                        if (!currentUserData.courses) {
+                            currentUserData.courses = {};
+                            dbNeedsUpdate = true;
+                        }
+                        if (!currentUserData.courses[CURRENT_COURSE_ID]) {
+                            currentUserData.courses[CURRENT_COURSE_ID] = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
+                            dbNeedsUpdate = true;
+                        }
+                        
+                        if (dbNeedsUpdate) {
+                            try {
+                                await setDoc(doc(db, "users", user.uid), { 
+                                    courses: {
+                                        [CURRENT_COURSE_ID]: currentUserData.courses[CURRENT_COURSE_ID]
+                                    }
+                                }, { merge: true });
+                            } catch(e) { console.error("Auto-init save error:", e); }
+                        }
+                        
+                        routeUser(true);
+                    } else {
+                        currentUserData = { 
+                            fullName: "",
+                            whatsappNumber: "",
+                            courses: {
+                                [CURRENT_COURSE_ID]: { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false }
+                            }
+                        };
+                        showScreen('profile-screen', true);
+                    }
+                } catch (error) {
+                    console.error("Firestore read error:", error);
+                    currentUserData = { courses: { [CURRENT_COURSE_ID]: { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false } } };
+                    showScreen('profile-screen', true);
+                }
+            } else {
+                document.getElementById('nav-profile').style.display = 'none';
+                showScreen('login-screen', true);
+            }
+        });
+
+        function routeUser(pushHistory = true) {
+            if (!currentUserData.fullName) return showScreen('profile-screen', pushHistory);
+            if (currentUserData.courses[CURRENT_COURSE_ID].paymentStatus !== 'paid') return showScreen('payment-screen', pushHistory);
+            
+            if (currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                showCertificate();
+                return showScreen('cert-screen', pushHistory);
+            }
+            
+            renderDashboard();
+            showScreen('dashboard-screen', pushHistory);
+        }
+
+        // ==========================================
+        // FORMS & PROGRESS
+        // ==========================================
+        document.getElementById('save-profile-btn').onclick = async () => {
+            const name = document.getElementById('prof-name').value;
+            const wa = document.getElementById('prof-wa').value;
+            if(!name || !wa) return showToast("Name and WhatsApp required!");
+
+            currentUserData.fullName = name;
+            currentUserData.whatsappNumber = wa;
+            
+            if (!currentUserData.courses) currentUserData.courses = {};
+            if (!currentUserData.courses[CURRENT_COURSE_ID]) {
+                currentUserData.courses[CURRENT_COURSE_ID] = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
+            }
+            
+            try {
+                await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
+            } catch(e) { console.error("Profile save error:", e); }
+            
+            routeUser(true);
+        };
+
+        document.getElementById('pay-razorpay-btn').onclick = async () => {
+            const user = auth.currentUser;
+            if (!user) return showToast("Please sign in first.");
+
+            const btn = document.getElementById('pay-razorpay-btn');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "Initializing Secure Gateway...";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('https://goolearn-payment.hf.space/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        userId: user.uid,
+                        courseId: CURRENT_COURSE_ID 
+                    })
+                });
+                
+                if (!response.ok) throw new Error("Order creation failed on backend");
+                const orderData = await response.json();
+
+                const options = {
+                    "key": "rzp_live_T1HpoAe39yK0FV", 
+                    "amount": orderData.amount, 
+                    "currency": "INR",
+                    "name": "Goorac Learn",
+                    "description": "Unlock Product Management Masterclass",
+                    "order_id": orderData.id, 
+                    "handler": async function (response) {
+                        showToast("Payment Successful! Unlocking curriculum...");
+                        
+                        currentUserData.courses[CURRENT_COURSE_ID].paymentStatus = 'paid';
+                        
+                        try {
+                            await setDoc(doc(db, "users", user.uid), { 
+                                courses: {
+                                    [CURRENT_COURSE_ID]: { paymentStatus: 'paid' }
+                                }
+                            }, { merge: true });
+                        } catch(e) { console.warn("Local sync skipped, relying fully on webhook."); }
+                        
+                        routeUser(true);
+                    },
+                    "prefill": {
+                        "name": currentUserData.fullName || "",
+                        "contact": currentUserData.whatsappNumber || ""
+                    },
+                    "theme": { 
+                        "color": "#059669"
+                    },
+                    "modal": {
+                        "ondismiss": function(){
+                            btn.innerText = originalText;
+                            btn.disabled = false;
+                        }
+                    }
+                };
+
+                const rzp = new window.Razorpay(options);
+                
+                rzp.on('payment.failed', function (response){
+                    showToast("Payment Failed: " + response.error.description);
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                });
+                
+                rzp.open();
+
+            } catch (error) {
+                console.error("Payment initiation failed:", error);
+                showToast("Could not connect to payment gateway. Try again.");
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        };
+
+        function renderDashboard() {
+            const container = document.getElementById('module-list-container');
+            container.innerHTML = '';
+            
+            let progressMod = currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+            if(progressMod > 25) progressMod = 25;
+            const percentage = Math.round(((progressMod - 1) / 25) * 100);
+            
+            if (currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                document.getElementById('progress-bar').style.width = '100%';
+                document.getElementById('progress-text').innerText = '100% - Certified';
+            } else {
+                document.getElementById('progress-bar').style.width = percentage + '%';
+                document.getElementById('progress-text').innerText = percentage + '%';
+            }
+
+            courseData.forEach(mod => {
+                const isCompleted = mod.id < currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+                const isUnlocked = mod.id <= currentUserData.courses[CURRENT_COURSE_ID].currentModule || currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz;
+                
+                container.innerHTML += `
+                    <div class="module-item ${isUnlocked ? '' : 'locked'} ${isCompleted ? 'completed' : ''}" onclick="${isUnlocked ? `loadModule(${mod.id})` : ''}">
+                        <div class="mod-icon">${mod.icon}</div>
+                        <div class="mod-details">
+                            <div class="mod-title">${mod.title_en}</div>
+                            <div class="mod-status">${isCompleted ? '✅ Completed' : (isUnlocked ? '📖 Ready' : '🔒 Locked')}</div>
+                        </div>
+                    </div>`;
+            });
+
+            if (currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                document.getElementById('quiz-unlock-banner').style.display = 'none';
+                document.getElementById('certificate-access-banner').style.display = 'block';
+            } else if (currentUserData.courses[CURRENT_COURSE_ID].currentModule > 25) {
+                document.getElementById('quiz-unlock-banner').style.display = 'block';
+                document.getElementById('certificate-access-banner').style.display = 'none';
+            } else {
+                document.getElementById('quiz-unlock-banner').style.display = 'none';
+                document.getElementById('certificate-access-banner').style.display = 'none';
+            }
+        }
+
+        window.loadModule = (id) => {
+            viewingModuleId = id;
+            setContentLang(contentLang);
+            const btn = document.getElementById('mark-complete-btn');
+            
+            if (id === currentUserData.courses[CURRENT_COURSE_ID].currentModule && !currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                btn.style.display = 'flex';
+                btn.innerText = id === 25 ? "Finish Curriculum & Take Exam" : "Mark Completed & Next";
+                btn.onclick = async () => {
+                    window.stopTTS();
+                    viewingModuleId = currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+                    currentUserData.courses[CURRENT_COURSE_ID].currentModule += 1;
+                    
+                    renderDashboard();
+                    
+                    try {
+                        await setDoc(doc(db, "users", auth.currentUser.uid), { 
+                            courses: {
+                                [CURRENT_COURSE_ID]: { currentModule: currentUserData.courses[CURRENT_COURSE_ID].currentModule }
+                            }
+                        }, { merge: true });
+                    } catch(e) { console.error("Progress save error:", e); }
+                    
+                    showToast("Module Completed!");
+                    if (id < 25) {
+                        loadModule(id + 1); 
+                        window.scrollTo(0,0);
+                    } else {
+                        routeUser(true);
+                    }
+                };
+            } else if (id < currentUserData.courses[CURRENT_COURSE_ID].currentModule || currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                btn.style.display = 'flex';
+                btn.innerText = id === 25 ? "Back to Dashboard" : "Next Module";
+                btn.onclick = () => {
+                    window.stopTTS();
+                    if (id === 25) { 
+                        goToDashboard(); 
+                    } else { 
+                        loadModule(id + 1); 
+                        window.scrollTo(0,0); 
+                    }
+                };
+            } else { 
+                btn.style.display = 'none'; 
+            }
+            const isAlreadyViewing = document.getElementById('module-viewer-screen').classList.contains('active-screen');
+            showScreen('module-viewer-screen', !isAlreadyViewing); 
+        }
+
+        // ==========================================
+        // QUIZ & CERTIFICATE
+        // ==========================================
+        document.getElementById('start-quiz-btn').onclick = () => {
+            const qc = document.getElementById('quiz-container');
+            qc.innerHTML = quizData.map((q, i) => `
+                <div class="quiz-question">
+                    <h3>${i+1}. ${q.q}</h3>
+                    ${q.opts.map((opt, oIdx) => `
+                        <label class="quiz-option">
+                            <input type="radio" name="q${i}" value="${oIdx}">
+                            ${opt}
+                        </label>
+                    `).join('')}
+                </div>
+            `).join('');
+            showScreen('quiz-screen', true);
+        };
+
+        document.getElementById('submit-quiz-btn').onclick = async () => {
+            let score = 0;
+            quizData.forEach((q, i) => {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if(selected && parseInt(selected.value) === q.ans) score++;
+            });
+
+            if (score >= 7) {
+                currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz = true;
+                
+                try {
+                    await setDoc(doc(db, "users", auth.currentUser.uid), { 
+                        courses: {
+                            [CURRENT_COURSE_ID]: { hasPassedQuiz: true }
+                        }
+                    }, { merge: true });
+                } catch(e) { console.error("Exam save error:", e); }
+                
+                showToast("Exam Passed! Generating Certificate...");
+                setTimeout(() => routeUser(true), 1500);
+            } else {
+                showToast(`Score: ${score}/10. You need 7 to pass. Try again!`);
+            }
+        };
+
+        function showCertificate() {
+            if (currentUserData.courses[CURRENT_COURSE_ID].paymentStatus === 'paid') {
+                document.getElementById('cert-pdf-view').style.display = 'block';
+                document.getElementById('cert-name-display').innerText = currentUserData.fullName;
+                
+                const issueDate = new Date();
+                const formattedDate = issueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                document.getElementById('cert-date-display').innerText = "Issued on: " + formattedDate;
+                
+                const encodedData = encodeURIComponent(`VERIFIED CREDENTIAL\nName: ${currentUserData.fullName}\nCourse: Product Management Masterclass\nIssuer: Goorac Learn (Goorac Corporation)\nDate: ${formattedDate}\nStatus: VERIFIED`);
+                document.getElementById('cert-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedData}`;
+            }
+        }
+
+        document.getElementById('download-pdf-btn').onclick = () => {
+            const btn = document.getElementById('download-pdf-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Generating PDF...";
+            
+            const element = document.getElementById('printable-cert');
+            const fileName = currentUserData.fullName ? `${currentUserData.fullName.replace(/\s+/g, '_')}_Product_Management_Certificate.pdf` : 'Product_Management_Certificate.pdf';
+            
+            const opt = {
+                margin:       0,
+                filename:     fileName,
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 3, useCORS: true, allowTaint: true, scrollY: 0, scrollX: 0, windowWidth: 1122 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerText = originalText;
+                showToast("PDF Downloaded Successfully!");
+            }).catch(err => {
+                console.error("PDF generation error: ", err);
+                btn.innerText = originalText;
+                showToast("Error generating PDF");
+            });
+        };
+
+        try {
+            history.replaceState({ screen: 'splash-screen' }, '', '#splash-screen');
+        } catch(e) {
+            console.warn("History API prevented:", e);
+        }
+    </script>
+</body>
+</html>
