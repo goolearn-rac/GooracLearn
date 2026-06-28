@@ -31,12 +31,13 @@ service cloud.firestore {
       
       // CREATE: Checks the payload when a brand new user signs up
       allow create: if isOwner(userId) &&
-        request.resource.data.keys().hasOnly(['fullName', 'whatsappNumber', 'courses']) &&
+        request.resource.data.keys().hasOnly(['fullName', 'whatsappNumber', 'collegeName', 'degree', 'dob', 'courses']) &&
         (
           !('courses' in request.resource.data) || 
           (
             isCourseSecure('prompt-engineering', {}, request.resource.data.courses) &&
-            isCourseSecure('python', {}, request.resource.data.courses)
+            isCourseSecure('python', {}, request.resource.data.courses) &&
+            isCourseSecure('internship', {}, request.resource.data.courses)
             // Add new courses here for Create if needed in the future
           )
         );
@@ -44,11 +45,12 @@ service cloud.firestore {
       // UPDATE: Runs every time they complete a module
       allow update: if isAdmin() || (
         isOwner(userId) && 
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['fullName', 'whatsappNumber', 'courses']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['fullName', 'whatsappNumber', 'collegeName', 'degree', 'dob', 'courses']) &&
         
         // WE CHECK EACH COURSE MANUALLY (This replaces the broken loop)
         isCourseSecure('prompt-engineering', resource.data.get('courses', {}), request.resource.data.get('courses', {})) &&
-        isCourseSecure('python', resource.data.get('courses', {}), request.resource.data.get('courses', {}))
+        isCourseSecure('python', resource.data.get('courses', {}), request.resource.data.get('courses', {})) &&
+        isCourseSecure('internship', resource.data.get('courses', {}), request.resource.data.get('courses', {}))
         
         // 🚀 WHEN YOU ADD JAVA, JUST ADD THIS LINE BELOW:
         // && isCourseSecure('java', resource.data.get('courses', {}), request.resource.data.get('courses', {}))
