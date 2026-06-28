@@ -585,6 +585,31 @@
             }
         };
 
+        // ADVANCED MODULE SELECTION MUTATOR
+        window.updateModule = async (uid, courseId, selectElement) => {
+            const newModule = parseInt(selectElement.value, 10);
+            selectElement.disabled = true; 
+
+            try {
+                // Safely target the currentModule specific to the course ID
+                await updateDoc(doc(db, "users", uid), { 
+                    [`courses.${courseId}.currentModule`]: newModule 
+                });
+                
+                // Update Local UI State cache instantly
+                const userIndex = allUsers.findIndex(u => u.uid === uid);
+                if (userIndex > -1 && allUsers[userIndex].courses[courseId]) {
+                    allUsers[userIndex].courses[courseId].currentModule = newModule;
+                }
+                
+            } catch (error) {
+                alert("Database module state update failure.");
+                console.error(error);
+            } finally {
+                selectElement.disabled = false;
+            }
+        };
+
         // Status Elements Color Palette Synthesizer
         function updateSelectStyle(el, status) {
             if(status === 'paid') { el.className = "status-select bg-success"; }
@@ -634,17 +659,30 @@
                     const course = user.courses[courseId];
                     const courseName = courseId.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()); // Formats "prompt-engineering" to "Prompt Engineering"
                     
-                    let currentModVal = course.currentModule || 0;
-                    if(currentModVal > 25) currentModVal = 25;
+                    let currentModVal = course.currentModule || 1;
+                    if(currentModVal > 11) currentModVal = 11;
                     
                     let isCertified = course.hasPassedQuiz === true || course.hasPassedQuiz === "true";
                     let selectClass = course.paymentStatus === 'paid' ? "status-select bg-success" : "status-select bg-neutral";
                     
+                    let moduleOptions = '';
+                    for(let i=1; i<=11; i++) {
+                        let label = i <= 10 ? `Task ${i}` : `Completed`;
+                        let selected = currentModVal == i ? 'selected' : '';
+                        moduleOptions += `<option value="${i}" ${selected}>${label}</option>`;
+                    }
+
                     coursesDetailHTML += `
                         <div style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; margin-bottom: 10px;">
                             <div style="font-weight: 700; color: var(--primary); margin-bottom: 12px; font-size: 1.1rem;">${courseName}</div>
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
-                                <div><span class="modal-label">Progress</span><br><span class="modal-value"><b>${currentModVal}</b> / 25</span></div>
+                                <div>
+                                    <span class="modal-label">Progress</span><br>
+                                    <select class="status-select bg-neutral" style="width: 100%; padding: 6px; font-size: 0.9rem; margin-top: 4px;" onchange="updateModule('${user.uid}', '${courseId}', this)">
+                                        ${moduleOptions}
+                                    </select> 
+                                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Out of 10 Tasks</div>
+                                </div>
                                 <div><span class="modal-label">Certification</span><br>${isCertified ? '<span class="badge bg-success">🏆 Certified</span>' : '<span class="badge bg-neutral">Pending</span>'}</div>
                             </div>
                             <div>
@@ -733,14 +771,27 @@
                         const course = user.courses[courseId];
                         const courseName = courseId.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
                         
-                        let currentModVal = course.currentModule || 0;
-                        if(currentModVal > 25) currentModVal = 25;
+                        let currentModVal = course.currentModule || 1;
+                        if(currentModVal > 11) currentModVal = 11;
                         
                         let isCertified = course.hasPassedQuiz === true || course.hasPassedQuiz === "true";
                         
+                        let moduleOptions = '';
+                        for(let i=1; i<=11; i++) {
+                            let label = i <= 10 ? `Task ${i}` : `Completed`;
+                            let selected = currentModVal == i ? 'selected' : '';
+                            moduleOptions += `<option value="${i}" ${selected}>${label}</option>`;
+                        }
+
                         // Desktop Stack Rows
                         coursesHTML += `<div style="margin-bottom: 12px; font-weight: 600; color: var(--primary); font-size: 0.85rem;">${courseName}</div>`;
-                        progressHTML += `<div style="margin-bottom: 12px; font-size: 0.85rem;"><b>${currentModVal}</b> / 25</div>`;
+                        progressHTML += `
+                            <div style="margin-bottom: 12px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
+                                <select class="status-select bg-neutral" style="width: 110px; padding: 4px 20px 4px 8px; font-size: 0.8rem;" onchange="updateModule('${user.uid}', '${courseId}', this)">
+                                    ${moduleOptions}
+                                </select> 
+                                <span style="color: var(--text-muted);">/ 10</span>
+                            </div>`;
                         quizHTML += `<div style="margin-bottom: 12px;">${isCertified ? '<span class="badge bg-success">🏆 Certified</span>' : '<span class="badge bg-neutral">Pending</span>'}</div>`;
                         
                         let selectClass = course.paymentStatus === 'paid' ? "status-select bg-success" : "status-select bg-neutral";
