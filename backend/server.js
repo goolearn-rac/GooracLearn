@@ -53,7 +53,9 @@ const coursePrices = {
     "data-analytics": 14900,     // ₹149.00 (Example for future)
     "hr-management": 19900,     // ₹199.00 (Example for future)
     "digital-marketing": 19900, // ₹199.00
-    "default": 14900             // Fallback safeguard
+    "cyber-security": 24900,    // ₹249.00
+    "internship": 24900,        // ₹249.00
+    "default": 14900            // Fallback safeguard
 };
 
 /**
