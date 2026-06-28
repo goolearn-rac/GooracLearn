@@ -55,6 +55,7 @@ const coursePrices = {
     "digital-marketing": 19900,   // ₹199.00
     "cyber-security": 24900,      // ₹249.00
     "product-management": 24900,  // ₹249.00
+    "cloud-computing": 29900,     //₹299.00
     "default": 14900              // Fallback safeguard
 };
 
