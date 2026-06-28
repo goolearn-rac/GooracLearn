@@ -591,15 +591,18 @@
             selectElement.disabled = true; 
 
             try {
-                // Safely target the currentModule specific to the course ID
+                // Safely target the currentModule specific to the course ID using template literal strings
+                // FIX APPLIED: Reset lastCompletedAt to 0 alongside the module update to bypass the 3-day time lock
                 await updateDoc(doc(db, "users", uid), { 
-                    [`courses.${courseId}.currentModule`]: newModule 
+                    [`courses.${courseId}.currentModule`]: newModule,
+                    [`courses.${courseId}.lastCompletedAt`]: 0
                 });
                 
                 // Update Local UI State cache instantly
                 const userIndex = allUsers.findIndex(u => u.uid === uid);
                 if (userIndex > -1 && allUsers[userIndex].courses[courseId]) {
                     allUsers[userIndex].courses[courseId].currentModule = newModule;
+                    allUsers[userIndex].courses[courseId].lastCompletedAt = 0;
                 }
                 
             } catch (error) {
