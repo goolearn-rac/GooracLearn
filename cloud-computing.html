@@ -2,477 +2,569 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloud Computing Masterclass | Goorac Learn</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta name="title" content="Advanced Cloud Computing | Goorac Learn">
+    <meta name="description" content="Master the future of Cloud Computing with Goorac Learn. Bridge the gap between basic IT and professional cloud architecture with our 25-module certification course.">
+    <meta name="keywords" content="Cloud Computing, Cloud Certification, Goorac Learn, Goorac Corporation, AWS, Google Cloud, Azure, DevOps, Kubernetes">
+    <meta name="author" content="Goorac Corporation">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.yourwebsite.com/index.html"> 
+    <meta property="og:title" content="Advanced Cloud Computing | Goorac Learn">
+    <meta property="og:description" content="A flagship educational certification initiative from Goorac Corporation. Learn the scalable, automated methods used by elite cloud architects to build enterprise infrastructure.">
+    <meta property="og:image" content="https://www.yourwebsite.com/icon.png"> 
+    <meta property="og:image:secure_url" content="https://www.yourwebsite.com/icon.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Goorac Learn">
+
+    <meta property="twitter:card" content="summary_large_image"> 
+    <meta property="twitter:url" content="https://www.yourwebsite.com/index.html"> 
+    <meta property="twitter:title" content="Advanced Cloud Computing | Goorac Learn">
+    <meta property="twitter:description" content="A flagship educational certification initiative from Goorac Corporation. Learn the scalable, automated methods used by elite cloud architects to build enterprise infrastructure.">
+    <meta property="twitter:image" content="https://www.yourwebsite.com/icon.png"> 
+    <title>Advanced Cloud Computing | Goorac Learn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
+        /* Premium SaaS Theme Variables - Emerald & Midnight Blue */
         :root {
             --bg-color: #f8fafc;
             --surface-color: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
             --primary: #059669; /* Emerald Green */
-            --primary-hover: #047857; /* Darker Emerald */
-            --secondary: #10b981;
+            --primary-hover: #047857;
             --border-color: #e2e8f0;
+            --code-bg: #0f172a; /* Midnight Blue */
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 8px;
             --radius-lg: 12px;
             --radius-xl: 16px;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #020617; /* Deep Midnight Blue */
+                --surface-color: #0f172a;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --border-color: #1e293b;
+                --code-bg: #000000;
+            }
+        }
+
+        /* Global Reset */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: var(--bg-color); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; line-height: 1.6;
+            -webkit-font-smoothing: antialiased; overflow-x: hidden;
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        /* Typography & Utilities */
+        h1, h2, h3 { font-weight: 800; line-height: 1.2; letter-spacing: -0.5px; }
+        p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 20px; }
+        .text-primary { color: var(--primary); }
+        .text-center { text-align: center; }
         
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; width: 100%; }
+        .section { padding: 80px 0; }
 
-        a { text-decoration: none; }
-
-        /* Navbar */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 5%;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: var(--shadow-sm);
+        /* Navigation */
+        .top-nav {
+            background-color: rgba(var(--surface-color), 0.9); border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); backdrop-filter: blur(10px);
         }
-
-        .brand {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--primary);
-            letter-spacing: -0.5px;
-        }
-        .brand span { color: var(--text-main); }
-
-        .btn {
-            background-color: var(--primary);
-            color: white;
-            padding: 14px 28px;
-            border-radius: var(--radius-lg);
-            font-weight: 600;
-            font-size: 1rem;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-md);
-        }
-        .btn:hover { background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-        .btn-outline {
-            background: transparent;
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            box-shadow: none;
-        }
-        .btn-outline:hover { background: var(--bg-color); transform: none; }
+        .brand { font-size: 22px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; text-decoration: none; display: flex; align-items: center; gap: 10px;}
+        .brand-logo { width: 32px; height: 32px; border-radius: 8px; box-shadow: var(--shadow-sm); }
+        .nav-link { color: var(--text-main); font-weight: 600; text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+        .nav-link:hover { color: var(--primary); }
 
         /* Hero Section */
-        .hero {
-            padding: 120px 5%;
-            text-align: center;
-            background: radial-gradient(circle at 50% -20%, #ecfdf5 0%, #f8fafc 100%);
-            position: relative;
-            overflow: hidden;
+        .hero { text-align: center; padding: 100px 20px 60px; }
+        .hero-logo { width: 100px; height: 100px; border-radius: 50%; box-shadow: var(--shadow-lg); margin-bottom: 24px; border: 4px solid var(--surface-color); }
+        /* Adjusted font size clamp for the longer text to fit gracefully */
+        .hero h1 { font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 16px; color: var(--text-main); }
+        .hero p { max-width: 600px; margin: 0 auto 32px; font-size: 1.2rem; }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+            background-color: var(--primary); color: white; border: none; text-decoration: none;
+            border-radius: var(--radius-lg); padding: 16px 32px; font-size: 1.1rem;
+            font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px 0 rgba(5, 150, 105, 0.39);
         }
-        .hero-badge {
-            background: rgba(5, 150, 105, 0.1);
-            color: var(--primary);
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            display: inline-block;
-            margin-bottom: 24px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4.5rem);
-            font-weight: 800;
-            margin-bottom: 24px;
-            color: var(--text-main);
-            line-height: 1.15;
-            letter-spacing: -1.5px;
-            max-width: 1000px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .hero h1 span { color: var(--primary); }
-        .hero p {
-            font-size: clamp(1.1rem, 2vw, 1.3rem);
-            color: var(--text-muted);
-            max-width: 700px;
-            margin: 0 auto 40px;
-        }
-        .hero-images {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 40px;
-            opacity: 0.7;
-        }
-        .hero-images img { height: 40px; object-fit: contain; }
+        .btn:hover { background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4); }
+        .btn:active { transform: translateY(0); }
 
-        /* Features */
-        .features {
-            padding: 100px 5%;
-            background: var(--surface-color);
-        }
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        /* Trusted By Section */
+        .trusted-section { padding: 40px 0; background: var(--surface-color); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); text-align: center; }
+        .trusted-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); font-weight: 700; margin-bottom: 24px; }
+        .logo-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 40px; opacity: 0.7; filter: grayscale(100%); transition: 0.3s; }
+        .logo-grid:hover { filter: grayscale(0%); opacity: 1; }
+        .logo-grid img { height: 28px; object-fit: contain; }
+
+        /* Features Grid */
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 40px; }
         .feature-card {
-            background: var(--bg-color);
-            padding: 40px;
-            border-radius: var(--radius-xl);
-            border: 1px solid var(--border-color);
-            transition: 0.3s;
+            background: var(--surface-color); border-radius: var(--radius-xl); padding: 32px;
+            border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s;
         }
-        .feature-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
-        .feature-icon {
-            font-size: 40px;
-            margin-bottom: 20px;
-            background: var(--surface-color);
-            width: 70px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 16px;
-            box-shadow: var(--shadow-sm);
-        }
-        .feature-card h3 { font-size: 1.4rem; margin-bottom: 12px; }
-        .feature-card p { color: var(--text-muted); }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--primary); }
+        .icon-wrapper { width: 56px; height: 56px; background: rgba(5, 150, 105, 0.1); color: var(--primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+        .icon-wrapper svg { width: 28px; height: 28px; }
+        .feature-card h3 { font-size: 1.25rem; margin-bottom: 12px; }
+        .feature-card p { font-size: 0.95rem; margin-bottom: 0; }
 
-        /* Modules Overview */
-        .modules-section {
-            padding: 100px 5%;
-        }
-        .section-header {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 60px;
-        }
-        .section-header h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; }
-        .section-header p { color: var(--text-muted); font-size: 1.1rem; }
-        
-        .modules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .module-item {
-            background: var(--surface-color);
-            padding: 24px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            transition: 0.2s;
-        }
-        .module-item:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
-        .module-num {
-            background: rgba(5, 150, 105, 0.1);
-            color: var(--primary);
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            flex-shrink: 0;
-            font-size: 1.1rem;
-        }
-        .module-details h4 { font-size: 1.05rem; margin-bottom: 6px; color: var(--text-main); }
-        .module-details p { font-size: 0.9rem; color: var(--text-muted); margin: 0; line-height: 1.4; }
+        /* Curriculum Table */
+        .table-wrapper { background: var(--surface-color); border-radius: var(--radius-xl); border: 1px solid var(--border-color); overflow: hidden; box-shadow: var(--shadow-md); margin-top: 40px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: rgba(5, 150, 105, 0.05); padding: 16px 24px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--primary); letter-spacing: 0.05em; border-bottom: 1px solid var(--border-color); }
+        td { padding: 20px 24px; font-size: 0.95rem; border-bottom: 1px solid var(--border-color); color: var(--text-main); font-weight: 500; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: var(--bg-color); }
+        .module-num { font-family: 'JetBrains Mono', monospace; color: var(--text-muted); font-size: 0.85rem; margin-right: 12px; font-weight: 600; }
 
-        /* Certification Section */
-        .cert-section {
-            padding: 100px 5%;
-            background: var(--surface-color);
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 60px;
-            flex-wrap: wrap;
+        /* Pricing Section */
+        .pricing-card {
+            background: var(--surface-color); border-radius: var(--radius-xl); padding: 40px;
+            border: 2px solid var(--primary); box-shadow: var(--shadow-lg);
+            max-width: 450px; margin: 40px auto 0; text-align: center; position: relative;
         }
-        .cert-text { max-width: 500px; }
-        .cert-text h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; letter-spacing: -1px;}
-        .cert-text p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 30px; }
-        .cert-text ul { list-style: none; margin-bottom: 30px; }
-        .cert-text li { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-weight: 600; color: var(--text-main);}
-        .cert-text li svg { color: var(--primary); }
-        .cert-image { 
-            background: var(--bg-color); 
-            padding: 20px; 
-            border-radius: var(--radius-xl); 
-            border: 1px solid var(--border-color); 
-            box-shadow: var(--shadow-lg);
-            max-width: 500px;
-            width: 100%;
+        .pricing-card::before {
+            content: "Most Popular"; position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+            background: var(--primary); color: white; font-size: 0.8rem; font-weight: 700;
+            padding: 4px 16px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px;
         }
-
-        /* Pricing */
-        .pricing {
-            padding: 120px 5%;
-            text-align: center;
-            background: #0f172a;
-            color: white;
-            position: relative;
-        }
-        .pricing::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at 50% 0%, rgba(5, 150, 105, 0.2) 0%, transparent 70%);
-            pointer-events: none;
-        }
-        .pricing-header { position: relative; z-index: 2; margin-bottom: 50px; }
-        .pricing-header h2 { font-size: clamp(2.5rem, 4vw, 3.5rem); margin-bottom: 16px; letter-spacing: -1px; }
-        .pricing-header p { color: #94a3b8; font-size: 1.2rem; }
-        
-        .price-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 50px;
-            border-radius: 24px;
-            max-width: 450px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-        .price-badge {
-            background: var(--primary);
-            color: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-        .price {
-            font-size: 4.5rem;
-            font-weight: 800;
-            color: white;
-            margin: 10px 0 30px;
-            line-height: 1;
-        }
-        .price span { font-size: 1.2rem; color: #94a3b8; font-weight: 500; }
-        
-        .price-features {
-            text-align: left;
-            margin-bottom: 40px;
-            list-style: none;
-        }
-        .price-features li {
-            margin-bottom: 16px;
-            font-size: 1.05rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #cbd5e1;
-        }
-        .btn-large {
-            font-size: 1.1rem;
-            padding: 20px 40px;
-            width: 100%;
-            border-radius: 12px;
-        }
-        .guarantee {
-            margin-top: 20px;
-            font-size: 0.85rem;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
+        .pricing-header h3 { font-size: 1.4rem; margin-bottom: 12px; }
+        .price { font-size: 3.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; line-height: 1; }
+        .price span { font-size: 1rem; color: var(--text-muted); font-weight: 500; }
+        .pricing-header p { font-size: 0.95rem; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 24px; }
+        .pricing-features { list-style: none; text-align: left; margin-bottom: 32px; }
+        .pricing-features li { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; font-size: 1rem; font-weight: 500; }
+        .pricing-features li svg { color: var(--primary); flex-shrink: 0; }
 
         /* Footer */
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            background: #020617;
-            color: #475569;
-            font-size: 0.9rem;
-        }
+        footer { background: var(--code-bg); color: #94a3b8; padding: 40px 20px; text-align: center; margin-top: auto; }
+        .footer-brand { font-size: 1.5rem; font-weight: 800; color: white; margin-bottom: 10px; display: inline-block; }
+        .footer-brand span { color: var(--primary); }
+        .footer-links { display: flex; justify-content: center; gap: 24px; margin: 20px 0; }
+        .footer-links a { color: #cbd5e1; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; cursor: pointer; }
+        .footer-links a:hover { color: white; }
+        .copyright { font-size: 0.85rem; opacity: 0.7; }
 
-        @media (max-width: 768px) {
-            .modules-grid { grid-template-columns: 1fr; }
-            .cert-section { flex-direction: column; text-align: center; }
-            .cert-text li { justify-content: center; }
-            .price-card { padding: 30px 20px; }
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: var(--surface-color); border-radius: var(--radius-xl);
+            width: 90%; max-width: 700px; max-height: 85vh;
+            box-shadow: var(--shadow-lg); display: flex; flex-direction: column;
+            transform: translateY(20px); transition: all 0.3s ease;
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .modal-header {
+            padding: 24px; border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-header h2 { font-size: 1.5rem; margin: 0; color: var(--text-main); }
+        .close-modal {
+            background: none; border: none; color: var(--text-muted); cursor: pointer;
+            font-size: 1.8rem; line-height: 1; transition: color 0.2s;
+        }
+        .close-modal:hover { color: var(--primary); }
+        .modal-body {
+            padding: 24px; overflow-y: auto; color: var(--text-muted); font-size: 0.95rem; text-align: left;
+        }
+        .modal-body h3 { color: var(--text-main); font-size: 1.1rem; margin: 24px 0 12px; }
+        .modal-body p { margin-bottom: 16px; font-size: 0.95rem; }
+        .modal-body ul { margin-left: 20px; margin-bottom: 16px; }
+        .modal-body li { margin-bottom: 8px; }
+        .modal-body strong { color: var(--text-main); }
+        
+        /* --- ADDED: IG/Browser Detection Modal Styles --- */
+        #igBrowserModal .modal-content { max-width: 400px; text-align: center; padding: 40px 24px; align-items: center;}
+        .browser-icon { width: 56px; height: 56px; margin-bottom: 20px; color: #4285F4; background: rgba(66, 133, 244, 0.1); padding: 12px; border-radius: 50%;}
+        .chrome-btn {
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            background-color: #4285F4; color: white; border: none; border-radius: var(--radius-lg);
+            padding: 16px 24px; font-weight: 700; font-size: 1.05rem; cursor: pointer; text-decoration: none;
+            margin-top: 24px; width: 100%; transition: all 0.2s; box-shadow: 0 4px 14px 0 rgba(66, 133, 244, 0.39);
+        }
+        .chrome-btn:hover { background-color: #3367D6; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4); }
+        .chrome-btn svg { width: 22px; height: 22px; }
+
+        /* --- NEW: IG/Browser Top Banner Styles --- */
+        #igBrowserBanner {
+            display: none;
+            background-color: #4285F4;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 0.95rem;
+            position: sticky;
+            top: 0;
+            z-index: 1001; /* Above modal overlays if any */
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            box-shadow: var(--shadow-md);
+        }
+        #igBrowserBanner.active {
+            display: flex;
+            animation: slideDown 0.3s ease-out forwards;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+        .banner-text { flex-grow: 1; text-align: left; }
+        .banner-btn {
+            background: white;
+            color: #4285F4;
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.2s;
+        }
+        .banner-btn:hover { background: #f8fafc; }
+        .dismiss-banner {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.5rem;
+            line-height: 1;
+            opacity: 0.8;
+            padding: 0 5px;
+            transition: opacity 0.2s;
+        }
+        .dismiss-banner:hover { opacity: 1; }
+
+        @media (max-width: 600px) {
+            #igBrowserBanner { flex-direction: column; gap: 10px; text-align: center; }
+            .banner-text { text-align: center; }
+            .dismiss-banner { position: absolute; top: 10px; right: 10px; }
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="brand">Goorac <span>Learn</span></div>
-        <a href="cloudcomputing.html" class="btn">Login / Start Learning</a>
-    </nav>
+    <div id="igBrowserBanner">
+        <span class="banner-text"><strong>Action Required:</strong> Instagram's browser restricts enrollment. Open in Chrome for the best experience.</span>
+        <button onclick="forceOpenChrome()" class="banner-btn">Open in Chrome</button>
+        <button onclick="dismissBanner()" class="dismiss-banner">&times;</button>
+    </div>
 
-    <section class="hero">
-        <div class="hero-badge">New Curriculum 2026</div>
-        <h1>Master <span>Cloud Computing</span> from Scratch</h1>
-        <p>A comprehensive 25-module journey. Learn AWS, Google Cloud, Azure, DevOps, Kubernetes, and Serverless architecture. From absolute beginner to certified professional.</p>
-        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-            <a href="cloudcomputing.html" class="btn" style="padding: 16px 32px; font-size: 1.1rem;">Enroll in Masterclass</a>
-            <a href="#modules" class="btn btn-outline" style="padding: 16px 32px; font-size: 1.1rem;">View Curriculum</a>
-        </div>
-        
-        <div class="hero-images">
-            <span style="font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 10px;">
-                Learn technologies from: 
-                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg" alt="Google Cloud">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/Microsoft_Azure_Logo.svg" alt="Azure">
-            </span>
+    <header class="hero container">
+        <img src="icon.png" alt="Goorac Logo" class="hero-logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23059669\'/><text x=\'50\' y=\'65\' font-size=\'50\' font-family=\'sans-serif\' font-weight=\'bold\' fill=\'white\' text-anchor=\'middle\'>G</text></svg>'">
+        <h1>Master the Future of <br><span class="text-primary">Cloud Computing</span></h1>
+        <p>A flagship educational certification initiative from <strong>Goorac Corporation</strong>. We bridge the gap between basic IT and professional cloud architecture.</p>
+        <a href="cloudcomputing.html" class="btn">
+            Enroll in Certificate Course
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+        </a>
+    </header>
+
+    <section class="trusted-section">
+        <div class="container">
+            <div class="trusted-label">Curriculum Backed & Recognized By</div>
+            <div class="logo-grid">
+                <img src="images/google.png" alt="Google" onerror="this.style.display='none'">
+                <img src="images/amazon.png" alt="Amazon" onerror="this.style.display='none'">
+                <img src="images/microsoft.png" alt="Microsoft" onerror="this.style.display='none'">
+                <img src="images/zoho.png" alt="Zoho" onerror="this.style.display='none'">
+                
+                <span style="font-weight: 800; font-size: 1.2rem; color: var(--text-main);">Google</span>
+                <span style="font-weight: 800; font-size: 1.2rem; color: var(--text-main);">Amazon</span>
+                <span style="font-weight: 800; font-size: 1.2rem; color: var(--text-main);">Microsoft</span>
+                <span style="font-weight: 800; font-size: 1.2rem; color: var(--text-main);">Zoho</span>
+            </div>
         </div>
     </section>
 
-    <section class="features">
+    <section class="section container">
+        <h2 class="text-center">Cloud Computing Course Highlights</h2>
+        <p class="text-center" style="max-width: 600px; margin: 0 auto;">Move beyond basic web hosting. Learn the scalable, automated methods used by elite cloud architects to build enterprise infrastructure and earn your verified credentials.</p>
+        
         <div class="features-grid">
             <div class="feature-card">
-                <div class="feature-icon">☁️</div>
-                <h3>Multi-Cloud Mastery</h3>
-                <p>Don't get locked into one vendor. Learn to architect scalable solutions across Amazon Web Services (AWS), Google Cloud Platform (GCP), and Microsoft Azure.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🐳</div>
-                <h3>Modern DevOps</h3>
-                <p>Master containerization with Docker and container orchestration with Kubernetes. Build automated CI/CD pipelines and deploy code like a Senior Engineer.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🏗️</div>
-                <h3>Infrastructure as Code</h3>
-                <p>Stop clicking through dashboards. Learn HashiCorp Terraform to write declarative code that instantly provisions massive cloud environments safely.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="modules" class="modules-section">
-        <div class="section-header">
-            <h2>The 25-Module Masterclass</h2>
-            <p>Carefully structured to take you from foundational concepts to advanced enterprise architecture.</p>
-        </div>
-        
-        <div class="modules-grid">
-            <div class="module-item"><div class="module-num">1</div><div class="module-details"><h4>The Cloud Paradigm Shift</h4><p>On-premise vs Cloud, CapEx vs OpEx.</p></div></div>
-            <div class="module-item"><div class="module-num">2</div><div class="module-details"><h4>Cloud Service Models</h4><p>Deep dive into IaaS, PaaS, and SaaS.</p></div></div>
-            <div class="module-item"><div class="module-num">3</div><div class="module-details"><h4>Global Infrastructure</h4><p>Regions, Availability Zones & Edge Locations.</p></div></div>
-            <div class="module-item"><div class="module-num">4</div><div class="module-details"><h4>Identity & Access (IAM)</h4><p>Users, Roles, Policies, and Least Privilege.</p></div></div>
-            <div class="module-item"><div class="module-num">5</div><div class="module-details"><h4>Virtual Compute Basics</h4><p>Provisioning EC2, Compute Engine, Azure VMs.</p></div></div>
-            <div class="module-item"><div class="module-num">6</div><div class="module-details"><h4>Cloud Networking (VPC)</h4><p>Subnets, Routing Tables, and NAT Gateways.</p></div></div>
-            <div class="module-item"><div class="module-num">7</div><div class="module-details"><h4>Storage Paradigms</h4><p>Block (EBS), File (EFS), and Object (S3) Storage.</p></div></div>
-            <div class="module-item"><div class="module-num">8</div><div class="module-details"><h4>Managed SQL Databases</h4><p>Amazon RDS, High Availability, and Read Replicas.</p></div></div>
-            <div class="module-item"><div class="module-num">9</div><div class="module-details"><h4>NoSQL & High-Performance</h4><p>DynamoDB, Firestore, and Horizontal Scaling.</p></div></div>
-            <div class="module-item"><div class="module-num">10</div><div class="module-details"><h4>Content Delivery (CDNs)</h4><p>Global caching with CloudFront and Cloudflare.</p></div></div>
-            <div class="module-item"><div class="module-num">11</div><div class="module-details"><h4>Elasticity & Auto-Scaling</h4><p>Handling massive traffic spikes automatically.</p></div></div>
-            <div class="module-item"><div class="module-num">12</div><div class="module-details"><h4>Application Decoupling</h4><p>Message Queues (SQS) and Notifications (SNS).</p></div></div>
-            <div class="module-item"><div class="module-num">13</div><div class="module-details"><h4>Serverless Computing</h4><p>Mastering AWS Lambda and Event-driven triggers.</p></div></div>
-            <div class="module-item"><div class="module-num">14</div><div class="module-details"><h4>Containerization</h4><p>Packaging apps consistently using Docker.</p></div></div>
-            <div class="module-item"><div class="module-num">15</div><div class="module-details"><h4>Container Orchestration</h4><p>Managing clusters globally with Kubernetes (K8s).</p></div></div>
-            <div class="module-item"><div class="module-num">16</div><div class="module-details"><h4>Infrastructure as Code</h4><p>Automating deployments with Terraform.</p></div></div>
-            <div class="module-item"><div class="module-num">17</div><div class="module-details"><h4>CI/CD Pipelines</h4><p>Continuous Integration and automated releases.</p></div></div>
-            <div class="module-item"><div class="module-num">18</div><div class="module-details"><h4>Monitoring & Observability</h4><p>CloudWatch, Logs, Metrics, and Tracing.</p></div></div>
-            <div class="module-item"><div class="module-num">19</div><div class="module-details"><h4>Advanced Security & WAF</h4><p>Web App Firewalls, Encryption, and Zero Trust.</p></div></div>
-            <div class="module-item"><div class="module-num">20</div><div class="module-details"><h4>Disaster Recovery</h4><p>Multi-region Active-Active failover architectures.</p></div></div>
-            <div class="module-item"><div class="module-num">21</div><div class="module-details"><h4>Big Data & Analytics</h4><p>Data Lakes, Redshift, and Serverless querying.</p></div></div>
-            <div class="module-item"><div class="module-num">22</div><div class="module-details"><h4>AI & Machine Learning</h4><p>Pre-trained APIs, SageMaker, and GenAI models.</p></div></div>
-            <div class="module-item"><div class="module-num">23</div><div class="module-details"><h4>Hybrid Cloud Networks</h4><p>Site-to-Site VPNs and AWS Direct Connect.</p></div></div>
-            <div class="module-item"><div class="module-num">24</div><div class="module-details"><h4>Cost Optimization (FinOps)</h4><p>Stopping waste, Spot Instances, and Billing Alarms.</p></div></div>
-            <div class="module-item"><div class="module-num">25</div><div class="module-details"><h4>Future Trends</h4><p>Agnostic design and enterprise multi-cloud strategies.</p></div></div>
-        </div>
-    </section>
-
-    <section class="cert-section">
-        <div class="cert-text">
-            <h2>Official Professional Certification</h2>
-            <p>Upon completing all 25 modules and passing the final 10-question exam (70% passing grade), you will immediately receive a verified, high-resolution digital certificate.</p>
-            <ul>
-                <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> High-Resolution PDF Download</li>
-                <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> QR Code Verification embedded</li>
-                <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Perfect for LinkedIn & Resumes</li>
-            </ul>
-        </div>
-        <div class="cert-image">
-            <div style="border: 4px double var(--primary); padding: 30px; text-align: center; background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); position: relative; overflow: hidden;">
-                <div style="font-family: 'Playfair Display', serif; font-size: 2rem; color: #1e293b; font-weight: 800; margin-bottom: 5px;">Goorac Learn</div>
-                <div style="font-size: 0.7rem; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 20px;">Certificate of Professional Mastery</div>
-                <div style="font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; border-bottom: 2px solid var(--primary); display: inline-block; padding-bottom: 5px; margin-bottom: 15px; color: #047857;">Your Name Here</div>
-                <div style="font-size: 0.85rem; color: #475569; margin-bottom: 20px;">has successfully completed all 25 advanced modules and passed the comprehensive final examination for the<br><strong style="font-size: 1.1rem; color: #0f172a; display: block; margin-top: 5px;">Cloud Computing Masterclass</strong></div>
-                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px;">
-                    <div style="width: 50px; height: 50px; border: 2px solid #fff; box-shadow: var(--shadow-sm); background: #e2e8f0;"></div>
-                    <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.5rem; font-weight: bold; text-align: center; border: 2px dashed white;">OFFICIAL<br>SEAL</div>
-                    <div style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem; border-bottom: 1px solid #cbd5e1;">Signature</div>
+                <div class="icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" /></svg>
                 </div>
+                <h3>Multi-Cloud Mastery</h3>
+                <p>Learn to design robust, highly available architectures across AWS, Google Cloud, and Microsoft Azure.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                </div>
+                <h3>Modern DevOps</h3>
+                <p>Command modern tools to deploy automated CI/CD pipelines, Docker containers, and Kubernetes orchestration.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                </div>
+                <h3>Official Certification</h3>
+                <p>Pass the final 10-question exam to earn a verifiable, multi-color digital certificate backed by the Goorac Corporation.</p>
             </div>
         </div>
     </section>
 
-    <section class="pricing">
-        <div class="pricing-header">
-            <h2>Unlock Your Cloud Career</h2>
-            <p>Stop watching scattered tutorials. Get the complete, structured blueprint.</p>
-        </div>
+    <section class="section container" style="padding-top: 0;">
+        <h2 class="text-center">Comprehensive 25-Module Curriculum</h2>
         
-        <div class="price-card">
-            <div class="price-badge">Lifetime Access</div>
-            <div class="price">₹299 <span>/ one-time</span></div>
-            
-            <ul class="price-features">
-                <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> All 25 In-Depth Modules</li>
-                <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Architecture Templates & CLI Scripts</li>
-                <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Code Boxes & Analogies</li>
-                <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Text-to-Speech Audio Mode</li>
-                <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Final Exam & Verified Certificate</li>
-                <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Free Future Updates</li>
-            </ul>
-            
-            <a href="cloudcomputing.html" class="btn btn-large">Start Learning Now</a>
-            
-            <div class="guarantee">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                Secure Checkout via Razorpay
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Key Topics Covered</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="module-num">01-05</span> Cloud Foundations & Core Concepts</td>
+                        <td>IaaS/PaaS/SaaS, Global Infrastructure, IAM, and Virtual Compute.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="module-num">06-10</span> Storage, Networking & Databases</td>
+                        <td>VPCs, Subnets, Object Storage, Managed SQL, NoSQL, and CDNs.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="module-num">11-15</span> Modern Architecture & Scalability</td>
+                        <td>Auto-Scaling, Message Queues, Serverless, Docker, and Kubernetes.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="module-num">16-20</span> DevOps, Security & Automation</td>
+                        <td>Terraform (IaC), CI/CD, Cloud Monitoring, WAF, and Disaster Recovery.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="module-num">21-25</span> Professional & Enterprise Strategies</td>
+                        <td>Big Data, AI/ML Services, Hybrid Cloud, FinOps, and Multi-Cloud.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section container" style="padding-top: 0;">
+        <h2 class="text-center">Simple, Transparent Pricing</h2>
+        <p class="text-center" style="max-width: 600px; margin: 0 auto;">Invest in your future with full access to our comprehensive cloud computing certification.</p>
+        
+        <div class="pricing-card">
+            <div class="pricing-header">
+                <h3>Full Certification Course</h3>
+                <div class="price">₹299<span> / one-time</span></div>
+                <p>Lifetime access to all 25 modules and updates.</p>
             </div>
+            <ul class="pricing-features">
+                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> 25 Comprehensive Modules</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> Official Verifiable Certificate</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> Real-world Architecture Projects</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> Lifetime Access & Updates</li>
+            </ul>
+            <a href="cloudcomputing.html" class="btn" style="width: 100%;">Enroll Now for ₹299</a>
         </div>
     </section>
 
     <footer>
-        <div style="font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 10px;">Goorac <span style="color: var(--primary);">Learn</span></div>
-        <p>© 2026 Goorac Corporation. All rights reserved.</p>
-        <p style="margin-top: 10px; font-size: 0.8rem;">AWS, Google Cloud, and Azure are trademarks of their respective owners. This course is independently produced.</p>
+        <div class="footer-brand">Goorac <span>Learn</span></div>
+        <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 0;">Empowering the next generation of cloud architects.</p>
+        
+        <div class="footer-links">
+            <a href="cloudcomputing.html">Course Access</a>
+            <a onclick="openModal('privacyModal')">Privacy Policy</a>
+            <a onclick="openModal('termsModal')">Terms of Service</a>
+        </div>
+        
+        <div class="copyright">
+            &copy; <span id="year"></span> Goorac Corporation. All rights reserved.
+        </div>
     </footer>
 
+    <div id="privacyModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Privacy Policy</h2>
+                <button class="close-modal" onclick="closeModal('privacyModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Effective Date:</strong> January 1, 2024</p>
+                <p>Goorac Corporation ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use the Goorac Learn platform.</p>
+                
+                <h3>1. Information We Collect</h3>
+                <p>We may collect personal information that you voluntarily provide to us when you register for the Advanced Cloud Computing Course, express an interest in obtaining information about us, or otherwise contact us. This includes:</p>
+                <ul>
+                    <li><strong>Personal Data:</strong> Name, email address, billing address, and payment information.</li>
+                    <li><strong>Usage Data:</strong> Course progress, quiz scores, and interaction times on our platform.</li>
+                </ul>
+
+                <h3>2. How We Use Your Information</h3>
+                <p>Having accurate information about you permits us to provide you with a smooth, efficient, and customized experience. Specifically, we may use your information to:</p>
+                <ul>
+                    <li>Process transactions and generate your digital certificate upon course completion.</li>
+                    <li>Email you regarding your account, course updates, and new cloud curriculum additions.</li>
+                    <li>Monitor and analyze usage and trends to improve your experience.</li>
+                </ul>
+
+                <h3>3. Data Security</h3>
+                <p>We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable.</p>
+
+                <h3>4. Contact Us</h3>
+                <p>If you have questions or comments about this Privacy Policy, please contact us at legal@goorac.com.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="termsModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Terms of Service</h2>
+                <button class="close-modal" onclick="closeModal('termsModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Last Updated:</strong> January 1, 2024</p>
+                <p>Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the Goorac Learn website operated by Goorac Corporation.</p>
+                
+                <h3>1. Acceptance of Terms</h3>
+                <p>By accessing or using our platform, you agree to be bound by these Terms. If you disagree with any part of the terms, then you may not access the course material or certification system.</p>
+
+                <h3>2. Intellectual Property License</h3>
+                <p>Upon enrollment, Goorac Corporation grants you a revocable, non-exclusive, non-transferable, limited license to access and view the course content for your personal, non-commercial educational purposes. You may not:</p>
+                <ul>
+                    <li>Reproduce, duplicate, copy, sell, or resell any part of the curriculum.</li>
+                    <li>Share your login credentials with unauthorized third parties.</li>
+                    <li>Reverse engineer the certification exam mechanism.</li>
+                </ul>
+
+                <h3>3. User Conduct</h3>
+                <p>You agree to use the platform only for lawful purposes. You are prohibited from using the site to engage in any prompt injection attacks against our systems, scraping data, or violating the security of any computer network.</p>
+
+                <h3>4. Limitation of Liability</h3>
+                <p>In no event shall Goorac Corporation, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.</p>
+
+                <h3>5. Governing Law</h3>
+                <p>These Terms shall be governed and construed in accordance with the laws of the jurisdiction in which Goorac Corporation is registered, without regard to its conflict of law provisions.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="igBrowserModal" class="modal-overlay">
+        <div class="modal-content">
+            <svg class="browser-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 10a3 3 0 106 0m-6 0a3 3 0 116 0m-6 0H3m15 0h-3m-6 4v5m0-5v-5" />
+            </svg>
+            <h2 style="font-size: 1.4rem; margin-bottom: 8px; color: var(--text-main);">For the Best Experience</h2>
+            <p style="font-size: 1rem; color: var(--text-muted); margin-bottom: 24px;">Instagram's built-in browser might restrict enrollment. Please open this page in Google Chrome.</p>
+            <button onclick="forceOpenChrome()" class="chrome-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.844 5.372a.5.5 0 0 1-.397.608l-1.92.384a.5.5 0 1 1-.192-.98l1.32-.264-1.28-1.28A6.97 6.97 0 0 0 8 1.018a6.97 6.97 0 0 0-4.938 2.052L4.01 4.02l.264 1.32a.5.5 0 0 1-.98.192l-.384-1.92a.5.5 0 0 1 .608-.608l1.92.384 1.28-1.28A8.02 8.02 0 0 1 8 0c2.21 0 4.21.896 5.662 2.348l1.28 1.28 1.28-1.28a.5.5 0 0 1 .808.536l-1.12 5.6a.5.5 0 0 1-.58.39l-5.6-1.12a.5.5 0 0 1 .192-.98l1.32.264-1.28-1.28A6.97 6.97 0 0 0 8 1.018a6.97 6.97 0 0 0-4.938 2.052l1.28 1.28.264-1.32a.5.5 0 1 1 .98.192l-.384 1.92a.5.5 0 0 1-.608.608l-1.92-.384a.5.5 0 1 1 .192-.98l1.32-.264 1.28-1.28A8.02 8.02 0 0 1 8 0a8.02 8.02 0 0 1 5.662 2.348z"/>
+                </svg>
+                Open in Chrome
+            </button>
+            <p style="font-size: 0.85rem; margin-top: 20px; margin-bottom: 0; color: var(--text-muted);">
+                Or tap the <strong>3 dots</strong> (top right) and select<br><strong>"Open in system browser"</strong>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Automatically set the current copyright year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Modal Logic
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = ''; // Restore background scrolling
+        }
+
+        // Close modal when clicking outside the modal content
+        window.onclick = function(event) {
+            // Note: Preventing click-outside for IG modal so they don't accidentally close it
+            if (event.target.classList.contains('modal-overlay') && event.target.id !== 'igBrowserModal') {
+                event.target.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // --- NEW: Dismiss banner logic ---
+        function dismissBanner() {
+            document.getElementById('igBrowserBanner').classList.remove('active');
+        }
+
+        // --- ADDED: Instagram Detection & Auto-Redirect Logic ---
+        function isInstagramBrowser() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            return (ua.indexOf('Instagram') > -1);
+        }
+
+        function forceOpenChrome() {
+            const currentUrl = window.location.href;
+            const isAndroid = /android/i.test(navigator.userAgent);
+            const isIOS = /ipad|iphone|ipod/i.test(navigator.userAgent);
+
+            if (isAndroid) {
+                // Uses Android Intent to force open Chrome
+                const intentUrl = `intent://${window.location.host}${window.location.pathname}${window.location.search}#Intent;scheme=https;package=com.android.chrome;end;`;
+                window.location.href = intentUrl;
+            } else if (isIOS) {
+                // Uses googlechrome:// scheme for iOS devices
+                const iosUrl = currentUrl.replace(/^https?:\/\//i, 'googlechrome://');
+                window.location.href = iosUrl;
+            } else {
+                window.open(currentUrl, '_blank');
+            }
+        }
+
+        // Check on load
+        window.addEventListener('load', function() {
+            if (isInstagramBrowser()) {
+                // NEW: Show top banner instead of the intrusive modal
+                document.getElementById('igBrowserBanner').classList.add('active');
+
+                // NEW: Intercept clicks on the enroll buttons strictly requiring them to open Chrome
+                const enrollBtns = document.querySelectorAll('a.btn');
+                enrollBtns.forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault(); // Stop standard link behavior
+                        forceOpenChrome();  // Force open in Chrome instead
+                    });
+                });
+
+                // --- ORIGINAL MODAL LOGIC (Commented out as requested instead of removed) ---
+                // Show the modal
+                // openModal('igBrowserModal');
+                
+                // Try automatically redirecting after 1.5 seconds (fulfills your "auto redirect" requirement)
+                // Note: IG occasionally blocks auto-redirects, which is why the modal is there as a fallback!
+                // setTimeout(forceOpenChrome, 1500); 
+            }
+        });
+    </script>
 </body>
 </html>
