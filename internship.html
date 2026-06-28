@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Goorac Learn | Product Management Internship</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        /* Premium SaaS & App Theme Variables - Emerald/Teal */
+        :root {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #059669; /* Emerald Green */
+            --primary-hover: #047857; /* Darker Emerald */
+            --border-color: #e2e8f0;
+            --success: #10b981;
+            --success-bg: #ecfdf5; 
+            --locked-bg: #f1f5f9;
+            --code-bg: #0f172a; 
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #020617; 
+                --surface-color: #0f172a;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --border-color: #1e293b;
+                --locked-bg: #0b1120;
+                --success-bg: #064e3b; 
+                --code-bg: #000000;
+            }
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: var(--bg-color); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; line-height: 1.6;
+            -webkit-font-smoothing: antialiased; overflow-x: hidden;
+        }
+
+        .top-nav {
+            background-color: var(--surface-color); border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px); background-color: rgba(var(--surface-color), 0.9);
+        }
+        .brand { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; cursor: pointer; }
+
+        .screen { display: none; flex: 1; padding: 30px 20px 80px 20px; max-width: 640px; margin: 0 auto; width: 100%; min-height: 100vh;}
+        .active-screen { display: block; animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(15px); } to { opacity: 1; transform: translateX(0); } }
+
+        #splash-screen.active-screen { display: flex; flex-direction: column; }
+        .spinner { 
+            width: 40px; height: 40px; border: 4px solid var(--border-color); 
+            border-top-color: var(--primary); border-radius: 50%; 
+            animation: spin 1s linear infinite; margin-top: 20px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        h1, h2, h3 { font-weight: 700; margin-bottom: 12px; line-height: 1.2; letter-spacing: -0.5px; }
+        p { margin-bottom: 20px; color: var(--text-muted); font-size: 1.05rem; }
+        
+        .card {
+            background: var(--surface-color); border-radius: var(--radius-xl);
+            border: 1px solid var(--border-color); padding: 24px;
+            box-shadow: var(--shadow-md); margin-bottom: 24px;
+        }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main); }
+        .input-group input, .input-group textarea {
+            width: 100%; padding: 16px; border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); background-color: var(--bg-color); 
+            color: var(--text-main); font-size: 1rem; transition: 0.2s; outline: none;
+            appearance: none; font-family: 'Inter', sans-serif;
+        }
+        .input-group input:focus, .input-group textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); }
+
+        .btn {
+            background-color: var(--primary); color: white; border: none;
+            border-radius: var(--radius-lg); padding: 16px; width: 100%; font-size: 1rem;
+            font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none !important; }
+        .btn:active:not(:disabled) { transform: scale(0.98); } 
+        .btn-success { background-color: var(--success); }
+        .btn-outline { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
+
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
+            text-align: center; border-radius: 30px; padding: 16px 24px;
+            position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%);
+            font-size: 15px; font-weight: 500; box-shadow: var(--shadow-lg);
+            opacity: 0; transition: opacity 0.3s, bottom 0.3s;
+        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
+        .progress-bar-bg { background: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px; margin-bottom: 10px;}
+        .progress-bar-fill { background: var(--primary); height: 100%; width: 0%; transition: width 0.8s ease-out; }
+
+        .module-item {
+            background-color: var(--surface-color); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; transition: 0.2s; box-shadow: var(--shadow-sm);
+        }
+        .module-item:active:not(.locked) { transform: scale(0.98); background: var(--bg-color); }
+        .module-item.locked { background-color: var(--locked-bg); opacity: 0.6; cursor: not-allowed; }
+        .module-item.completed { border-left: 4px solid var(--success); }
+        
+        .mod-icon { font-size: 24px; width: 44px; height: 44px; background: var(--bg-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
+        .mod-details { flex: 1; }
+        .mod-title { font-weight: 600; font-size: 1rem; color: var(--text-main); margin-bottom: 2px; }
+        .mod-status { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
+        .mod-lock-time { font-size: 0.75rem; color: #ef4444; font-weight: 600; margin-top: 2px;}
+
+        .mod-hero-img { width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .content-body h3 { margin-top: 30px; margin-bottom: 15px; font-size: 1.25rem; color: var(--primary); border-bottom: 1px solid var(--border-color); padding-bottom: 5px;}
+        .content-body ul, .content-body ol { margin-bottom: 20px; padding-left: 20px; color: var(--text-muted); }
+        .content-body li { margin-bottom: 10px; }
+        
+        .analogy-box {
+            background: rgba(5, 150, 105, 0.05); border-left: 4px solid var(--primary);
+            padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 24px 0; font-size: 1.05rem; color: var(--text-main);
+        }
+
+        .task-box {
+            background: var(--code-bg); border: 1px solid var(--border-color);
+            padding: 24px; border-radius: var(--radius-lg); margin: 30px 0;
+        }
+        .task-box h3 { color: white; margin-top:0; border-bottom: none; font-size: 1.1rem; }
+        .task-box p { color: #cbd5e1; font-size: 0.95rem; }
+
+        .lang-switch-bar { display: flex; background: var(--locked-bg); padding: 4px; border-radius: 30px; width: fit-content; }
+        .lang-btn { background: transparent; border: none; padding: 8px 24px; border-radius: 20px; cursor: pointer; font-weight: 600; color: var(--text-muted); transition: 0.2s; }
+        .lang-btn.active { background: var(--surface-color); color: var(--primary); box-shadow: var(--shadow-sm); }
+
+        .cert-scroll-container {
+            width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px; border-radius: 12px; background: rgba(0,0,0,0.02);
+            padding: 10px; border: 1px solid var(--border-color);
+        }
+        
+        .certificate-wrapper {
+            background: #ffffff;
+            background-image: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            border: 0px solid transparent; 
+            padding: 50px 60px; 
+            text-align: center;
+            border-radius: 0px; 
+            box-shadow: none; 
+            color: #0f172a;
+            margin: 0 auto;
+            position: relative; 
+            overflow: hidden;
+            width: 100%;
+            min-width: 900px; 
+            max-width: 1122px; 
+            aspect-ratio: 1.414; 
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .certificate-wrapper::before {
+            content: ''; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 6px double #059669; /* Emerald Green */
+            pointer-events: none; z-index: 1;
+        }
+        .certificate-wrapper::after {
+            content: 'PRODUCT'; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: clamp(60px, 15vw, 150px); color: rgba(0,0,0,0.03); font-weight: 900;
+            pointer-events: none; z-index: 0;
+        }
+        .cert-content { z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding-top: 15px;}
+        .cert-header { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4.5vw, 3.2rem); color: #1e293b; margin-bottom: 0; font-weight: 800;}
+        .cert-sub { font-size: clamp(0.7rem, 1.5vw, 1.1rem); color: #059669; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; font-weight: bold; }
+        .cert-name { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4.5vw, 3rem); font-weight: 700; border-bottom: 2px solid #059669; padding-bottom: 8px; margin: 0 auto 15px; display: inline-block; min-width: 60%; color: #047857; line-height: 1.2;}
+        .cert-body { font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #475569; margin-bottom: 10px; max-width: 85%; margin-left: auto; margin-right: auto; line-height: 1.5;}
+        
+        .multi-color-sig { color: #047857; font-weight: 800; }
+
+        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; z-index: 2; position: relative; margin-top: auto; padding-bottom: 15px;}
+        .cert-qr-container { text-align: center; }
+        .cert-qr { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); border: 3px solid #fff; box-shadow: var(--shadow-md); border-radius: 6px; background: white;}
+        .cert-badge { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); background: radial-gradient(circle, #059669, #047857); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: clamp(0.45rem, 0.9vw, 0.65rem); border: 2px dashed white; line-height: 1.2;}
+        .cert-signature-block { text-align: center; }
+        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.2rem, 3vw, 2.2rem); border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 150px; }
+
+        @media print {
+            @page { size: A4 landscape; margin: 0; }
+            body { background: white; margin: 0; }
+            body * { visibility: hidden; }
+            #cert-pdf-view, #cert-pdf-view * { visibility: visible; }
+            #cert-pdf-view { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh;}
+            .cert-scroll-container { border: none; background: transparent; padding: 0; overflow: visible; }
+            .certificate-wrapper { 
+                width: 297mm !important; height: 210mm !important; 
+                margin: 0 !important; border: 0px solid transparent !important; 
+                max-width: none !important; min-width: 0 !important; aspect-ratio: auto !important;
+                -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-shadow: none !important;
+            }
+            .cert-content { padding-top: 0 !important; }
+            .cert-footer { padding-bottom: 0 !important; }
+            .btn { display: none !important; }
+            .top-nav { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast">Message</div>
+
+    <div class="top-nav">
+        <div class="brand" onclick="window.location.href='index.html'">Goorac <span style="color:var(--text-main)">Interns</span></div>
+        <div id="nav-profile" style="display:none; align-items: center; gap: 8px; cursor: pointer;" onclick="window.location.href='profile.html'"></div>
+    </div>
+
+    <div id="splash-screen" class="screen active-screen" style="justify-content: center; align-items: center; text-align: center;">
+        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 20px; border-radius: 50%; box-shadow: var(--shadow-md);">
+        <h1 style="color: var(--primary); margin-bottom: 8px; font-size: 2rem;">Goorac Interns</h1>
+        <p style="color: var(--text-muted); font-weight: 500; font-size: 1rem;">Initializing workspace...</p>
+        <div class="spinner"></div>
+    </div>
+
+    <div id="login-screen" class="screen">
+        <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=800&q=80" alt="Product Management" style="width:100%; height:180px; object-fit:cover; border-radius: var(--radius-xl); margin-bottom: 24px;">
+        <h1 style="font-size: 2.2rem;">Product Management Internship</h1>
+        <p>Join Goorac Corporation as a PM Intern. Complete 10 rigorous real-world tasks, submit your work, and earn your official professional credential.</p>
+        
+        <button id="primary-auth-btn" class="btn" style="background: #0f172a; margin-top: 20px;">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Sign in with Google
+        </button>
+    </div>
+
+    <div id="profile-screen" class="screen">
+        <h2>Intern Onboarding Profile</h2>
+        <p>Please provide your academic details to register for the internship. All fields are mandatory.</p>
+        <div class="card">
+            <div class="input-group">
+                <label>Full Legal Name</label>
+                <input type="text" id="prof-name" placeholder="E.g., Jane Smith">
+            </div>
+            <div class="input-group">
+                <label>College / University Name</label>
+                <input type="text" id="prof-college" placeholder="E.g., Anna University">
+            </div>
+            <div class="input-group">
+                <label>Degree & Specialization</label>
+                <input type="text" id="prof-degree" placeholder="E.g., B.Tech Computer Science">
+            </div>
+            <div class="input-group">
+                <label>Date of Birth</label>
+                <input type="date" id="prof-dob">
+            </div>
+            <div class="input-group">
+                <label>WhatsApp Number</label>
+                <input type="tel" id="prof-wa" placeholder="+91 9876543210">
+            </div>
+            <button id="save-profile-btn" class="btn">Continue</button>
+        </div>
+    </div>
+
+    <div id="interview-screen" class="screen">
+        <h2>Initial Interview Assessment</h2>
+        <p>Before proceeding, please answer these 5 fundamental questions. Your answers will be automatically validated by our system.</p>
+        <div class="card">
+            <div class="input-group">
+                <label>1. Why do you want to be a Product Manager?</label>
+                <textarea id="int-q1" rows="2" placeholder="Type your answer..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>2. What is your favorite tech product and why?</label>
+                <textarea id="int-q2" rows="2" placeholder="Type your answer..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>3. How do you handle disagreements in a team?</label>
+                <textarea id="int-q3" rows="2" placeholder="Type your answer..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>4. Explain the difference between UI and UX.</label>
+                <textarea id="int-q4" rows="2" placeholder="Type your answer..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>5. How would you prioritize features for a new app?</label>
+                <textarea id="int-q5" rows="2" placeholder="Type your answer..."></textarea>
+            </div>
+            
+            <button id="submit-interview-btn" class="btn">Submit Interview</button>
+            
+            <div id="interview-validating" style="display:none; text-align: center; margin-top: 20px;">
+                <div class="spinner" style="margin: 0 auto 10px;"></div>
+                <p style="color: var(--primary); font-weight: 600;">Validating responses...</p>
+            </div>
+            <div id="interview-success" style="display:none; text-align: center; margin-top: 20px; color: var(--success); font-weight: 700; font-size: 1.2rem;">
+                🎉 Assessment Passed! You are selected.
+            </div>
+        </div>
+    </div>
+
+    <div id="payment-screen" class="screen">
+        <h2 style="font-size: 2.2rem; margin-bottom: 10px;">Finalize Registration</h2>
+        <p>You have been selected! Please complete the document handling fee to unlock your internship dashboard.</p>
+        
+        <div class="card" style="text-align: center; border: 2px solid var(--primary); padding: 30px 20px;">
+            <div style="background: var(--success-bg); padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:10px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <h3 style="color: var(--primary); margin-bottom: 5px;">Document Handling Fee</h3>
+                <p style="color: var(--text-main); font-weight: 800; font-size: 2rem; margin:0;">₹149</p>
+            </div>
+            
+            <ul style="text-align: left; margin-bottom: 30px; list-style: none; padding: 0; font-size: 1.05rem;">
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> 10 Practical Industry Modules</li>
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Verified Internship Certificate</li>
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Project Portfolio Building</li>
+            </ul>
+            
+            <button id="pay-razorpay-btn" class="btn" style="font-size: 1.1rem; padding: 18px;">
+                Pay Securely Now
+            </button>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                100% Encrypted & Safe
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard-screen" class="screen">
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600;">
+            <span>Internship Progress</span>
+            <span id="progress-text" style="color: var(--primary);">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+        </div>
+        <div style="margin-top: -5px; margin-bottom: 30px; font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
+            Role: Product Management Intern
+        </div>
+
+        <div id="module-list-container"></div>
+        
+        <div id="certificate-access-banner" style="display:none; margin-top: 30px;">
+            <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
+                <h3 style="color: var(--success);">🏆 Internship Completed</h3>
+                <p style="color: #064e3b; font-size: 0.95rem;">You have successfully completed all 10 modules and earned your certificate.</p>
+                <button onclick="viewCertificate()" class="btn btn-success">View Certificate</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="module-viewer-screen" class="screen">
+        <button onclick="goToDashboard()" style="background:none; border:none; color:var(--text-muted); font-weight:600; cursor:pointer; padding: 0 0 20px 0; display:flex; align-items:center; gap:5px; font-size: 1rem;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"></path></svg> Back
+        </button>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
+            <div class="lang-switch-bar" style="margin-bottom: 0;">
+                <button class="lang-btn active" id="btn-en" onclick="setContentLang('en')">English</button>
+                <button class="lang-btn" id="btn-ta" onclick="setContentLang('ta')">தமிழ்</button>
+            </div>
+            
+            <button id="tts-btn" class="btn btn-outline" style="width: auto; padding: 8px 20px; border-radius: 20px; border-color: var(--primary); color: var(--primary); margin-top: 0; background: var(--success-bg);" onclick="toggleTTS()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5 10v4a2 2 0 002 2h2l4 4V4L9 8H7a2 2 0 00-2 2z"></path></svg>
+                <span id="tts-text">Listen</span>
+            </button>
+        </div>
+
+        <img id="viewer-img" class="mod-hero-img" src="" alt="Module Hero" onerror="this.style.display='none'">
+        <h1 id="viewer-title" style="color: var(--primary); font-size: 1.8rem;"></h1>
+        <div class="content-body" id="viewer-content" style="font-size: 1.05rem; margin-bottom: 20px; color: var(--text-main);"></div>
+        
+        <div class="task-box" id="task-container">
+            <h3>Internship Task</h3>
+            <p id="task-desc"></p>
+            <textarea id="task-input" rows="6" style="width: 100%; margin-top: 15px; padding: 15px; border-radius: 8px; border: 1px solid #475569; background: #1e293b; color: white; font-family: inherit;" placeholder="Type your complete task work here (Min 100 characters)..."></textarea>
+            <button id="mark-complete-btn" class="btn" style="margin-top: 15px; background: white; color: black;">Submit Task & Complete Module</button>
+        </div>
+        
+        <div class="card" id="task-completed-banner" style="display:none; background: var(--success-bg); border-color: var(--success); text-align: center; margin-top: 30px;">
+            <h3 style="color: var(--success); margin: 0;">✅ Task Submitted Successfully</h3>
+            <p style="color: #064e3b; margin-top: 5px; font-size: 0.95rem;">Your work has been recorded. Wait 3 days for the next module.</p>
+        </div>
+    </div>
+
+    <div id="cert-screen" class="screen" style="max-width: 100%;">
+        <div id="cert-pdf-view" style="display:none; width: 100%;">
+            <div class="cert-scroll-container">
+                <div class="certificate-wrapper" id="printable-cert">
+                    <div class="cert-content">
+                        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 55px; height: 55px; object-fit: contain; margin-bottom: 5px; border-radius: 50%; box-shadow: var(--shadow-md);">
+                        
+                        <div class="cert-header">Goorac Interns</div>
+                        <div style="font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">from Goorac Corporation</div>
+                        <div class="cert-sub">Certificate of Internship Completion</div>
+                        <div class="cert-body">This document officially certifies that</div>
+                        
+                        <div class="cert-name" id="cert-name-display">Student Name</div>
+                        
+                        <div class="cert-body" style="margin-bottom: 15px;">
+                            has successfully completed all 10 rigorous practical modules and assessments for the role of<br>
+                            <span style="font-size: 1.3em; font-weight: 800; color: #0f172a; display: inline-block; margin-top: 8px;">Product Management Intern</span>
+                        </div>
+                        
+                        <div class="cert-date" id="cert-date-display" style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #475569; font-size: 0.95rem; background: #f1f5f9; padding: 6px 16px; border-radius: 20px; border: 1px solid #cbd5e1;">Date of Issue</div>
+                        
+                        <div style="margin-top: 15px; border-top: 2px dashed #e2e8f0; padding-top: 10px; width: 100%; max-width: 600px; font-size: 0.75rem; color: #64748b;">
+                            Goorac Corp, 49, Mela St, Maveedupannai, Tamil Nadu 628623
+                        </div>
+                    </div>
+                    
+                    <div class="cert-footer">
+                        <div class="cert-qr-container">
+                            <img id="cert-qr-img" class="cert-qr" src="" alt="Verified QR" crossorigin="anonymous">
+                            <div style="font-size: clamp(0.5rem, 1vw, 0.75rem); color: #10b981; margin-top: 5px; font-weight: 800; letter-spacing: 1px;">✓ VERIFIED</div>
+                        </div>
+                        
+                        <div class="cert-badge">
+                            OFFICIAL<br>INTERN
+                        </div>
+
+                        <div class="cert-signature-block">
+                            <div class="cert-signature multi-color-sig">Director</div>
+                            <div style="font-size: clamp(0.6rem, 1.2vw, 0.9rem); color: #64748b; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Goorac Corporation</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; max-width: 400px; margin: 0 auto;">
+                <button id="download-pdf-btn" class="btn btn-success">Download High-Res PDF</button>
+                <button onclick="goToDashboard()" class="btn btn-outline">Back to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDeXk6z_5mYQZi_xIsQsN935KxuIBxAM3w",
+            authDomain: "gooraclearn.firebaseapp.com",
+            projectId: "gooraclearn",
+            storageBucket: "gooraclearn.firebasestorage.app",
+            messagingSenderId: "221459932053",
+            appId: "1:221459932053:web:af713811da7edd113e0c9c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        const CURRENT_COURSE_ID = "internship"; 
+        const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000; 
+
+        let contentLang = 'en';
+        let currentUserData = null; 
+        let viewingModuleId = 1;
+        let isSpeaking = false; 
+
+        window.showToast = (msg) => {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        };
+
+        window.stopTTS = () => {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            isSpeaking = false;
+            const ttsText = document.getElementById('tts-text');
+            if (ttsText) ttsText.innerText = "Listen";
+        };
+
+        window.toggleTTS = () => {
+            if (!window.speechSynthesis) return showToast("Audio playback not supported on this browser.");
+            
+            if (isSpeaking) {
+                window.stopTTS();
+                return;
+            }
+
+            const title = document.getElementById('viewer-title').innerText;
+            const contentText = document.getElementById('viewer-content').innerText;
+            const fullText = title + ". " + contentText;
+            
+            const utterance = new SpeechSynthesisUtterance(fullText);
+            utterance.lang = contentLang === 'ta' ? 'ta-IN' : 'en-US';
+            utterance.rate = 0.90; 
+
+            utterance.onend = () => {
+                isSpeaking = false;
+                document.getElementById('tts-text').innerText = "Listen";
+            };
+
+            utterance.onerror = (e) => {
+                console.warn("TTS Processing Error", e);
+                window.stopTTS();
+            };
+
+            isSpeaking = true;
+            document.getElementById('tts-text').innerText = "Stop Playing";
+            window.speechSynthesis.speak(utterance);
+        };
+
+        window.showScreen = (screenId, pushHistory = true) => {
+            window.stopTTS(); 
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active-screen'));
+            document.getElementById(screenId).classList.add('active-screen');
+            window.scrollTo(0,0);
+            if(pushHistory) {
+                try {
+                    history.pushState({ screen: screenId }, '', '#' + screenId);
+                } catch(e) {}
+            }
+        };
+
+        window.goBack = () => { 
+            window.stopTTS(); 
+            goToDashboard();
+        };
+        
+        window.addEventListener('popstate', (e) => {
+            window.stopTTS();
+            if(e.state && e.state.screen) showScreen(e.state.screen, false);
+            else if(currentUserData) routeUser(false);
+        });
+
+        window.goToDashboard = () => {
+            renderDashboard();
+            showScreen('dashboard-screen', true);
+        };
+
+        window.viewCertificate = () => {
+            showCertificate();
+            showScreen('cert-screen', true);
+        };
+
+        // ==========================================
+        // 10 PRODUCT MANAGEMENT MODULES
+        // ==========================================
+        const courseData = [
+            { 
+                id: 1, icon: "🧠", img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
+                title_en: "1. The Role of a Product Manager", title_ta: "1. ஒரு Product Manager-இன் வேலை என்ன?", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Think of a Product Manager as the conductor of an orchestra. The conductor doesn't actually play the violin, the drums, or the flute. Their job is to ensure every musician plays together in perfect harmony to create a beautiful song. A PM doesn't code or design, but ensures engineers and designers build the right thing.</div>
+                    <p>Welcome to the Goorac Corporation Product Management Internship. Your journey begins with understanding the core identity of a PM. The PM sits at the exact intersection of Business, Technology, and User Experience (UX). You are the CEO of the product, but you have no direct authority over anyone. You must lead by influence, not by command.</p>
+                    <p>Your primary responsibility is to answer two questions: "What should we build?" and "Why should we build it?" Engineers will answer the "How." If you build a flawless app that nobody wants to use, that is a PM failure, not an engineering failure.</p>
+                    <p>You must constantly balance the needs of the users (they want everything for free) with the needs of the business (Goorac Corp needs to make a profit). This requires deep empathy, strong analytical skills, and the ability to say "No" to 99% of ideas.</p>
+                    <p>Every great product starts with a PRD (Product Requirements Document). This is the master blueprint that explains the problem, the target audience, the features, and the success metrics. It is the single source of truth for the entire team.</p>
+                    <p>In this module, you must shift your mindset from a "Consumer" to a "Creator". You are no longer just using apps; you are analyzing why buttons are placed where they are, and why certain features exist.</p>`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு இசைக்குழுவை (Orchestra) நடத்தும் நபரை நினைத்துக்கொள்ளுங்கள். அவர் வயலின் வாசிக்க மாட்டார், டிரம்ஸ் வாசிக்க மாட்டார். ஆனால் அனைவரும் இணைந்து ஒரே பாடலைச் சரியாக வாசிப்பதை உறுதிசெய்வார். அதுபோலவே, ஒரு PM கோடிங் (Coding) செய்ய மாட்டார், டிசைன் செய்ய மாட்டார். ஆனால் என்ன உருவாக்க வேண்டும் என்பதைத் தீர்மானிப்பார்.</div>
+                    <p>Goorac Corporation-இன் இந்த இன்டர்ன்ஷிப்பிற்கு உங்களை வரவேற்கிறோம். ஒரு Product Manager (PM) என்பவர் பிசினஸ், டெக்னாலஜி மற்றும் வாடிக்கையாளர் அனுபவம் ஆகிய மூன்றிற்கும் மையமாக இருப்பார். நீங்கள் அந்தப் பொருளின் CEO போன்றவர், ஆனால் உங்கள் கீழ் யாரும் வேலை செய்ய மாட்டார்கள். அன்பாலும் திறமையாலுமே நீங்கள் அவர்களை வழிநடத்த வேண்டும்.</p>
+                    <p>"நாம் என்ன உருவாக்க வேண்டும்?" மற்றும் "ஏன் உருவாக்க வேண்டும்?" என்ற இரண்டு கேள்விகளுக்குப் பதில் சொல்வதே உங்கள் வேலை. "எப்படி உருவாக்குவது" என்பதை இன்ஜினியர்கள் பார்த்துக்கொள்வார்கள். மக்கள் விரும்பாத ஒரு பொருளை நீங்கள் உருவாக்கினால், அது உங்கள் தவறுதான்.</p>
+                    <p>வாடிக்கையாளர்களின் ஆசைகளுக்கும் (எல்லாம் இலவசமாக வேண்டும்), பிசினஸின் தேவைக்கும் (நிறுவனத்திற்கு லாபம் வேண்டும்) இடையில் நீங்கள் ஒரு சமநிலையை உருவாக்க வேண்டும். இதற்கு 99% ஐடியாக்களுக்கு "இல்லை" (No) என்று சொல்லும் தைரியம் வேண்டும்.</p>
+                    <p>எந்த ஒரு சிறந்த பொருளும் PRD (Product Requirements Document) என்ற ஆவணத்தில்தான் தொடங்கும். இதுவே பிரச்சனை, வாடிக்கையாளர் மற்றும் தீர்வுகள் அனைத்தையும் விளக்கும் முக்கிய வரைபடமாகும்.</p>
+                    <p>இனி நீங்கள் ஒரு செயலியைப் (App) பயன்படுத்தும்போது, "இந்த பட்டனை ஏன் இங்கு வைத்திருக்கிறார்கள்?" என்று ஆராய்ச்சி செய்யும் மனநிலைக்கு மாற வேண்டும்.</p>`,
+                task_en: "Task: Identify a digital product (like Swiggy or Instagram) that you use daily. Write a short analysis explaining one feature you love, and one feature you think is missing or frustrating. Explain WHY it is frustrating.",
+                task_ta: "டாஸ்க்: நீங்கள் தினமும் பயன்படுத்தும் ஒரு செயலியை (App) தேர்ந்தெடுத்து, அதில் உங்களுக்குப் பிடித்த ஒரு வசதியையும், பிடிக்காத ஒரு வசதியையும் எழுதுங்கள். அது ஏன் பிடிக்கவில்லை என்பதையும் விளக்குங்கள்."
+            },
+            { 
+                id: 2, icon: "🕵️", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
+                title_en: "2. User Research & Empathy", title_ta: "2. வாடிக்கையாளர் ஆராய்ச்சி", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Building a product without user research is like buying a birthday gift for a stranger. You might buy them an expensive watch, but they might be blind. User research is simply asking the stranger what they need before you spend the money.</div>
+                    <p>The foundation of all successful product management is deep user empathy. You are not the user. Your engineers are not the user. You cannot sit in an air-conditioned office at Goorac Corp and guess what a farmer in a rural village needs from an agricultural app.</p>
+                    <p>There are two types of research: Qualitative and Quantitative. Qualitative research answers the "Why". It involves 1-on-1 user interviews, asking open-ended questions. You must listen 80% of the time and speak 20% of the time. Never ask leading questions like "Do you think this app is good?" Ask "Can you show me how you currently solve this problem?"</p>
+                    <p>Quantitative research answers the "What". It involves looking at data, analytics, and sending out large-scale surveys to thousands of people to find statistical trends.</p>
+                    <p>Once you gather this research, you create User Personas. A persona is a fictional character representing a segment of your target audience. For example, "Busy Mom Mary" or "Tech-Savvy Student Sam".</p>
+                    <p>If you skip user research, you will build features based on assumptions. Assumptions lead to wasted engineering time and failed product launches.</p>`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> வாடிக்கையாளர்களைப் பற்றி ஆராயாமல் ஒரு பொருளை உருவாக்குவது, முகம் தெரியாத ஒருவருக்குப் பிறந்தநாள் பரிசு வாங்குவது போன்றது. நீங்கள் விலை உயர்ந்த கடிகாரத்தை வாங்கலாம், ஆனால் அவர் கண் தெரியாதவராக இருக்கலாம்! காசைச் செலவழிக்கும் முன் அவர்களிடம் கேட்பதே யூசர் ரிசர்ச்.</div>
+                    <p>ஒரு சிறந்த PM-ஆக இருக்க, வாடிக்கையாளர்களின் வலியை நீங்கள் முழுமையாக உணர வேண்டும். நீங்கள் வாடிக்கையாளர் இல்லை என்பதை முதலில் புரிந்துகொள்ளுங்கள். Goorac Corp அலுவலகத்தில் அமர்ந்துகொண்டு, ஒரு கிராமத்து விவசாயிக்கு என்ன வேண்டும் என நீங்கள் சுயமாக ஊகிக்கக் கூடாது.</p>
+                    <p>இதில் இரண்டு வகைகள் உள்ளன. Qualitative ஆராய்ச்சி என்பது வாடிக்கையாளர்களிடம் நேரடியாகப் பேசி, "ஏன்" இந்தப் பிரச்சனை வருகிறது எனப் புரிந்துகொள்வது. இதில் நீங்கள் 80% கேட்க வேண்டும், 20% மட்டுமே பேச வேண்டும்.</p>
+                    <p>Quantitative ஆராய்ச்சி என்பது டேட்டா மற்றும் சர்வேக்களை (Surveys) வைத்துப் பல ஆயிரம் பேரின் பழக்கவழக்கங்களைக் கண்டுபிடிப்பது.</p>
+                    <p>இந்த ஆராய்ச்சிகளை முடித்த பின், "User Personas" (வாடிக்கையாளர் மாதிரி) உருவாக்க வேண்டும். இது, உங்கள் வாடிக்கையாளர்களின் குணாதிசயங்களைக் குறிக்கும் ஒரு கற்பனைக் கதாபாத்திரமாகும்.</p>
+                    <p>ஆராய்ச்சி செய்யாமல் நீங்களாகவே ஒரு முடிவுக்கு வந்தால், அது பெரிய தோல்வியில்தான் முடியும்.</p>`,
+                task_en: "Task: Imagine Goorac Corp is building a new app to help college students find internships. Define a brief 'User Persona' for this app. Include their name, age, primary goal, and biggest frustration.",
+                task_ta: "டாஸ்க்: கல்லூரி மாணவர்களுக்கு இன்டர்ன்ஷிப் தேடித்தரும் ஒரு புதிய ஆப்பை Goorac Corp உருவாக்குகிறது என வைத்துக்கொள்வோம். அதற்கான ஒரு User Persona-ஐ (வயது, நோக்கம், அவர்கள் சந்திக்கும் சிரமங்கள்) எழுதுங்கள்."
+            },
+            { 
+                id: 3, icon: "🏃", img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80",
+                title_en: "3. Agile Methodology & Scrums", title_ta: "3. அஜைல் (Agile) வேலை முறை", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> The old way of building (Waterfall) is like ordering a 5-course meal and waiting 2 hours to get everything at once. If the soup is cold, it's too late to fix it. Agile is like a buffet. You take a small plate, eat, see how it tastes, and then go back for what you actually want next.</div>
+                    <p>In modern software companies like Goorac Corp, we do not spend 2 years building a massive product in secret, only to release it and hope people like it. We use the Agile Methodology. Agile is all about speed, flexibility, and continuous iteration.</p>
+                    <p>Instead of building the whole car at once, we first build a skateboard. We give it to the user. If they like it, we add a steering wheel (a scooter). Then a motor (a motorcycle). Finally, a car. This allows us to gather user feedback at every single step.</p>
+                    <p>The most common Agile framework is Scrum. In Scrum, work is broken down into small, 2-week periods called "Sprints". At the beginning of a Sprint, the team decides exactly what small features they can complete in those 14 days.</p>
+                    <p>Every single day, the team holds a "Daily Standup" meeting. It lasts only 15 minutes. Every person answers three questions: What did I do yesterday? What will I do today? Is anything blocking my work?</p>
+                    <p>As a PM, you manage the "Product Backlog" (a prioritized list of all the features you want to build). You ensure the engineering team always has clear, well-defined tasks to work on in the next sprint.</p>`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பழைய முறையில் (Waterfall) சாஃப்ட்வேர் உருவாக்குவது, உணவகத்தில் ஆர்டர் செய்துவிட்டு 2 மணிநேரம் காத்திருந்து மொத்தமாகச் சாப்பிடுவது போன்றது. சாப்பாடு நன்றாக இல்லையென்றால் மாற்ற முடியாது. ஆனால் Agile முறை என்பது பஃபே (Buffet) போன்றது. கொஞ்சம் கொஞ்சமாக எடுத்துச் சாப்பிட்டு, பிடித்துள்ளதா எனப் பார்த்து அடுத்ததை எடுக்கலாம்.</div>
+                    <p>Goorac Corp போன்ற நவீன நிறுவனங்களில் ஒரு பொருளை உருவாக்க 2 வருடங்கள் ரகசியமாகச் செலவிட மாட்டார்கள். அதற்குப் பதிலாக 'அஜைல்' (Agile) முறையைப் பயன்படுத்துவார்கள். இது மிகவும் வேகமானது மற்றும் மாற்றங்களை எளிதில் ஏற்றுக்கொள்ளக்கூடியது.</p>
+                    <p>ஒரே அடியாக ஒரு காரை உருவாக்குவதற்குப் பதிலாக, முதலில் ஒரு ஸ்கேட்போர்டை உருவாக்கி மக்களிடம் கொடுப்போம். அவர்களுக்குப் பிடித்திருந்தால் அடுத்து ஸ்கூட்டர், பைக் என படிப்படியாகக் காரை உருவாக்குவோம். இதனால் ஒவ்வொரு கட்டத்திலும் மக்களின் கருத்தை அறிய முடியும்.</p>
+                    <p>Agile-இல் அதிகம் பயன்படுத்தப்படும் முறை "Scrum". இதில் வேலைகளை 2-வாரப் பகுதிகளாகப் பிரிப்பார்கள். இதற்கு "Sprint" என்று பெயர். இந்த 14 நாட்களில் என்ன செய்து முடிக்க முடியும் என முதலில் திட்டமிடுவார்கள்.</p>
+                    <p>தினமும் காலையில் 15 நிமிடம் "Daily Standup" மீட்டிங் நடக்கும். அதில் அனைவரும், நேற்று என்ன செய்தேன், இன்று என்ன செய்யப்போகிறேன், ஏதாவது தடை உள்ளதா எனக் கூறுவார்கள்.</p>
+                    <p>ஒரு PM-ஆக நீங்கள் 'Product Backlog'-ஐ (செய்ய வேண்டிய வேலைகளின் பட்டியல்) நிர்வகித்து, இன்ஜினியர்களுக்கு வேலைகளைத் தெளிவாகப் பிரித்துக் கொடுக்க வேண்டும்.</p>`,
+                task_en: "Task: Imagine you are planning a 2-week Sprint to build a basic 'Login Screen' for a mobile app. Write down 3 specific, small tasks that the engineering team needs to complete for this sprint.",
+                task_ta: "டாஸ்க்: ஒரு மொபைல் ஆப்பிற்கான 'Login Screen'-ஐ 2 வாரங்களில் உருவாக்க வேண்டும். அதற்கு இன்ஜினியர்கள் செய்ய வேண்டிய 3 சிறிய வேலைகளைப் பட்டியலிடுங்கள்."
+            },
+            { 
+                id: 4, icon: "🎨", img: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80",
+                title_en: "4. UI/UX & Wireframing", title_ta: "4. UI/UX மற்றும் வயர்ஃபிரேமிங் (Wireframing)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> UX (User Experience) is the foundation and walls of a house; it determines how easy it is to walk from the bedroom to the kitchen. UI (User Interface) is the paint, the furniture, and the beautiful lights. If the UX is bad, a beautiful UI won't save you from bumping into walls.</div>
+                    <p>While Product Managers are not Graphic Designers, you must have a strong understanding of User Interface (UI) and User Experience (UX) principles. You will constantly collaborate with designers to translate your business requirements into visual screens.</p>
+                    <p>UX focuses on logic and friction. If a user has to click 7 times just to change their password, that is terrible UX. The goal is to make the user journey as intuitive and frictionless as possible. UI focuses on the aesthetics: the colors, the typography, and the button shapes.</p>
+                    <p>Before any real code is written, a PM often creates "Wireframes". A wireframe is a low-fidelity, black-and-white sketch of a screen. It uses simple boxes to represent where images and text will go. It takes 5 minutes to draw and allows the team to argue about the layout before spending hours designing it.</p>
+                    <p>Tools like Balsamiq, Figma, or even a simple piece of paper are used for wireframing. As a PM, your wireframe doesn't need to look beautiful; it just needs to clearly communicate the structural logic of the feature.</p>
+                    <p>Always prioritize accessibility. Ensure text has high contrast, and buttons are large enough to be tapped easily on a mobile screen.</p>`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> UX (User Experience) என்பது வீட்டின் அடிப்படை அமைப்பு; படுக்கையறையில் இருந்து சமையலறைக்குச் செல்வது எவ்வளவு எளிது என்பதை இது குறிக்கும். UI (User Interface) என்பது பெயிண்ட் மற்றும் அலங்கார விளக்குகள். வீட்டின் அமைப்பு (UX) மோசமாக இருந்தால், அழகான பெயிண்ட் (UI) உங்களைச் சுவரில் மோதுவதிலிருந்து காப்பாற்றாது.</div>
+                    <p>PM-கள் டிசைனர்கள் அல்ல என்றாலும், UI மற்றும் UX பற்றி நன்றாகத் தெரிந்திருக்க வேண்டும். டிசைனர்களுடன் இணைந்து உங்கள் ஐடியாக்களுக்கு நீங்கள் வடிவம் கொடுக்க வேண்டும்.</p>
+                    <p>பாஸ்வேர்டை மாற்றுவதற்கு ஒருவர் 7 முறை கிளிக் செய்ய வேண்டும் என்றால், அது மோசமான UX. பயனர்களின் வேலையை எவ்வளவு எளிதாக்க முடியுமோ அவ்வளவு எளிதாக்குவதே UX. UI என்பது ஆப் எந்த நிறத்தில், எவ்வளவு அழகாக இருக்க வேண்டும் என்பதைக் குறிக்கும்.</p>
+                    <p>கோடிங் செய்யத் தொடங்கும் முன், PM-கள் "Wireframes"-ஐ உருவாக்குவார்கள். இது ஒரு கருப்பு-வெள்ளை பென்சில் ஸ்கெட்ச் போன்றது. எந்த இடத்தில் பட்டன் வரும், எந்த இடத்தில் படம் வரும் என்பதை ஒரு காகிதத்திலோ அல்லது Figma போன்ற மென்பொருளிலோ சாதாரணமாக வரைந்து காட்டுவதாகும்.</p>
+                    <p>இது அழகாக இருக்க வேண்டியதில்லை; ஆனால் என்ன சொல்ல வருகிறோம் என்பது இன்ஜினியர்களுக்குப் புரிய வேண்டும்.</p>
+                    <p>எல்லோருக்கும் எளிதாகப் பயன்படுத்தும் வகையில் (Accessibility) டிசைன் இருக்க வேண்டும். மொபைலில் எளிதாகத் தொடும் அளவுக்குப் பட்டன்கள் பெரிதாக இருக்க வேண்டும்.</p>`,
+                task_en: "Task: Pick a popular app like WhatsApp or YouTube. In text format, describe a 'Wireframe' for its home screen. (e.g., 'Top left: Logo, Top right: Search icon, Middle: List of videos...'). Be detailed about the layout.",
+                task_ta: "டாஸ்க்: வாட்ஸ்அப் அல்லது யூடியூப் போன்ற ஒரு ஆப்பைத் தேர்ந்தெடுத்து, அதன் முதல் பக்கத்தின் 'வயர்ஃபிரேமை' எழுத்துக்களில் விவரிக்கவும். (எ.கா: 'மேலே இடதுபுறம் லோகோ, வலதுபுறம் சர்ச் ஐகான், நடுவில் வீடியோக்களின் பட்டியல்...')"
+            },
+            { 
+                id: 5, icon: "⚖️", img: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80",
+                title_en: "5. Feature Prioritization (RICE & MoSCoW)", title_ta: "5. அம்சங்களை முன்னுரிமைப்படுத்துதல்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Prioritization is like packing a small suitcase for a one-month trip. You have 50 items you *want* to take, but only space for 10. You must strictly decide what is absolutely essential (passport, clothes) and leave behind the "nice-to-haves" (a heavy book, extra shoes).</div>
+                    <p>As a PM at Goorac Corp, everybody will ask you for features. The CEO wants a dashboard, sales wants a chat feature, users want a dark mode, and engineering wants to rewrite the database. You only have 3 engineers. You cannot do it all. Prioritization is your most important daily skill.</p>
+                    <p>We use mathematical frameworks to remove emotion from these decisions. The first framework is <b>MoSCoW</b>: Must-have, Should-have, Could-have, and Won't-have. If a feature is a "Must-have", the product cannot legally or functionally launch without it. "Won't-have" means we are explicitly choosing not to build it this year.</p>
+                    <p>For more advanced data-driven teams, we use the <b>RICE scoring model</b>: Reach, Impact, Confidence, and Effort. You multiply Reach x Impact x Confidence, and divide by Effort.</p>
+                    <p>Reach: How many users will this affect? Impact: How much will it increase our revenue or retention? Confidence: How sure are we about these numbers? Effort: How many weeks will it take engineering to build?</p>
+                    <p>A feature that takes 1 week to build (Low Effort) and makes $100k (High Impact) gets prioritized instantly. A feature that takes 6 months to build and only affects 5 users is killed immediately.</p>`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு மாதப் பயணத்திற்குச் சிறிய பெட்டியில் துணிகளை அடுக்குவது போன்றது இது. 50 பொருட்களை எடுத்துச் செல்ல ஆசை இருந்தாலும், 10 பொருட்களை மட்டுமே வைக்க முடியும். பாஸ்போர்ட் போன்ற மிக அவசியமானவற்றை மட்டும் வைத்துவிட்டு, மற்றவற்றை விட்டுச் செல்ல வேண்டும்.</div>
+                    <p>Goorac Corp-இல் PM-ஆக இருக்கும்போது, பலரும் உங்களிடம் பல வசதிகளை (Features) ஆப்பில் சேர்க்கக் கேட்பார்கள். ஆனால் உங்களிடம் 3 இன்ஜினியர்கள் மட்டுமே இருப்பார்கள். அனைத்தையும் செய்ய முடியாது. எதை முதலில் செய்வது என முடிவெடுப்பதே (Prioritization) உங்களின் முக்கியத் திறமை.</p>
+                    <p>விருப்பத்தின் அடிப்படையில் முடிவெடுக்காமல், லாஜிக்காக முடிவெடுக்க <b>MoSCoW</b> என்ற முறையைப் பயன்படுத்துவோம். Must-have (கண்டிப்பாக வேண்டும்), Should-have (இருந்தால் நல்லது), Could-have (வாய்ப்பிருந்தால் செய்யலாம்), Won't-have (இப்போதைக்கு வேண்டாம்).</p>
+                    <p>இன்னும் துல்லியமாகக் கணக்கிட <b>RICE</b> முறையைப் பயன்படுத்துவோம்: Reach (எத்தனை பேருக்குப் பயன்தரும்?), Impact (எவ்வளவு லாபம் தரும்?), Confidence (இதன் மீது நமக்கு எவ்வளவு நம்பிக்கை உள்ளது?), Effort (இதை உருவாக்க எவ்வளவு காலம் ஆகும்?).</p>
+                    <p>1 வாரத்தில் செய்துமுடித்து, அதிக லாபம் தரும் வேலைகளை உடனே செய்ய வேண்டும். 6 மாதம் உழைத்து மிகக் குறைவான பேருக்கு மட்டுமே பயன்படும் வேலைகளைத் தவிர்த்துவிட வேண்டும்.</p>`,
+                task_en: "Task: You are building a Food Delivery App. You can only build 3 features before launch. Using the MoSCoW method, list 2 'Must-have' features and 2 'Could-have' features.",
+                task_ta: "டாஸ்க்: நீங்கள் ஒரு உணவு டெலிவரி ஆப்பை (Food Delivery App) உருவாக்குகிறீர்கள். MoSCoW முறையைப் பயன்படுத்தி, ஆப் தொடங்குவதற்கு முன் 'கண்டிப்பாக இருக்க வேண்டிய' (Must-have) 2 வசதிகளையும், 'பிற்பாடு சேர்க்கக்கூடிய' (Could-have) 2 வசதிகளையும் எழுதுங்கள்."
+            },
+            { 
+                id: 6, icon: "🚀", img: "https://images.unsplash.com/photo-1557838923-2985c318be48?w=800&q=80",
+                title_en: "6. Go-To-Market (GTM) Strategy", title_ta: "6. சந்தைப்படுத்துதல் வியூகம் (GTM)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Building a product is like cooking a feast. The Go-To-Market strategy is printing the invitations, setting the table, hiring the waiters, and making sure the guests actually arrive at your house to eat it. A great meal with no guests is a failure.</div>
+                    <p>A PM's job does not end when the engineering team finishes coding. You are responsible for the successful launch of the product. This requires a comprehensive Go-To-Market (GTM) strategy. You must align the Marketing, Sales, and Customer Support teams.</p>
+                    <p>First, you define the Value Proposition. This is a one-sentence summary that explains exactly why your product is better than the competitors. It must be instantly understandable by your target audience.</p>
+                    <p>Next, you choose your distribution channels. Will you acquire customers through Paid Ads (Facebook/Google)? Through SEO and content marketing? Or through a direct B2B sales team making cold calls?</p>
+                    <p>You also need to prepare your internal teams. Customer Support needs training documentation to handle bugs and user complaints on day one. Sales needs pitch decks and pricing sheets.</p>
+                    <p>A soft launch (or Beta launch) is often used before the global release. You release the product to a small group of 500 loyal users, observe the crashes and bugs, fix them, and then execute the massive public launch.</p>`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு பொருளை உருவாக்குவது என்பது பிரம்மாண்டமாகச் சமைப்பது போன்றது. அதைச் சந்தைப்படுத்துவது (GTM) என்பது பத்திரிகை அடித்து, விருந்தினர்களை அழைத்து வந்து அவர்களுக்குப் பரிமாறுவது போன்றது. சாப்பிட ஆள் இல்லாமல் எவ்வளவு பெரிய விருந்து சமைத்தாலும் அது வீண்தான்.</div>
+                    <p>இன்ஜினியர்கள் ஆப்பை உருவாக்கி முடித்தவுடன் PM-இன் வேலை முடிந்துவிடாது. அதை மக்களிடம் வெற்றிகரமாகக் கொண்டு சேர்க்கும் பொறுப்பும் உங்களுடையதே. இதற்கு மார்க்கெட்டிங் மற்றும் சேல்ஸ் (Sales) டீமுடன் நீங்கள் இணைந்து செயல்பட வேண்டும்.</p>
+                    <p>முதலில் உங்கள் பொருளின் சிறப்பம்சத்தை (Value Proposition) ஒரே வரியில் விளக்க வேண்டும். போட்டியாளர்களை விட உங்கள் ஆப் எப்படிச் சிறந்தது என்பதை மக்கள் எளிதில் புரிந்துகொள்ளும் வகையில் கூற வேண்டும்.</p>
+                    <p>அடுத்து, வாடிக்கையாளர்களை எப்படிப் பிடிப்பது என முடிவெடுக்க வேண்டும். பேஸ்புக் விளம்பரங்கள் மூலமாகவா? அல்லது சேல்ஸ் டீம் மூலம் நேரடியாகப் போன் செய்தா? என்பதைத் திட்டமிட வேண்டும்.</p>
+                    <p>உங்கள் நிறுவனத்தின் கஸ்டமர் சப்போர்ட் (Customer Support) டீமுக்கும் பயிற்சி அளிக்க வேண்டும். ஆப்பில் பிரச்சனை வந்தால் வாடிக்கையாளர்களிடம் எப்படிப் பேசுவது என அவர்களுக்கு முன்கூட்டியே சொல்லிக்கொடுக்க வேண்டும்.</p>
+                    <p>ஆப்பை எடுத்தவுடனே உலகம் முழுவதும் வெளியிடாமல், முதலில் 500 பேருக்கு மட்டும் கொடுத்து (Beta launch), அதில் உள்ள குறைகளைச் சரிசெய்த பிறகே பெரிய அளவில் வெளியிட வேண்டும்.</p>`,
+                task_en: "Task: Goorac Corp is launching a new AI tool for writers. Write a 1-sentence 'Value Proposition' for this tool. Then, list 2 marketing channels you would use to find your first 100 users.",
+                task_ta: "டாஸ்க்: எழுத்தாளர்களுக்காக Goorac Corp ஒரு புதிய AI கருவியை வெளியிடுகிறது. அதற்கான ஒரு வரியிலான விளம்பர வாசகத்தை (Value Proposition) எழுதுங்கள். முதல் 100 வாடிக்கையாளர்களைப் பிடிக்க எந்த 2 மார்க்கெட்டிங் வழிகளைப் பயன்படுத்துவீர்கள்?"
+            },
+            { 
+                id: 7, icon: "📊", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+                title_en: "7. Metrics & Analytics (The AARRR Framework)", title_ta: "7. டேட்டா மற்றும் அளவீடுகள் (AARRR)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Metrics are the dashboard of your car. If you don't look at the speedometer, you get a ticket. If you ignore the fuel gauge, you crash. If you don't track product metrics, you are driving your business blindfolded.</div>
+                    <p>Great PMs do not rely on gut feelings; they rely on hard data. To know if your product is actually successful, you must track user behavior obsessively using analytics tools like Mixpanel, Amplitude, or Google Analytics.</p>
+                    <p>The industry standard for tracking the lifecycle of a user is the Pirate Metrics framework: <b>AARRR</b>.</p>
+                    <p>1. <b>Acquisition:</b> How do users find us? (e.g., 10,000 app downloads from Facebook ads).<br>2. <b>Activation:</b> Do they have a great first experience? (e.g., 40% of downloaded users actually complete the sign-up process).</p>
+                    <p>3. <b>Retention:</b> Do they come back? This is the most critical metric. If 1,000 people download the app, but only 10 open it after a week, your product is dying.<br>4. <b>Referral:</b> Do they tell others? (e.g., inviting friends via a referral code).</p>
+                    <p>5. <b>Revenue:</b> How do we make money? (e.g., 5% of active users buy the premium subscription). By monitoring these 5 stages, you can identify exactly where your funnel is leaking and fix it.</p>`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> டேட்டா என்பது உங்கள் காரின் டேஷ்போர்டு (Dashboard) போன்றது. ஸ்பீடோ மீட்டரைப் பார்க்காவிட்டால் ஃபைன் கட்டுவீர்கள். பெட்ரோல் அளவைப் பார்க்காவிட்டால் வண்டி நின்றுவிடும். டேட்டாவைக் கண்காணிக்காவிட்டால் உங்கள் பிசினஸ் கண்கட்டி விட்டது போல முடங்கிவிடும்.</div>
+                    <p>சிறந்த PM-கள் தங்களின் சொந்த உள்ளுணர்வை நம்ப மாட்டார்கள்; டேட்டாவை (Data) மட்டுமே நம்புவார்கள். உங்கள் ஆப் வெற்றிகரமானதா என்பதை அறிய, Google Analytics போன்ற கருவிகளைப் பயன்படுத்தி மக்களைக் கண்காணிக்க வேண்டும்.</p>
+                    <p>இதற்கு <b>AARRR</b> (Pirate Metrics) என்ற முறையைப் பயன்படுத்துவோம்.</p>
+                    <p>1. <b>Acquisition (வருதல்):</b> மக்கள் எப்படி நம் ஆப்பைத் தேடி வருகிறார்கள்? (எ.கா: விளம்பரம் மூலம் 10,000 பேர் டவுன்லோட் செய்தார்கள்).<br>2. <b>Activation (செயல்படுதல்):</b> உள்ளே வந்தவர்கள் ஆப்பைப் பயன்படுத்துகிறார்களா? (எ.கா: டவுன்லோட் செய்தவர்களில் 40% பேர் அக்கவுண்ட் ஓபன் செய்தார்கள்).</p>
+                    <p>3. <b>Retention (தக்கவைத்தல்):</b> அவர்கள் மீண்டும் ஆப்பிற்கு வருகிறார்களா? 1000 பேர் டவுன்லோட் செய்துவிட்டு, ஒரு வாரம் கழித்து 10 பேர் மட்டுமே பயன்படுத்தினால், உங்கள் ஆப் தோல்வியடைந்துவிட்டது என அர்த்தம்.<br>4. <b>Referral (பரிந்துரை):</b> அவர்கள் நண்பர்களுக்குப் பரிந்துரைக்கிறார்களா?</p>
+                    <p>5. <b>Revenue (வருமானம்):</b> நமக்கு எப்படிப் பணம் வருகிறது? இந்த 5 நிலைகளையும் கண்காணிப்பதன் மூலம், எந்த இடத்தில் பிரச்சனை உள்ளது என்பதைக் கண்டுபிடித்துச் சரிசெய்யலாம்.</p>`,
+                task_en: "Task: Think of the Spotify app. Give one specific metric (number) they track for 'Activation', and one specific metric they track for 'Retention'.",
+                task_ta: "டாஸ்க்: ஸ்பாட்டிஃபை (Spotify) ஆப்பை எடுத்துக்கொள்வோம். அதில் 'Activation'-க்கு அவர்கள் எதைக் கண்காணிப்பார்கள்? 'Retention'-க்கு எதைக் கண்காணிப்பார்கள்? என எழுதுங்கள்."
+            },
+            { 
+                id: 8, icon: "💬", img: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800&q=80",
+                title_en: "8. Stakeholder Management", title_ta: "8. ஸ்டேக்ஹோல்டர் மேனேஜ்மென்ட் (குழு நிர்வாகம்)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Managing stakeholders is like being a diplomat between warring countries. The CEO wants high revenue, Engineering wants to rewrite old code, and Marketing wants flashing banners. You must negotiate a peace treaty where everyone gets a little of what they want, but the user ultimately wins.</div>
+                    <p>A "Stakeholder" is anyone who has an interest or influence in your product. This includes the CEO, the engineering lead, the sales team, and even the legal department. Managing these relationships is 50% of a PM's job.</p>
+                    <p>You will frequently face conflicting demands. The sales team might promise a giant client a custom feature to close a deal, but building that feature will delay the main roadmap by 3 months. As the PM, you have to be the bad guy and say "No" to the sales team, while explaining the logical reasons why.</p>
+                    <p>Communication is your main weapon. You must over-communicate. Send weekly update emails, maintain a visible roadmap, and hold alignment meetings. Never let a stakeholder be surprised by a delay.</p>
+                    <p>When presenting to the CEO, speak in terms of revenue, market share, and strategic vision. When talking to engineers, speak in terms of technical constraints, edge cases, and user flow. You must adapt your language to your audience.</p>
+                    <p>Trust is built by keeping promises. If you tell engineering you will protect their time from random CEO requests, you must actually do it.</p>`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஸ்டேக்ஹோல்டர்களை நிர்வகிப்பது என்பது, சண்டையிடும் நாடுகளுக்கு இடையே தூதராகச் செயல்படுவது போன்றது. CEO அதிக லாபத்தை எதிர்பார்ப்பார், இன்ஜினியர்கள் பழைய கோடிங்கை மாற்ற நினைப்பார்கள், மார்க்கெட்டிங் டீம் அதிக விளம்பரங்களை விரும்புவார்கள். வாடிக்கையாளருக்குப் பாதிப்பு வராமல் இவர்கள் அனைவரையும் சமாதானப்படுத்துவதே உங்கள் வேலை.</div>
+                    <p>"ஸ்டேக்ஹோல்டர்" (Stakeholder) என்பவர், உங்கள் ஆப்பில் சம்பந்தப்பட்ட அனைவரும். CEO, சேல்ஸ் டீம், இன்ஜினியர்கள் என அனைவரும் இதில் அடங்குவார்கள். இவர்களைச் சரியாகக் கையாள்வதே PM-இன் 50% வேலையாகும்.</p>
+                    <p>பல நேரங்களில் இவர்களுக்குள் முரண்பாடுகள் வரும். சேல்ஸ் டீம் ஒரு பெரிய கிளைண்டைப் பிடிக்க, ஆப்பில் இல்லாத ஒரு வசதியைச் செய்து தருவதாக வாக்குக் கொடுத்துவிடுவார்கள். ஆனால் அதைச் செய்தால் ஆப்பின் மற்ற வேலைகள் 3 மாதம் தாமதமாகும். அப்போது PM-ஆக நீங்கள், சேல்ஸ் டீமிடம் காரணத்தை விளக்கி "இல்லை" (No) என்று சொல்லும் தைரியத்தைப் பெற்றிருக்க வேண்டும்.</p>
+                    <p>தகவல் தொடர்பு (Communication) தான் உங்கள் ஆயுதம். வாரம் ஒருமுறை அனைவருக்கும் என்ன வேலை நடக்கிறது என்று ஈமெயில் அனுப்ப வேண்டும். எந்த ஒரு தாமதமும் திடீரென யாருக்கும் அதிர்ச்சி அளிக்கக் கூடாது.</p>
+                    <p>CEO-விடம் பேசும்போது லாபம் மற்றும் பிசினஸ் பற்றிப் பேச வேண்டும். இன்ஜினியர்களிடம் பேசும்போது டெக்னிக்கல் விஷயங்களைப் பேச வேண்டும். யாரிடம் பேசுகிறோமோ அதற்கு ஏற்ப உங்களை மாற்றிக்கொள்ள வேண்டும்.</p>`,
+                task_en: "Task: The CEO demands you add a complicated 'AI Chatbot' to the app immediately, but your engineering team says it will take 2 months and delay everything else. Write a short, polite response to the CEO explaining why you shouldn't build it right now.",
+                task_ta: "டாஸ்க்: ஆப்பில் உடனடியாக ஒரு 'AI Chatbot'-ஐச் சேர்க்க வேண்டும் என CEO கட்டளையிடுகிறார். ஆனால் அதற்கு 2 மாதம் ஆகும் என இன்ஜினியர்கள் கூறுகிறார்கள். இப்போது CEO-விடம் அதை ஏன் உடனே செய்ய முடியாது என மரியாதையாக விளக்கி ஒரு பதிலை எழுதுங்கள்."
+            },
+            { 
+                id: 9, icon: "💰", img: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80",
+                title_en: "9. Pricing and Revenue Models", title_ta: "9. விலை நிர்ணயம் மற்றும் வருமான முறைகள்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If you give away free water at a marathon, everyone loves you, but you go bankrupt. If you charge $100 for a bottle, you make lots of money per bottle, but everyone hates you and buys from the guy charging $2. Pricing is finding the exact number where the runner is happy to pay, and you can stay in business.</div>
+                    <p>A product can have a brilliant UX and solve a real problem, but if the pricing model is wrong, the company will die. As a PM at Goorac Corp, you must help design how the product makes money.</p>
+                    <p>There are several standard digital revenue models. The <b>Freemium Model</b> (like Spotify or Zoom) gives the core product away for free to acquire millions of users, and charges a premium for advanced features. This is great for scaling, but expensive to maintain the free users.</p>
+                    <p>The <b>Subscription Model</b> (SaaS, like Netflix) charges a recurring monthly fee. This creates highly predictable revenue for the business.</p>
+                    <p>The <b>Marketplace/Commission Model</b> (like Uber, Swiggy, or Airbnb) doesn't own the product. They connect buyers and sellers and take a 10-30% cut of the transaction.</p>
+                    <p>Pricing psychology is also critical. $9.99 converts significantly better than $10.00. Offering 3 tiers (Basic, Pro, Enterprise) forces the user to compare your own prices against each other, rather than comparing your price against a competitor. The middle "Pro" tier is usually designed to be the most attractive.</p>`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> மாரத்தான் ஓட்டத்தில் இலவசமாகத் தண்ணீர் கொடுத்தால் அனைவரும் உங்களை விரும்புவார்கள், ஆனால் நீங்கள் திவாலாகிவிடுவீர்கள். ஒரு பாட்டிலை ₹1000-க்கு விற்றால் அதிக லாபம் கிடைக்கும், ஆனால் யாரும் வாங்க மாட்டார்கள். வாடிக்கையாளர் மகிழ்ச்சியாகப் பணம் தரக்கூடிய, உங்களுக்கும் லாபம் தரக்கூடிய சரியான விலையைக் கண்டுபிடிப்பதே ப்ரைசிங் (Pricing).</div>
+                    <p>ஒரு ஆப் எவ்வளவு அற்புதமாக இருந்தாலும், அதன் விலை நிர்ணயம் தவறாக இருந்தால் நிறுவனம் அழிந்துவிடும். ஒரு PM-ஆக ஆப் எப்படிப் பணம் சம்பாதிக்கப் போகிறது என்பதையும் நீங்கள் வடிவமைக்க வேண்டும்.</p>
+                    <p>இதில் பல முறைகள் உள்ளன. <b>Freemium முறை</b> (எ.கா: Spotify, Zoom) ஆப்பை இலவசமாகக் கொடுத்து பல லட்சம் பேரை உள்ளே கொண்டுவரும். சிறப்பு வசதிகளுக்கு மட்டும் பணம் வசூலிக்கும்.</p>
+                    <p><b>சந்தா முறை (Subscription)</b> (எ.கா: Netflix) மாதம் ஒருமுறை கட்டணம் வசூலிக்கும். இது நிறுவனத்திற்கு நிலையான வருமானத்தைத் தரும்.</p>
+                    <p><b>கமிஷன் முறை (Marketplace)</b> (எ.கா: Swiggy, Uber) இவர்கள் எந்தப் பொருளையும் சொந்தமாக விற்க மாட்டார்கள். வாங்குபவரையும் விற்பவரையும் இணைத்துவிட்டு, இடையில் 10-30% கமிஷன் எடுத்துக்கொள்வார்கள்.</p>
+                    <p>விலை நிர்ணயத்தில் உளவியலும் (Psychology) உள்ளது. ₹1000 என வைப்பதை விட ₹999 என வைத்தால் மக்கள் அதிகம் வாங்குவார்கள். 3 விதமான விலைகளை (Basic, Pro, Premium) வைக்கும்போது, நடுத்தரமான விலையை மக்கள் அதிகம் தேர்வு செய்வார்கள்.</p>`,
+                task_en: "Task: You are launching a new note-taking app for college students. Choose a revenue model (Freemium, Subscription, One-time fee, or Ads) and explain why it is the best choice for this specific audience.",
+                task_ta: "டாஸ்க்: கல்லூரி மாணவர்களுக்காக ஒரு Note-taking ஆப்பை வெளியிடுகிறீர்கள். இதற்கு எந்த முறையில் (இலவசம், மாதச் சந்தா, விளம்பரம்) பணம் வசூலிப்பீர்கள்? அது மாணவர்களுக்கு ஏன் சரியானது என விளக்குங்கள்."
+            },
+            { 
+                id: 10, icon: "🏆", img: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=80",
+                title_en: "10. Product Launch & Iteration", title_ta: "10. ஆப்பை வெளியிடுதல் மற்றும் மேம்படுத்துதல்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Launching a product is not the finish line; it is the starting gun of the marathon. You don't build a ship, throw it in the ocean, and walk away. You get on the ship, steer it, patch the leaks, and upgrade the engine while sailing.</div>
+                    <p>Congratulations, you have reached the final phase of the product lifecycle. Launch day is exciting, but it is also when the real work begins. No product survives first contact with real users without breaking in unexpected ways.</p>
+                    <p>Immediately after launch, your team enters a "Hypercare" period. You must obsessively monitor crash reports, customer support tickets, and Twitter mentions. If a critical bug prevents users from logging in (a P0 issue), you pull the engineers out of bed to fix it instantly.</p>
+                    <p>Once the product is stable, you shift to Iteration. You look back at the AARRR metrics you defined in Module 7. Are users dropping off at the payment screen? You run A/B tests (changing button colors or text) to improve the conversion rate.</p>
+                    <p>A PM is never truly "done". You continuously groom the backlog, talk to users who churned (canceled their subscription) to understand why, and plan the roadmap for Version 2.0.</p>
+                    <p>You have now learned the fundamentals of Product Management at Goorac Corp. Submit your final task below to earn your official completion certificate.</p>`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு ஆப்பை வெளியிடுவது என்பது ஓட்டப்பந்தயத்தின் முடிவு அல்ல; அதுதான் ஆரம்பமே! ஒரு கப்பலை உருவாக்கி கடலில் தள்ளிவிட்டு நீங்கள் சென்றுவிட முடியாது. நீங்களும் அதில் பயணித்து, ஓட்டைகளை அடைத்து, கப்பலைச் சரியாகச் செலுத்த வேண்டும்.</div>
+                    <p>வாழ்த்துகள், நீங்கள் இறுதிப் பகுதியை அடைந்துவிட்டீர்கள். ஆப்பை வெளியிடும் நாள் (Launch day) மிகவும் சந்தோஷமானது, ஆனால் அன்றுதான் உண்மையான வேலையே தொடங்குகிறது. நிஜ வாடிக்கையாளர்கள் பயன்படுத்தும்போது பல புதிய பிரச்சனைகள் வரும்.</p>
+                    <p>ஆப்பை வெளியிட்ட சில நாட்களுக்கு மிகவும் கவனமாக இருக்க வேண்டும் (Hypercare). ஆப் க்ராஷ் (Crash) ஆகிறதா, வாடிக்கையாளர்கள் என்ன குறை சொல்கிறார்கள் எனத் தொடர்ந்து கண்காணிக்க வேண்டும். லாகின் (Login) ஆகவில்லை என்பது போன்ற பெரிய பிரச்சனை வந்தால், உடனே அதைச் சரிசெய்ய வேண்டும்.</p>
+                    <p>ஆப் சீராக இயங்கத் தொடங்கியதும், அதை மேம்படுத்தும் (Iteration) வேலையைத் தொடங்க வேண்டும். பேமெண்ட் பக்கத்தில் மக்கள் வெளியேறினால், அங்குள்ள டிசைனை மாற்றி A/B டெஸ்டிங் செய்து பார்க்க வேண்டும்.</p>
+                    <p>ஒரு PM-இன் வேலை எப்போதுமே முடிவடையாது. ஆப்பை விட்டு விலகியவர்களிடம் காரணம் கேட்டு, அடுத்த அப்டேட்டிற்கான (Version 2.0) வேலைகளைத் தொடங்க வேண்டும்.</p>
+                    <p>Goorac Corp-இன் ப்ராடக்ட் மேனேஜ்மென்ட் இன்டர்ன்ஷிப்பை வெற்றிகரமாக முடித்துவிட்டீர்கள். உங்கள் இறுதி டாஸ்க்கைச் சமர்ப்பித்து உங்களின் சான்றிதழைப் பெற்றுக்கொள்ளுங்கள்.</p>`,
+                task_en: "Task: Your app has just launched. On Day 2, you notice that 50% of users are downloading the app, opening it once, and deleting it immediately. List 3 steps you would take as a PM to figure out what is going wrong.",
+                task_ta: "டாஸ்க்: உங்கள் ஆப் வெளியிடப்பட்டுவிட்டது. 2-ஆம் நாளில், டவுன்லோட் செய்த 50% பேர் ஆப்பை ஒரே முறை பார்த்துவிட்டு உடனே டெலீட் செய்வதைக் கவனிக்கிறீர்கள். ஒரு PM-ஆக இந்தப் பிரச்சனையைக் கண்டுபிடிக்க நீங்கள் எடுக்கும் 3 நடவடிக்கைகளை எழுதுங்கள்."
+            }
+        ];
+
+        // ==========================================
+        // UI & ROUTING
+        // ==========================================
+        window.setContentLang = (lang) => {
+            window.stopTTS(); 
+            contentLang = lang;
+            document.getElementById('btn-en').className = `lang-btn ${lang === 'en' ? 'active' : ''}`;
+            document.getElementById('btn-ta').className = `lang-btn ${lang === 'ta' ? 'active' : ''}`;
+            
+            const mod = courseData.find(m => m.id === viewingModuleId);
+            const imgEl = document.getElementById('viewer-img');
+            imgEl.style.display = 'block'; 
+            imgEl.src = mod.img;
+            document.getElementById('viewer-title').innerText = lang === 'en' ? mod.title_en : mod.title_ta;
+            document.getElementById('viewer-content').innerHTML = lang === 'en' ? mod.content_en : mod.content_ta;
+            document.getElementById('task-desc').innerText = lang === 'en' ? mod.task_en : mod.task_ta;
+        };
+
+        document.getElementById('primary-auth-btn').onclick = async () => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch(error) {
+                console.error("Login Error:", error);
+                showToast("Sign In Failed: " + error.message);
+            }
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const photoUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=random`;
+                document.getElementById('nav-profile').innerHTML = `<img src="${photoUrl}" alt="Profile" style="width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; box-shadow: var(--shadow-sm);">`;
+                document.getElementById('nav-profile').style.display = 'flex';
+                
+                try {
+                    const docSnap = await getDoc(doc(db, "users", user.uid));
+                    if (docSnap.exists()) {
+                        currentUserData = docSnap.data();
+                        
+                        let dbNeedsUpdate = false;
+                        if (!currentUserData.courses) {
+                            currentUserData.courses = {};
+                            dbNeedsUpdate = true;
+                        }
+                        if (!currentUserData.courses[CURRENT_COURSE_ID]) {
+                            currentUserData.courses[CURRENT_COURSE_ID] = { currentModule: 1, paymentStatus: 'none', interviewPassed: false, lastCompletedAt: 0 };
+                            dbNeedsUpdate = true;
+                        }
+                        
+                        if (dbNeedsUpdate) {
+                            try {
+                                await setDoc(doc(db, "users", user.uid), { courses: { [CURRENT_COURSE_ID]: currentUserData.courses[CURRENT_COURSE_ID] } }, { merge: true });
+                            } catch(e) {}
+                        }
+                        routeUser(true);
+                    } else {
+                        currentUserData = { fullName: "", whatsappNumber: "", collegeName: "", degree: "", dob: "", courses: { [CURRENT_COURSE_ID]: { currentModule: 1, paymentStatus: 'none', interviewPassed: false, lastCompletedAt: 0 } } };
+                        showScreen('profile-screen', true);
+                    }
+                } catch (error) {
+                    console.error("Firestore read error:", error);
+                    currentUserData = { courses: { [CURRENT_COURSE_ID]: { currentModule: 1, paymentStatus: 'none', interviewPassed: false, lastCompletedAt: 0 } } };
+                    showScreen('profile-screen', true);
+                }
+            } else {
+                document.getElementById('nav-profile').style.display = 'none';
+                showScreen('login-screen', true);
+            }
+        });
+
+        function routeUser(pushHistory = true) {
+            if (!currentUserData.fullName || !currentUserData.collegeName || !currentUserData.degree || !currentUserData.dob || !currentUserData.whatsappNumber) {
+                return showScreen('profile-screen', pushHistory);
+            }
+            if (!currentUserData.courses[CURRENT_COURSE_ID].interviewPassed) {
+                return showScreen('interview-screen', pushHistory);
+            }
+            if (currentUserData.courses[CURRENT_COURSE_ID].paymentStatus !== 'paid') {
+                return showScreen('payment-screen', pushHistory);
+            }
+            
+            if (currentUserData.courses[CURRENT_COURSE_ID].currentModule > 10) {
+                showCertificate();
+                return showScreen('cert-screen', pushHistory);
+            }
+            
+            renderDashboard();
+            showScreen('dashboard-screen', pushHistory);
+        }
+
+        // ==========================================
+        // FORMS & PROGRESS
+        // ==========================================
+        document.getElementById('save-profile-btn').onclick = async () => {
+            const name = document.getElementById('prof-name').value;
+            const college = document.getElementById('prof-college').value;
+            const degree = document.getElementById('prof-degree').value;
+            const dob = document.getElementById('prof-dob').value;
+            const wa = document.getElementById('prof-wa').value;
+            
+            if(!name || !college || !degree || !dob || !wa) return showToast("All fields are mandatory to register.");
+
+            currentUserData.fullName = name;
+            currentUserData.collegeName = college;
+            currentUserData.degree = degree;
+            currentUserData.dob = dob;
+            currentUserData.whatsappNumber = wa;
+            
+            try {
+                await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
+            } catch(e) {}
+            
+            routeUser(true);
+        };
+
+        // INTERVIEW VALIDATION
+        document.getElementById('submit-interview-btn').onclick = async () => {
+            const q1 = document.getElementById('int-q1').value.trim();
+            const q2 = document.getElementById('int-q2').value.trim();
+            const q3 = document.getElementById('int-q3').value.trim();
+            const q4 = document.getElementById('int-q4').value.trim();
+            const q5 = document.getElementById('int-q5').value.trim();
+
+            if (q1.length < 2 || q2.length < 2 || q3.length < 2 || q4.length < 2 || q5.length < 2) {
+                return showToast("Please provide complete answers for all 5 questions.");
+            }
+
+            document.getElementById('submit-interview-btn').style.display = 'none';
+            document.getElementById('interview-validating').style.display = 'block';
+
+            setTimeout(async () => {
+                document.getElementById('interview-validating').style.display = 'none';
+                document.getElementById('interview-success').style.display = 'block';
+                
+                currentUserData.courses[CURRENT_COURSE_ID].interviewPassed = true;
+                try {
+                    await setDoc(doc(db, "users", auth.currentUser.uid), { 
+                        courses: { [CURRENT_COURSE_ID]: { interviewPassed: true } }
+                    }, { merge: true });
+                } catch(e) {}
+
+                setTimeout(() => routeUser(true), 2000);
+            }, 3000);
+        };
+
+        // PAYMENT HANDLING
+        document.getElementById('pay-razorpay-btn').onclick = async () => {
+            const user = auth.currentUser;
+            if (!user) return showToast("Please sign in first.");
+
+            const btn = document.getElementById('pay-razorpay-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Initializing Secure Gateway...";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('https://goolearn-payment.hf.space/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        userId: user.uid,
+                        courseId: CURRENT_COURSE_ID,
+                        amount: 149 
+                    })
+                });
+                
+                if (!response.ok) throw new Error("Order creation failed on backend");
+                const orderData = await response.json();
+
+                const options = {
+                    "key": "rzp_live_T1HpoAe39yK0FV", 
+                    "amount": orderData.amount, 
+                    "currency": "INR",
+                    "name": "Goorac Corporation",
+                    "description": "Internship Doc Handling Fee",
+                    "order_id": orderData.id, 
+                    "handler": async function (response) {
+                        showToast("Payment Successful! Unlocking Dashboard...");
+                        currentUserData.courses[CURRENT_COURSE_ID].paymentStatus = 'paid';
+                        try {
+                            await setDoc(doc(db, "users", user.uid), { 
+                                courses: { [CURRENT_COURSE_ID]: { paymentStatus: 'paid' } }
+                            }, { merge: true });
+                        } catch(e) {}
+                        routeUser(true);
+                    },
+                    "prefill": { "name": currentUserData.fullName, "contact": currentUserData.whatsappNumber },
+                    "theme": { "color": "#059669" },
+                    "modal": {
+                        "ondismiss": function(){
+                            btn.innerText = originalText;
+                            btn.disabled = false;
+                        }
+                    }
+                };
+
+                const rzp = new window.Razorpay(options);
+                rzp.on('payment.failed', function (response){
+                    showToast("Payment Failed: " + response.error.description);
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                });
+                rzp.open();
+
+            } catch (error) {
+                console.error("Payment initiation failed:", error);
+                showToast("Could not connect to payment gateway. Try again.");
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        };
+
+        function renderDashboard() {
+            const container = document.getElementById('module-list-container');
+            container.innerHTML = '';
+            
+            let progressMod = currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+            if(progressMod > 10) progressMod = 10;
+            const percentage = Math.round(((progressMod - 1) / 10) * 100);
+            
+            if (currentUserData.courses[CURRENT_COURSE_ID].currentModule > 10) {
+                document.getElementById('progress-bar').style.width = '100%';
+                document.getElementById('progress-text').innerText = '100% - Certified';
+            } else {
+                document.getElementById('progress-bar').style.width = percentage + '%';
+                document.getElementById('progress-text').innerText = percentage + '%';
+            }
+
+            const now = Date.now();
+            const lastCompletedAt = currentUserData.courses[CURRENT_COURSE_ID].lastCompletedAt || 0;
+            const timeDiff = now - lastCompletedAt;
+            const isTimeLocked = (progressMod > 1) && (timeDiff < THREE_DAYS_MS);
+
+            courseData.forEach(mod => {
+                const isCompleted = mod.id < progressMod;
+                const isCurrent = mod.id === progressMod;
+                
+                let lockStatusText = '';
+                let isClickable = false;
+
+                if (isCompleted) {
+                    lockStatusText = '✅ Completed';
+                    isClickable = true;
+                } else if (isCurrent) {
+                    if (isTimeLocked) {
+                        const msLeft = THREE_DAYS_MS - timeDiff;
+                        const hoursLeft = Math.ceil(msLeft / (1000 * 60 * 60));
+                        lockStatusText = `🔒 Locked (Unlocks in ${hoursLeft} hrs)`;
+                        isClickable = false;
+                    } else {
+                        lockStatusText = '📖 Task Ready';
+                        isClickable = true;
+                    }
+                } else {
+                    lockStatusText = '🔒 Locked';
+                    isClickable = false;
+                }
+                
+                container.innerHTML += `
+                    <div class="module-item ${isClickable ? '' : 'locked'} ${isCompleted ? 'completed' : ''}" onclick="${isClickable ? `loadModule(${mod.id})` : ''}">
+                        <div class="mod-icon">${mod.icon}</div>
+                        <div class="mod-details">
+                            <div class="mod-title">${mod.title_en}</div>
+                            <div class="mod-status ${isTimeLocked && isCurrent ? 'mod-lock-time' : ''}">${lockStatusText}</div>
+                        </div>
+                    </div>`;
+            });
+
+            if (currentUserData.courses[CURRENT_COURSE_ID].currentModule > 10) {
+                document.getElementById('certificate-access-banner').style.display = 'block';
+            } else {
+                document.getElementById('certificate-access-banner').style.display = 'none';
+            }
+        }
+
+        window.loadModule = (id) => {
+            viewingModuleId = id;
+            setContentLang(contentLang);
+            document.getElementById('task-input').value = ""; // Reset input
+            
+            const taskContainer = document.getElementById('task-container');
+            const completedBanner = document.getElementById('task-completed-banner');
+            const btn = document.getElementById('mark-complete-btn');
+            
+            if (id === currentUserData.courses[CURRENT_COURSE_ID].currentModule) {
+                taskContainer.style.display = 'block';
+                completedBanner.style.display = 'none';
+                
+                btn.onclick = async () => {
+                    const taskText = document.getElementById('task-input').value.trim();
+                    if (taskText.length < 100) {
+                        return showToast("Task submission must be at least 100 characters. Please explain in detail.");
+                    }
+
+                    window.stopTTS();
+                    const now = Date.now();
+                    currentUserData.courses[CURRENT_COURSE_ID].currentModule += 1;
+                    currentUserData.courses[CURRENT_COURSE_ID].lastCompletedAt = now;
+                    
+                    try {
+                        await setDoc(doc(db, "users", auth.currentUser.uid), { 
+                            courses: {
+                                [CURRENT_COURSE_ID]: { 
+                                    currentModule: currentUserData.courses[CURRENT_COURSE_ID].currentModule,
+                                    lastCompletedAt: now
+                                }
+                            }
+                        }, { merge: true });
+                    } catch(e) {}
+                    
+                    showToast("Module Task Completed!");
+                    taskContainer.style.display = 'none';
+                    completedBanner.style.display = 'block';
+
+                    setTimeout(() => {
+                        if (currentUserData.courses[CURRENT_COURSE_ID].currentModule > 10) {
+                            routeUser(true);
+                        } else {
+                            goToDashboard();
+                        }
+                    }, 2000);
+                };
+            } else if (id < currentUserData.courses[CURRENT_COURSE_ID].currentModule) {
+                taskContainer.style.display = 'none';
+                completedBanner.style.display = 'block';
+                completedBanner.querySelector('p').innerText = "You have already completed this module.";
+            } 
+            
+            const isAlreadyViewing = document.getElementById('module-viewer-screen').classList.contains('active-screen');
+            showScreen('module-viewer-screen', !isAlreadyViewing); 
+        }
+
+        function showCertificate() {
+            if (currentUserData.courses[CURRENT_COURSE_ID].currentModule > 10) {
+                document.getElementById('cert-pdf-view').style.display = 'block';
+                document.getElementById('cert-name-display').innerText = currentUserData.fullName;
+                
+                const issueDate = new Date();
+                const formattedDate = issueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                document.getElementById('cert-date-display').innerText = "Issued on: " + formattedDate;
+                
+                const encodedData = encodeURIComponent(`VERIFIED INTERNSHIP\nName: ${currentUserData.fullName}\nRole: Product Management Intern\nCompany: Goorac Corporation\nDate: ${formattedDate}\nStatus: COMPLETED`);
+                document.getElementById('cert-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedData}`;
+            }
+        }
+
+        document.getElementById('download-pdf-btn').onclick = () => {
+            const btn = document.getElementById('download-pdf-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Generating PDF...";
+            
+            const element = document.getElementById('printable-cert');
+            const fileName = currentUserData.fullName ? `${currentUserData.fullName.replace(/\s+/g, '_')}_PM_Internship_Certificate.pdf` : 'Internship_Certificate.pdf';
+            
+            const opt = {
+                margin:       0,
+                filename:     fileName,
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 3, useCORS: true, allowTaint: true, scrollY: 0, scrollX: 0, windowWidth: 1122 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerText = originalText;
+                showToast("PDF Downloaded Successfully!");
+            }).catch(err => {
+                console.error("PDF generation error: ", err);
+                btn.innerText = originalText;
+                showToast("Error generating PDF");
+            });
+        };
+
+        try { history.replaceState({ screen: 'splash-screen' }, '', '#splash-screen'); } catch(e) {}
+    </script>
+</body>
+</html>
