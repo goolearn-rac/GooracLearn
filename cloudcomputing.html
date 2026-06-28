@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Goorac Learn | Advanced Cloud Computing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        /* Premium SaaS & App Theme Variables - Emerald/Teal */
+        :root {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #059669; /* Emerald Green */
+            --primary-hover: #047857; /* Darker Emerald */
+            --border-color: #e2e8f0;
+            --success: #10b981;
+            --success-bg: #ecfdf5; /* Emerald Light BG */
+            --locked-bg: #f1f5f9;
+            --code-bg: #0f172a; /* Midnight Blue */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #020617; /* Deep Midnight Blue */
+                --surface-color: #0f172a;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --border-color: #1e293b;
+                --locked-bg: #0b1120;
+                --success-bg: #064e3b; /* Dark Emerald BG */
+                --code-bg: #000000;
+            }
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: var(--bg-color); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; line-height: 1.6;
+            -webkit-font-smoothing: antialiased; overflow-x: hidden;
+        }
+
+        .top-nav {
+            background-color: var(--surface-color); border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px); background-color: rgba(var(--surface-color), 0.9);
+        }
+        .brand { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; cursor: pointer; }
+
+        .screen { display: none; flex: 1; padding: 30px 20px 80px 20px; max-width: 640px; margin: 0 auto; width: 100%; min-height: 100vh;}
+        .active-screen { display: block; animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(15px); } to { opacity: 1; transform: translateX(0); } }
+
+        #splash-screen.active-screen { display: flex; flex-direction: column; }
+        .spinner { 
+            width: 40px; height: 40px; border: 4px solid var(--border-color); 
+            border-top-color: var(--primary); border-radius: 50%; 
+            animation: spin 1s linear infinite; margin-top: 20px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        h1, h2, h3 { font-weight: 700; margin-bottom: 12px; line-height: 1.2; letter-spacing: -0.5px; }
+        p { margin-bottom: 20px; color: var(--text-muted); font-size: 1.05rem; }
+        
+        .card {
+            background: var(--surface-color); border-radius: var(--radius-xl);
+            border: 1px solid var(--border-color); padding: 24px;
+            box-shadow: var(--shadow-md); margin-bottom: 24px;
+        }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main); }
+        .input-group input {
+            width: 100%; padding: 16px; border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); background-color: var(--bg-color); 
+            color: var(--text-main); font-size: 1rem; transition: 0.2s; outline: none;
+            appearance: none; 
+        }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); }
+
+        .btn {
+            background-color: var(--primary); color: white; border: none;
+            border-radius: var(--radius-lg); padding: 16px; width: 100%; font-size: 1rem;
+            font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none !important; }
+        .btn:active:not(:disabled) { transform: scale(0.98); } 
+        .btn-success { background-color: var(--success); }
+        .btn-outline { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
+
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
+            text-align: center; border-radius: 30px; padding: 16px 24px;
+            position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%);
+            font-size: 15px; font-weight: 500; box-shadow: var(--shadow-lg);
+            opacity: 0; transition: opacity 0.3s, bottom 0.3s;
+        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
+        .progress-bar-bg { background: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px; margin-bottom: 10px;}
+        .progress-bar-fill { background: var(--primary); height: 100%; width: 0%; transition: width 0.8s ease-out; }
+
+        .module-item {
+            background-color: var(--surface-color); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; transition: 0.2s; box-shadow: var(--shadow-sm);
+        }
+        .module-item:active:not(.locked) { transform: scale(0.98); background: var(--bg-color); }
+        .module-item.locked { background-color: var(--locked-bg); opacity: 0.6; cursor: not-allowed; }
+        .module-item.completed { border-left: 4px solid var(--success); }
+        
+        .mod-icon { font-size: 24px; width: 44px; height: 44px; background: var(--bg-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
+        .mod-details { flex: 1; }
+        .mod-title { font-weight: 600; font-size: 1rem; color: var(--text-main); margin-bottom: 2px; }
+        .mod-status { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
+
+        .mod-hero-img { width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .content-body h3 { margin-top: 30px; margin-bottom: 15px; font-size: 1.25rem; color: var(--primary); border-bottom: 1px solid var(--border-color); padding-bottom: 5px;}
+        .content-body ul, .content-body ol { margin-bottom: 20px; padding-left: 20px; color: var(--text-muted); }
+        .content-body li { margin-bottom: 10px; }
+        .content-body mark { background-color: rgba(5, 150, 105, 0.2); padding: 2px 4px; border-radius: 4px; color: var(--primary); font-weight: 600; }
+        .content-body strong { color: var(--text-main); }
+        
+        .analogy-box {
+            background: rgba(5, 150, 105, 0.05); border-left: 4px solid var(--primary);
+            padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 24px 0; font-size: 1.05rem; color: var(--text-main);
+        }
+        
+        .code-wrapper {
+            position: relative; background: var(--code-bg); border-radius: var(--radius-lg);
+            margin: 24px 0; border: 1px solid var(--border-color); overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        .code-header {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.05); padding: 8px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .code-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; font-weight: 600;}
+        .copy-btn {
+            background: transparent; color: #cbd5e1; border: 1px solid #475569; border-radius: 4px;
+            padding: 4px 10px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; font-weight: 600;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .copy-btn.copied { background: var(--success); border-color: var(--success); color: white; }
+        .code-wrapper pre {
+            padding: 20px; margin: 0; overflow-x: auto; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem; color: #f8fafc; white-space: pre-wrap; line-height: 1.5;
+        }
+
+        .lang-switch-bar { display: flex; background: var(--locked-bg); padding: 4px; border-radius: 30px; width: fit-content; }
+        .lang-btn { background: transparent; border: none; padding: 8px 24px; border-radius: 20px; cursor: pointer; font-weight: 600; color: var(--text-muted); transition: 0.2s; }
+        .lang-btn.active { background: var(--surface-color); color: var(--primary); box-shadow: var(--shadow-sm); }
+
+        .quiz-question { margin-bottom: 40px; }
+        .quiz-option {
+            display: block; padding: 16px; border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg); margin-bottom: 12px; cursor: pointer;
+            transition: 0.2s; font-weight: 500; background: var(--surface-color);
+        }
+        .quiz-option input[type="radio"] { display: none; }
+        .quiz-option:has(input:checked) { border-color: var(--primary); background: rgba(5, 150, 105, 0.05); color: var(--primary); }
+
+        .cert-scroll-container {
+            width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px; border-radius: 12px; background: rgba(0,0,0,0.02);
+            padding: 10px; border: 1px solid var(--border-color);
+        }
+        
+        .certificate-wrapper {
+            background: #ffffff;
+            background-image: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            border: 0px solid transparent; 
+            padding: 50px 60px; 
+            text-align: center;
+            border-radius: 0px; 
+            box-shadow: none; 
+            color: #0f172a;
+            margin: 0 auto;
+            position: relative; 
+            overflow: hidden;
+            width: 100%;
+            min-width: 900px; 
+            max-width: 1122px; 
+            aspect-ratio: 1.414; 
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .certificate-wrapper::before {
+            content: ''; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 6px double #059669; /* Emerald Green */
+            pointer-events: none; z-index: 1;
+        }
+        .certificate-wrapper::after {
+            content: 'CLOUD'; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: clamp(60px, 15vw, 180px); color: rgba(0,0,0,0.03); font-weight: 900;
+            pointer-events: none; z-index: 0;
+        }
+        .cert-content { z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding-top: 15px;}
+        .cert-header { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4.5vw, 3.2rem); color: #1e293b; margin-bottom: 0; font-weight: 800;}
+        .cert-sub { font-size: clamp(0.7rem, 1.5vw, 1.1rem); color: #059669; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px; font-weight: bold; }
+        .cert-name { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4.5vw, 3rem); font-weight: 700; border-bottom: 2px solid #059669; padding-bottom: 8px; margin: 0 auto 15px; display: inline-block; min-width: 60%; color: #047857; line-height: 1.2;}
+        .cert-body { font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #475569; margin-bottom: 10px; max-width: 85%; margin-left: auto; margin-right: auto; line-height: 1.5;}
+        
+        .multi-color-sig { color: #047857; font-weight: 800; }
+
+        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; z-index: 2; position: relative; margin-top: auto; padding-bottom: 15px;}
+        .cert-qr-container { text-align: center; }
+        .cert-qr { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); border: 3px solid #fff; box-shadow: var(--shadow-md); border-radius: 6px; background: white;}
+        .cert-badge { width: clamp(60px, 12vw, 100px); height: clamp(60px, 12vw, 100px); background: radial-gradient(circle, #059669, #047857); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: clamp(0.5rem, 1vw, 0.75rem); border: 2px dashed white; line-height: 1.2;}
+        .cert-signature-block { text-align: center; }
+        .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.2rem, 3vw, 2.2rem); border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 150px; }
+
+        @media print {
+            @page { size: A4 landscape; margin: 0; }
+            body { background: white; margin: 0; }
+            body * { visibility: hidden; }
+            #cert-pdf-view, #cert-pdf-view * { visibility: visible; }
+            #cert-pdf-view { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh;}
+            .cert-scroll-container { border: none; background: transparent; padding: 0; overflow: visible; }
+            .certificate-wrapper { 
+                width: 297mm !important; height: 210mm !important; 
+                margin: 0 !important; border: 0px solid transparent !important; 
+                max-width: none !important; min-width: 0 !important; aspect-ratio: auto !important;
+                -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-shadow: none !important;
+            }
+            .cert-content { padding-top: 0 !important; }
+            .cert-footer { padding-bottom: 0 !important; }
+            .btn { display: none !important; }
+            .top-nav { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast">Message</div>
+
+    <div class="top-nav">
+        <div class="brand" onclick="window.location.href='index.html'">Goorac <span style="color:var(--text-main)">Learn</span></div>
+        <div id="nav-profile" style="display:none; align-items: center; gap: 8px; cursor: pointer;" onclick="window.location.href='profile.html'"></div>
+    </div>
+
+    <div id="splash-screen" class="screen active-screen" style="justify-content: center; align-items: center; text-align: center;">
+        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 20px; border-radius: 50%; box-shadow: var(--shadow-md);">
+        <h1 style="color: var(--primary); margin-bottom: 8px; font-size: 2rem;">Goorac Learn</h1>
+        <p style="color: var(--text-muted); font-weight: 500; font-size: 1rem;">Initializing cloud workspace...</p>
+        <div class="spinner"></div>
+    </div>
+
+    <div id="login-screen" class="screen">
+        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80" alt="Cloud Architecture" style="width:100%; height:180px; object-fit:cover; border-radius: var(--radius-xl); margin-bottom: 24px;">
+        <h1 style="font-size: 2.2rem;">Master Cloud Computing</h1>
+        <p>Transform your career by mastering AWS, Google Cloud, Azure, and modern DevOps across 25 comprehensive Modules. Get officially certified.</p>
+        
+        <button id="primary-auth-btn" class="btn" style="background: #0f172a; margin-top: 20px;">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Sign in with Google
+        </button>
+    </div>
+
+    <div id="profile-screen" class="screen">
+        <h2>Certificate Setup</h2>
+        <p>Enter your details exactly as they should appear on your final diploma.</p>
+        <div class="card">
+            <div class="input-group">
+                <label>Full Legal Name</label>
+                <input type="text" id="prof-name" placeholder="E.g., Jane Smith">
+            </div>
+            <div class="input-group">
+                <label>WhatsApp Number</label>
+                <input type="tel" id="prof-wa" placeholder="+91 9876543210">
+            </div>
+            <button id="save-profile-btn" class="btn">Continue</button>
+        </div>
+    </div>
+
+    <div id="payment-screen" class="screen">
+        <h2 style="font-size: 2.2rem; margin-bottom: 10px;">Unlock Premium Access</h2>
+        <p>Get lifetime access to our 25 advanced Cloud Computing modules, architecture templates, deployment strategies, and your verified official certificate.</p>
+        
+        <div class="card" style="text-align: center; border: 2px solid var(--primary); padding: 30px 20px;">
+            <div style="background: var(--success-bg); padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:10px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <h3 style="color: var(--primary); margin-bottom: 5px;">Secure One-Time Payment</h3>
+                <p style="color: var(--text-main); font-weight: 800; font-size: 2rem; margin:0;">₹299</p>
+            </div>
+            
+            <ul style="text-align: left; margin-bottom: 30px; list-style: none; padding: 0; font-size: 1.05rem;">
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Full 25-Module Masterclass</li>
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Verified Professional Certificate</li>
+                <li style="margin-bottom: 15px; display: flex; align-items: center; gap: 12px; font-weight: 500;"><div style="background: var(--success); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px;">✓</div> Lifetime Access & Updates</li>
+            </ul>
+            
+            <button id="pay-razorpay-btn" class="btn" style="font-size: 1.1rem; padding: 18px;">
+                Pay Securely Now
+            </button>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                100% Encrypted & Safe
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard-screen" class="screen">
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600;">
+            <span>Course Progress</span>
+            <span id="progress-text" style="color: var(--primary);">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+        </div>
+        <div style="margin-top: -5px; margin-bottom: 30px; font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
+            Course: Cloud Computing Masterclass
+        </div>
+
+        <div id="module-list-container"></div>
+        
+        <div id="quiz-unlock-banner" style="display:none; margin-top: 30px;">
+            <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
+                <h3 style="color: var(--success);">🎉 Curriculum Complete!</h3>
+                <p style="color: #064e3b; font-size: 0.95rem;">Take the final 10-question exam to earn your certificate.</p>
+                <button id="start-quiz-btn" class="btn btn-success">Start Final Exam</button>
+            </div>
+        </div>
+
+        <div id="certificate-access-banner" style="display:none; margin-top: 30px;">
+            <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
+                <h3 style="color: var(--success);">🏆 Masterclass Certified</h3>
+                <p style="color: #064e3b; font-size: 0.95rem;">You have successfully completed this course and earned your certificate.</p>
+                <button onclick="viewCertificate()" class="btn btn-success">View Certificate</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="module-viewer-screen" class="screen">
+        <button onclick="goToDashboard()" style="background:none; border:none; color:var(--text-muted); font-weight:600; cursor:pointer; padding: 0 0 20px 0; display:flex; align-items:center; gap:5px; font-size: 1rem;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"></path></svg> Back
+        </button>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
+            <div class="lang-switch-bar" style="margin-bottom: 0;">
+                <button class="lang-btn active" id="btn-en" onclick="setContentLang('en')">English</button>
+                <button class="lang-btn" id="btn-ta" onclick="setContentLang('ta')">தமிழ்</button>
+            </div>
+            
+            <button id="tts-btn" class="btn btn-outline" style="width: auto; padding: 8px 20px; border-radius: 20px; border-color: var(--primary); color: var(--primary); margin-top: 0; background: var(--success-bg);" onclick="toggleTTS()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5 10v4a2 2 0 002 2h2l4 4V4L9 8H7a2 2 0 00-2 2z"></path></svg>
+                <span id="tts-text">Listen</span>
+            </button>
+        </div>
+
+        <img id="viewer-img" class="mod-hero-img" src="" alt="Module Hero" onerror="this.style.display='none'">
+        <h1 id="viewer-title" style="color: var(--primary); font-size: 1.8rem;"></h1>
+        <div class="content-body" id="viewer-content" style="font-size: 1.05rem; margin-bottom: 40px; color: var(--text-main);"></div>
+        
+        <button id="mark-complete-btn" class="btn">Mark Completed & Next</button>
+    </div>
+
+    <div id="quiz-screen" class="screen">
+        <h2>Certification Exam</h2>
+        <p>Answer 10 questions. You need 70% (7/10) to pass.</p>
+        <div id="quiz-container"></div>
+        <button id="submit-quiz-btn" class="btn">Submit Exam</button>
+    </div>
+
+    <div id="cert-screen" class="screen" style="max-width: 100%;">
+        <div id="cert-pdf-view" style="display:none; width: 100%;">
+            
+            <div class="cert-scroll-container">
+                <div class="certificate-wrapper" id="printable-cert">
+                    <div class="cert-content">
+                        <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 55px; height: 55px; object-fit: contain; margin-bottom: 5px; border-radius: 50%; box-shadow: var(--shadow-md);">
+                        
+                        <div class="cert-header">Goorac Learn</div>
+                        <div style="font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">from Goorac Corporation</div>
+                        <div class="cert-sub">Certificate of Professional Mastery</div>
+                        <div class="cert-body">This document officially certifies that</div>
+                        
+                        <div class="cert-name" id="cert-name-display">Student Name</div>
+                        
+                        <div class="cert-body" style="margin-bottom: 15px;">
+                            has successfully completed all 25 advanced modules and passed the comprehensive final examination for the<br>
+                            <span style="font-size: 1.3em; font-weight: 800; color: #0f172a; display: inline-block; margin-top: 8px;">Cloud Computing Masterclass</span>
+                        </div>
+                        
+                        <div class="cert-date" id="cert-date-display" style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #475569; font-size: 0.95rem; background: #f1f5f9; padding: 6px 16px; border-radius: 20px; border: 1px solid #cbd5e1;">Date of Issue</div>
+                        
+                        <div style="margin-top: 15px; border-top: 2px dashed #e2e8f0; padding-top: 10px; width: 100%; max-width: 600px;">
+                            <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Valid & Recognized By</div>
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 25px;">
+                                <img src="images/google.png" alt="Google" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="images/microsoft.png" alt="Microsoft" crossorigin="anonymous" style="height: 20px; object-fit: contain;">
+                                <img src="images/amazon.png" alt="Amazon" crossorigin="anonymous" style="height: 22px; object-fit: contain;">
+                                <img src="images/zoho.png" alt="Zoho" crossorigin="anonymous" style="height: 18px; object-fit: contain;">
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="cert-footer">
+                        <div class="cert-qr-container">
+                            <img id="cert-qr-img" class="cert-qr" src="" alt="Verified QR" crossorigin="anonymous">
+                            <div style="font-size: clamp(0.5rem, 1vw, 0.75rem); color: #10b981; margin-top: 5px; font-weight: 800; letter-spacing: 1px;">✓ VERIFIED</div>
+                        </div>
+                        
+                        <div class="cert-badge">
+                            OFFICIAL<br>CERTIFIED
+                        </div>
+
+                        <div class="cert-signature-block">
+                            <div class="cert-signature multi-color-sig">Dr. Jonathan Reynolds</div>
+                            <div style="font-size: clamp(0.6rem, 1.2vw, 0.9rem); color: #64748b; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Director of Cloud Architecture</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; max-width: 400px; margin: 0 auto;">
+                <button id="download-pdf-btn" class="btn btn-success">Download High-Res PDF</button>
+                <button onclick="goToDashboard()" class="btn btn-outline">Back to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDeXk6z_5mYQZi_xIsQsN935KxuIBxAM3w",
+            authDomain: "gooraclearn.firebaseapp.com",
+            projectId: "gooraclearn",
+            storageBucket: "gooraclearn.firebasestorage.app",
+            messagingSenderId: "221459932053",
+            appId: "1:221459932053:web:af713811da7edd113e0c9c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        // CHANGED TO CLOUD COMPUTING
+        const CURRENT_COURSE_ID = "cloud-computing";
+
+        let contentLang = 'en';
+        let currentUserData = null; 
+        let viewingModuleId = 1;
+        let isSpeaking = false; 
+
+        window.showToast = (msg) => {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        };
+
+        window.copyCode = (btn) => {
+            const codeText = btn.parentElement.parentElement.querySelector('pre').innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                btn.innerText = "Copied!";
+                btn.classList.add('copied');
+                setTimeout(() => { btn.innerText = "Copy"; btn.classList.remove('copied'); }, 2000);
+            });
+        };
+
+        window.stopTTS = () => {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            isSpeaking = false;
+            const ttsText = document.getElementById('tts-text');
+            if (ttsText) ttsText.innerText = "Listen";
+        };
+
+        window.toggleTTS = () => {
+            if (!window.speechSynthesis) return showToast("Audio playback not supported on this browser.");
+            
+            if (isSpeaking) {
+                window.stopTTS();
+                return;
+            }
+
+            const title = document.getElementById('viewer-title').innerText;
+            const contentNode = document.getElementById('viewer-content').cloneNode(true);
+            
+            contentNode.querySelectorAll('.copy-btn, .code-label').forEach(el => el.remove());
+            const contentText = contentNode.innerText;
+            
+            const fullText = title + ". " + contentText;
+            const utterance = new SpeechSynthesisUtterance(fullText);
+            
+            utterance.lang = contentLang === 'ta' ? 'ta-IN' : 'en-US';
+            utterance.rate = 0.90; 
+
+            utterance.onend = () => {
+                isSpeaking = false;
+                document.getElementById('tts-text').innerText = "Listen";
+            };
+
+            utterance.onerror = (e) => {
+                console.warn("TTS Processing Error", e);
+                window.stopTTS();
+            };
+
+            isSpeaking = true;
+            document.getElementById('tts-text').innerText = "Stop Playing";
+            window.speechSynthesis.speak(utterance);
+        };
+
+        window.showScreen = (screenId, pushHistory = true) => {
+            window.stopTTS(); 
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active-screen'));
+            document.getElementById(screenId).classList.add('active-screen');
+            window.scrollTo(0,0);
+            if(pushHistory) {
+                try {
+                    history.pushState({ screen: screenId }, '', '#' + screenId);
+                } catch(e) {
+                    console.warn("History API prevented:", e);
+                }
+            }
+        };
+
+        window.goBack = () => { 
+            window.stopTTS(); 
+            goToDashboard();
+        };
+        
+        window.addEventListener('popstate', (e) => {
+            window.stopTTS();
+            if(e.state && e.state.screen) showScreen(e.state.screen, false);
+            else if(currentUserData) routeUser(false);
+        });
+
+        window.goToDashboard = () => {
+            renderDashboard();
+            showScreen('dashboard-screen', true);
+        };
+
+        window.viewCertificate = () => {
+            showCertificate();
+            showScreen('cert-screen', true);
+        };
+
+        // Code box generator for Cloud Architecture/CLI examples
+        const generatePromptBox = (label, code) => `
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-label">${label}</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy Script</button>
+                </div>
+                <pre><code>${code}</code></pre>
+            </div>`;
+
+        // ==========================================
+        // 25 HIGHLY DETAILED CLOUD COMPUTING MODULES 
+        // ==========================================
+        const courseData = [
+            { 
+                id: 1, icon: "☁️", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "1. The Cloud Paradigm Shift", title_ta: "1. கிளவுட் কম্পিউটিং அறிமுகம்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Traditional IT is like buying a car. You pay for it upfront, maintain it, and keep it in your garage. Cloud Computing is like using Uber. You only pay for the ride when you need it, and someone else handles the maintenance and fuel.</div>
+                    <p>Welcome to the foundational module of Cloud Computing. Before we dive into AWS, Google Cloud Platform (GCP), or Microsoft Azure, you must deeply understand why the industry shifted away from traditional on-premise data centers.</p>
+                    <p>Historically, building a tech company meant buying massive physical servers, renting real estate, cooling them, and hiring teams to maintain them. This required huge upfront capital (CapEx). If your app went viral, your servers crashed. If it failed, you were left with expensive, useless hardware.</p>
+                    <h3>CapEx vs. OpEx</h3>
+                    <p>The cloud revolutionized this by moving to an <b>OpEx (Operational Expenditure)</b> model. You now rent computing power by the second. This democratization allows a two-person startup in a garage to access the exact same supercomputers used by Netflix or the US Department of Defense.</p>
+                    <h3>The Shared Responsibility Model</h3>
+                    <p>A critical concept to master is the Shared Responsibility Model. The Cloud Provider is responsible for the security <i>OF</i> the cloud (physical security of the data center, hardware, network infrastructure). You, the customer, are responsible for security <i>IN</i> the cloud (your passwords, your data encryption, your firewall rules).</p>
+                    <p>If you leave an S3 bucket open to the public and your data is stolen, it is not Amazon's fault. It is yours.</p>
+                    <p>In the upcoming modules, we will build a comprehensive architecture across IaaS, PaaS, and SaaS layers, mastering the art of global scalability.</p>
+                    ${generatePromptBox('Cloud Concept Validator', 'Use this mental checklist when evaluating if a workload belongs in the cloud:\n1. Does it require variable compute (traffic spikes)? -> YES (Cloud)\n2. Does it require 100% fixed, highly secure local data custody by law? -> NO (On-Premise)\n3. Do you want to avoid upfront hardware costs? -> YES (Cloud)')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பழைய IT முறை என்பது சொந்தமாக ஒரு கார் வாங்குவது போன்றது. நீங்கள்தான் பராமரிக்க வேண்டும். கிளவுட் (Cloud) என்பது ஓலா/ஊபர் (Uber) பயன்படுத்துவது போன்றது. உங்களுக்குத் தேவைப்படும்போது மட்டும் பயணத்திற்குப் பணம் செலுத்தினால் போதும், பராமரிப்பை அவர்கள் பார்த்துக்கொள்வார்கள்.</div>
+                    <p>கிளவுட் கம்ப்யூட்டிங்கின் அடிப்படைக்கு உங்களை வரவேற்கிறோம். AWS, Google Cloud, Azure போன்றவற்றைப் படிக்கும் முன், நிறுவனங்கள் ஏன் பழைய சர்வர் முறையை விட்டுவிட்டு கிளவுடிற்கு மாறின என்பதைப் புரிந்துகொள்ள வேண்டும்.</p>
+                    <p>முன்பெல்லாம் ஒரு சாஃப்ட்வேர் கம்பெனி தொடங்க, பல லட்சம் செலவு செய்து பெரிய சர்வர்களை வாங்க வேண்டும். அதை வைத்துக்கொள்ள இடம், ஏசி வசதி எல்லாம் தேவைப்பட்டது. இது மிகப்பெரிய ஆரம்பச் செலவு (CapEx). இப்போது அது மாறிவிட்டது.</p>
+                    <h3>CapEx vs OpEx</h3>
+                    <p>கிளவுட் இதை <b>OpEx (நடைமுறைச் செலவு)</b> மாடலாக மாற்றிவிட்டது. நீங்கள் ஒரு விநாடிக்கு மட்டும் கம்ப்யூட்டரை வாடகைக்கு எடுக்கலாம். இதனால் நெட்ஃபிக்ஸ் (Netflix) பயன்படுத்தும் அதே சூப்பர் கம்ப்யூட்டரை, ஒரு சிறிய ஸ்டார்ட்-அப் நிறுவனமும் பயன்படுத்த முடிகிறது.</p>
+                    <h3>பகிரப்பட்ட பொறுப்பு (Shared Responsibility Model)</h3>
+                    <p>கிளவுடில் பாதுகாப்பைப் பொறுத்தவரை ஒரு முக்கிய விதி உள்ளது. டேட்டா சென்டரின் பௌதிகப் பாதுகாப்பு (Physical Security), ஹார்டுவேர் ஆகியவற்றிற்கு கிளவுட் நிறுவனம் (எ.கா: அமேசான்) பொறுப்பு. ஆனால் உங்கள் பாஸ்வேர்டு, உங்கள் டேட்டாவை யார் பார்க்கலாம் என்ற கட்டுப்பாடுகளுக்கு (Security IN the cloud) நீங்கள்தான் பொறுப்பு.</p>
+                    <p>உங்கள் டேட்டாவை நீங்கள் கவனக்குறைவாகத் திறந்து வைத்துவிட்டுத் திருடுபோனால், அதற்கு அமேசான் பொறுப்பல்ல.</p>
+                    ${generatePromptBox('Cloud Concept Validator', 'ஒரு வேலையை கிளவுடில் செய்யலாமா என முடிவெடுக்க:\n1. டிராபிக் எப்போது அதிகமாகும்/குறையும் எனத் தெரியாதா? -> கிளவுட் பயன்படுத்துங்கள்.\n2. பல லட்சம் ஆரம்பச் செலவுகளைத் தவிர்க்க வேண்டுமா? -> கிளவுட் பயன்படுத்துங்கள்.\n3. சட்டப்படி டேட்டா உங்கள் அலுவலகத்தில்தான் இருக்க வேண்டுமா? -> சொந்த சர்வரைப் பயன்படுத்துங்கள்.')}`
+            },
+            { 
+                id: 2, icon: "🏢", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "2. Cloud Service Models (IaaS, PaaS, SaaS)", title_ta: "2. கிளவுட் சேவை வகைகள் (IaaS, PaaS, SaaS)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Think of making pizza. <br>On-Premise: You make the dough, sauce, cheese, and bake it in your oven. <br>IaaS: You buy the ingredients, but bake it using rented kitchen space. <br>PaaS: You get pizza delivered, you just provide the dining table and drinks. <br>SaaS: You go to a restaurant, eat the pizza, and leave. You do absolutely nothing.</div>
+                    <p>Cloud computing is not a single product; it is a spectrum of services offering varying degrees of control and automation. The industry categorizes these into three primary models: IaaS, PaaS, and SaaS.</p>
+                    <h3>Infrastructure as a Service (IaaS)</h3>
+                    <p>IaaS provides the highest level of flexibility and management control. The cloud provider hosts the hardware, hypervisor, and network. You rent virtual machines (VMs), storage, and virtual networks. You are entirely responsible for installing the Operating System (Windows/Linux), patching it, installing runtimes, and managing the application.</p>
+                    <p><b>Examples:</b> Amazon EC2, Google Compute Engine, Azure Virtual Machines.</p>
+                    <h3>Platform as a Service (PaaS)</h3>
+                    <p>PaaS removes the need for organizations to manage the underlying infrastructure (hardware and OS). It provides a ready-to-use framework for developers to build and deploy applications. You write the code, and the PaaS handles the server provisioning, load balancing, and auto-scaling automatically.</p>
+                    <p><b>Examples:</b> AWS Elastic Beanstalk, Google App Engine, Heroku.</p>
+                    <h3>Software as a Service (SaaS)</h3>
+                    <p>SaaS provides a completed product that is run and managed entirely by the service provider. You do not worry about how the service is maintained or how the infrastructure is managed; you only think about how you will use that particular piece of software.</p>
+                    <p><b>Examples:</b> Gmail, Salesforce, Dropbox, Office 365.</p>
+                    <p>As a Cloud Professional, your job is to architect solutions by mixing and matching these models to optimize for cost, performance, and maintenance overhead.</p>
+                    ${generatePromptBox('Service Model Selection Matrix', 'Scenario: A startup wants to launch a Node.js web application fast.\n\nChoice A (IaaS - EC2): High effort. Must install Linux, Node, Nginx, setup firewalls.\nChoice B (PaaS - Elastic Beanstalk): Low effort. Just upload the Node.js code zip file. The platform handles the rest.\nConclusion: Use PaaS for speed to market. Use IaaS only if you need custom kernel-level OS modifications.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பிட்சா (Pizza) செய்வதை நினைத்துக்கொள்ளுங்கள். <br>IaaS: பொருட்களை நீங்கள் வாங்கி, வாடகை சமையலறையில் நீங்களே சமைப்பது. <br>PaaS: சமைத்த பிட்சா உங்கள் வீட்டிற்கு வரும், நீங்கள் சாப்பிட இடம் மட்டும் கொடுத்தால் போதும். <br>SaaS: ஹோட்டலுக்குச் சென்று பிட்சா சாப்பிட்டுவிட்டு வருவது. நீங்கள் எந்த வேலையும் செய்யத் தேவையில்லை.</div>
+                    <p>கிளவுட் கம்ப்யூட்டிங் என்பது ஒரே ஒரு பொருள் அல்ல; அது பல வகையான சேவைகளின் தொகுப்பு. இதை IaaS, PaaS, SaaS என மூன்றாகப் பிரிக்கலாம்.</p>
+                    <h3>IaaS (Infrastructure as a Service)</h3>
+                    <p>இது உங்களுக்கு முழு சுதந்திரத்தைத் தரும். கிளவுட் நிறுவனம் வெறும் ஹார்டுவேரை (Hardware) மட்டும் கொடுக்கும். அதில் விண்டோஸ் அல்லது லினக்ஸ் (OS) இன்ஸ்டால் செய்வது, அப்டேட் செய்வது எல்லாமே உங்கள் பொறுப்பு. இது காலியான வாடகை வீடு போன்றது.</p>
+                    <p><b>உதாரணம்:</b> Amazon EC2, Google Compute Engine.</p>
+                    <h3>PaaS (Platform as a Service)</h3>
+                    <p>PaaS முறையில், நீங்கள் OS பற்றியோ, சர்வர் பற்றியோ கவலைப்படத் தேவையில்லை. டெவலப்பர்கள் தங்கள் சாஃப்ட்வேர் கோடை (Code) மட்டும் கொடுத்தால் போதும், அதை எப்படி இயக்குவது, எப்படி விரிவாக்குவது என்பதை PaaS தானாகவே பார்த்துக்கொள்ளும்.</p>
+                    <p><b>உதாரணம்:</b> Google App Engine, Heroku.</p>
+                    <h3>SaaS (Software as a Service)</h3>
+                    <p>SaaS என்பது முழுமையாகத் தயாரான ஒரு சாஃப்ட்வேர். இதை கிளவுட் நிறுவனமே முழுமையாகப் பராமரிக்கும். நீங்கள் வெறும் லாகின் (Login) செய்து பயன்படுத்தினால் மட்டும் போதும்.</p>
+                    <p><b>உதாரணம்:</b> Gmail, Google Drive, Zoom.</p>
+                    <p>ஒரு கிளவுட் இன்ஜினியராக, எப்போது எந்த மாடலைப் பயன்படுத்த வேண்டும் என முடிவு செய்வதே உங்கள் முக்கிய வேலை.</p>
+                    ${generatePromptBox('Service Model Selection Matrix', 'ஒரு ஸ்டார்ட்-அப் கம்பெனி விரைவாக ஒரு சாஃப்ட்வேரை வெளியிட வேண்டும் என்றால்:\n\nIaaS: லினக்ஸ் இன்ஸ்டால் செய்து, செக்யூரிட்டி அமைத்து செய்ய நேரம் ஆகும்.\nPaaS: கோடை (Code) மட்டும் அப்லோட் செய்தால் போதும். இதுவே விரைவானது.\nமுடிவு: விரைவாகச் செயல்பட PaaS சிறந்தது. முழுமையான கட்டுப்பாடு தேவைப்பட்டால் மட்டுமே IaaS செல்ல வேண்டும்.')}`
+            },
+            { 
+                id: 3, icon: "🌍", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "3. Global Infrastructure & Providers", title_ta: "3. கிளவுட் நெட்வொர்க் கட்டமைப்பு", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A Region is like a massive industrial city (e.g., Mumbai). An Availability Zone (AZ) is a specific secure building inside that city. If building A loses power, building B is far enough away to stay online, but close enough to share data instantly.</div>
+                    <p>The "Cloud" is not in the sky; it is composed of massive, hyper-secure concrete buildings filled with servers, connected by oceanic fiber-optic cables. AWS, GCP, and Azure all follow a very specific geographical architecture to ensure 99.999% uptime.</p>
+                    <h3>Regions</h3>
+                    <p>A <b>Region</b> is a distinct geographic location in the world (e.g., us-east-1 in N. Virginia, or ap-south-1 in Mumbai). When you deploy a server, you must choose a Region. You select a Region based on three factors:</p>
+                    <ul>
+                        <li><b>Latency:</b> If your customers are in India, deploying your server in Mumbai gives them 20ms response times, whereas a server in New York would give them 250ms of lag.</li>
+                        <li><b>Compliance:</b> Data privacy laws (like GDPR) often dictate that citizen data cannot physically leave the country's borders.</li>
+                        <li><b>Pricing:</b> Electricity and real estate cost more in London than in Ohio, so the exact same cloud server will cost differently depending on the region.</li>
+                    </ul>
+                    <h3>Availability Zones (AZs)</h3>
+                    <p>Inside every Region, there are usually 3 or more <b>Availability Zones</b>. An AZ is a discrete data center with redundant power, networking, and connectivity. AZs are separated by physical distance (usually 50-100 kilometers) to protect against local disasters like floods or fires, but are connected by high-bandwidth fiber so they act as a single logical unit.</p>
+                    <h3>Edge Locations (PoPs)</h3>
+                    <p>Edge Locations are mini-data centers globally distributed (hundreds of them) used specifically for caching content (like images and videos) so users can download them instantly without traveling back to the main Region.</p>
+                    ${generatePromptBox('High Availability Architecture Check', 'Goal: Survive a localized disaster.\n\nBAD Architecture: Deploying 2 Web Servers in us-east-1a (Single AZ). If the us-east-1a building loses power, your app goes down entirely.\n\nGOOD Architecture: Deploying 1 Web Server in us-east-1a and 1 Web Server in us-east-1b. Put an Elastic Load Balancer in front of them. If AZ "a" burns down, traffic seamlessly routes to AZ "b".')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> Region (மண்டலம்) என்பது ஒரு பெரிய நகரம் (எ.கா: மும்பை) போன்றது. Availability Zone (AZ) என்பது அந்த நகரத்தில் உள்ள தனித்தனி பாதுகாப்பான கட்டடங்கள். ஒரு கட்டடத்தில் மின்தடை ஏற்பட்டாலும், மற்றொன்று இயங்கும்.</div>
+                    <p>கிளவுட் என்பது மேகத்தில் இல்லை; அது உலகம் முழுவதும் கடலடி கேபிள்களால் இணைக்கப்பட்ட மிகப் பெரிய டேட்டா சென்டர்களில்தான் உள்ளது. AWS, Google Cloud போன்றவை எந்நேரமும் தடையின்றி இயங்க ஒரு குறிப்பிட்ட புவியியல் கட்டமைப்பைப் பின்பற்றுகின்றன.</p>
+                    <h3>Regions (மண்டலங்கள்)</h3>
+                    <p><b>Region</b> என்பது உலகின் ஒரு குறிப்பிட்ட இடம் (எ.கா: மும்பை - ap-south-1). உங்கள் சர்வரை எங்கு வைக்க வேண்டும் என்பதை நீங்கள்தான் தேர்வு செய்ய வேண்டும். இதை 3 விஷயங்களை வைத்து முடிவு செய்ய வேண்டும்:</p>
+                    <ul>
+                        <li><b>வேகம் (Latency):</b> வாடிக்கையாளர்கள் இந்தியாவில் இருந்தால், மும்பை Region-ஐத் தேர்ந்தெடுத்தால் ஆப் மிக வேகமாக வேலை செய்யும்.</li>
+                        <li><b>சட்டம் (Compliance):</b> சில நாட்டுச் சட்டப்படி, மக்களின் டேட்டாவை அந்த நாட்டை விட்டு வெளியே கொண்டு செல்லக் கூடாது.</li>
+                        <li><b>விலை:</b> மின்சாரச் செலவைப் பொறுத்து ஒவ்வொரு Region-இலும் சர்வரின் வாடகை மாறும்.</li>
+                    </ul>
+                    <h3>Availability Zones (AZs)</h3>
+                    <p>ஒவ்வொரு Region-க்குள்ளும் 3 அல்லது அதற்கு மேற்பட்ட <b>AZs</b> இருக்கும். இவை தனித்தனி டேட்டா சென்டர்கள். வெள்ளம், தீ விபத்து போன்ற ஆபத்துகளில் இருந்து தப்பிக்க, இவை 50 கி.மீ இடைவெளியில் கட்டப்பட்டிருக்கும். ஒன்றில் பிரச்சனை வந்தாலும் மற்றொன்று உங்களைக் காப்பாற்றும்.</p>
+                    <h3>Edge Locations</h3>
+                    <p>இவை சிறிய டேட்டா சென்டர்கள். படங்கள் மற்றும் வீடியோக்களை வாடிக்கையாளர்களின் ஊருக்கு அருகிலேயே சேமித்து வைத்து (Cache), மிக வேகமாக அவர்களுக்கு வழங்க இது பயன்படுகிறது.</p>
+                    ${generatePromptBox('High Availability Architecture Check', 'இலக்கு: ஒரு சர்வர் கட்டடம் அழிந்தாலும் வெப்சைட் இயங்க வேண்டும்.\n\nதவறான முறை: இரண்டு சர்வர்களையும் ஒரே AZ-இல் (us-east-1a) வைப்பது. அந்த கட்டடத்திற்கு மின்தடை ஏற்பட்டால் வெப்சைட் முடங்கிவிடும்.\n\nசரியான முறை: ஒரு சர்வரை AZ-A விலும், மற்றொன்றை AZ-B யிலும் வைப்பது. ஒன்றில் பிரச்சனை என்றாலும் மற்றொன்று வேலை செய்யும்.')}`
+            },
+            { 
+                id: 4, icon: "🔑", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "4. Identity & Access Management (IAM)", title_ta: "4. IAM - பாதுகாப்பும் அனுமதிகளும்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> IAM is like the security badge system at a top-secret facility. You don't give every employee a master key to every room. You give the janitor access to the closets, and the CEO access to the vault. IAM manages who has the keys and which doors they unlock.</div>
+                    <p>Before you launch a single server, you must master <b>Identity and Access Management (IAM)</b>. Misconfigured IAM is the number one cause of massive corporate data breaches. IAM allows you to manage access to compute, storage, database, and application services centrally.</p>
+                    <h3>The Principle of Least Privilege</h3>
+                    <p>This is the golden rule of cloud security: <b>Grant a user only the bare minimum permissions necessary to perform their specific job.</b> If a junior developer needs to read data from a specific storage bucket, you give them "Read-Only" access to <i>that specific bucket</i>. You do not give them full admin access to the entire account.</p>
+                    <h3>Core IAM Components</h3>
+                    <ul>
+                        <li><b>Users:</b> Individual people (e.g., John, Sarah) who need to interact with the cloud dashboard or APIs.</li>
+                        <li><b>Groups:</b> A collection of users. Instead of assigning permissions to 50 developers individually, you put them in a "Developers" group and assign the permission to the group.</li>
+                        <li><b>Roles:</b> Roles are temporary permissions. Instead of giving a User a long-term password, or embedding a password inside your code, you create a Role. An EC2 virtual machine can "assume a role" to securely talk to a database without ever needing a password.</li>
+                        <li><b>Policies:</b> JSON documents attached to Users, Groups, or Roles that explicitly define what actions are Allowed or Denied.</li>
+                    </ul>
+                    <h3>Multi-Factor Authentication (MFA)</h3>
+                    <p>The "Root Account" (the email you used to sign up for AWS/GCP) has absolute, god-level power. You must instantly lock this account away using hardware MFA or an Authenticator app, and never use it for daily tasks. Create a separate IAM user for yourself for daily work.</p>
+                    ${generatePromptBox('IAM JSON Policy Example', 'Below is an AWS IAM Policy granting Read-Only access to a specific S3 bucket named "company-financial-logs".\n\n{\n  "Version": "2012-10-17",\n  "Statement": [\n    {\n      "Effect": "Allow",\n      "Action": ["s3:GetObject", "s3:ListBucket"],\n      "Resource": [\n        "arn:aws:s3:::company-financial-logs",\n        "arn:aws:s3:::company-financial-logs/*"\n      ]\n    }\n  ]\n}')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> IAM என்பது ஒரு பெரிய அலுவலகத்தில் உள்ள ஐடி கார்டு (ID Card) சிஸ்டம் போன்றது. அனைவருக்கும் எல்லா அறைகளுக்கும் செல்லும் சாவியைக் கொடுக்க மாட்டோம். IAM என்பது யாருக்கு எந்தச் சாவி வேண்டும் என்பதை முடிவு செய்யும் கட்டுப்பாட்டு அறை.</div>
+                    <p>சர்வர்களை உருவாக்கும் முன், <b>IAM (Identity and Access Management)</b> பற்றி முழுமையாகத் தெரிந்துகொள்ள வேண்டும். கிளவுடில் நடக்கும் 90% டேட்டா திருட்டுகளுக்குக் காரணம் தவறாக அமைக்கப்பட்ட IAM தான்.</p>
+                    <h3>Least Privilege விதி (குறைந்தபட்ச அனுமதி)</h3>
+                    <p>கிளவுட் பாதுகாப்பின் முக்கிய விதி இதுதான்: <b>ஒருவருக்கு அவரது வேலைக்கு என்ன அனுமதி தேவையோ அதை மட்டுமே கொடுக்க வேண்டும்.</b> ஒரு ஜூனியர் ஊழியர் ஒரு டேட்டாவைப் படிக்க வேண்டும் என்றால், அவருக்கு 'Read-Only' (படிக்க மட்டும்) அனுமதியை மட்டுமே வழங்க வேண்டும். Admin அனுமதியைக் கொடுக்கக் கூடாது.</p>
+                    <h3>IAM-இன் முக்கியப் பகுதிகள்</h3>
+                    <ul>
+                        <li><b>Users (பயனர்கள்):</b> கிளவுடைப் பயன்படுத்தும் நபர்கள்.</li>
+                        <li><b>Groups (குழுக்கள்):</b> 50 பேருக்குத் தனித்தனியாக அனுமதி கொடுப்பதற்குப் பதிலாக, அவர்களை ஒரு Group-இல் சேர்த்து அந்த Group-க்கு அனுமதியை வழங்கலாம்.</li>
+                        <li><b>Roles (ரோல்கள்):</b> இது தற்காலிக அனுமதி. ஒரு சர்வர் மற்றொரு டேட்டாபேஸ் உடன் தொடர்புகொள்ள பாஸ்வேர்டு கொடுப்பதற்குப் பதிலாக, Role-ஐப் பயன்படுத்தினால் அது மிகவும் பாதுகாப்பானது.</li>
+                        <li><b>Policies (பாலிசிகள்):</b> யார் என்ன செய்யலாம், என்ன செய்யக்கூடாது என்பதை வரையறுக்கும் JSON ஃபைல்.</li>
+                    </ul>
+                    <h3>MFA (Multi-Factor Authentication)</h3>
+                    <p>நீங்கள் கணக்கைத் தொடங்கிய Root அக்கவுண்ட்டிற்கு எல்லையற்ற அதிகாரம் உள்ளது. அதற்கு உடனே 2-Step Verification (MFA) அமைத்துப் பாதுகாப்பாக வைக்க வேண்டும். தினசரி வேலைகளுக்குப் புதிய IAM User-ஐ உருவாக்கிப் பயன்படுத்த வேண்டும்.</p>
+                    ${generatePromptBox('IAM JSON Policy Example', 'ஒரு குறிப்பிட்ட S3 பக்கெட்டில் உள்ள பைல்களை மட்டும் படிக்க (Read-Only) அனுமதி வழங்கும் AWS பாலிசி:\n\n{\n  "Version": "2012-10-17",\n  "Statement": [\n    {\n      "Effect": "Allow",\n      "Action": ["s3:GetObject", "s3:ListBucket"],\n      "Resource": [\n        "arn:aws:s3:::company-financial-logs/*"\n      ]\n    }\n  ]\n}')}`
+            },
+            { 
+                id: 5, icon: "💻", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "5. Virtual Compute Basics (VMs)", title_ta: "5. விர்ச்சுவல் கம்ப்யூட் (Virtual Machines)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A Virtual Machine is like splitting a massive mansion (the physical server) into 10 separate apartments. Each apartment has its own locked door, its own kitchen, and its own rules (Operating System), but they all share the same foundation and plumbing (CPU and RAM).</div>
+                    <p>The backbone of Cloud IaaS is the Virtual Machine (VM). In AWS, they are called EC2 (Elastic Compute Cloud). In GCP, they are Google Compute Engine. In Azure, they are Azure Virtual Machines. Under the hood, the cloud provider runs a "Hypervisor" software that slices a massive bare-metal server into smaller, independent virtual environments.</p>
+                    <h3>Instance Families & Types</h3>
+                    <p>You do not just rent "a computer." You rent highly specialized hardware optimized for specific workloads.</p>
+                    <ul>
+                        <li><b>General Purpose (e.g., AWS t3, m5):</b> Balanced CPU and RAM. Great for web servers and microservices.</li>
+                        <li><b>Compute Optimized (e.g., AWS c5):</b> High CPU ratio. Ideal for batch processing, scientific modeling, or gaming servers.</li>
+                        <li><b>Memory Optimized (e.g., AWS r5):</b> Massive RAM. Required for in-memory databases (like Redis) or big data analytics.</li>
+                        <li><b>Accelerated Computing (e.g., AWS p3):</b> Loaded with GPUs. Essential for Machine Learning, AI training, and 3D rendering.</li>
+                    </ul>
+                    <h3>Pricing Models (How to save 70%)</h3>
+                    <p>Cloud pricing is highly dynamic. If you leave a VM running 24/7 on <b>On-Demand</b> pricing, you will pay the absolute maximum rate. Professional architects use different models:</p>
+                    <p><b>Reserved Instances:</b> If you know you need a database server running for 1 to 3 years, you commit to a contract and get up to a 72% discount. <br>
+                    <b>Spot Instances:</b> You bid on "spare" capacity in the AWS data center. You can get up to a 90% discount, but AWS can terminate your server with a 2-minute warning if they need the capacity back. Spot is perfect for fault-tolerant, interruptible workloads like batch processing.</p>
+                    ${generatePromptBox('AWS CLI: Launching an EC2 Instance', 'Command to launch a basic Ubuntu web server using the AWS CLI:\n\naws ec2 run-instances \\\n    --image-id ami-0c55b159cbfafe1f0 \\\n    --count 1 \\\n    --instance-type t3.micro \\\n    --key-name MyKeyPair \\\n    --security-group-ids sg-903004f8 \\\n    --subnet-id subnet-6e7f829e \\\n    --user-data file://startup-script.sh')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> விர்ச்சுவல் மெஷின் (VM) என்பது ஒரு பெரிய மாளிகையை (Physical Server) 10 தனித்தனி வீடுகளாகப் பிரிப்பது போன்றது. ஒவ்வொரு வீடும் தனித்தனி கதவுகள், தனி விதிகள் (OS) கொண்டிருக்கும், ஆனால் அனைத்தும் ஒரே அஸ்திவாரத்தைப் (CPU, RAM) பகிர்ந்துகொள்ளும்.</div>
+                    <p>கிளவுடின் முதுகெலும்பே இந்த Virtual Machine (VM) தான். இதை AWS-இல் EC2 என்றும், Google-இல் Compute Engine என்றும் அழைப்பார்கள். கிளவுட் நிறுவனங்கள் ஒரு பிரம்மாண்டமான சர்வரைச் சிறிய சிறிய துண்டுகளாகப் பிரித்து நமக்கு வாடகைக்குக் கொடுக்கின்றன.</p>
+                    <h3>சர்வர் வகைகள் (Instance Types)</h3>
+                    <p>அனைத்து வேலைகளுக்கும் ஒரே மாதிரியான கம்ப்யூட்டரைப் பயன்படுத்தக் கூடாது. வேலைக்கு ஏற்ப சரியான வகையைத் தேர்ந்தெடுக்க வேண்டும்:</p>
+                    <ul>
+                        <li><b>General Purpose:</b> நடுத்தரமான CPU மற்றும் RAM. சாதாரண வெப்சைட்டுகளுக்கு இது சிறந்தது.</li>
+                        <li><b>Compute Optimized:</b> அதிக CPU பவர். அதிகக் கணக்கீடுகள் செய்யும் சாஃப்ட்வேர்களுக்கு ஏற்றது.</li>
+                        <li><b>Memory Optimized:</b> மிக அதிக RAM பவர். பெரிய டேட்டாபேஸ்களுக்கு இது தேவை.</li>
+                        <li><b>GPU Optimized:</b> AI மற்றும் Machine Learning மாடல்களைப் பயிற்றுவிக்க இது பயன்படும்.</li>
+                    </ul>
+                    <h3>பணத்தைச் சேமிக்கும் வழிகள்</h3>
+                    <p>சர்வரைத் தொடர்ந்து ஆன் செய்து வைத்து <b>On-Demand</b> முறையில் பில் கட்டினால் நிறைய செலவாகும். பணத்தைச் சேமிக்க:</p>
+                    <p><b>Reserved:</b> 1 அல்லது 3 வருடங்களுக்கு ஒப்பந்தம் போட்டால் 72% வரை தள்ளுபடி கிடைக்கும்.<br>
+                    <b>Spot Instances:</b> அமேசானிடம் மீதமுள்ள காலியான சர்வர்களை 90% தள்ளுபடியில் வாங்கலாம். ஆனால், அமேசானுக்குத் தேவைப்படும்போது 2 நிமிட முன்னறிவிப்போடு அந்த சர்வரை உங்களிடமிருந்து பறித்துக்கொள்வார்கள். இதை முக்கியமான வெப்சைட்டுகளுக்குப் பயன்படுத்தக் கூடாது.</p>
+                    ${generatePromptBox('AWS CLI: Launching an EC2 Instance', 'AWS கமாண்ட் லைன் மூலம் ஒரு புதிய லினக்ஸ் சர்வரை உருவாக்குவதற்கான கமாண்ட்:\n\naws ec2 run-instances \\\n    --image-id ami-0c55b159cbfafe1f0 \\\n    --count 1 \\\n    --instance-type t3.micro \\\n    --key-name MyKeyPair \\\n    --security-group-ids sg-903004f8')}`
+            },
+            { 
+                id: 6, icon: "🕸️", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "6. Cloud Networking Fundamentals (VPC)", title_ta: "6. கிளவுட் நெட்வொர்க்கிங் (VPC)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A VPC is like a gated community. Subnets are the different streets. Public subnets are like the visitor center at the front gate where anyone can walk in. Private subnets are like the VIP houses deep inside where you need a special escort (a NAT Gateway) to go in or out.</div>
+                    <p>Networking is the most critical and often misunderstood part of Cloud Computing. A <b>Virtual Private Cloud (VPC)</b> is your own logically isolated section of the cloud network. Without a properly configured VPC, your databases are exposed directly to the public internet, inviting hackers.</p>
+                    <h3>Subnets & Routing</h3>
+                    <p>Inside your VPC, you divide your IP address range into <b>Subnets</b>.</p>
+                    <ul>
+                        <li><b>Public Subnets:</b> These have a route to an Internet Gateway (IGW). This is where you put your Load Balancers and Web Servers that need to talk directly to users on the internet.</li>
+                        <li><b>Private Subnets:</b> These do NOT have a direct route to the internet. This is where you hide your application backend and databases. They are completely invisible to the outside world.</li>
+                    </ul>
+                    <h3>How do Private Subnets get updates?</h3>
+                    <p>If a database in a private subnet needs to download a Linux security patch, it cannot connect to the internet. To solve this, we use a <b>NAT Gateway</b> (Network Address Translation). The NAT Gateway sits in the Public Subnet. The database sends the request to the NAT Gateway, the NAT talks to the internet, and passes the patch back to the database. Hackers cannot initiate connections inwards through a NAT.</p>
+                    <h3>Security Groups vs. NACLs</h3>
+                    <p><b>Security Groups (SGs)</b> act as a firewall at the <i>Instance (VM) level</i>. They are stateful, meaning if you allow traffic in, return traffic is automatically allowed out. <br>
+                    <b>Network ACLs (NACLs)</b> act as a firewall at the <i>Subnet level</i>. They are stateless, requiring explicit rules for both inbound and outbound traffic.</p>
+                    ${generatePromptBox('VPC Architecture Blueprint', 'Standard 3-Tier Web Architecture Networking Setup:\n\nVPC CIDR: 10.0.0.0/16\n\nAZ A:\n- Public Subnet 1 (10.0.1.0/24) -> Contains Load Balancer & NAT Gateway\n- Private Subnet 1 (10.0.2.0/24) -> Contains Web Application Servers\n- Secure Subnet 1 (10.0.3.0/24) -> Contains Primary Database\n\nAZ B:\n- Public Subnet 2 (10.0.4.0/24)\n- Private Subnet 2 (10.0.5.0/24)\n- Secure Subnet 2 (10.0.6.0/24) -> Contains Standby Database Replica')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> VPC என்பது ஒரு பாதுகாப்பான கேட்-காம்ப்ளக்ஸ் (Gated Community) போன்றது. Public Subnet என்பது வாசலில் உள்ள வரவேற்பறை, யார் வேண்டுமானாலும் வரலாம். Private Subnet என்பது உள்ளே இருக்கும் ரகசிய அறை, வெளியாட்கள் யாரும் நேரடியாக அங்கு செல்ல முடியாது.</div>
+                    <p>நெட்வொர்க்கிங் என்பது கிளவுடில் மிகவும் முக்கியமான பகுதி. <b>VPC (Virtual Private Cloud)</b> என்பது கிளவுடில் உங்களுக்கென ஒதுக்கப்படும் ஒரு தனிப்பட்ட, பாதுகாப்பான நெட்வொர்க். இதைச் சரியாக அமைக்காவிட்டால், உங்கள் டேட்டாபேஸ் ஹேக்கர்களின் கையில் எளிதாகச் சிக்கிவிடும்.</p>
+                    <h3>Subnets (துணை நெட்வொர்க்குகள்)</h3>
+                    <p>உங்கள் VPC-க்குள் IP முகவரிகளைச் சிறு பிரிவுகளாகப் பிரிக்க வேண்டும், இதை <b>Subnets</b> என்பார்கள்.</p>
+                    <ul>
+                        <li><b>Public Subnets:</b> இது நேரடியாக இன்டர்நெட்டுடன் இணைக்கப்பட்டிருக்கும். இணையத்தில் உள்ள மக்கள் நேரடியாகத் தொடர்புகொள்ள வேண்டிய வெப்சைட் சர்வர்களை (Web Servers) இங்குதான் வைக்க வேண்டும்.</li>
+                        <li><b>Private Subnets:</b> இதற்கு நேரடியாக இன்டர்நெட் இணைப்பு இருக்காது. உங்களின் முக்கியமான டேட்டாபேஸ்களை இங்குதான் மறைத்து வைக்க வேண்டும். வெளியுலகில் இருந்து யாரும் இதை அணுக முடியாது.</li>
+                    </ul>
+                    <h3>Private Subnet எப்படி அப்டேட் ஆகும்?</h3>
+                    <p>இன்டர்நெட் இணைப்பு இல்லாத Private Subnet-இல் உள்ள சர்வர் எப்படி அப்டேட் ஆகும்? இதற்கு <b>NAT Gateway</b> பயன்படுகிறது. இது Public Subnet-இல் இருக்கும். Private சர்வர் தமக்குத் தேவையான பைல்களை NAT Gateway மூலமாகப் பாதுகாப்பாகப் பெற்றுக்கொள்ளும்.</p>
+                    <h3>Security Groups (SG)</h3>
+                    <p><b>Security Groups</b> என்பது உங்கள் சர்வருக்குப் பாதுகாப்பளிக்கும் ஃபயர்வால் (Firewall). எந்த IP முகவரியில் இருந்து உங்கள் சர்வருக்கு டிராபிக் வரலாம், எந்த போர்ட் (Port 80/443) திறந்திருக்க வேண்டும் என்பதை இதுதான் கட்டுப்படுத்துகிறது.</p>
+                    ${generatePromptBox('VPC Architecture Blueprint', 'ஒரு பாதுகாப்பான வெப்சைட்டிற்கான நெட்வொர்க் அமைப்பு:\n\n1. Public Subnet: இங்கு Load Balancer வைக்கப்படும் (மக்கள் இங்குதான் வருவார்கள்).\n2. Private Subnet: இங்கு உங்கள் Application Code ஓடும் சர்வர்கள் இருக்கும்.\n3. Secure Subnet: இங்கு டேட்டாபேஸ் இருக்கும் (இது மிக மிக பாதுகாப்பானது).')}`
+            },
+            { 
+                id: 7, icon: "💾", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "7. Storage: Block, File, and Object", title_ta: "7. ஸ்டோரேஜ்: Block, File & Object", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Block Storage is like a high-speed hard drive plugged directly into your laptop; great for installing apps, but stuck to one machine. Object Storage is like a massive digital warehouse with a conveyor belt; you throw unlimited boxes of photos into it, and anyone in the world can fetch a box using a web URL.</div>
+                    <p>Storing data in the cloud is not a one-size-fits-all approach. Choosing the wrong storage type will result in terrible performance or astronomical bills. There are three primary paradigms:</p>
+                    <h3>1. Block Storage (AWS EBS, Azure Managed Disks)</h3>
+                    <p>Block storage acts as the "C: Drive" or root volume for your Virtual Machines. It provides ultra-fast, low-latency access suitable for operating systems and databases. However, block storage is highly expensive and is generally tied to a single specific Virtual Machine in a specific Availability Zone.</p>
+                    <h3>2. File Storage (AWS EFS, Azure Files)</h3>
+                    <p>File storage is like a traditional network-attached storage (NAS) drive. It uses standard file protocols like NFS or SMB. The defining feature is that <b>hundreds of Virtual Machines can connect to the exact same File Storage simultaneously</b>, reading and writing files in real-time. It is perfect for shared content management systems like WordPress.</p>
+                    <h3>3. Object Storage (AWS S3, Google Cloud Storage)</h3>
+                    <p>This is the greatest innovation of the cloud. Object storage is infinitely scalable, flat storage. You do not install operating systems here. You store "Objects" (images, videos, backups, PDFs). It is incredibly cheap. Every object gets a unique URL, meaning a user can download a video directly from S3 without the data ever passing through your expensive web servers.</p>
+                    <p>Object storage is highly durable (designed for 99.999999999% durability). It also has storage classes: If you have backup data you rarely access, you can move it to "Glacier" or "Archive" storage to pay fractions of a penny per gigabyte.</p>
+                    ${generatePromptBox('AWS S3 Lifecycle Rule (Terraform)', 'Use Infrastructure as Code to automate cost savings. This rule moves files to cheap storage after 30 days.\n\nresource "aws_s3_bucket_lifecycle_configuration" "cost_saver" {\n  bucket = aws_s3_bucket.my_data.id\n  rule {\n    id     = "archive-old-files"\n    status = "Enabled"\n    transition {\n      days          = 30\n      storage_class = "GLACIER"\n    }\n  }\n}')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> Block Storage என்பது உங்கள் லேப்டாப்பில் உள்ள ஹார்டு டிஸ்க் போன்றது; அதிவேகமாக இயங்கும், ஆனால் அந்த லேப்டாப்பிற்கு மட்டுமே சொந்தம். Object Storage என்பது ஒரு பெரிய கிடங்கு போன்றது; அதில் எவ்வளவு டேட்டா வேண்டுமானாலும் போடலாம், அதற்கான லிங்க்கை (URL) வைத்து யார் வேண்டுமானாலும் அதை டவுன்லோட் செய்யலாம்.</div>
+                    <p>கிளவுடில் டேட்டாவைச் சேமிக்க 3 முக்கிய முறைகள் உள்ளன. சரியான முறையைத் தேர்ந்தெடுத்தால்தான் செலவைக் குறைக்க முடியும்.</p>
+                    <h3>1. Block Storage (AWS EBS)</h3>
+                    <p>இது உங்கள் Virtual Machine-இன் (VM) 'C: Drive' ஆகச் செயல்படுகிறது. இது மிக வேகமாக இயங்கும், ஆப்பரேட்டிங் சிஸ்டம் (OS) மற்றும் டேட்டாபேஸ்களை இன்ஸ்டால் செய்ய இதுவே சிறந்தது. ஆனால் இது மிகவும் விலை உயர்ந்தது மற்றும் ஒரு சர்வருக்கு மட்டுமே சொந்தமாக இருக்கும்.</p>
+                    <h3>2. File Storage (AWS EFS)</h3>
+                    <p>இது நெட்வொர்க் ஸ்டோரேஜ் (NAS) போன்றது. இதன் சிறப்பு என்னவென்றால், <b>நூற்றுக்கணக்கான சர்வர்கள் ஒரே நேரத்தில் இந்த ஸ்டோரேஜில் இணைந்து பைல்களைப் படிக்கவும் எழுதவும் முடியும்</b>. பல சர்வர்களில் இயங்கும் பெரிய வெப்சைட்டுகளுக்கு இது பயன்படும்.</p>
+                    <h3>3. Object Storage (AWS S3 / Google Cloud Storage)</h3>
+                    <p>இது கிளவுடின் மிகச் சிறந்த கண்டுபிடிப்பு. இதில் எவ்வளவு டேட்டாவை (படங்கள், வீடியோக்கள், பேக்கப்) வேண்டுமானாலும் சேமிக்கலாம். இது மிகவும் மலிவானது. ஒவ்வொரு பைலுக்கும் ஒரு தனி URL லிங்க் கிடைக்கும். உங்கள் வாடிக்கையாளர்கள் உங்கள் சர்வரைத் தொந்தரவு செய்யாமலேயே, நேராக S3-யில் இருந்து வீடியோக்களை டவுன்லோட் செய்து கொள்ளலாம்.</p>
+                    <p>அடிக்கடி பயன்படுத்தாத பழைய டேட்டாக்களை 'Glacier' அல்லது 'Archive' என்ற பகுதிக்கு மாற்றிவிட்டால் செலவு இன்னும் பல மடங்கு குறையும்.</p>
+                    ${generatePromptBox('AWS S3 Cost Optimization', 'பணத்தைச் சேமிக்கும் ஆட்டோமேஷன்:\n\nS3 பக்கெட்டில் உள்ள ஒரு ஃபைல் 30 நாட்களுக்கு மேல் பயன்படுத்தப்படாமல் இருந்தால், அது தானாகவே மிக மலிவான "Glacier" ஸ்டோரேஜிற்கு மாறிவிடும் வகையில் Lifecycle Rules-ஐ செட் செய்ய வேண்டும். இது நிறுவனங்களுக்கு பல லட்சம் ரூபாயைச் சேமித்துத் தரும்.')}`
+            },
+            { 
+                id: 8, icon: "🗄️", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "8. Managed Relational Databases (SQL)", title_ta: "8. ரிலேஷனல் டேட்டாபேஸ் (SQL)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Running your own database on a VM is like adopting a puppy. You have to feed it, clean up after it, and take it to the vet (patching, backups, scaling). A Managed Database (RDS) is like a robot dog. It does all the tricks perfectly, but it feeds itself, heals itself, and backs itself up automatically.</div>
+                    <p>Data is the most valuable asset of any application. While you *could* install MySQL or PostgreSQL on a standard EC2 virtual machine, doing so makes you responsible for OS patching, database patching, automated backups, and complex failover routing. This is a massive operational burden.</p>
+                    <h3>The Managed Database (RDS/Cloud SQL)</h3>
+                    <p>Cloud providers offer fully managed relational database services (Amazon RDS, Google Cloud SQL, Azure SQL). You simply select the engine (MySQL, PostgreSQL, SQL Server), and the cloud provider handles all the tedious database administration tasks.</p>
+                    <h3>High Availability (Multi-AZ)</h3>
+                    <p>A critical architectural pattern is <b>Multi-AZ Deployment</b>. When you enable this, the cloud provider creates a primary database in Availability Zone A, and a hidden, synchronous standby database in Availability Zone B. If the primary database hardware catches fire, the system automatically points your application's DNS to the standby database within 60 seconds, with zero data loss.</p>
+                    <h3>Read Replicas</h3>
+                    <p>If you have a reporting dashboard that runs massive, heavy SQL queries, it can slow down the database for regular users trying to buy things. To solve this, you create a <b>Read Replica</b>. This is an asynchronous copy of the database. You route all your heavy "Read" traffic (like analytics) to the replica, and keep all the "Write" traffic (like new orders) on the primary database, massively improving performance.</p>
+                    ${generatePromptBox('Database Architecture Strategy', 'Rule of Thumb for Scaling SQL:\n\n1. Need to handle database failure? -> Enable Multi-AZ (Synchronous, hidden standby).\n2. Need to handle heavy read traffic? -> Add Read Replicas (Asynchronous, active query targets).\n3. Need massive, limitless horizontal scaling? -> Relational SQL is the wrong choice. Move to NoSQL (Module 9).')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒரு விர்ச்சுவல் மெஷினில் நீங்களே டேட்டாபேஸை இன்ஸ்டால் செய்வது ஒரு நாய்க்குட்டியை வளர்ப்பது போன்றது. அதற்கு உணவளித்து, நோய் வந்தால் மருத்துவம் பார்க்க வேண்டும் (Backups, Updates). Managed Database என்பது ரோபோ நாய் போன்றது. அது தானே தனக்கு உணவளித்துக் கொள்ளும், தன்னைத்தானே பாதுகாத்துக் கொள்ளும்.</div>
+                    <p>ஒரு அப்ளிகேஷனில் டேட்டாதான் மிகவும் முக்கியம். EC2 சர்வரில் நீங்களே MySQL-ஐ இன்ஸ்டால் செய்யலாம், ஆனால் அதன் பாதுகாப்பு, பேக்கப் (Backup) அனைத்தையும் நீங்களே பார்க்க வேண்டும். இது மிகவும் கடினமான வேலை.</p>
+                    <h3>Managed Database (RDS)</h3>
+                    <p>இதற்குப் பதிலாக, AWS RDS அல்லது Google Cloud SQL போன்ற சேவைகளைப் பயன்படுத்தலாம். இது டேட்டாபேஸை முழுமையாகக் கவனித்துக்கொள்ளும் (Fully Managed). அப்டேட், பேக்கப் அனைத்தையும் கிளவுட் நிறுவனமே பார்த்துக்கொள்ளும்.</p>
+                    <h3>Multi-AZ (அதிகப் பாதுகாப்பு)</h3>
+                    <p>உங்கள் டேட்டாபேஸ் சர்வர் பழுதானால் முழு சிஸ்டமும் முடங்கும். இதைத் தடுக்க <b>Multi-AZ</b> முறையைப் பயன்படுத்த வேண்டும். இது AZ-A வில் உள்ள முக்கிய டேட்டாபேஸை, AZ-B யில் உள்ள மற்றொரு மறைமுக டேட்டாபேஸுடன் எந்நேரமும் காப்பி (Sync) செய்துகொண்டே இருக்கும். முதல் டேட்டாபேஸ் பழுதானால், 60 விநாடிகளில் சிஸ்டம் தானாகவே இரண்டாவது டேட்டாபேஸிற்கு மாறிவிடும்.</p>
+                    <h3>Read Replicas</h3>
+                    <p>உங்கள் வெப்சைட்டில் அதிக மக்கள் ஒரே நேரத்தில் டேட்டாவைப் படிக்கும்போது (எ.கா: ரிப்போர்ட்கள் பார்ப்பது) சர்வர் மெதுவாகும். இதைத் தவிர்க்க <b>Read Replica</b> உருவாக்கலாம். மக்கள் டேட்டாவைப் படிக்க Read Replica-வையும், புதிய டேட்டாவை எழுத (எ.கா: ஆர்டர் செய்ய) Primary டேட்டாபேஸையும் பயன்படுத்தினால் வெப்சைட் அதிவேகமாக இயங்கும்.</p>
+                    ${generatePromptBox('Database Architecture Strategy', 'SQL டேட்டாபேஸை மேம்படுத்தும் விதிகள்:\n\n1. சர்வர் பழுதானால் தப்பிக்க வேண்டுமா? -> Multi-AZ ஐப் பயன்படுத்துங்கள்.\n2. அதிக மக்கள் ஒரே நேரத்தில் டேட்டாவைப் படிக்க வேண்டுமா? -> Read Replicas ஐப் பயன்படுத்துங்கள்.\n3. எல்லையற்ற அளவு டேட்டாவைக் கையாள வேண்டுமா? -> SQL தவறான தேர்வு, NoSQL-க்கு மாறுங்கள் (Module 9).')}`
+            },
+            { 
+                id: 9, icon: "⚡", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "9. NoSQL & High-Performance Databases", title_ta: "9. NoSQL டேட்டாபேஸ்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> SQL is like an Excel spreadsheet. Everything must fit perfectly into strict rows and columns. NoSQL is like a filing cabinet with manila folders. Each folder can contain completely different things—one has a single piece of paper, another has a thick book. It is built for speed and flexibility, not rigid rules.</div>
+                    <p>Relational databases (SQL) are fantastic, but they have a fatal flaw: they scale <i>vertically</i>. If your SQL database maxes out on CPU, your only option is to turn it off and upgrade it to a bigger, more expensive machine. Eventually, you hit a hardware limit.</p>
+                    <h3>The NoSQL Solution</h3>
+                    <p><b>NoSQL databases</b> (like Amazon DynamoDB, Google Firestore, Azure Cosmos DB, or MongoDB) scale <i>horizontally</i>. They distribute data across hundreds of underlying servers seamlessly. This allows them to handle millions of requests per second with single-digit millisecond latency.</p>
+                    <h3>Key-Value & Document Stores</h3>
+                    <p>Instead of strict tables, NoSQL often stores data as JSON documents. This means the schema is flexible. User A's record might have a "phone number" field, while User B's record does not. The database doesn't care. This is incredible for rapid application development and handling unstructured data like social media feeds, IoT sensor data, or gaming leaderboards.</p>
+                    <h3>The Trade-off (Eventual Consistency)</h3>
+                    <p>You cannot cheat physics. To achieve this extreme horizontal scaling across the globe, NoSQL databases often sacrifice strict consistency. If you write data to node A, and instantly read from node B across the world, you might get old data for a few milliseconds before the sync finishes. This is called "Eventual Consistency." You would use SQL for a banking transaction, but NoSQL for a shopping cart or chat history.</p>
+                    ${generatePromptBox('DynamoDB JSON Structure Example', 'Notice how the schema is flexible. User 1 has "skills", User 2 has "certifications".\n\n{\n  "UserId": "101",\n  "Name": "Jane Doe",\n  "Role": "DevOps",\n  "Skills": ["AWS", "Terraform"]\n}\n\n{\n  "UserId": "102",\n  "Name": "John Smith",\n  "Role": "Security",\n  "Certifications": "CISSP"\n}')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> SQL என்பது எக்ஸெல் (Excel) சீட் போன்றது. எல்லா டேட்டாவும் வரிசையாகவும், கட்டங்களுக்குள்ளும் (Rows/Columns) சரியாகப் பொருந்த வேண்டும். NoSQL என்பது ஃபைல் கேபினட் போன்றது. ஒவ்வொரு ஃபைலிலும் வெவ்வேறு வகையான பேப்பர்கள் இருக்கலாம். இது கடுமையான விதிகள் இன்றி, அதிவேகமாகச் செயல்பட உருவாக்கப்பட்டது.</div>
+                    <p>SQL டேட்டாபேஸ்கள் சிறந்தவை, ஆனால் அவற்றில் ஒரு குறை உள்ளது: அவை செங்குத்தாக (Vertically) மட்டுமே வளரும். சர்வர் நிரம்பிவிட்டால், அதைவிடப் பெரிய விலையுயர்ந்த சர்வருக்குத்தான் மாற முடியும். ஒரு கட்டத்தில் ஹார்டுவேர் எல்லை வந்துவிடும்.</p>
+                    <h3>NoSQL-இன் தீர்வு</h3>
+                    <p><b>NoSQL டேட்டாபேஸ்கள்</b> (Amazon DynamoDB, MongoDB) கிடைமட்டமாக (Horizontally) வளரும். இவை டேட்டாவை நூற்றுக்கணக்கான சர்வர்களில் பிரித்து வைத்துக்கொள்ளும். இதனால் ஒரு விநாடிக்கு பல லட்சம் பேரை எவ்விதத் தாமதமுமின்றி (Millisecond latency) கையாள முடியும்.</p>
+                    <h3>JSON Document முறை</h3>
+                    <p>NoSQL-இல் டேட்டா கட்டங்களாக இல்லாமல், JSON வடிவில் சேமிக்கப்படும். இதனால் விதிகள் நெகிழ்வாக இருக்கும். ஒரு பயனரிடம் 'போன் நம்பர்' இருக்கலாம், மற்றொரு பயனரிடம் அது இல்லாமலும் இருக்கலாம். டேட்டாபேஸ் இதை ஏற்றுக் கொள்ளும். சோஷியல் மீடியா கமெண்ட்கள், கேமிங் ஸ்கோர்கள் போன்றவற்றைச் சேமிக்க இதுவே சிறந்தது.</p>
+                    <h3>ஒரு சிறிய குறை (Eventual Consistency)</h3>
+                    <p>வேகத்திற்காக NoSQL சில சமரசங்களைச் செய்கிறது. டேட்டாவை அப்டேட் செய்த அடுத்த மில்லி விநாடியே அதைப் படித்தால், சில நேரம் பழைய டேட்டா காட்டப்படலாம். சில விநாடிகள் கழித்தே புதிய டேட்டா அனைத்து சர்வர்களுக்கும் மாறும். எனவே, வங்கிப் பணப் பரிவர்த்தனைக்கு SQL-ஐயும், அமேசான் ஷாப்பிங் கார்ட்டுக்கு NoSQL-ஐயும் பயன்படுத்த வேண்டும்.</p>
+                    ${generatePromptBox('DynamoDB JSON Structure Example', 'விதிகள் நெகிழ்வாக இருப்பதை இங்கே கவனிக்கவும்:\n\nபயனர் 1:\n{\n  "UserId": "101",\n  "Name": "Jane Doe",\n  "Skills": ["AWS", "Terraform"]\n}\n\nபயனர் 2 (Skills இல்லை, Certifications உள்ளது):\n{\n  "UserId": "102",\n  "Name": "John Smith",\n  "Certifications": "CISSP"\n}')}`
+            },
+            { 
+                id: 10, icon: "🌐", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "10. Content Delivery Networks (CDNs)", title_ta: "10. CDN - வெப்சைட்டை வேகமாக்குதல்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If your web server is a pizza shop in New York, and a customer in Tokyo orders a pizza, it will be cold by the time it arrives. A CDN is like opening a freezer full of frozen pizzas in Tokyo. The customer gets it instantly, and the main shop in New York isn't overworked.</div>
+                    <p>Latency is the silent killer of digital businesses. If your web application takes longer than 3 seconds to load, 50% of your users will abandon the site. If your main servers are located in AWS us-east-1 (Virginia), a user accessing your site from India will experience significant physical lag.</p>
+                    <h3>How a CDN Works</h3>
+                    <p>A <b>Content Delivery Network (CDN)</b>, such as AWS CloudFront, Cloudflare, or Akamai, solves this by utilizing the "Edge Locations" we discussed in Module 3. A CDN caches (temporarily stores) the static assets of your website—such as HTML files, CSS, JavaScript, and high-resolution images—on hundreds of servers globally.</p>
+                    <p>When a user in Mumbai visits your site, the request doesn't go to Virginia. It goes to the CloudFront Edge Location in Mumbai, which delivers the cached images instantly.</p>
+                    <h3>DDoS Protection</h3>
+                    <p>CDNs are not just for speed; they are your frontline defense against Distributed Denial of Service (DDoS) attacks. Because CDNs have massive global bandwidth, if a hacker tries to flood your website with fake traffic, the CDN absorbs and filters the attack at the edge, ensuring your origin servers never crash.</p>
+                    <h3>Invalidation</h3>
+                    <p>The trickiest part of managing a CDN is cache invalidation. If you update your company logo on your main server, users might still see the old logo for 24 hours because the CDN is serving the cached version. You must run an "Invalidation Request" to force the CDN to delete the old cache and fetch the new file.</p>
+                    ${generatePromptBox('AWS CloudFront Invalidation Command', 'To instantly force all global Edge Locations to delete the cached version of your homepage and fetch the newest update, use this CLI command:\n\naws cloudfront create-invalidation \\\n    --distribution-id E1A2B3C4D5E6F7 \\\n    --paths "/index.html" "/images/logo.png"')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> நியூயார்க்கில் உள்ள ஹோட்டலில் இருந்து டோக்கியோவிற்கு பிட்சா ஆர்டர் செய்தால், அது வருவதற்குள் ஆறிவிடும். CDN என்பது டோக்கியோவிலேயே ஒரு சிறிய கிளை திறந்து, அங்கிருந்தே பிட்சாவை சூடாகக் கொடுப்பது போன்றது. வாடிக்கையாளருக்கு உடனடியாகக் கிடைக்கும், முக்கிய ஹோட்டலுக்கும் அதிக வேலை இருக்காது.</div>
+                    <p>வேகமின்மை (Latency) என்பது எந்த ஒரு டிஜிட்டல் பிசினஸுக்கும் எதிரி. உங்கள் வெப்சைட் திறக்க 3 வினாடிகளுக்கு மேல் ஆனால், 50% பேர் வெளியேறிவிடுவார்கள். உங்கள் சர்வர் அமெரிக்காவில் இருந்து, அதை இந்தியாவில் இருந்து பார்த்தால் டேட்டா வரத் தாமதமாகும்.</p>
+                    <h3>CDN எப்படி வேலை செய்கிறது?</h3>
+                    <p><b>CDN (Content Delivery Network)</b> (எ.கா: AWS CloudFront, Cloudflare) இந்தப் பிரச்சனையைத் தீர்க்கிறது. வெப்சைட்டில் உள்ள படங்கள், வீடியோக்கள், CSS பைல்களை இது உலகம் முழுவதும் உள்ள நூற்றுக்கணக்கான "Edge Locations"-களில் சேமித்து (Cache) வைத்துக்கொள்ளும்.</p>
+                    <p>மும்பையில் இருந்து ஒருவர் உங்கள் வெப்சைட்டைத் திறந்தால், டேட்டா அமெரிக்காவில் இருந்து வராது. மும்பையில் உள்ள Edge Location-இல் இருந்தே உடனடியாக வரும்.</p>
+                    <h3>DDoS தாக்குதல் பாதுகாப்பு</h3>
+                    <p>CDN வேகத்திற்கு மட்டுமல்ல, பாதுகாப்பிற்கும் உதவுகிறது. ஹேக்கர்கள் லட்சக்கணக்கான போலி டிராபிக்கை (DDoS attack) அனுப்பி உங்கள் சர்வரை முடக்க நினைத்தால், CDN அந்தத் தாக்குதலை வழியிலேயே தடுத்து நிறுத்தி, உங்கள் முக்கிய சர்வரைக் காப்பாற்றும்.</p>
+                    <h3>Cache Invalidation</h3>
+                    <p>நீங்கள் வெப்சைட்டில் புதிய லோகோவை அப்டேட் செய்தாலும், சில சமயம் பழைய லோகோவே காட்டும். காரணம், CDN பழைய லோகோவை Cache செய்து வைத்திருக்கும். இதைச் சரிசெய்ய, "Invalidation" கமாண்ட் கொடுத்து பழைய Cache-ஐ அழிக்க வேண்டும்.</p>
+                    ${generatePromptBox('AWS CloudFront Invalidation Command', 'உலகம் முழுவதும் உள்ள Edge Location-களில் உள்ள பழைய Cache-ஐ அழிக்க AWS CLI கமாண்ட்:\n\naws cloudfront create-invalidation \\\n    --distribution-id E1A2B3C4D5E6F7 \\\n    --paths "/index.html" "/images/logo.png"')}`
+            },
+            { 
+                id: 11, icon: "📈", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "11. Elasticity & Auto-Scaling", title_ta: "11. ஆட்டோ-ஸ்கேலிங் (Auto-Scaling)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Auto-scaling is like a magical restaurant. At 11:00 AM, you have 1 waiter. At 12:00 PM, 500 customers suddenly walk in. Instantly, 10 clone waiters appear to handle the rush. At 2:00 PM when the lunch rush ends, the clone waiters disappear, and you stop paying their hourly wage.</div>
+                    <p>True cloud architecture is not static; it is elastic. If your e-commerce site gets featured on the news, traffic might spike by 10,000% in five minutes. A traditional server will crash immediately. In the cloud, we use <b>Auto-Scaling Groups (ASGs)</b>.</p>
+                    <h3>Horizontal vs. Vertical Scaling</h3>
+                    <ul>
+                        <li><b>Vertical Scaling (Scale Up):</b> Shutting down a server with 2GB of RAM and replacing it with a 16GB RAM server. This causes downtime and eventually hits a hardware ceiling.</li>
+                        <li><b>Horizontal Scaling (Scale Out):</b> Keeping the 2GB RAM server, but seamlessly adding 7 more identical 2GB RAM servers alongside it to share the load. This is the cloud way.</li>
+                    </ul>
+                    <h3>How Auto-Scaling Works</h3>
+                    <p>You create an ASG and define rules (Policies). For example: "If the average CPU utilization across all my servers hits 75%, launch 2 more servers. If the CPU drops below 30%, terminate 2 servers."</p>
+                    <p>To make this work, the new servers must be identical. You achieve this by creating an <b>AMI (Amazon Machine Image)</b> or an Instance Template, which contains the exact OS, code, and configuration needed. The ASG uses this template to clone new servers automatically.</p>
+                    <h3>The Load Balancer Connection</h3>
+                    <p>Auto-scaling is useless without an <b>Elastic Load Balancer (ELB)</b>. The ELB sits in front of your servers. It represents the single IP address your customers talk to. As the ASG spins up new clone servers, it registers them with the ELB. The ELB then distributes incoming traffic evenly across all available healthy servers.</p>
+                    ${generatePromptBox('Auto-Scaling Configuration Blueprint', 'Minimum Capacity: 2 (Always have at least 2 servers running across 2 different AZs for High Availability).\nDesired Capacity: 2\nMaximum Capacity: 10 (Set a hard limit to protect against infinite scaling bills if you get hit by a DDoS attack).\n\nScale-Out Policy: Add 1 Instance when CPU > 70% for 2 consecutive minutes.\nScale-In Policy: Remove 1 Instance when CPU < 30% for 5 consecutive minutes.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஆட்டோ-ஸ்கேலிங் என்பது ஒரு மாயாஜால ஹோட்டல் போன்றது. காலை 11 மணிக்கு 1 சர்வர் (Waiter) இருப்பார். மதியம் 12 மணிக்கு 500 பேர் வந்தால், உடனே 10 புதிய சர்வர்கள் மாயமாகத் தோன்றுவார்கள். கூட்டம் குறைந்தவுடன் அவர்கள் மறைந்துவிடுவார்கள், அவர்களுக்கான சம்பளமும் மிச்சமாகும்.</div>
+                    <p>கிளவுட் கட்டமைப்பு என்பது நிலையானதல்ல; அது ரப்பர் பேண்ட் போல வளையக்கூடியது (Elastic). உங்கள் வெப்சைட் திடீரென பிரபலமாகி பல லட்சம் பேர் ஒரே நேரத்தில் வந்தால் பழைய சர்வர்கள் முடங்கிவிடும். இதைத் தடுக்க <b>Auto-Scaling</b> பயன்படுகிறது.</p>
+                    <h3>Horizontal vs. Vertical Scaling</h3>
+                    <ul>
+                        <li><b>Vertical Scaling (Scale Up):</b> இருக்கும் சிறிய சர்வரை மூடிவிட்டு, அதிக RAM உள்ள பெரிய சர்வருக்கு மாறுவது. இதில் வெப்சைட் சிறிது நேரம் முடங்கும் அபாயம் உண்டு.</li>
+                        <li><b>Horizontal Scaling (Scale Out):</b> இருக்கும் சர்வருடனே, அதே போன்ற பல புதிய சர்வர்களைக் கூட்டத்தில் சேர்ப்பது. இதுவே கிளவுடின் சிறந்த முறை. எவ்விதத் தடையுமின்றி வளரலாம்.</li>
+                    </ul>
+                    <h3>ஆட்டோ-ஸ்கேலிங் எப்படி வேலை செய்யும்?</h3>
+                    <p>இதற்கு நீங்கள் விதிகளை அமைக்க வேண்டும். எ.கா: "சர்வரின் CPU பயன்பாடு 75%-ஐத் தாண்டினால், புதியதாக 2 சர்வர்களை உருவாக்கு. CPU 30%-க்குக் கீழ் குறைந்தால், 2 சர்வர்களை அழித்துவிடு."</p>
+                    <p>புதிதாக வரும் சர்வர்கள் அப்படியே பழைய சர்வர் போலவே இருக்க வேண்டும். இதற்காக <b>AMI (Machine Image)</b> என்ற டெம்ப்ளேட்டை (Template) உருவாக்கி வைத்துக்கொள்ள வேண்டும். இதை வைத்து சிஸ்டம் தானாகவே சர்வர்களை க்ளோன் (Clone) செய்துகொள்ளும்.</p>
+                    <h3>Load Balancer</h3>
+                    <p>ஆட்டோ-ஸ்கேலிங்கிற்கு <b>Load Balancer</b> மிக அவசியம். மக்கள் அனைவரும் Load Balancer-ஐயே தொடர்புகொள்வார்கள். இது உள்வரும் டிராபிக்கை, உள்ளே இருக்கும் அனைத்து சர்வர்களுக்கும் சமமாகப் பிரித்துக் கொடுக்கும்.</p>
+                    ${generatePromptBox('Auto-Scaling Configuration Blueprint', 'சிறந்த கட்டமைப்பு விதிகள்:\n\nகுறைந்தபட்ச சர்வர்கள்: 2 (பாதுகாப்பிற்காக எப்போதுமே 2 இயங்க வேண்டும்).\nஅதிகபட்ச சர்வர்கள்: 10 (அதிகபட்ச வரம்பை செட் செய்ய வேண்டும், இல்லையெனில் பில் லட்சக்கணக்கில் வந்துவிடும்).\n\nவிதி 1: CPU 70%-ஐத் தாண்டினால் 1 சர்வரைச் சேர்.\nவிதி 2: CPU 30%-க்குக் கீழ் குறைந்தால் 1 சர்வரை நீக்கு.')}`
+            },
+            { 
+                id: 12, icon: "✉️", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "12. Application Integration & Decoupling", title_ta: "12. மெசேஜ் கியூ (Message Queues & Decoupling)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A tightly coupled system is like calling someone on the phone; if they don't answer, communication fails. A decoupled system (using queues) is like sending a WhatsApp message; even if their phone is off, the message waits safely on the server until they turn it on and read it.</div>
+                    <p>As your application grows, building it as one massive block of code (a Monolith) becomes a nightmare. If the PDF-generation module crashes, it takes down the entire checkout system with it. The modern solution is <b>Microservices</b>, but microservices need a highly reliable way to talk to each other without being strictly dependent on one another. We call this "Decoupling."</p>
+                    <h3>Message Queues (AWS SQS, Google Pub/Sub)</h3>
+                    <p>A Message Queue is a temporary buffer. Imagine a video processing app. User uploads a video. The Web Server doesn't process the video itself (that would freeze the web page). Instead, the Web Server sends a message to an <b>SQS Queue</b> saying "Process Video 123".</p>
+                    <p>A separate group of Worker Servers constantly poll the queue. A worker picks up the message, processes the video, and deletes the message. If a Worker Server crashes halfway through, the message becomes visible on the queue again, and another worker picks it up. Zero data is lost.</p>
+                    <h3>Notification Services (AWS SNS)</h3>
+                    <p>While SQS is for 1-to-1 processing (one message to one worker), <b>SNS (Simple Notification Service)</b> is for 1-to-Many broadcasting (Pub/Sub model). An event happens (e.g., "Item Sold"), and the SNS Topic pushes that notification simultaneously to the Email Service, the Analytics Database, and the Inventory Management system.</p>
+                    <h3>The Fan-Out Pattern</h3>
+                    <p>The ultimate decoupled architecture is the "Fan-Out Pattern." An SNS Topic receives a single event, and instantly pushes copies of that event into three different SQS Queues, allowing three entirely different microservices to process the event independently and at their own pace.</p>
+                    ${generatePromptBox('SQS + Auto-Scaling Architecture', 'Pro-Tip for Cost Optimization:\n\nDo not scale your Worker Servers based on CPU! Scale them based on the Queue Length.\n\nSet an Auto-Scaling policy: If `ApproximateNumberOfMessagesVisible` in SQS > 1000, launch 5 more Worker VMs. If the queue hits 0, terminate all workers to save money. This ensures you only pay for compute exactly when there is work to be done.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> ஒருவருக்கொருவர் நேரடியாகத் தொடர்புகொள்வது (Tightly coupled) போன் பேசுவது போன்றது; அவர்கள் எடுக்கவில்லை என்றால் தகவல் சேராது. Decoupled முறை என்பது வாட்ஸ்அப் மெசேஜ் போன்றது; அவர்கள் போன் ஆஃப் ஆகியிருந்தாலும், மெசேஜ் பாதுகாப்பாகக் காத்திருந்து, அவர்கள் ஆன் செய்ததும் சென்று சேரும்.</div>
+                    <p>உங்கள் சாஃப்ட்வேர் பெரியதாகும்போது, அனைத்தையும் ஒரே கோடில் (Monolith) எழுதினால், அதில் ஒரு சிறிய பிழை வந்தாலும் மொத்த வெப்சைட்டும் முடங்கிவிடும். இதைத் தவிர்க்க, ஒவ்வொரு வேலைக்கும் தனித்தனிச் சிறிய சாஃப்ட்வேர்களை (Microservices) உருவாக்கி, அவை ஒன்றுக்கொன்று பாதுகாப்பாகத் தொடர்புகொள்ளும் <b>Decoupling</b> முறையைப் பயன்படுத்த வேண்டும்.</p>
+                    <h3>Message Queues (AWS SQS)</h3>
+                    <p>மெசேஜ் கியூ (Message Queue) என்பது ஒரு தற்காலிகப் பாதுகாப்பகம். ஒருவர் வெப்சைட்டில் பெரிய வீடியோவை அப்லோட் செய்தால், வெப்சைட் சர்வர் அதை பிராசஸ் செய்யாது (செய்தால் வெப்சைட் ஹேங் ஆகிவிடும்). அதற்குப் பதிலாக வெப்சைட் சர்வர், "இந்த வீடியோவைப் பிராசஸ் செய்" என்று ஒரு மெசேஜை <b>SQS Queue</b>-வில் போட்டுவிடும்.</p>
+                    <p>தனியாக இருக்கும் Worker சர்வர்கள் கியூவில் உள்ள மெசேஜை எடுத்து வேலையைச் செய்யும். இடையில் சர்வர் பழுதானாலும், அந்த மெசேஜ் மீண்டும் கியூவிற்கே சென்றுவிடும். இதனால் எந்த டேட்டாவும் அழியாது.</p>
+                    <h3>Notification Services (AWS SNS)</h3>
+                    <p>SQS என்பது ஒருவருக்கு ஒரு மெசேஜ் அனுப்புவது. ஆனால் <b>SNS (Simple Notification Service)</b> என்பது ஒரு செய்தியைப் பலருக்கு ஒரே நேரத்தில் அனுப்புவது (Broadcasting). ஒருவர் பொருளை வாங்கியவுடன், SNS அந்தச் செய்தியை ஈமெயில் சர்வருக்கும், இன்வென்ட்ரி சர்வருக்கும் ஒரே நேரத்தில் அனுப்பிவிடும்.</p>
+                    ${generatePromptBox('SQS + Auto-Scaling Architecture', 'பணத்தைச் சேமிக்கும் தொழில்முறை யுக்தி:\n\nWorker சர்வர்களை CPU-ஐ வைத்து ஆட்டோ-ஸ்கேல் செய்யாதீர்கள். கியூவில் (Queue) உள்ள மெசேஜ்களின் எண்ணிக்கையை வைத்து ஸ்கேல் செய்யுங்கள்.\n\nவிதி: கியூவில் 1000 மெசேஜ்களுக்கு மேல் இருந்தால் 5 சர்வர்களை உருவாக்கு. மெசேஜ் 0 ஆனால், அனைத்து சர்வர்களையும் அழித்துவிடு. இதனால் வேலை இருக்கும்போது மட்டும் பணம் செலவாகும்.')}`
+            },
+            { 
+                id: 13, icon: "λ", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "13. Serverless Computing", title_ta: "13. சர்வர்லெஸ் கம்ப்யூட்டிங் (Serverless)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Traditional servers are like paying a monthly water bill for a constantly running tap, whether you drink from it or not. Serverless is like a smart faucet; you only pay for the exact drops of water that come out when you place your hands under it.</div>
+                    <p>Welcome to the bleeding edge of cloud architecture. <b>Serverless</b> does not mean there are no servers; it means you, the developer, do not manage, provision, or even see the servers. The cloud provider handles everything.</p>
+                    <h3>Function as a Service (FaaS)</h3>
+                    <p>Tools like <b>AWS Lambda, Google Cloud Functions, and Azure Functions</b> are the core of serverless compute. Instead of uploading an entire Operating System and application, you upload a single function of code (written in Python, Node.js, Go, etc.).</p>
+                    <p>That code sits dormant, costing $0.00. When an event triggers it (e.g., a user uploads an image to S3, or an API Gateway receives a web request), the cloud provider instantly spins up a micro-container, executes your code, and shuts it down. You are billed in increments of 1 millisecond. If your code runs for 200 milliseconds, you pay for exactly 200 milliseconds of compute time.</p>
+                    <h3>The Scaling Magic</h3>
+                    <p>With traditional Auto-Scaling, going from 1 server to 100 servers takes minutes. With AWS Lambda, if 10,000 users click a button at the exact same second, AWS instantly spins up 10,000 independent Lambda functions in parallel. It scales from zero to tens of thousands instantly, and drops back to zero just as fast.</p>
+                    <h3>The Cold Start Problem</h3>
+                    <p>The main drawback of serverless is the "Cold Start." If a function hasn't been used in a while, the cloud provider spins down the environment. The next time it is triggered, it might take 1-2 seconds to initialize the runtime environment before executing the code. For highly latency-sensitive applications, this slight delay can be problematic.</p>
+                    ${generatePromptBox('AWS Lambda Python Example', 'A simple Lambda function that resizes an image when triggered by an S3 upload event:\n\nimport boto3\n\ndef lambda_handler(event, context):\n    # Get bucket and file name from the event trigger\n    bucket = event[\'Records\'][\'s3\'][\'bucket\'][\'name\']\n    key = event[\'Records\'][\'s3\'][\'object\'][\'key\']\n    \n    print(f"Triggered! Processing file {key} from {bucket}...")\n    # Image resizing logic goes here...\n    \n    return {"status": 200, "body": "Success"}')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சாதாரண சர்வர் என்பது, தண்ணீர் குடித்தாலும் குடிக்காவிட்டாலும் எந்நேரமும் ஓடிக்கொண்டிருக்கும் குழாய்க்குப் பணம் கட்டுவது போன்றது. Serverless என்பது சென்சார் வைத்த குழாய் போன்றது; நீங்கள் கையை வைக்கும்போது விழும் ஒவ்வொரு சொட்டுத் தண்ணீருக்கு மட்டுமே நீங்கள் பணம் கட்டுவீர்கள்.</div>
+                    <p>கிளவுட் தொழில்நுட்பத்தின் உச்சக்கட்டம் இதுதான். <b>Serverless (சர்வர்லெஸ்)</b> என்றால் சர்வர்களே இல்லை என்று அர்த்தமல்ல; அந்த சர்வர்களை நீங்கள் நிர்வகிக்கவோ, பார்க்கவோ மாட்டீர்கள். அமேசான் அல்லது கூகுளே அதை முழுமையாகப் பார்த்துக்கொள்ளும்.</p>
+                    <h3>Function as a Service (FaaS)</h3>
+                    <p><b>AWS Lambda</b> அல்லது <b>Google Cloud Functions</b> போன்றவை இதன் முதுகெலும்பு. இதில் நீங்கள் முழு சாஃப்ட்வேரையும் அப்லோட் செய்யத் தேவையில்லை. ஒரு சிறிய கோடை (Code) மட்டும் அப்லோட் செய்தால் போதும்.</p>
+                    <p>அந்த கோடு சும்மா இருக்கும்போது உங்களுக்கு 0 செலவு. எப்போதாவது ஒரு நிகழ்வு நடக்கும்போது (எ.கா: வெப்சைட்டில் ஒரு பட்டனைக் கிளிக் செய்தால்), கிளவுட் உடனடியாக அந்த கோடை இயக்கிவிட்டு, உடனே மூடிவிடும். அது எவ்வளவு மில்லி-விநாடிகள் (Milliseconds) ஓடியதோ அதற்கு மட்டும் பணம் கட்டினால் போதும்.</p>
+                    <h3>மேஜிக் ஸ்கேலிங் (Scaling Magic)</h3>
+                    <p>சாதாரண சர்வர்களை 1-இல் இருந்து 100 ஆக மாற்றச் சில நிமிடங்கள் ஆகும். ஆனால் AWS Lambda-வில், 10,000 பேர் ஒரே விநாடியில் கிளிக் செய்தால், அது உடனடியாக 10,000 தனித்தனி லாம்ப்டாக்களை (Lambda) உருவாக்கி அனைவரையும் சமாளித்துவிட்டு, அடுத்த நொடியே மீண்டும் பூஜ்யத்திற்குத் திரும்பிவிடும்.</p>
+                    <h3>Cold Start பிரச்சனை</h3>
+                    <p>இதில் உள்ள ஒரே ஒரு குறை "Cold Start". நீண்ட நேரம் யாரும் பயன்படுத்தாமல் இருந்துவிட்டு, திடீரென ஒருவர் பயன்படுத்தினால், அந்த கோடு செயல்படத் தொடங்க 1 அல்லது 2 விநாடிகள் தாமதமாகலாம்.</p>
+                    ${generatePromptBox('AWS Lambda Python Example', 'ஒருவர் S3-யில் போட்டோ அப்லோட் செய்தால், தானாகவே இயங்கும் பைதான் (Python) லாம்ப்டா கோடு:\n\ndef lambda_handler(event, context):\n    bucket = event[\'Records\'][\'s3\'][\'bucket\'][\'name\']\n    key = event[\'Records\'][\'s3\'][\'object\'][\'key\']\n    \n    print(f"{key} என்ற பைல் வந்துள்ளது. பிராசஸ் செய்யப்படுகிறது...")\n    return {"status": 200, "body": "Success"}')}`
+            },
+            { 
+                id: 14, icon: "🐳", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "14. Containerization with Docker", title_ta: "14. டாக்கர் (Docker & Containers)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Before shipping containers were invented, loading a cargo ship meant manually packing loose barrels, boxes, and sacks. It was chaotic. Docker is the standardized steel shipping container of the software world. No matter what is inside (Java, Python, Node), it is packed into a standard box that runs exactly the same on any ship (server) in the world.</div>
+                    <p>One of the oldest problems in software engineering is the "It works on my machine!" excuse. A developer writes code on their Mac, but when it is deployed to the Linux production server, it crashes because of missing dependencies or different software versions.</p>
+                    <h3>The Container Revolution</h3>
+                    <p><b>Docker</b> solved this by introducing Containers. A container is a lightweight, standalone, executable package that includes everything needed to run an application: the code, runtime, system tools, libraries, and settings. Unlike Virtual Machines, which each require a heavy, full Operating System, multiple containers share the host machine's OS kernel. This makes them boot in milliseconds and use a fraction of the RAM.</p>
+                    <h3>The Dockerfile</h3>
+                    <p>You define a container using a text document called a <b>Dockerfile</b>. It is a step-by-step recipe. It tells Docker which base image to use (e.g., Ubuntu), what files to copy into it, which dependencies to install (e.g., npm install), and what command to run when the container starts.</p>
+                    <h3>Images and Registries</h3>
+                    <p>Once you build a Dockerfile, it creates a <b>Docker Image</b> (an immutable snapshot). You push this image to a Registry (like Docker Hub, AWS ECR, or Google GCR). From there, any server in your cloud architecture can pull that exact image and run it. The environment is guaranteed to be 100% identical every single time.</p>
+                    ${generatePromptBox('Standard Node.js Dockerfile', 'A production-ready Dockerfile for a Node.js web app:\n\n# Use a lightweight Node Alpine image as the base\nFROM node:18-alpine\n\n# Set the working directory inside the container\nWORKDIR /usr/src/app\n\n# Copy package.json and install dependencies\nCOPY package*.json ./\nRUN npm install --only=production\n\n# Copy the rest of the application code\nCOPY . .\n\n# Expose port 8080 and define the startup command\nEXPOSE 8080\nCMD ["node", "server.js"]')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> கப்பலில் சரக்குகளை ஏற்ற கன்டெய்னர்கள் (Shipping Containers) கண்டுபிடிக்கும் முன், மூட்டைகளையும் பெட்டிகளையும் ஏற்றுவது மிகவும் சிரமமாக இருந்தது. டாக்கர் (Docker) என்பது சாஃப்ட்வேர் உலகின் இரும்பு கன்டெய்னர் போன்றது. உள்ளே பைதான் (Python) இருக்கிறதா, ஜாவா (Java) இருக்கிறதா என்று கவலையில்லை. அதை ஒரு பெட்டிக்குள் அடைத்துவிட்டால், உலகின் எந்த சர்வரிலும் அது ஒரே மாதிரி வேலை செய்யும்.</div>
+                    <p>சாஃப்ட்வேர் துறையில் உள்ள மிகப்பெரிய பிரச்சனை, "என் லேப்டாப்பில் சரியாக வேலை செய்கிறதே, சர்வரில் ஏன் வேலை செய்யவில்லை?" என்பதுதான். ஒவ்வொரு கம்ப்யூட்டரிலும் வெவ்வேறு செட்டிங்ஸ் இருப்பதால் இந்தப் பிரச்சனை வரும்.</p>
+                    <h3>கன்டெய்னர் புரட்சி (Containers)</h3>
+                    <p><b>Docker (டாக்கர்)</b> இதைச் சரிசெய்தது. உங்கள் சாஃப்ட்வேர் இயங்குவதற்குத் தேவையான கோடு (Code), லைப்ரரிகள், செட்டிங்ஸ் அனைத்தையும் ஒரு சிறிய பெட்டிக்குள் (Container) அடைத்துவிடும். விர்ச்சுவல் மெஷின்களைப் (VM) போல இதற்குத் தனியாக பெரிய OS தேவையில்லை. மெயின் சர்வரின் OS-ஐயே பகிர்ந்துகொள்வதால், இது மிகவும் எடை குறைவானது மற்றும் மில்லி-விநாடிகளில் பூட் (Boot) ஆகிவிடும்.</p>
+                    <h3>Dockerfile என்றால் என்ன?</h3>
+                    <p>இந்த கன்டெய்னரை உருவாக்க <b>Dockerfile</b> என்ற குறிப்பைப் பயன்படுத்த வேண்டும். இது ஒரு சமையல் குறிப்பு போன்றது. எந்த OS வேண்டும், எந்த பைல்களை உள்ளே காப்பி செய்ய வேண்டும், எந்த சாஃப்ட்வேர்களை இன்ஸ்டால் செய்ய வேண்டும் என அனைத்தையும் இதில் எழுதிவிட வேண்டும்.</p>
+                    <h3>Images மற்றும் Registries</h3>
+                    <p>Dockerfile-ஐ வைத்து உருவாக்கப்படும் இறுதி வடிவத்தை <b>Docker Image</b> என்பார்கள். இதை AWS ECR அல்லது Docker Hub போன்ற இடங்களில் அப்லோட் செய்துவிட்டால், கிளவுடில் உள்ள எந்த சர்வர் வேண்டுமானாலும் அந்த Image-ஐ டவுன்லோட் செய்து ஓடவிடலாம். அது 100% ஒரே மாதிரியாகவே இயங்கும்.</p>
+                    ${generatePromptBox('Standard Node.js Dockerfile', 'ஒரு Node.js ஆப்பிற்கான பாதுகாப்பான Dockerfile:\n\n# லினக்ஸ் பேஸ் இமேஜை எடுத்தல்\nFROM node:18-alpine\n\n# வேலை செய்யும் போல்டரை உருவாக்குதல்\nWORKDIR /usr/src/app\n\n# பைல்களை காப்பி செய்து இன்ஸ்டால் செய்தல்\nCOPY package*.json ./\nRUN npm install --only=production\n\n# மற்ற கோடுகளை காப்பி செய்தல்\nCOPY . .\n\n# ஆப்பை இயக்குதல்\nEXPOSE 8080\nCMD ["node", "server.js"]')}`
+            },
+            { 
+                id: 15, icon: "☸️", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "15. Container Orchestration (Kubernetes)", title_ta: "15. குபர்னெட்டிஸ் (Kubernetes - K8s)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> If a Docker container is a musician in an orchestra, Kubernetes is the conductor. A single musician can play a song, but coordinating 5,000 musicians to play a symphony flawlessly in real-time requires a master conductor to tell them when to start, stop, and get louder.</div>
+                    <p>Docker is incredible for packaging an application. But what happens when you need to run 10,000 containers across 500 different servers? How do they talk to each other? What happens if Server #42 crashes and takes down 200 containers with it? You need an Orchestrator.</p>
+                    <h3>Enter Kubernetes (K8s)</h3>
+                    <p><b>Kubernetes</b>, originally developed by Google, is the undisputed industry standard for container orchestration. Instead of manually starting and stopping Docker containers, you write a declarative YAML file telling Kubernetes what the final state should look like (e.g., "I always want 5 copies of my web-app running"). Kubernetes constantly monitors the cluster. If a container crashes, Kubernetes instantly detects the discrepancy and spins up a new replacement container automatically (Self-Healing).</p>
+                    <h3>The Architecture</h3>
+                    <ul>
+                        <li><b>Control Plane (The Master):</b> The brain of the cluster. It makes global decisions (like scheduling) and responds to cluster events.</li>
+                        <li><b>Worker Nodes:</b> The actual EC2/Compute Engine servers that run your containers.</li>
+                        <li><b>Pods:</b> The smallest deployable unit in Kubernetes. A Pod usually contains one Docker container. Kubernetes manages Pods, not containers directly.</li>
+                    </ul>
+                    <h3>Managed Kubernetes Services</h3>
+                    <p>Managing the K8s Control Plane yourself is notoriously difficult. Modern enterprises use Managed Services like <b>Amazon EKS, Google GKE, or Azure AKS</b>. The cloud provider completely manages the complex master nodes, leaving you to only worry about deploying your worker nodes and application Pods.</p>
+                    ${generatePromptBox('Kubernetes Deployment YAML', 'This declarative YAML file tells K8s to ensure 3 replicas of the Nginx web server are always running.\n\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: nginx-deployment\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: nginx\n  template:\n    metadata:\n      labels:\n        app: nginx\n    spec:\n      containers:\n      - name: nginx\n        image: nginx:1.14.2\n        ports:\n        - containerPort: 80')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> டாக்கர் கன்டெய்னர் என்பது இசைக் குழுவில் உள்ள ஒரு இசைக்கலைஞர் போன்றவர். 5,000 இசைக்கலைஞர்களை ஒருங்கிணைத்துச் சரியாக இசைக்க வைக்க ஒரு மாஸ்டர் (Conductor) தேவை. அந்த மாஸ்டர்தான் குபர்னெட்டிஸ் (Kubernetes).</div>
+                    <p>டாக்கர் (Docker) ஒரு சாஃப்ட்வேரை பேக் செய்யச் சிறந்தது. ஆனால் 500 சர்வர்களில் 10,000 கன்டெய்னர்களை நிர்வகிக்க வேண்டும் என்றால் என்ன செய்வது? 42-வது சர்வர் பழுதாகி அதில் உள்ள 200 கன்டெய்னர்கள் அழிந்தால் யார் அதைக் கவனிப்பார்கள்? இதைச் செய்யத்தான் நமக்கு ஒரு மேலாளர் தேவை.</p>
+                    <h3>குபர்னெட்டிஸ் (K8s) என்றால் என்ன?</h3>
+                    <p>கூகுளால் உருவாக்கப்பட்ட <b>Kubernetes (K8s)</b> தான் இன்று உலகின் நம்பர் 1 Orchestration கருவி. நீங்களாகவே கன்டெய்னர்களை ஆன்/ஆஃப் செய்வதற்குப் பதிலாக, "எனக்கு எப்போதும் 5 கன்டெய்னர்கள் ஓடிக்கொண்டே இருக்க வேண்டும்" என்று ஒரு YAML பைலில் எழுதிக் கொடுத்தால் போதும். குபர்னெட்டிஸ் அதை எந்நேரமும் கண்காணிக்கும். ஒரு கன்டெய்னர் பழுதானால், அடுத்த நொடியே அது புதிய ஒன்றை உருவாக்கிவிடும் (Self-Healing).</p>
+                    <h3>முக்கியப் பகுதிகள்</h3>
+                    <ul>
+                        <li><b>Control Plane (மாஸ்டர்):</b> இதுதான் குபர்னெட்டிஸின் மூளை. எந்த சர்வரில் எந்த கன்டெய்னரை வைக்க வேண்டும் என இதுதான் முடிவு செய்யும்.</li>
+                        <li><b>Worker Nodes:</b> கன்டெய்னர்கள் இயங்கும் உண்மையான சர்வர்கள்.</li>
+                        <li><b>Pods (பாட்ஸ்):</b> குபர்னெட்டிஸின் மிகச் சிறிய அலகு. ஒரு Pod-க்குள் ஒரு டாக்கர் கன்டெய்னர் இருக்கும். குபர்னெட்டிஸ் Pod-ஐத் தான் கட்டுப்படுத்துமே தவிர, நேரடியாக கன்டெய்னரை அல்ல.</li>
+                    </ul>
+                    <h3>Managed Services</h3>
+                    <p>மாஸ்டர் நோடுகளை நாமே நிர்வகிப்பது மிகவும் கடினம். எனவே <b>Amazon EKS, Google GKE</b> போன்ற சேவைகளைப் பயன்படுத்துவார்கள். மாஸ்டரை அமேசான் அல்லது கூகுள் பார்த்துக்கொள்ளும், நாம் சர்வர்களை மட்டும் கவனித்தால் போதும்.</p>
+                    ${generatePromptBox('Kubernetes Deployment YAML', 'எப்போதும் 3 Nginx வெப் சர்வர்கள் இயங்க வேண்டும் என K8s-க்குக் கட்டளையிடும் YAML பைல்:\n\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: nginx-deployment\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: nginx\n  template:\n    metadata:\n      labels:\n        app: nginx\n    spec:\n      containers:\n      - name: nginx\n        image: nginx:latest\n        ports:\n        - containerPort: 80')}`
+            },
+            { 
+                id: 16, icon: "🏗️", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "16. Infrastructure as Code (IaC)", title_ta: "16. IaC (Infrastructure as Code) & டெராஃபார்ம்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Clicking through the AWS console to build a network is like building a Lego house by hand without instructions; if someone knocks it over, you have to remember how to rebuild it from memory. Infrastructure as Code is like writing a perfect, automated blueprint. If the house falls down, a robot instantly rebuilds an exact replica in 3 seconds.</div>
+                    <p>In Phase 4, we enter the world of DevOps. Pointing and clicking your mouse inside the AWS or Azure web dashboard is for amateurs. It leads to human error, undocumented changes, and architecture that cannot be quickly replicated. Professionals build architecture using code.</p>
+                    <h3>The Terraform Standard</h3>
+                    <p><b>Infrastructure as Code (IaC)</b> means you write declarative configuration files that define your desired cloud resources. While AWS has CloudFormation and Azure has ARM templates, <b>HashiCorp Terraform</b> is the undisputed industry standard because it is cloud-agnostic. You can use the exact same Terraform workflow to provision resources on AWS, GCP, Azure, and even GitHub.</p>
+                    <h3>The Declarative Paradigm</h3>
+                    <p>Terraform is <i>declarative</i>, not imperative. You do not write a script saying "Launch server A, then create a database, then attach them." You simply declare the final state: "I want Server A and Database B connected." Terraform calculates the dependency graph, figures out the correct order of operations, and makes API calls to the cloud provider to build it.</p>
+                    <h3>State Management</h3>
+                    <p>Terraform keeps track of the real-world infrastructure it built using a "State File" (terraform.tfstate). If you change your code to require 5 servers instead of 3, and run <code>terraform apply</code>, Terraform checks the State File, sees that 3 already exist, and intelligentely decides to only build 2 new ones, rather than destroying everything and building 5 from scratch.</p>
+                    ${generatePromptBox('Terraform Basic EC2 Deployment', 'A simple main.tf file to deploy an AWS EC2 instance:\n\nprovider "aws" {\n  region = "us-east-1"\n}\n\nresource "aws_instance" "web_server" {\n  ami           = "ami-0c55b159cbfafe1f0"\n  instance_type = "t2.micro"\n  \n  tags = {\n    Name        = "Production-Web"\n    Environment = "Prod"\n  }\n}\n\n# Run: \n# terraform init\n# terraform plan\n# terraform apply')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> கிளவுட் வெப்சைட்டிற்குள் சென்று மவுஸால் கிளிக் செய்து சர்வர்களை உருவாக்குவது, குறிப்புகள் இல்லாமல் கைகளால் லெகோ (Lego) வீடு கட்டுவது போன்றது. அது உடைந்தால் மீண்டும் ஞாபகப்படுத்திப் புதிதாகக் கட்ட வேண்டும். IaC என்பது ஒரு துல்லியமான ப்ளூ-பிரிண்ட் (Blueprint) வரைவது போன்றது. வீடு உடைந்தாலும், ரோபோ அந்த வரைபடத்தை வைத்து 3 விநாடிகளில் வீட்டை அப்படியே கட்டிவிடும்.</div>
+                    <p>Phase 4-இல் நாம் DevOps உலகத்திற்குள் நுழைகிறோம். அமேசான் டேஷ்போர்டுக்குள் சென்று கிளிக் செய்து சர்வர்களை உருவாக்குவது புதியவர்களின் முறை. இதில் மனிதத் தவறுகள் நடக்கும். தொழில்முறை இன்ஜினியர்கள் உரை கோப்புகளைக் (Code) கொண்டே சர்வர்களை உருவாக்குவார்கள்.</p>
+                    <h3>Terraform (டெராஃபார்ம்)</h3>
+                    <p><b>Infrastructure as Code (IaC)</b> என்பது, உங்களுக்கு என்னென்ன சர்வர்கள் வேண்டும் என்பதை கோடாக எழுதி வைப்பது. அமேசானுக்கு CloudFormation இருந்தாலும், <b>Terraform</b> தான் உலகின் நம்பர் 1 கருவி. ஏனெனில், இதை வைத்து AWS, Google, Azure என அனைத்திலுமே சர்வர்களை உருவாக்கலாம்.</p>
+                    <h3>Declarative முறை</h3>
+                    <p>Terraform "இதைச் செய், அதைச் செய்" என்று படிப்படியாகச் சொல்லும் முறையல்ல (Imperative). இது "எனக்கு இது வேண்டும்" என்று முடிவை மட்டும் சொல்லும் முறை (Declarative). "எனக்கு 5 சர்வர்கள் வேண்டும்" என்று எழுதிவிட்டால் போதும், அதை எப்படி உருவாக்குவது, எந்த வரிசையில் உருவாக்குவது என்பதை Terraform பார்த்துக்கொள்ளும்.</p>
+                    <h3>State File</h3>
+                    <p>Terraform தான் உருவாக்கிய சர்வர்களின் விவரங்களை "State File"-இல் பதிவு செய்து வைத்துக்கொள்ளும். நீங்கள் கோடில் 3 சர்வர்களை 5 ஆக மாற்றினால், Terraform பழைய 3-ஐ அழிக்காமல், புத்திசாலித்தனமாகப் புதிதாக 2 சர்வர்களை மட்டும் உருவாக்கும்.</p>
+                    ${generatePromptBox('Terraform Basic EC2 Deployment', 'AWS சர்வரை உருவாக்கும் Terraform கோடு (main.tf):\n\nprovider "aws" {\n  region = "us-east-1"\n}\n\nresource "aws_instance" "web_server" {\n  ami           = "ami-0c55b159cbfafe1f0"\n  instance_type = "t2.micro"\n  \n  tags = {\n    Name = "Production-Web"\n  }\n}')}`
+            },
+            { 
+                id: 17, icon: "🔄", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "17. CI/CD Pipelines & Automation", title_ta: "17. CI/CD பைப்லைன்கள் (CI/CD Pipelines)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Writing software without CI/CD is like building a car and immediately driving it onto the highway hoping the brakes work. A CI/CD pipeline is an automated factory assembly line; before the car leaves the factory, robots automatically test the brakes, crash-test the bumper, and paint the doors. Only perfect cars reach the highway.</div>
+                    <p>In traditional software development, deploying a new feature to production was a massive, terrifying manual event that happened once a month. In modern cloud DevOps, elite teams deploy code to production 50 times a day. This velocity is achieved through <b>Continuous Integration and Continuous Deployment (CI/CD)</b>.</p>
+                    <h3>Continuous Integration (CI)</h3>
+                    <p>CI is the first half of the pipeline. When a developer writes new code and pushes it to a shared repository (like GitHub or GitLab), the CI server (like GitHub Actions, Jenkins, or AWS CodeBuild) automatically intercepts it. The server instantly runs a suite of automated unit tests and security scans. If the new code breaks an existing feature, the pipeline "Fails" and blocks the merge, protecting the main codebase.</p>
+                    <h3>Continuous Deployment (CD)</h3>
+                    <p>If the CI tests pass, the CD phase begins. The pipeline automatically builds the production artifact (like compiling the Java code or building a new Docker image) and securely pushes it directly to the live cloud servers (like updating the Kubernetes cluster). No human clicks a single button to deploy.</p>
+                    <h3>Blue/Green Deployments</h3>
+                    <p>To achieve zero-downtime during deployments, the CD pipeline uses advanced routing. In a <b>Blue/Green Deployment</b>, you have two identical production environments. Blue is currently live. The pipeline deploys the new code to Green (which is hidden). Tests run on Green. Once verified, the Load Balancer instantly flips traffic from Blue to Green. If users complain about a bug, you simply flip the Load Balancer back to Blue instantly.</p>
+                    ${generatePromptBox('GitHub Actions CI/CD YAML', 'A simple pipeline that tests Node.js code and builds a Docker image on every push to the main branch:\n\nname: Node.js CI/CD\non:\n  push:\n    branches: [ "main" ]\n\njobs:\n  build-and-test:\n    runs-on: ubuntu-latest\n    steps:\n    - uses: actions/checkout@v3\n    - name: Use Node.js\n      uses: actions/setup-node@v3\n      with:\n        node-version: "18.x"\n    - run: npm ci\n    - run: npm test\n    - name: Build Docker Image\n      run: docker build -t myapp/web:latest .')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> CI/CD இல்லாமல் சாஃப்ட்வேர் வெளியிடுவது, காரை உருவாக்கிவிட்டு பிரேக் வேலை செய்யுமா எனத் தெரியாமலேயே நெடுஞ்சாலையில் ஓட்டுவது போன்றது. CI/CD என்பது ஆட்டோமேட்டிக் தொழிற்சாலை போன்றது. கார் வெளியே வரும் முன் ரோபோக்கள் பிரேக்கை செக் செய்து, வர்ணம் பூசி அனுப்பும். சரியான கார்கள் மட்டுமே வெளியே வரும்.</div>
+                    <p>முன்பெல்லாம் ஒரு புதிய அப்டேட்டை வெளியிடுவது மிகவும் கடினமான வேலை; மாதத்திற்கு ஒருமுறைதான் நடக்கும். ஆனால் இன்று நவீன நிறுவனங்கள் ஒரு நாளைக்கு 50 முறை அப்டேட்களை வெளியிடுகின்றன. இந்த அதீத வேகத்திற்கு <b>CI/CD (Continuous Integration / Continuous Deployment)</b> தான் காரணம்.</p>
+                    <h3>Continuous Integration (CI)</h3>
+                    <p>ஒரு டெவலப்பர் புதிய கோடை (Code) எழுதி GitHub-இல் அப்லோட் செய்தவுடன், CI சர்வர் (எ.கா: Jenkins, GitHub Actions) அதைத் தானாகவே எடுத்துப் பரிசோதிக்கும். அதில் பிழைகள் (Bugs) இருக்கிறதா, செக்யூரிட்டி சரியாக உள்ளதா எனப் பல டெஸ்ட்களைச் செய்யும். பிழை இருந்தால், அந்த கோடு நிராகரிக்கப்படும்.</p>
+                    <h3>Continuous Deployment (CD)</h3>
+                    <p>CI டெஸ்ட்களில் பாஸ் ஆகிவிட்டால், CD அதைத் தானாகவே பேக் (Docker Image) செய்து, நேரலையில் உள்ள கிளவுட் சர்வர்களுக்குள் (K8s Cluster) அப்லோட் செய்துவிடும். இந்த முழு நிகழ்விலும் மனிதர்கள் எந்தப் பட்டனையும் அழுத்தத் தேவையில்லை.</p>
+                    <h3>Blue/Green Deployments</h3>
+                    <p>வெப்சைட் முடங்காமல் அப்டேட் செய்ய, இரண்டு சர்வர் செட்களை (Blue மற்றும் Green) பயன்படுத்துவார்கள். Blue செட்டில் மக்கள் வெப்சைட்டைப் பயன்படுத்திக் கொண்டிருப்பார்கள். புதிய அப்டேட் மறைந்திருக்கும் Green செட்டிற்கு அனுப்பப்படும். எல்லாம் சரியாக இருந்தால், Load Balancer டிராபிக்கை உடனடியாக Green-க்கு மாற்றிவிடும். பிழை இருந்தால் உடனே மீண்டும் Blue-க்கு மாற்றிவிடலாம்.</p>
+                    ${generatePromptBox('GitHub Actions CI/CD YAML', 'டெவலப்பர் கோடை அப்லோட் செய்தவுடன், அதை டெஸ்ட் செய்து டாக்கர் இமேஜ் உருவாக்கும் பைல்:\n\nname: Node.js CI/CD\non: push\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n    - uses: actions/checkout@v3\n    - run: npm install\n    - run: npm test # பிழை இருந்தால் இங்கே நின்றுவிடும்\n    - run: docker build -t myapp .')}`
+            },
+            { 
+                id: 18, icon: "📊", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "18. Cloud Monitoring & Observability", title_ta: "18. கண்காணிப்பு (Monitoring & Observability)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Monitoring is like the dashboard on your car; it tells you your speed and if the engine is overheating (What is happening). Observability is like plugging a mechanic's diagnostic computer into the car; it tells you exactly *why* the engine is overheating by analyzing the internal fluid pressure (Why is it happening).</div>
+                    <p>When you have a highly decoupled, auto-scaling microservice architecture, finding a bug is like finding a needle in a haystack. If a user clicks "Checkout" and gets an error, which of the 50 underlying services failed? Without robust observability, you are flying blind.</p>
+                    <h3>The Three Pillars of Observability</h3>
+                    <ul>
+                        <li><b>Metrics:</b> Numbers measured over time. (e.g., "CPU utilization is at 95%", or "API error rate is 4%"). Metrics are excellent for triggering automated alerts (e.g., PagerDuty calling an engineer at 3 AM). Native tools include AWS CloudWatch and Google Cloud Monitoring.</li>
+                        <li><b>Logs:</b> Immutable, timestamped records of discrete events. If a metric tells you the database is failing, you look at the Logs to read the exact error message the database printed out (e.g., "Out of Memory Exception on line 42").</li>
+                        <li><b>Traces:</b> The most advanced pillar. Distributed Tracing assigns a unique ID to a user's request. As that request hops from the Load Balancer, to the Web Server, to the Queue, to the Database, the Trace tracks exactly how many milliseconds it spent at each hop. This instantly reveals complex bottlenecks.</li>
+                    </ul>
+                    <h3>Centralized Logging Platforms</h3>
+                    <p>You cannot log into 100 individual servers to read text files. You must stream all logs to a centralized platform. The industry standards are <b>Datadog, Splunk, or the ELK Stack (Elasticsearch, Logstash, Kibana)</b>. These platforms allow you to search through billions of log lines across your entire cloud environment in milliseconds using powerful query languages.</p>
+                    ${generatePromptBox('AWS CloudWatch Alarms (Terraform)', 'Never rely on humans looking at dashboards. Automate alerts.\n\nresource "aws_cloudwatch_metric_alarm" "high_cpu" {\n  alarm_name          = "cpu-utilization-critical"\n  comparison_operator = "GreaterThanThreshold"\n  evaluation_periods  = "2"\n  metric_name         = "CPUUtilization"\n  namespace           = "AWS/EC2"\n  period              = "120"\n  statistic           = "Average"\n  threshold           = "85"\n  alarm_actions       = [aws_sns_topic.pagerduty.arn]\n}')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> Monitoring என்பது காரின் டேஷ்போர்டு போன்றது; காரின் வேகம், இன்ஜின் சூடாகிறதா என்று காட்டும் (என்ன நடக்கிறது). Observability என்பது மெக்கானிக்கின் கம்ப்யூட்டரை காரில் இணைப்பது போன்றது; இன்ஜின் உள்ளே எந்தப் பாகம் பழுதானதால் சூடாகிறது எனத் துல்லியமாகக் காட்டும் (ஏன் நடக்கிறது).</div>
+                    <p>ஆட்டோ-ஸ்கேலிங் மூலம் 100 சர்வர்கள் இயங்கும்போது, வெப்சைட்டில் பிழை (Error) வந்தால் எந்த சர்வரில் பிரச்சனை எனக் கண்டுபிடிப்பது வைக்கோல் போரில் ஊசியைத் தேடுவது போன்றது. இதற்குத் துல்லியமான கண்காணிப்பு அமைப்பு தேவை.</p>
+                    <h3>Observability-இன் 3 தூண்கள்</h3>
+                    <ul>
+                        <li><b>Metrics (அளவீடுகள்):</b> எண்கள் மூலம் அறிவது. (எ.கா: "CPU 95% உள்ளது"). இது அபாய எச்சரிக்கைகளை (Alerts) அனுப்ப உதவும். (எ.கா: AWS CloudWatch).</li>
+                        <li><b>Logs (பதிவுகள்):</b> சிஸ்டமில் நடக்கும் ஒவ்வொரு நிகழ்வின் பதிவு. CPU ஏன் 95% ஆனது என்பதை அறிய Logs-ஐப் பார்த்தால், "Line 42-இல் Memory Error" எனத் துல்லியமான காரணம் தெரியும்.</li>
+                        <li><b>Traces (தடங்கள்):</b> இது மிக முக்கியமானது. ஒரு பயனர் பட்டனைக் கிளிக் செய்ததிலிருந்து, அந்த ரிக்வெஸ்ட் எந்தெந்த சர்வருக்குச் சென்றது, ஒவ்வொரு சர்வரிலும் எத்தனை மில்லி-விநாடிகள் தாமதமானது என்பதை டிராக் செய்து காட்டும். எந்தச் சர்வர் மெதுவாக உள்ளது என்பதை உடனே கண்டுபிடிக்கலாம்.</li>
+                    </ul>
+                    <h3>Centralized Logging (மையப்படுத்தப்பட்ட பதிவுகள்)</h3>
+                    <p>100 சர்வர்களுக்குள் தனித்தனியாக லாகின் செய்து பைல்களைப் படிக்க முடியாது. எனவே அனைத்து லாக் (Logs) தரவுகளையும் <b>Datadog</b> அல்லது <b>ELK Stack</b> போன்ற ஒரு மைய அமைப்பிற்கு அனுப்பிவிட வேண்டும். அங்குப் பல கோடி பதிவுகளுக்குள் நமக்குத் தேவையானதை ஒரு விநாடியில் தேடி எடுத்துவிடலாம்.</p>
+                    ${generatePromptBox('AWS CloudWatch Alerts', 'மனிதர்கள் டேஷ்போர்டைப் பார்ப்பார்கள் என நம்பக் கூடாது. தானியங்கி அலர்ட் அமைக்க வேண்டும்:\n\nCPU பயன்பாடு தொடர்ந்து 2 நிமிடங்களுக்கு 85%-ஐத் தாண்டினால், உடனடியாக PagerDuty மூலம் சம்பந்தப்பட்ட இன்ஜினியரின் மொபைலுக்கு நள்ளிரவு 2 மணியாக இருந்தாலும் தானாகவே போன் செய்து எழுப்பும் அமைப்பை உருவாக்க வேண்டும்.')}`
+            },
+            { 
+                id: 19, icon: "🛡️", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "19. Advanced Cloud Security & WAF", title_ta: "19. அட்வான்ஸ்டு செக்யூரிட்டி & WAF", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A VPC Firewall is like a bouncer checking IDs at the door (checking IP addresses). A WAF (Web Application Firewall) is like a detective scanning the actual contents of the guest's backpack. Even if the ID is valid, if they are carrying a bomb (a SQL Injection attack), the WAF kicks them out.</div>
+                    <p>Securing the perimeter of your VPC with Security Groups and NACLs is only the first line of defense. Modern hackers do not attack your network ports; they attack your application code directly through standard open web ports (Port 443/HTTPS).</p>
+                    <h3>Web Application Firewalls (WAF)</h3>
+                    <p>A <b>WAF (AWS WAF, Cloudflare WAF)</b> sits in front of your Load Balancer or CDN. It deeply inspects the actual HTTP requests coming into your application. If a hacker tries to submit malicious code into your login box (like a SQL Injection or Cross-Site Scripting attack), the WAF recognizes the malicious pattern and instantly blocks the request before it ever reaches your web server.</p>
+                    <h3>Encryption Strategies</h3>
+                    <p>Data must be protected in two states:</p>
+                    <ul>
+                        <li><b>Encryption in Transit:</b> Protecting data as it moves across the internet. This is achieved using TLS/SSL certificates (HTTPS). AWS Certificate Manager handles this for free.</li>
+                        <li><b>Encryption at Rest:</b> Protecting data saved on the hard drives (S3, EBS, RDS). You use a <b>KMS (Key Management Service)</b> to encrypt the data. If a physical hard drive is stolen from the AWS data center, it is mathematically unreadable without the KMS decryption key.</li>
+                    </ul>
+                    <h3>Zero Trust Architecture</h3>
+                    <p>The modern enterprise security model is "Zero Trust." This means the network assumes it is already compromised. Just because a microservice is sitting inside your private subnet does not mean it is trusted. Every single interaction between internal microservices must be authenticated and authorized, often using a Service Mesh like Istio.</p>
+                    ${generatePromptBox('AWS WAF Rule Configuration', 'Concept: Rate Limiting & Geo-Blocking\n\nTo prevent brute-force login attacks and scraping:\n1. Rate Limit Rule: If any single IP address sends more than 100 requests in 5 minutes, block the IP for 4 hours.\n2. Geo-Match Rule: If your business only operates in India and the USA, create a WAF rule to explicitly block all web traffic originating from high-risk countries (e.g., North Korea, Russia) at the CDN edge.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சாதாரண ஃபயர்வால் என்பது வாசலில் ஐடி கார்டு (IP Address) செக் செய்யும் காவலாளி போன்றது. WAF என்பது பைக்குள் என்ன இருக்கிறது என எக்ஸ்-ரே (X-Ray) மூலம் சோதிக்கும் டிடெக்டிவ் போன்றது. ஐடி கார்டு சரியாக இருந்தாலும், பைக்குள் வெடிகுண்டு (SQL Injection) இருந்தால் WAF அவர்களை வெளியே தள்ளிவிடும்.</div>
+                    <p>VPC-ஐப் பாதுகாப்பது முதல் கட்டம் மட்டுமே. நவீன ஹேக்கர்கள் நெட்வொர்க்கைத் தாக்குவதில்லை; திறந்திருக்கும் வெப்சைட் போர்ட் (Port 443) வழியாக உங்கள் சாஃப்ட்வேர் கோடில் நேரடியாகத் தாக்குதல் நடத்துவார்கள்.</p>
+                    <h3>WAF (Web Application Firewall)</h3>
+                    <p>Load Balancer-க்கு முன்னால் இந்த <b>WAF</b> வைக்கப்படும். இது வரும் ஒவ்வொரு வெப்சைட் கோரிக்கையையும் (HTTP Request) ஆழமாகச் சோதிக்கும். யாராவது உங்கள் லாகின் பாக்ஸில் பாஸ்வேர்டுக்குப் பதிலாக ஹேக்கிங் கோடை (SQL Injection) டைப் செய்தால், WAF அதைக் கண்டுபிடித்து சர்வரைத் தொட விடாமல் தடுத்துவிடும்.</p>
+                    <h3>டேட்டாவை என்க்ரிப்ட் செய்தல் (Encryption)</h3>
+                    <p>டேட்டாவை இரண்டு நிலைகளில் பாதுகாக்க வேண்டும்:</p>
+                    <ul>
+                        <li><b>Encryption in Transit:</b> இன்டர்நெட்டில் டேட்டா பயணிக்கும்போது பாதுகாப்பது (HTTPS / SSL).</li>
+                        <li><b>Encryption at Rest:</b> ஹார்டு டிஸ்கில் (S3, RDS) சேமிக்கப்படும்போது பாதுகாப்பது. <b>KMS (Key Management Service)</b> மூலம் டேட்டாவைப் பூட்டி வைக்க வேண்டும். அமேசான் டேட்டா சென்டரிலிருந்து யாராவது ஹார்டு டிஸ்க்கைத் திருடிச் சென்றாலும், சாவியின்றி அதைப் படிக்க முடியாது.</li>
+                    </ul>
+                    <h3>Zero Trust முறை</h3>
+                    <p>நவீன கிளவுட் பாதுகாப்பின் பெயர் "Zero Trust". அதாவது, "யாரையும் நம்பாதே". Private Subnet-க்குள் இருக்கும் சர்வர் தானே என நம்பிவிடக் கூடாது. உள்ளே இருக்கும் இரண்டு சர்வர்கள் பேசிக்கொண்டால் கூட, அதற்கும் பாஸ்வேர்ட்/அனுமதி செக் செய்ய வேண்டும்.</p>
+                    ${generatePromptBox('AWS WAF Security Rules', 'ஹேக்கர்களைத் தடுக்கும் WAF விதிகள்:\n\n1. Rate Limiting: ஒரே IP முகவரியிலிருந்து 5 நிமிடங்களில் 100 முறைக்கு மேல் கோரிக்கைகள் வந்தால், அந்த IP-ஐ 4 மணிநேரத்திற்கு முடக்கிவிடு.\n2. Geo-Blocking: உங்கள் பிசினஸ் இந்தியாவில் மட்டும் இருந்தால், தேவையில்லாமல் ரஷ்யா, வட கொரியா போன்ற நாடுகளில் இருந்து வரும் டிராபிக்கை WAF அளவிலேயே தடுத்துவிடலாம்.')}`
+            },
+            { 
+                id: 20, icon: "🚑", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "20. Disaster Recovery & High Availability", title_ta: "20. பேரிடர் மீட்பு (Disaster Recovery)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Backups are like taking a photo of your house; if it burns down, you know what to rebuild. Disaster Recovery (DR) is like having a fully furnished identical house in another city, with the keys in your pocket, ready to move into the moment the fire starts.</div>
+                    <p>Everything fails all the time. Hard drives fail, fiber cables get cut by construction workers, and entire cloud data centers can be taken offline by extreme weather. Enterprise architecture is graded by its "Nines" (e.g., 99.99% uptime means a maximum of 52 minutes of downtime per year). Achieving this requires robust <b>Disaster Recovery (DR)</b> planning.</p>
+                    <h3>RTO and RPO</h3>
+                    <p>Every DR plan is governed by two business metrics negotiated with the CEO:</p>
+                    <ul>
+                        <li><b>RPO (Recovery Point Objective):</b> How much data are you willing to lose? If RPO is 1 hour, you must back up the database every hour. If RPO is 0, you must use synchronous multi-region replication.</li>
+                        <li><b>RTO (Recovery Time Objective):</b> How long can the system be down before business goes bankrupt? If RTO is 15 minutes, you cannot rely on manual backups; you need automated failover.</li>
+                    </ul>
+                    <h3>The 4 Disaster Recovery Strategies</h3>
+                    <ul>
+                        <li><b>Backup & Restore:</b> The cheapest. Store backups in S3. If a disaster happens, manually spin up new servers and restore data. Takes hours or days (High RTO).</li>
+                        <li><b>Pilot Light:</b> Keep the core database running in a secondary region, but leave the web servers turned off. In a disaster, boot the web servers. Takes 10-30 minutes.</li>
+                        <li><b>Warm Standby:</b> A scaled-down version of your full architecture is always running in Region B. In a disaster, you simply scale it up to handle full production traffic. Takes minutes.</li>
+                        <li><b>Multi-Region Active-Active:</b> The most expensive and complex. Your app runs in Mumbai and Sydney simultaneously at 100% scale. Global DNS routes users to the closest region. If Mumbai goes offline, DNS routes everyone to Sydney with zero downtime.</li>
+                    </ul>
+                    ${generatePromptBox('Route 53 Global Failover', 'Concept: Automated DNS Failover\n\nYou use a global DNS service (like AWS Route 53) configured with Health Checks. Route 53 constantly pings your Mumbai Load Balancer. If it fails 3 consecutive pings, the DNS automatically stops sending traffic to Mumbai and redirects all global traffic to the IP address of your Sydney Load Balancer.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பேக்கப் (Backup) எடுப்பது வீட்டைப் புகைப்படம் எடுப்பது போன்றது; வீடு எரிந்தால் எப்படிப் புதிதாகக் கட்டுவது எனத் தெரியும். Disaster Recovery (DR) என்பது வேறொரு ஊரில் ஒரு புதிய வீட்டைக் கட்டி சாவியைத் தயார் நிலையில் வைத்திருப்பது போன்றது. தீப்பிடித்த அடுத்த நிமிடம் அங்கு குடிபெயர்ந்துவிடலாம்.</div>
+                    <p>உலகில் எப்போது வேண்டுமானாலும் எந்தச் சர்வரும் பழுதாகலாம் (புயல், நிலநடுக்கம், எலி கேபிளைக் கடிப்பது). பெரிய நிறுவனங்கள் வருடத்திற்கு 52 நிமிடங்களுக்கு மேல் வெப்சைட்டை முடங்க விடமாட்டார்கள் (99.99% Uptime). இதைச் சாதிக்க <b>Disaster Recovery (DR)</b> திட்டம் தேவை.</p>
+                    <h3>RTO மற்றும் RPO</h3>
+                    <p>DR திட்டம் இரண்டு அளவுகோல்களைக் கொண்டது:</p>
+                    <ul>
+                        <li><b>RPO (எவ்வளவு டேட்டா இழக்கலாம்?):</b> RPO 1 மணிநேரம் என்றால், ஒவ்வொரு மணிநேரமும் பேக்கப் எடுக்க வேண்டும். RPO 0 என்றால், உடனுக்குடன் வேறொரு ஊரில் உள்ள சர்வருக்கு டேட்டாவைக் காப்பி செய்ய வேண்டும்.</li>
+                        <li><b>RTO (எவ்வளவு நேரம் முடங்கலாம்?):</b> சிஸ்டம் மீண்டு வர எவ்வளவு நேரம் ஆகலாம்? RTO 15 நிமிடம் என்றால், நாமே சுயமாகச் செய்ய முடியாது; ஆட்டோமேட்டிக் சிஸ்டம் தேவை.</li>
+                    </ul>
+                    <h3>4 வகையான பேரிடர் மீட்பு உத்திகள்</h3>
+                    <ul>
+                        <li><b>Backup & Restore:</b> மிகவும் மலிவானது. S3-யில் பேக்கப் எடுத்து வைப்பது. பிரச்சனை வந்தால் புதிய சர்வரை உருவாக்கி டேட்டாவைப் போடப் பல மணிநேரம் ஆகும்.</li>
+                        <li><b>Pilot Light:</b> டேட்டாபேஸை மட்டும் வேறொரு ஊரில் ஆன் செய்து வைப்பது. பிரச்சனை வந்தால் வெப் சர்வர்களை ஆன் செய்துகொள்ளலாம். (10-30 நிமிடம்).</li>
+                        <li><b>Warm Standby:</b> சிறிய அளவில் முழு செட்டப்பையும் வேறொரு ஊரில் ஓடவிடுவது. பிரச்சனை வந்தால் அதை ஆட்டோ-ஸ்கேல் செய்து பெரியதாக்கிக் கொள்ளலாம். (சில நிமிடங்கள்).</li>
+                        <li><b>Active-Active:</b> மிகவும் விலையுயர்ந்தது. மும்பையிலும் சிட்னியிலும் ஒரே நேரத்தில் முழு வெப்சைட்டும் இயங்கும். மும்பை அழிந்தாலும், வாடிக்கையாளர்களுக்கு எந்தத் தடையும் இன்றி சிட்னி சர்வர் வேலை செய்யும் (Zero Downtime).</li>
+                    </ul>
+                    ${generatePromptBox('Route 53 Global Failover', 'ஆட்டோமேட்டிக் DNS Failover:\n\nAWS Route 53 என்ற அமைப்பு உங்கள் மும்பை சர்வரை எந்நேரமும் கண்காணிக்கும். மும்பை சர்வர் முடங்கியதை அறிந்தால், மனிதர்களின் தலையீடு இல்லாமல், அதுவாகவே அனைத்து வாடிக்கையாளர்களையும் சிட்னி சர்வருக்குத் திருப்பிவிட்டுவிடும்.')}`
+            },
+            { 
+                id: 21, icon: "🧠", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "21. Big Data & Analytics Processing", title_ta: "21. பிக் டேட்டா (Big Data & Data Warehouses)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> An OLTP database (like RDS) is a bank teller fast at taking individual deposits. A Data Warehouse (OLAP) is the bank's team of accountants locked in a back room, analyzing 10 years of deposits across 50 branches to predict next quarter's revenue. Don't ask the teller to do the accountant's job.</div>
+                    <p>As enterprises scale, they generate terabytes of data daily (clickstreams, transactions, logs). Standard SQL databases are designed for row-based transactions (OLTP). If you ask a standard MySQL database to run a complex analytics query across 5 billion rows, the database will lock up and crash.</p>
+                    <h3>The Data Warehouse</h3>
+                    <p>To analyze massive datasets, we extract the data from our operational databases, transform it, and load it (ETL) into a <b>Cloud Data Warehouse</b> (like Amazon Redshift, Google BigQuery, or Snowflake). These are columnar-storage databases (OLAP) specifically optimized for running complex analytics queries against petabytes of data in seconds.</p>
+                    <h3>Data Lakes vs. Data Warehouses</h3>
+                    <ul>
+                        <li><b>Data Warehouse:</b> Highly structured, cleaned, and organized relational data. Ready for Business Intelligence (BI) dashboards.</li>
+                        <li><b>Data Lake:</b> A massive, cheap pool of raw, unstructured data (JSON, CSVs, raw logs, images) usually stored in Amazon S3 or Google Cloud Storage. Data scientists use Data Lakes to run raw machine learning experiments before they even know what structure the data should have.</li>
+                    </ul>
+                    <h3>Serverless Analytics</h3>
+                    <p>Modern cloud architecture allows you to query Data Lakes directly without even loading the data into a database! Using serverless tools like <b>AWS Athena</b>, you can write a standard SQL query, point it at a raw CSV file sitting in an S3 bucket, and get the answer instantly. You pay per query based on the amount of data scanned.</p>
+                    ${generatePromptBox('Data Lake Architecture Pattern', 'The Modern Data Pipeline:\n\n1. Ingest: IoT devices stream raw JSON data via Amazon Kinesis.\n2. Store (Data Lake): Kinesis dumps the raw JSON into Amazon S3 (Raw Zone).\n3. Transform: AWS Glue (Serverless ETL) cleans the JSON, converts it to Parquet format (highly compressed columnar format), and saves it to a new S3 bucket (Clean Zone).\n4. Analyze: Analysts use Amazon Athena to run SQL directly on the Parquet files in S3.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சாதாரண டேட்டாபேஸ் (OLTP) என்பது வங்கியில் பணம் வாங்கும் காசாளர் (Teller) போன்றவர்; ஒருவரின் பணத்தை வேகமாக வாங்குவார். Data Warehouse என்பது வங்கியின் ஆடிட்டர்கள் போன்றவர்கள்; 10 வருடக் கணக்குகளை ஆராய்ந்து ரிப்போர்ட் தருவார்கள். காசாளரிடம் போய் ஆடிட்டர் வேலையைக் கேட்டால் வங்கி முடங்கிவிடும்.</div>
+                    <p>பெரிய நிறுவனங்கள் தினமும் டெராபைட் (Terabytes) கணக்கில் டேட்டாவை உருவாக்குகின்றன. சாதாரண MySQL டேட்டாபேஸிடம் "கடந்த 5 வருடங்களில் 500 கோடி பில்களில் எந்தப் பொருள் அதிகம் விற்றது?" எனக் கேட்டால் அந்த சர்வர் முடங்கிவிடும் (Crash). அது சிறிய பரிவர்த்தனைகளுக்கு மட்டுமே வடிவமைக்கப்பட்டது.</p>
+                    <h3>Data Warehouse (டேட்டா வேர்ஹவுஸ்)</h3>
+                    <p>இவ்வளவு பெரிய டேட்டாவை ஆராய, அதைப் பிரித்தெடுத்து <b>Cloud Data Warehouse</b>-க்கு (எ.கா: Amazon Redshift, Google BigQuery, Snowflake) அனுப்ப வேண்டும். இவை Columnar (நெடுவரிசை) முறையில் சேமிப்பதால், பல கோடி டேட்டாவைக் கூடச் சில விநாடிகளில் கணக்கிட்டு விடை சொல்லும்.</p>
+                    <h3>Data Lake vs Data Warehouse</h3>
+                    <ul>
+                        <li><b>Data Warehouse:</b> நன்கு சுத்தம் செய்யப்பட்டு, வரிசைப்படுத்தப்பட்ட டேட்டா. இது ரிப்போர்ட் (Dashboards) எடுக்கத் தயார் நிலையில் இருக்கும்.</li>
+                        <li><b>Data Lake (டேட்டா ஏரி):</b> சுத்தம் செய்யப்படாத, குப்பையாக உள்ள அனைத்து வகையான டேட்டாவும் (JSON, லாக்குகள், படங்கள்) அமேசான் S3-யில் மொத்தமாகக் கொட்டப்படும் இடம். டேட்டா சயின்டிஸ்டுகள் இதை வைத்து AI ஆராய்ச்சிகளைச் செய்வார்கள்.</li>
+                    </ul>
+                    <h3>Serverless Analytics</h3>
+                    <p>இப்போது டேட்டாபேஸ் இல்லாமலேயே டேட்டாவை ஆராய முடியும்! <b>AWS Athena</b> போன்ற கருவிகளைப் பயன்படுத்தி, S3-யில் சும்மா கிடக்கும் ஒரு CSV பைலை நேரடியாக SQL கமாண்ட் மூலம் தேடிப் பதில் பெறலாம். தேடும் டேட்டாவின் அளவிற்கு மட்டும் பணம் கட்டினால் போதும்.</p>
+                    ${generatePromptBox('Data Lake Architecture Pattern', 'நவீன டேட்டா பைப்லைன் (Data Pipeline):\n\n1. சேகரிப்பு: கம்ப்யூட்டர்கள் கச்சா டேட்டாவை Kinesis மூலம் அனுப்பும்.\n2. சேமிப்பு: அது அப்படியே குப்பையாக S3-யில் (Data Lake) கொட்டப்படும்.\n3. சுத்தம் செய்தல்: AWS Glue மூலம் அந்த டேட்டா சுத்தம் செய்யப்பட்டுப் புதிய S3 பக்கெட்டில் சேமிக்கப்படும்.\n4. ஆராய்ச்சி: Athena-ஐப் பயன்படுத்திப் புதிய S3-யில் உள்ள டேட்டாவை டேட்டாபேஸ் இல்லாமலேயே ஆராயலாம்.')}`
+            },
+            { 
+                id: 22, icon: "🤖", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "22. AI & Machine Learning Services", title_ta: "22. AI & மெஷின் லேர்னிங் (Machine Learning)", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Buying pre-trained Cloud AI is like hiring a professional translator; they instantly speak French for you. Training your own Custom ML model is like raising a child and teaching them French from scratch. It takes massive time and resources, but eventually, they speak your specific family dialect perfectly.</div>
+                    <p>Cloud providers have democratized Artificial Intelligence. You no longer need a PhD or a rack of $50,000 GPUs to implement machine learning into your applications. The cloud separates AI into three distinct tiers of complexity.</p>
+                    <h3>Tier 1: Pre-Trained API Services</h3>
+                    <p>These are out-of-the-box APIs. The cloud provider has already trained the models using billions of data points. You simply send an image, text, or audio file via an API call, and the service returns the result instantly.</p>
+                    <ul>
+                        <li><b>Vision:</b> AWS Rekognition, Google Cloud Vision (Identifies objects, faces, text, and inappropriate content in images).</li>
+                        <li><b>Language & Speech:</b> AWS Comprehend (Sentiment analysis), Amazon Polly (Text-to-Speech), AWS Transcribe (Speech-to-Text).</li>
+                    </ul>
+                    <h3>Tier 2: Managed ML Platforms (SageMaker / Vertex AI)</h3>
+                    <p>If the pre-trained APIs don't fit your niche business case (e.g., identifying a specific defect in a proprietary manufacturing part), you must train a custom model. Platforms like <b>Amazon SageMaker</b> or <b>Google Vertex AI</b> provide managed Jupyter Notebooks for data scientists to write code (TensorFlow, PyTorch), automatically provision the massive GPU clusters needed for training, and then deploy the finished model behind a scalable API endpoint.</p>
+                    <h3>Tier 3: Generative AI Foundations</h3>
+                    <p>The newest era involves Foundation Models (LLMs). Services like <b>Amazon Bedrock</b> or <b>Azure OpenAI Service</b> allow you to take massive pre-trained models (like Claude, Llama, or GPT-4) and privately fine-tune them with your own corporate data without leaking your proprietary information to the public internet.</p>
+                    ${generatePromptBox('AWS Rekognition Implementation', 'A Python snippet to detect objects in an image sitting in S3 without knowing any machine learning math:\n\nimport boto3\nclient = boto3.client("rekognition")\n\nresponse = client.detect_labels(\n    Image={"S3Object": {"Bucket": "my-photo-bucket", "Name": "car.jpg"}},\n    MaxLabels=5,\n    MinConfidence=85\n)\n\nfor label in response["Labels"]:\n    print(f"Found: {label[\'Name\']} with {label[\'Confidence\']}% confidence")')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> தயாராக உள்ள Cloud AI-ஐப் பயன்படுத்துவது ஒரு மொழிபெயர்ப்பாளரை வேலைக்கு வைப்பது போன்றது; அவர் உடனடியாக உங்களுக்கு மொழிபெயர்த்துத் தருவார். சொந்தமாக ML மாடலை உருவாக்குவது ஒரு குழந்தையை வளர்த்து மொழி கற்றுக்கொடுப்பது போன்றது. இதற்கு அதிக நேரமும் செலவும் ஆகும், ஆனால் உங்கள் தேவைக்கேற்ப அது துல்லியமாகச் செயல்படும்.</div>
+                    <p>AI தொழில்நுட்பத்தை அனைத்து நிறுவனங்களுக்கும் எளிதாக்கியது கிளவுட் தான். இப்போது AI-ஐப் பயன்படுத்த நீங்கள் பெரிய அறிவியலாளராக இருக்க வேண்டியதில்லை. கிளவுட் AI-ஐ 3 வகையாகப் பிரிக்கிறது.</p>
+                    <h3>வகை 1: தயாராக உள்ள API சேவைகள் (Pre-Trained)</h3>
+                    <p>இவை ஏற்கனவே அமேசான் மற்றும் கூகுளால் பல கோடி டேட்டாக்களை வைத்துப் பயிற்றுவிக்கப்பட்டவை. நீங்கள் ஒரு புகைப்படம் அல்லது ஆடியோவை API மூலம் அனுப்பினால் போதும், அது உடனே முடிவைத் தரும்.</p>
+                    <ul>
+                        <li><b>பார்வை (Vision):</b> AWS Rekognition (புகைப்படத்தில் உள்ள முகம், பொருள், எழுத்துக்களைக் கண்டறியும்).</li>
+                        <li><b>மொழி (Language):</b> Amazon Polly (எழுத்தை ஒலியாக மாற்றும்), AWS Transcribe (பேச்சை எழுத்தாக மாற்றும்).</li>
+                    </ul>
+                    <h3>வகை 2: Managed ML Platforms (SageMaker)</h3>
+                    <p>தயாரான AI உங்கள் தொழிலுக்குச் செட் ஆகவில்லை என்றால் (எ.கா: உங்கள் கம்பெனியின் ஒரு குறிப்பிட்ட மெஷின் பாகத்தில் உள்ள விரிசலைக் கண்டுபிடிக்க வேண்டும்), நீங்களே AI-க்குக் கற்றுக்கொடுக்க வேண்டும். இதற்கு <b>Amazon SageMaker</b> அல்லது <b>Google Vertex AI</b> பயன்படுகிறது. இது டேட்டா சயின்டிஸ்டுகளுக்குத் தேவையான GPU சர்வர்களைக் கொடுத்து, AI மாடலை உருவாக்க உதவுகிறது.</p>
+                    <h3>வகை 3: Generative AI (LLMs)</h3>
+                    <p>தற்போது <b>Amazon Bedrock</b> போன்ற சேவைகள் மூலம், பெரிய AI மாடல்களைக் (GPT, Claude) கிளவுடிற்குள் பாதுகாப்பாகக் கொண்டுவந்து, உங்கள் நிறுவனத்தின் ரகசிய டேட்டாவை வைத்து அவற்றிற்குப் பயிற்சி அளித்து, உங்களுக்கெனச் சொந்தமான பாதுகாப்பான ChatGPT-ஐ உருவாக்கிக்கொள்ளலாம்.</p>
+                    ${generatePromptBox('AWS Rekognition Implementation', 'S3-யில் உள்ள ஒரு புகைப்படத்தில் என்ன இருக்கிறது என்பதை AI-ஐ விட்டுக் கண்டுபிடிக்கும் பைதான் கோடு:\n\nimport boto3\nclient = boto3.client("rekognition")\n\nresponse = client.detect_labels(\n    Image={"S3Object": {"Bucket": "my-bucket", "Name": "car.jpg"}},\n    MaxLabels=5\n)\n# இது புகைப்படத்தில் உள்ள காரை எந்த ML அறிவும் இன்றித் துல்லியமாகக் கண்டுபிடித்துவிடும்.')}`
+            },
+            { 
+                id: 23, icon: "🌉", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "23. Advanced Networking & Hybrid Cloud", title_ta: "23. ஹைப்ரிட் கிளவுட் (Hybrid Cloud) & VPN", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> A Site-to-Site VPN is like an armored car driving on the public highway carrying your cash; it is encrypted and safe, but can get stuck in traffic. AWS Direct Connect is like building a private underground tunnel directly from your bank to the vault; it is extremely expensive, but blazingly fast and physically immune to highway traffic.</div>
+                    <p>Enterprise cloud adoption rarely happens overnight. Massive corporations (like banks or hospitals) have decades of legacy databases sitting in their own physical data centers (On-Premise) that cannot simply be dragged and dropped into AWS. They operate in a <b>Hybrid Cloud</b> state, where the cloud and the physical data center must talk to each other securely.</p>
+                    <h3>Site-to-Site VPN (IPsec)</h3>
+                    <p>To connect a corporate office network to an AWS VPC, you set up a Site-to-Site VPN. This creates an encrypted IPsec tunnel over the public internet. The data is highly secure, but because it traverses the public internet, the bandwidth is limited, and latency can fluctuate based on global internet traffic.</p>
+                    <h3>Dedicated Connections (AWS Direct Connect / Azure ExpressRoute)</h3>
+                    <p>For mission-critical workloads moving massive amounts of data (e.g., migrating Petabytes of video, or real-time trading systems), a VPN is too slow. <b>AWS Direct Connect</b> provisions a physical, dedicated fiber-optic cable directly from your corporate data center into the AWS facility. It bypasses the public internet completely, offering consistent, ultra-low latency (e.g., 10 Gbps or 100 Gbps speeds).</p>
+                    <h3>Transit Gateway (The Network Hub)</h3>
+                    <p>As a company grows, it might end up with 50 different VPCs and 10 on-premise offices. Connecting them all point-to-point creates a complex "Spoke-to-Spoke" nightmare (50 VPCs would require 1,225 VPN connections). <b>AWS Transit Gateway</b> solves this. It acts as a central hub. Every VPC and every corporate office simply connects to the Transit Gateway once, and the Gateway routes the traffic intelligently to the correct destination.</p>
+                    ${generatePromptBox('Hybrid Architecture Planning', 'Decision Matrix for Hybrid Connectivity:\n\n1. Budget: Low ($50/month). Speed requirement: Low (1 Gbps). Setup time: 1 hour.\n   -> Solution: AWS Site-to-Site VPN (Over the public internet).\n\n2. Budget: High ($1000+/month). Speed requirement: Massive (100 Gbps). Setup time: 1-2 Months (Requires digging physical cables & telecom partners).\n   -> Solution: AWS Direct Connect.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> VPN என்பது பொதுச் சாலையில் செல்லும் கவச வாகனம் போன்றது; பாதுகாப்பானது, ஆனால் டிராபிக்கில் சிக்க வாய்ப்புள்ளது. Direct Connect என்பது உங்கள் பேங்கிலிருந்து நேரடியாகத் தோண்டப்பட்ட ரகசியச் சுரங்கப்பாதை போன்றது; அதிகச் செலவாகும், ஆனால் நம்பமுடியாத அளவிற்கு வேகமாக இருக்கும், டிராபிக் பிரச்சனையும் இல்லை.</div>
+                    <p>பெரிய நிறுவனங்கள் (வங்கிகள், மருத்துவமனைகள்) ஒரே இரவில் கிளவுடிற்கு மாறிவிட முடியாது. அவர்களிடம் பல வருடப் பழைய டேட்டாபேஸ்கள் அவர்களின் சொந்த அலுவலக சர்வரில் (On-Premise) இருக்கும். இவர்கள் <b>Hybrid Cloud</b> முறையையே பயன்படுத்துவார்கள். அதாவது, அலுவலக சர்வரையும், கிளவுடையும் பாதுகாப்பாக இணைப்பது.</p>
+                    <h3>Site-to-Site VPN</h3>
+                    <p>உங்கள் அலுவலக நெட்வொர்க்கையும், கிளவுடையும் (AWS VPC) இணைக்க VPN பயன்படுகிறது. இது பொது இன்டர்நெட் வழியாகச் சென்றாலும், டேட்டாவை ரகசியக் குறியீடாக (Encrypted IPsec tunnel) மாற்றிப் பாதுகாப்பாகக் கொண்டு செல்லும். ஆனால் இது பொது இன்டர்நெட் என்பதால் வேகம் சற்று ஏற்ற இறக்கமாக இருக்கும்.</p>
+                    <h3>AWS Direct Connect / Azure ExpressRoute</h3>
+                    <p>டெராபைட் (Terabyte) கணக்கில் டேட்டாவை மாற்ற வேண்டும் என்றாலோ, அல்லது மிக அதிவேகம் தேவைப்பட்டாலோ VPN உதவாது. இதற்கு <b>AWS Direct Connect</b> பயன்படுகிறது. இது உங்கள் அலுவலகத்தில் இருந்து அமேசான் டேட்டா சென்டருக்குப் போடப்படும் ஒரு பிரத்யேக ஃபைபர் ஆப்டிக் (Fiber-optic) கேபிள். இது இன்டர்நெட்டைப் பயன்படுத்தாமல் நேரடியாகச் செல்வதால் அதீத வேகத்தில் இயங்கும்.</p>
+                    <h3>Transit Gateway</h3>
+                    <p>ஒரு நிறுவனத்தில் 50 VPC-களும், 10 கிளை அலுவலகங்களும் இருந்தால், அனைத்தையும் ஒன்றுக்கொன்று தனித்தனியாக இணைப்பது சாத்தியமில்லை. <b>AWS Transit Gateway</b> ஒரு மையப்புள்ளியாக (Hub) செயல்படும். அனைவரும் இந்த கேட்வேயில் இணைந்துவிட்டால் போதும், இதுவே அனைவரையும் இணைத்துப் பேச வைக்கும்.</p>
+                    ${generatePromptBox('Hybrid Architecture Planning', 'எந்த இணைப்பைத் தேர்ந்தெடுப்பது?\n\n1. குறைவான பட்ஜெட், 1 Gbps வேகம் போதும், 1 மணிநேரத்தில் இணைக்க வேண்டும்:\n   -> தீர்வு: AWS Site-to-Site VPN.\n\n2. அதிக பட்ஜெட், 100 Gbps வேகம் வேண்டும், 1 மாதம் ஆனாலும் பரவாயில்லை, ஆனால் கேபிள் தனியாக இருக்க வேண்டும்:\n   -> தீர்வு: AWS Direct Connect.')}`
+            },
+            { 
+                id: 24, icon: "💰", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "24. Cloud Cost Optimization (FinOps)", title_ta: "24. FinOps - கிளவுட் செலவைக் குறைத்தல்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Moving to the cloud without FinOps is like leaving every light, TV, and faucet turned on in your house before leaving for a 3-month vacation. You only pay for what you use, but if you forget to turn it off, you will return home to a devastating utility bill.</div>
+                    <p>In traditional IT, procurement was a slow process managed by finance teams. In the cloud, a junior developer can accidentally spin up a $500-a-day GPU instance with a single line of code. This led to the creation of <b>FinOps (Financial Operations)</b>—the cultural practice of bringing financial accountability to the variable spend model of the cloud.</p>
+                    <h3>The Big Three Cost Wasters</h3>
+                    <ul>
+                        <li><b>Zombie Resources:</b> You spin up a temporary EC2 instance to test something, terminate the instance, but forget to delete the attached EBS Block Storage drive and the Elastic IP address. AWS will charge you for that unattached storage forever.</li>
+                        <li><b>Over-provisioning:</b> Developers love power. They will request a 16-core, 64GB RAM instance because it feels safe, even though the app only ever uses 5% of the CPU. You must implement "Right-sizing" using tools like AWS Compute Optimizer to downgrade servers mathematically to fit their actual utilization.</li>
+                        <li><b>Data Transfer (Egress) Costs:</b> Ingress (bringing data into the cloud) is usually free. Egress (moving data out of the cloud to the internet, or even between different AZs) costs money per Gigabyte. Poor architectural design can lead to massive hidden network bills.</li>
+                    </ul>
+                    <h3>Strategic Cost Management</h3>
+                    <p>As discussed in Module 5, use <b>Reserved Instances (RI)</b> or Savings Plans for baseline predictable loads (saving 72%), and use <b>Spot Instances</b> for stateless, interruptible background workers (saving 90%).</p>
+                    <p>Implement strict <b>Resource Tagging</b> (e.g., Environment: Prod, Team: Marketing). This allows you to generate Cost Allocation Reports to see exactly which team is burning the budget. Finally, set up <b>AWS Budgets and Billing Alarms</b> so you get an SMS the moment your daily spend exceeds a predetermined threshold, preventing "bill shock" at the end of the month.</p>
+                    ${generatePromptBox('FinOps Tagging & Alert Automation', 'If a resource is untagged, it cannot be tracked. Use IaC to enforce tags.\n\nAWS CLI command to create an automated Budget Alert:\n\naws budgets create-budget \\\n    --account-id 123456789012 \\\n    --budget \'{"BudgetLimit": {"Amount": "500.0", "Unit": "USD"}, "BudgetName": "Monthly-Limit", "BudgetType": "COST", "TimeUnit": "MONTHLY"}\' \\\n    --notifications-with-subscribers \'[{"Notification": {"NotificationType": "ACTUAL", "ComparisonOperator": "GREATER_THAN", "Threshold": 80}, "Subscribers": [{"SubscriptionType": "EMAIL", "Address": "admin@company.com"}]}]\'')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> FinOps இல்லாமல் கிளவுடிற்கு மாறுவது, வீட்டில் உள்ள அனைத்து விளக்குகள், டிவி மற்றும் தண்ணீர் பைப்பைத் திறந்துவிட்டு 3 மாதம் ஊருக்குச் செல்வது போன்றது. கிளவுடில் எதைப் பயன்படுத்துகிறீர்களோ அதற்கு மட்டுமே பில் வரும், ஆனால் ஆஃப் செய்ய மறந்துவிட்டால் பில் பல லட்சங்களில் வரும்.</div>
+                    <p>பழைய முறையில் ஒரு சர்வர் வாங்க மேனேஜர் அனுமதி தேவை. ஆனால் கிளவுடில், ஒரு ஜூனியர் டெவலப்பர் கோடில் (Code) ஒரு சிறிய தவறு செய்தால்கூட ஒரு நாளைக்கு ₹50,000 செலவு வைக்கும் சர்வர் உருவாகிவிடும். இதைக் கட்டுப்படுத்தவே <b>FinOps (Financial Operations)</b> என்ற முறை உருவாக்கப்பட்டது.</p>
+                    <h3>பணத்தை வீணாக்கும் 3 முக்கியத் தவறுகள்</h3>
+                    <ul>
+                        <li><b>Zombie Resources (பயன்படுத்தாத வளங்கள்):</b> டெஸ்டிங் செய்ய ஒரு சர்வரை உருவாக்கிவிட்டு, சர்வரை அழித்துவிடுவார்கள். ஆனால் அதனுடன் இருந்த EBS ஹார்டு டிஸ்கை அழிக்க மறந்துவிடுவார்கள். அமேசான் அந்தப் பயன்படுத்தாத டிஸ்க்கிற்கும் வாழ்நாள் முழுவதும் பில் போடும்.</li>
+                        <li><b>Over-provisioning (அதிகப்படியான சர்வர்):</b> தேவை 5% CPU மட்டுமே இருக்கும், ஆனால் பாதுகாப்புக்காக 64GB RAM சர்வரை வாங்குவார்கள். AWS Compute Optimizer போன்ற கருவிகளைப் பயன்படுத்தி, சர்வரின் அளவைச் சரியாகக் குறைக்க வேண்டும் (Right-sizing).</li>
+                        <li><b>Data Transfer Costs:</b> டேட்டாவை கிளவுடிற்குள் கொண்டுவர இலவசம். ஆனால் டேட்டாவை வெளியே எடுத்தாலோ, அல்லது ஒரு AZ-இல் இருந்து இன்னொரு AZ-க்கு அனுப்பினாலோ GB கணக்கில் பணம் வசூலிக்கப்படும்.</li>
+                    </ul>
+                    <h3>பணத்தைச் சேமிக்கும் உத்திகள்</h3>
+                    <p>உறுதியாக ஓடும் சர்வர்களுக்கு <b>Reserved Instances</b> மூலம் ஒப்பந்தம் போட்டு 72% பணத்தைச் சேமிக்கலாம். திடீர் வேலைகளுக்கு <b>Spot Instances</b> மூலம் 90% சேமிக்கலாம்.</p>
+                    <p>எல்லா சர்வர்களுக்கும் <b>Tagging</b> (எ.கா: Team: Marketing) கொடுக்க வேண்டும். அப்போதுதான் எந்த டீம் அதிகச் செலவு செய்கிறது எனக் கண்டுபிடிக்க முடியும். மிக முக்கியமாக, <b>Billing Alarms</b> செட் செய்ய வேண்டும். பட்ஜெட் 80%-ஐத் தாண்டியவுடன் உங்கள் போனுக்கு மெசேஜ் வந்துவிடும்.</p>
+                    ${generatePromptBox('FinOps Tagging & Alert Automation', 'தானியங்கி பட்ஜெட் அலர்ட் அமைப்பதற்கான AWS கமாண்ட்:\n\nமாத பட்ஜெட் $500 என செட் செய்து, அது 80%-ஐ ($400) தாண்டியவுடன் admin@company.com என்ற ஈமெயிலுக்கு அலர்ட் (Alert) அனுப்பும் கமாண்ட். இது மாதக் கடைசியில் வரும் அதிர்ச்சி பில்லிலிருந்து உங்களைக் காப்பாற்றும்.')}`
+            },
+            { 
+                id: 25, icon: "🏆", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+                title_en: "25. Multi-Cloud Architecture & Future Trends", title_ta: "25. மல்டி-கிளவுட் (Multi-Cloud) & எதிர்காலம்", 
+                content_en: `
+                    <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Single Cloud is like keeping all your money in one bank. If that bank goes bankrupt or freezes your account, you are ruined. Multi-Cloud is having accounts in 3 different banks. It takes more paperwork and is harder to manage, but you are completely immune to a single bank's failure.</div>
+                    <p>We conclude this Masterclass with the pinnacle of enterprise architecture: The <b>Multi-Cloud</b> strategy. As organizations mature, they realize relying 100% on AWS or Azure poses a massive business risk. What if AWS drastically raises their prices? What if a global AWS outage takes down us-east-1 for a whole day? This is known as "Vendor Lock-In."</p>
+                    <h3>Avoiding Vendor Lock-In</h3>
+                    <p>If you build your entire app using AWS Lambda and Amazon DynamoDB, you are deeply locked into AWS's proprietary ecosystem. You cannot copy/paste a DynamoDB table into Google Cloud. To achieve true Multi-Cloud flexibility, you must build <b>Cloud-Agnostic Architecture</b>.</p>
+                    <p>This means heavily relying on open-source standards we covered earlier:</p>
+                    <ul>
+                        <li><b>Compute:</b> Use Docker and Kubernetes. A Kubernetes cluster behaves exactly the same on AWS EKS, Google GKE, and Azure AKS. You can move containers between them in minutes.</li>
+                        <li><b>Databases:</b> Use standard engines like PostgreSQL or MongoDB instead of proprietary cloud NoSQL.</li>
+                        <li><b>Infrastructure:</b> Use Terraform (IaC) instead of AWS CloudFormation, as Terraform can deploy to any provider.</li>
+                    </ul>
+                    <h3>The Polyglot Cloud</h3>
+                    <p>Multi-cloud isn't just for backup; it's for leveraging the "Best of Breed". A highly advanced enterprise might use AWS for its unparalleled global EC2 compute infrastructure, route their massive data analytics directly into Google Cloud BigQuery (because Google excels at data), and use Azure Active Directory (Microsoft Entra ID) to manage their corporate employee logins seamlessly. This is the Polyglot approach.</p>
+                    <h3>Your Journey as a Cloud Architect</h3>
+                    <p>You now possess the foundational blueprint of a Senior Cloud Architect. The next step is continuous hands-on building. The cloud changes daily. Stay curious, build unbreakable infrastructure, and always optimize for automation. Congratulations on completing the Masterclass.</p>
+                    ${generatePromptBox('Cloud-Agnostic Migration Principle', 'The 3-Step Multi-Cloud Mindset:\n\n1. Abstract the Compute (Docker/K8s).\n2. Standardize the Deployment (Terraform).\n3. Replicate the Data (Cross-cloud replication tools).\n\nIf AWS fails, you simply change your Terraform provider to "google", apply the K8s deployment to GKE, point the global DNS to Google, and your business survives.')}`,
+                content_ta: `
+                    <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> Single Cloud என்பது உங்கள் மொத்தப் பணத்தையும் ஒரே வங்கியில் போடுவது போன்றது. அந்த வங்கி திவாலானால் உங்கள் பணமும் போகும். Multi-Cloud என்பது 3 வெவ்வேறு வங்கிகளில் கணக்கு வைப்பது போன்றது. இதைப் பராமரிப்பது கடினம் என்றாலும், ஒரு வங்கி அழிந்தாலும் நீங்கள் பாதுகாப்பாக இருப்பீர்கள்.</div>
+                    <p>இந்த மாஸ்டர்கிளாஸின் இறுதிக் கட்டத்திற்கு வந்துவிட்டோம்: <b>Multi-Cloud (மல்டி-கிளவுட்)</b>. பெரிய நிறுவனங்கள் அமேசானை (AWS) மட்டுமே 100% நம்பியிருக்க மாட்டார்கள். ஒருவேளை AWS திடீரென விலையை ஏற்றினால் என்ன செய்வது? அல்லது AWS சர்வர் முழுமையாக முடங்கினால் என்ன செய்வது? இதை "Vendor Lock-In" என்று சொல்வார்கள்.</p>
+                    <h3>Vendor Lock-In-ஐத் தவிர்த்தல்</h3>
+                    <p>நீங்கள் AWS DynamoDB-ஐ முழுமையாக நம்பி சாஃப்ட்வேரை உருவாக்கினால், நாளை அதை அப்படியே கூகுள் கிளவுடிற்கு மாற்ற முடியாது. எந்தக் கிளவுடிற்கும் எளிதாக மாறும் வகையில் <b>Cloud-Agnostic</b> முறையைப் பின்பற்ற வேண்டும்.</p>
+                    <ul>
+                        <li><b>சர்வர்:</b> Docker மற்றும் Kubernetes-ஐப் பயன்படுத்துங்கள். இது AWS, Google, Azure என அனைத்திலும் ஒரே மாதிரியாகவே வேலை செய்யும்.</li>
+                        <li><b>டேட்டாபேஸ்:</b> கிளவுடின் சொந்த டேட்டாபேஸ்களை விட, PostgreSQL போன்ற பொதுவான (Open-source) டேட்டாபேஸ்களைப் பயன்படுத்துங்கள்.</li>
+                        <li><b>IaC:</b> சர்வர்களை உருவாக்க AWS CloudFormation-ஐத் தவிர்த்துவிட்டு, Terraform-ஐப் பயன்படுத்துங்கள்.</li>
+                    </ul>
+                    <h3>Polyglot Cloud (சிறந்ததைத் தேர்ந்தெடுத்தல்)</h3>
+                    <p>மல்டி-கிளவுட் என்பது பேக்கப்பிற்காக மட்டுமல்ல. ஒவ்வொரு கிளவுடிலும் எது சிறந்ததோ அதை மட்டும் எடுத்துப் பயன்படுத்துவது. எ.கா: வெப்சைட் ஓட AWS சர்வர் சிறந்தது. டேட்டாவை ஆராய Google Cloud (BigQuery) சிறந்தது. கம்பெனி ஊழியர்களின் பாஸ்வேர்டுகளை நிர்வகிக்க Microsoft Azure சிறந்தது. அனைத்தையும் இணைத்து ஒரே நிறுவனமாகப் பயன்படுத்துவார்கள்.</p>
+                    <h3>உங்களின் பயணம் (Cloud Architect)</h3>
+                    <p>இப்போது நீங்கள் ஒரு சீனியர் கிளவுட் ஆர்கிடெக்டுக்கான (Cloud Architect) முழு வரைபடத்தையும் பெற்றுள்ளீர்கள். அடுத்த கட்டம், நீங்களே சுயமாக சர்வர்களை உருவாக்கிப் பழகுவதுதான். கிளவுட் உலகம் தினமும் மாறிக்கொண்டே இருக்கும். புதிதாகக் கற்றுக்கொண்டே இருங்கள். வாழ்த்துக்கள்!</p>
+                    ${generatePromptBox('Cloud-Agnostic Migration Principle', 'மல்டி-கிளவுட் மாறும் யுக்தி:\n\n1. சாஃப்ட்வேரை டாக்கராக (Docker) மாற்றுங்கள்.\n2. டெராஃபார்ம் (Terraform) மூலம் கட்டமைப்பை எழுதுங்கள்.\n\nநாளை AWS முடங்கினால், டெராஃபார்ம் கோடில் "aws"-க்கு பதிலாக "google" என மாற்றிவிட்டு கமாண்ட் கொடுத்தால், உங்களின் மொத்த கம்பெனியும் அடுத்த சில நிமிடங்களில் கூகுள் கிளவுடில் உயிர்பெற்று இயங்கும்.')}`
+            }
+        ];
+
+        // ==========================================
+        // 10-QUESTION QUIZ (CLOUD COMPUTING)
+        // ==========================================
+        const quizData = [
+            { q: "Which cloud service model provides a completely managed application where you do not interact with the underlying OS or hardware?", opts: ["IaaS (Infrastructure as a Service)", "PaaS (Platform as a Service)", "SaaS (Software as a Service)", "CaaS (Container as a Service)"], ans: 2 },
+            { q: "In the AWS Shared Responsibility Model, what is the customer responsible for?", opts: ["Physical security of the data center", "Replacing broken hard drives", "Updating the hypervisor software", "Encrypting their own application data and managing IAM passwords"], ans: 3 },
+            { q: "Which cloud storage type is best suited for storing millions of unstructured files (like images) that need to be accessed via a web URL?", opts: ["Block Storage (EBS)", "Object Storage (S3)", "File Storage (EFS)", "Relational Database Storage"], ans: 1 },
+            { q: "What is the primary purpose of an Availability Zone (AZ)?", opts: ["To isolate billing accounts", "To provide physical fault tolerance and redundancy within a single geographic Region", "To cache videos closer to end users", "To prevent DDoS attacks"], ans: 1 },
+            { q: "If you have a database that must strictly NOT be accessible from the public internet, where should you place it?", opts: ["In a Public Subnet attached to an IGW", "In an S3 Bucket", "In a Private Subnet", "In a Content Delivery Network"], ans: 2 },
+            { q: "What is the defining characteristic of Serverless compute (like AWS Lambda)?", opts: ["Servers run 24/7 but are hidden", "You only pay for the exact milliseconds your code is executing", "It requires you to install Linux manually", "It cannot scale past 10 users"], ans: 1 },
+            { q: "Why is Kubernetes considered an 'Orchestrator'?", opts: ["It automatically writes code for you", "It manages the scheduling, scaling, and self-healing of thousands of Docker containers", "It encrypts network traffic natively", "It is a specialized SQL database"], ans: 1 },
+            { q: "In Infrastructure as Code (like Terraform), what does 'Declarative' mean?", opts: ["Writing step-by-step scripts of exactly how to build a server", "Declaring the desired final state and letting the tool figure out how to build it", "Declaring an emergency stop", "Manually clicking through the cloud dashboard"], ans: 1 },
+            { q: "What is the primary function of a Content Delivery Network (CDN)?", opts: ["To run machine learning algorithms", "To cache static assets globally at Edge Locations to reduce user latency", "To store relational SQL data", "To orchestrate containers"], ans: 1 },
+            { q: "In FinOps, what is a 'Spot Instance'?", opts: ["A highly expensive, ultra-secure server", "A server reserved for 3 years", "Spare cloud capacity rented at a massive discount that can be terminated by the provider at any time", "A server dedicated strictly to logging"], ans: 2 }
+        ];
+
+        // ==========================================
+        // UI & ROUTING
+        // ==========================================
+        window.setContentLang = (lang) => {
+            window.stopTTS(); 
+            contentLang = lang;
+            document.getElementById('btn-en').className = `lang-btn ${lang === 'en' ? 'active' : ''}`;
+            document.getElementById('btn-ta').className = `lang-btn ${lang === 'ta' ? 'active' : ''}`;
+            
+            const mod = courseData.find(m => m.id === viewingModuleId);
+            const imgEl = document.getElementById('viewer-img');
+            imgEl.style.display = 'block'; 
+            imgEl.src = mod.img;
+            document.getElementById('viewer-title').innerText = lang === 'en' ? mod.title_en : mod.title_ta;
+            document.getElementById('viewer-content').innerHTML = lang === 'en' ? mod.content_en : mod.content_ta;
+        };
+
+        document.getElementById('primary-auth-btn').onclick = async () => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch(error) {
+                console.error("Login Error:", error);
+                showToast("Sign In Failed: " + error.message);
+            }
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const photoUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=random`;
+                document.getElementById('nav-profile').innerHTML = `<img src="${photoUrl}" alt="Profile" style="width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; box-shadow: var(--shadow-sm);">`;
+                document.getElementById('nav-profile').style.display = 'flex';
+                
+                try {
+                    const docSnap = await getDoc(doc(db, "users", user.uid));
+                    if (docSnap.exists()) {
+                        currentUserData = docSnap.data();
+                        
+                        let dbNeedsUpdate = false;
+                        
+                        if (!currentUserData.courses) {
+                            currentUserData.courses = {};
+                            dbNeedsUpdate = true;
+                        }
+                        if (!currentUserData.courses[CURRENT_COURSE_ID]) {
+                            currentUserData.courses[CURRENT_COURSE_ID] = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
+                            dbNeedsUpdate = true;
+                        }
+                        
+                        if (dbNeedsUpdate) {
+                            try {
+                                await setDoc(doc(db, "users", user.uid), { 
+                                    courses: {
+                                        [CURRENT_COURSE_ID]: currentUserData.courses[CURRENT_COURSE_ID]
+                                    }
+                                }, { merge: true });
+                            } catch(e) { console.error("Auto-init save error:", e); }
+                        }
+                        
+                        routeUser(true);
+                    } else {
+                        currentUserData = { 
+                            fullName: "",
+                            whatsappNumber: "",
+                            courses: {
+                                [CURRENT_COURSE_ID]: { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false }
+                            }
+                        };
+                        showScreen('profile-screen', true);
+                    }
+                } catch (error) {
+                    console.error("Firestore read error:", error);
+                    currentUserData = { courses: { [CURRENT_COURSE_ID]: { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false } } };
+                    showScreen('profile-screen', true);
+                }
+            } else {
+                document.getElementById('nav-profile').style.display = 'none';
+                showScreen('login-screen', true);
+            }
+        });
+
+        function routeUser(pushHistory = true) {
+            if (!currentUserData.fullName) return showScreen('profile-screen', pushHistory);
+            if (currentUserData.courses[CURRENT_COURSE_ID].paymentStatus !== 'paid') return showScreen('payment-screen', pushHistory);
+            
+            if (currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                showCertificate();
+                return showScreen('cert-screen', pushHistory);
+            }
+            
+            renderDashboard();
+            showScreen('dashboard-screen', pushHistory);
+        }
+
+        // ==========================================
+        // FORMS & PROGRESS
+        // ==========================================
+        document.getElementById('save-profile-btn').onclick = async () => {
+            const name = document.getElementById('prof-name').value;
+            const wa = document.getElementById('prof-wa').value;
+            if(!name || !wa) return showToast("Name and WhatsApp required!");
+
+            currentUserData.fullName = name;
+            currentUserData.whatsappNumber = wa;
+            
+            if (!currentUserData.courses) currentUserData.courses = {};
+            if (!currentUserData.courses[CURRENT_COURSE_ID]) {
+                currentUserData.courses[CURRENT_COURSE_ID] = { currentModule: 1, paymentStatus: 'none', hasPassedQuiz: false };
+            }
+            
+            try {
+                await setDoc(doc(db, "users", auth.currentUser.uid), currentUserData, { merge: true });
+            } catch(e) { console.error("Profile save error:", e); }
+            
+            routeUser(true);
+        };
+
+        document.getElementById('pay-razorpay-btn').onclick = async () => {
+            const user = auth.currentUser;
+            if (!user) return showToast("Please sign in first.");
+
+            const btn = document.getElementById('pay-razorpay-btn');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "Initializing Secure Gateway...";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('https://goolearn-payment.hf.space/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        userId: user.uid,
+                        courseId: CURRENT_COURSE_ID 
+                    })
+                });
+                
+                if (!response.ok) throw new Error("Order creation failed on backend");
+                const orderData = await response.json();
+
+                const options = {
+                    "key": "rzp_live_T1HpoAe39yK0FV", 
+                    "amount": orderData.amount, 
+                    "currency": "INR",
+                    "name": "Goorac Learn",
+                    "description": "Unlock Cloud Computing Masterclass",
+                    "order_id": orderData.id, 
+                    "handler": async function (response) {
+                        showToast("Payment Successful! Unlocking curriculum...");
+                        
+                        currentUserData.courses[CURRENT_COURSE_ID].paymentStatus = 'paid';
+                        
+                        try {
+                            await setDoc(doc(db, "users", user.uid), { 
+                                courses: {
+                                    [CURRENT_COURSE_ID]: { paymentStatus: 'paid' }
+                                }
+                            }, { merge: true });
+                        } catch(e) { console.warn("Local sync skipped, relying fully on webhook."); }
+                        
+                        routeUser(true);
+                    },
+                    "prefill": {
+                        "name": currentUserData.fullName || "",
+                        "contact": currentUserData.whatsappNumber || ""
+                    },
+                    "theme": { 
+                        "color": "#059669" // Emerald theme
+                    },
+                    "modal": {
+                        "ondismiss": function(){
+                            btn.innerText = originalText;
+                            btn.disabled = false;
+                        }
+                    }
+                };
+
+                const rzp = new window.Razorpay(options);
+                
+                rzp.on('payment.failed', function (response){
+                    showToast("Payment Failed: " + response.error.description);
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                });
+                
+                rzp.open();
+
+            } catch (error) {
+                console.error("Payment initiation failed:", error);
+                showToast("Could not connect to payment gateway. Try again.");
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        };
+
+        function renderDashboard() {
+            const container = document.getElementById('module-list-container');
+            container.innerHTML = '';
+            
+            let progressMod = currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+            if(progressMod > 25) progressMod = 25;
+            const percentage = Math.round(((progressMod - 1) / 25) * 100);
+            
+            if (currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                document.getElementById('progress-bar').style.width = '100%';
+                document.getElementById('progress-text').innerText = '100% - Certified';
+            } else {
+                document.getElementById('progress-bar').style.width = percentage + '%';
+                document.getElementById('progress-text').innerText = percentage + '%';
+            }
+
+            courseData.forEach(mod => {
+                const isCompleted = mod.id < currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+                const isUnlocked = mod.id <= currentUserData.courses[CURRENT_COURSE_ID].currentModule || currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz;
+                
+                container.innerHTML += `
+                    <div class="module-item ${isUnlocked ? '' : 'locked'} ${isCompleted ? 'completed' : ''}" onclick="${isUnlocked ? `loadModule(${mod.id})` : ''}">
+                        <div class="mod-icon">${mod.icon}</div>
+                        <div class="mod-details">
+                            <div class="mod-title">${mod.title_en}</div>
+                            <div class="mod-status">${isCompleted ? '✅ Completed' : (isUnlocked ? '📖 Ready' : '🔒 Locked')}</div>
+                        </div>
+                    </div>`;
+            });
+
+            if (currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                document.getElementById('quiz-unlock-banner').style.display = 'none';
+                document.getElementById('certificate-access-banner').style.display = 'block';
+            } else if (currentUserData.courses[CURRENT_COURSE_ID].currentModule > 25) {
+                document.getElementById('quiz-unlock-banner').style.display = 'block';
+                document.getElementById('certificate-access-banner').style.display = 'none';
+            } else {
+                document.getElementById('quiz-unlock-banner').style.display = 'none';
+                document.getElementById('certificate-access-banner').style.display = 'none';
+            }
+        }
+
+        window.loadModule = (id) => {
+            viewingModuleId = id;
+            setContentLang(contentLang);
+            const btn = document.getElementById('mark-complete-btn');
+            
+            if (id === currentUserData.courses[CURRENT_COURSE_ID].currentModule && !currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                btn.style.display = 'flex';
+                btn.innerText = id === 25 ? "Finish Curriculum & Take Exam" : "Mark Completed & Next";
+                btn.onclick = async () => {
+                    window.stopTTS();
+                    viewingModuleId = currentUserData.courses[CURRENT_COURSE_ID].currentModule;
+                    currentUserData.courses[CURRENT_COURSE_ID].currentModule += 1;
+                    
+                    renderDashboard();
+                    
+                    try {
+                        await setDoc(doc(db, "users", auth.currentUser.uid), { 
+                            courses: {
+                                [CURRENT_COURSE_ID]: { currentModule: currentUserData.courses[CURRENT_COURSE_ID].currentModule }
+                            }
+                        }, { merge: true });
+                    } catch(e) { console.error("Progress save error:", e); }
+                    
+                    showToast("Module Completed!");
+                    if (id < 25) {
+                        loadModule(id + 1); 
+                        window.scrollTo(0,0);
+                    } else {
+                        routeUser(true);
+                    }
+                };
+            } else if (id < currentUserData.courses[CURRENT_COURSE_ID].currentModule || currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz) {
+                btn.style.display = 'flex';
+                btn.innerText = id === 25 ? "Back to Dashboard" : "Next Module";
+                btn.onclick = () => {
+                    window.stopTTS();
+                    if (id === 25) { 
+                        goToDashboard(); 
+                    } else { 
+                        loadModule(id + 1); 
+                        window.scrollTo(0,0); 
+                    }
+                };
+            } else { 
+                btn.style.display = 'none'; 
+            }
+            const isAlreadyViewing = document.getElementById('module-viewer-screen').classList.contains('active-screen');
+            showScreen('module-viewer-screen', !isAlreadyViewing); 
+        }
+
+        // ==========================================
+        // QUIZ & CERTIFICATE
+        // ==========================================
+        document.getElementById('start-quiz-btn').onclick = () => {
+            const qc = document.getElementById('quiz-container');
+            qc.innerHTML = quizData.map((q, i) => `
+                <div class="quiz-question">
+                    <h3>${i+1}. ${q.q}</h3>
+                    ${q.opts.map((opt, oIdx) => `
+                        <label class="quiz-option">
+                            <input type="radio" name="q${i}" value="${oIdx}">
+                            ${opt}
+                        </label>
+                    `).join('')}
+                </div>
+            `).join('');
+            showScreen('quiz-screen', true);
+        };
+
+        document.getElementById('submit-quiz-btn').onclick = async () => {
+            let score = 0;
+            quizData.forEach((q, i) => {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if(selected && parseInt(selected.value) === q.ans) score++;
+            });
+
+            if (score >= 7) {
+                currentUserData.courses[CURRENT_COURSE_ID].hasPassedQuiz = true;
+                
+                try {
+                    await setDoc(doc(db, "users", auth.currentUser.uid), { 
+                        courses: {
+                            [CURRENT_COURSE_ID]: { hasPassedQuiz: true }
+                        }
+                    }, { merge: true });
+                } catch(e) { console.error("Exam save error:", e); }
+                
+                showToast("Exam Passed! Generating Certificate...");
+                setTimeout(() => routeUser(true), 1500);
+            } else {
+                showToast(`Score: ${score}/10. You need 7 to pass. Try again!`);
+            }
+        };
+
+        function showCertificate() {
+            if (currentUserData.courses[CURRENT_COURSE_ID].paymentStatus === 'paid') {
+                document.getElementById('cert-pdf-view').style.display = 'block';
+                document.getElementById('cert-name-display').innerText = currentUserData.fullName;
+                
+                const issueDate = new Date();
+                const formattedDate = issueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                document.getElementById('cert-date-display').innerText = "Issued on: " + formattedDate;
+                
+                const encodedData = encodeURIComponent(`VERIFIED CREDENTIAL\nName: ${currentUserData.fullName}\nCourse: Cloud Computing Masterclass\nIssuer: Goorac Learn (Goorac Corporation)\nDate: ${formattedDate}\nStatus: VERIFIED`);
+                document.getElementById('cert-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedData}`;
+            }
+        }
+
+        document.getElementById('download-pdf-btn').onclick = () => {
+            const btn = document.getElementById('download-pdf-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Generating PDF...";
+            
+            const element = document.getElementById('printable-cert');
+            const fileName = currentUserData.fullName ? `${currentUserData.fullName.replace(/\s+/g, '_')}_Cloud_Computing_Certificate.pdf` : 'Cloud_Computing_Certificate.pdf';
+            
+            const opt = {
+                margin:       0,
+                filename:     fileName,
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 3, useCORS: true, allowTaint: true, scrollY: 0, scrollX: 0, windowWidth: 1122 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerText = originalText;
+                showToast("PDF Downloaded Successfully!");
+            }).catch(err => {
+                console.error("PDF generation error: ", err);
+                btn.innerText = originalText;
+                showToast("Error generating PDF");
+            });
+        };
+
+        try {
+            history.replaceState({ screen: 'splash-screen' }, '', '#splash-screen');
+        } catch(e) {
+            console.warn("History API prevented:", e);
+        }
+    </script>
+</body>
+</html>
