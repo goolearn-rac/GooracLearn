@@ -734,12 +734,12 @@
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Using Linux as a standard user is like driving a regular car. Hardening a Linux server is turning it into a tank by welding shut unused ports, stripping out the radio, and ensuring only authorized mechanics can turn the ignition.</div>
                     <p>Linux is the backbone of the internet. The vast majority of web servers, cloud infrastructure, and security appliances run on Linux. If you cannot navigate a Linux terminal, you cannot work in cybersecurity.</p>
                     <h3>Mastering Permissions</h3>
-                    <p>The Linux filesystem relies on strict Read (r), Write (w), and Execute (x) permissions assigned to the Owner, the Group, and Others. A misconfigured permission (like `chmod 777`) gives every user on the system the ability to overwrite critical files, leading to immediate privilege escalation.</p>
+                    <p>The Linux filesystem relies on strict Read (r), Write (w), and Execute (x) permissions assigned to the Owner, the Group, and Others. A misconfigured permission (like \`chmod 777\`) gives every user on the system the ability to overwrite critical files, leading to immediate privilege escalation.</p>
                     <h3>System Hardening Steps</h3>
                     <p>A fresh installation of Linux is highly vulnerable. "Hardening" is the process of reducing the attack surface:</p>
                     <ul>
-                        <li><b>Disable Root Login:</b> Hackers always try to brute-force the 'root' user. You must disable direct root login via SSH in the `/etc/ssh/sshd_config` file and force users to log in with their own accounts, then use `sudo` for administrative tasks.</li>
-                        <li><b>Remove Unnecessary Services:</b> If the server is only running a web database, why is the FTP service running? Every open port is a potential backdoor. Use `systemctl disable` to kill unused services permanently.</li>
+                        <li><b>Disable Root Login:</b> Hackers always try to brute-force the 'root' user. You must disable direct root login via SSH in the \`/etc/ssh/sshd_config\` file and force users to log in with their own accounts, then use \`sudo\` for administrative tasks.</li>
+                        <li><b>Remove Unnecessary Services:</b> If the server is only running a web database, why is the FTP service running? Every open port is a potential backdoor. Use \`systemctl disable\` to kill unused services permanently.</li>
                         <li><b>Implement UFW / iptables:</b> Use the built-in Linux firewalls to drop all incoming traffic by default, only explicitly allowing required ports like 80 (HTTP) or 443 (HTTPS).</li>
                     </ul>
                     ${generatePromptBox('Linux Hardening Cheat Sheet', 'Essential CLI commands for Server Hardening:\n\n# Find all files with world-writable (777) permissions (DANGEROUS)\nfind / -type f -perm 0777\n\n# Change permissions so only the owner can read/write\nchmod 600 /etc/shadow\n\n# Disable SSH Root Login\nsed -i "s/PermitRootLogin yes/PermitRootLogin no/" /etc/ssh/sshd_config\nsystemctl restart sshd\n\n# Check for open ports listening for connections\nnetstat -tulpn')}`,
@@ -747,7 +747,7 @@
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> சாதாரணமாக லினக்ஸைப் பயன்படுத்துவது ஒரு காரை ஓட்டுவது போன்றது. ஆனால் லினக்ஸ் சர்வரை 'Harden' (பாதுகாப்பாக மாற்றுவது) செய்வது, அந்த காரை ஒரு டாங்கியாக (Tank) மாற்றுவது போன்றது. தேவையற்ற கதவுகளை மூடி, அங்கீகரிக்கப்பட்ட ஆட்கள் மட்டுமே இயக்க முடியும் என உறுதி செய்வதாகும்.</div>
                     <p>இன்டர்நெட்டின் முதுகெலும்பு லினக்ஸ் (Linux) தான். பெரும்பாலான வெப்சைட் சர்வர்கள் லினக்ஸில்தான் இயங்குகின்றன. லினக்ஸ் கமாண்டுகள் தெரியாமல் சைபர் செக்யூரிட்டி துறையில் வேலை செய்ய முடியாது.</p>
                     <h3>பெர்மிஷன்கள் (Permissions)</h3>
-                    <p>லினக்ஸில் ஃபைல்களைப் படிக்க (Read - r), எழுத (Write - w), மற்றும் இயக்க (Execute - x) எனத் தனித்தனி அனுமதிகள் உள்ளன. தவறுதலாக `chmod 777` எனக் கட்டளை கொடுத்தால், யார் வேண்டுமானாலும் அந்த ஃபைலை அழிக்க முடியும். இது ஹேக்கர்களுக்கு மிகவும் வசதியாகிவிடும்.</p>
+                    <p>லினக்ஸில் ஃபைல்களைப் படிக்க (Read - r), எழுத (Write - w), மற்றும் இயக்க (Execute - x) எனத் தனித்தனி அனுமதிகள் உள்ளன. தவறுதலாக \`chmod 777\` எனக் கட்டளை கொடுத்தால், யார் வேண்டுமானாலும் அந்த ஃபைலை அழிக்க முடியும். இது ஹேக்கர்களுக்கு மிகவும் வசதியாகிவிடும்.</p>
                     <h3>சர்வரைப் பாதுகாத்தல் (Hardening)</h3>
                     <p>புதிதாக இன்ஸ்டால் செய்யப்பட்ட லினக்ஸ் பாதுகாப்பற்றது. அதைப் பாதுகாப்பாக மாற்றச் சில படிகள் உள்ளன:</p>
                     <ul>
@@ -792,26 +792,26 @@
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Performing security checks manually is like counting every grain of sand on a beach with your fingers. Writing scripts is building an automated machine that sifts through the sand in seconds and alerts you when it finds gold.</div>
                     <p>A cybersecurity analyst who cannot write code is extremely limited. You will constantly face situations where you need to parse 50,000 lines of log files to find a single malicious IP address. Doing this manually in Notepad is impossible. Automation via <b>Bash</b> and <b>Python</b> is mandatory.</p>
                     <h3>Bash (The System Glues)</h3>
-                    <p>Bash is the native scripting language of Linux. It is incredibly fast for OS-level tasks. You string together basic CLI commands using pipes (`|`). For example, you can take a massive web server log, `grep` (search) for "Failed Password", `awk` (extract) the IP address column, and `sort` it to find the top attacker in one line of code.</p>
+                    <p>Bash is the native scripting language of Linux. It is incredibly fast for OS-level tasks. You string together basic CLI commands using pipes (\`|\`). For example, you can take a massive web server log, \`grep\` (search) for "Failed Password", \`awk\` (extract) the IP address column, and \`sort\` it to find the top attacker in one line of code.</p>
                     <h3>Python (The Swiss Army Knife)</h3>
                     <p>Python is the undisputed king of cybersecurity programming. It is used to write custom exploits, automate network scanners, and interact with APIs.</p>
                     <ul>
                         <li><b>Socket Library:</b> Allows you to write your own custom port scanners or reverse shells by directly interacting with TCP/UDP network connections.</li>
                         <li><b>Requests Library:</b> Automates HTTP traffic. You can write a 10-line Python script that attempts to brute-force a web login page automatically.</li>
                     </ul>
-                    ${generatePromptBox('Python Port Scanner Script', '# A simple Python script to scan open ports on a target IP\nimport socket\n\ntarget = "192.168.1.100"\nports = [21, 22, 80, 443, 3389]\n\nfor port in ports:\n    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n    s.settimeout(1)\n    result = s.connect_ex((target, port))\n    if result == 0:\n        print(f"Port {port} is OPEN 🚨")\n    s.close()')}`,
+                    ${generatePromptBox('Python Port Scanner Script', '# A simple Python script to scan open ports on a target IP\nimport socket\n\ntarget = "192.168.1.100"\nports =\n\nfor port in ports:\n    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n    s.settimeout(1)\n    result = s.connect_ex((target, port))\n    if result == 0:\n        print(f"Port {port} is OPEN 🚨")\n    s.close()')}`,
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> பாதுகாப்பு சோதனைகளை நீங்களே சுயமாகச் செய்வது, கடற்கரையில் உள்ள மணல் துகள்களை விரலால் எண்ணுவது போன்றது. ஸ்கிரிப்ட் (Script) எழுதுவது என்பது, அந்த மணலைச் சல்லடையில் சலித்துத் தங்கத்தை மட்டும் சில நொடிகளில் கண்டுபிடிக்கும் இயந்திரத்தை உருவாக்குவது போன்றது.</div>
                     <p>கோடிங் (Coding) தெரியாத சைபர் செக்யூரிட்டி நிபுணரால் பெரிய அளவில் சாதிக்க முடியாது. 50,000 வரிகள் கொண்ட ஒரு லாக் (Log) ஃபைலில் இருந்து ஹேக்கரின் ஐபியைக் (IP) கண்டுபிடிக்க வேண்டும் என்றால், அதை நோட்பேடில் சுயமாகச் செய்வது சாத்தியமில்லை. இதற்கு <b>Bash</b> மற்றும் <b>Python</b> ஸ்கிரிப்டுகள் மிகவும் அவசியம்.</p>
                     <h3>Bash (லினக்ஸின் மொழி)</h3>
-                    <p>Bash என்பது லினக்ஸில் உள்ள ஸ்கிரிப்டிங் மொழியாகும். இது சிஸ்டம் வேலைகளுக்கு மிகவும் வேகமானது. பல கட்டளைகளை `|` (Pipe) மூலம் இணைத்து, பெரிய லாக் ஃபைலில் இருந்து "Failed Password" வந்த ஐபிகளை மட்டும் ஒரே வரியில் பிரித்தெடுக்க முடியும்.</p>
+                    <p>Bash என்பது லினக்ஸில் உள்ள ஸ்கிரிப்டிங் மொழியாகும். இது சிஸ்டம் வேலைகளுக்கு மிகவும் வேகமானது. பல கட்டளைகளை \`|\` (Pipe) மூலம் இணைத்து, பெரிய லாக் ஃபைலில் இருந்து "Failed Password" வந்த ஐபிகளை மட்டும் ஒரே வரியில் பிரித்தெடுக்க முடியும்.</p>
                     <h3>Python (பயனுள்ள ஆயுதம்)</h3>
                     <p>சைபர் செக்யூரிட்டி ப்ரோக்ராமிங்கில் பைத்தான்தான் (Python) ராஜா. இதை வைத்து நெட்வொர்க் ஸ்கேனர்களை உருவாக்கலாம்.</p>
                     <ul>
                         <li><b>Socket Library:</b> TCP/UDP இணைப்புகளை நேரடியாகக் கட்டுப்படுத்தி, சொந்தமாக போர்ட் ஸ்கேனர்களை (Port Scanners) உருவாக்க உதவும்.</li>
                         <li><b>Requests Library:</b> HTTP வெப்சைட்டுகளுடன் தொடர்புகொள்ள உதவும். 10 வரி பைத்தான் கோடு எழுதி, ஒரு வெப்சைட்டின் லாகின் பக்கத்தில் பாஸ்வேர்டுகளைத் தானாகவே போட்டுப் பார்க்கலாம் (Brute-force).</li>
                     </ul>
-                    ${generatePromptBox('Python Port Scanner Script', '# குறிப்பிட்ட IP-யில் திறந்திருக்கும் போர்ட்டுகளைக் கண்டுபிடிக்கும் பைத்தான் ஸ்கிரிப்ட்\nimport socket\n\ntarget = "192.168.1.100"\nports = [22, 80, 443]\n\nfor port in ports:\n    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n    s.settimeout(1)\n    result = s.connect_ex((target, port))\n    if result == 0:\n        print(f"Port {port} OPEN ஆக உள்ளது 🚨")\n    s.close()')}`
+                    ${generatePromptBox('Python Port Scanner Script', '# குறிப்பிட்ட IP-யில் திறந்திருக்கும் போர்ட்டுகளைக் கண்டுபிடிக்கும் பைத்தான் ஸ்கிரிப்ட்\nimport socket\n\ntarget = "192.168.1.100"\nports =\n\nfor port in ports:\n    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n    s.settimeout(1)\n    result = s.connect_ex((target, port))\n    if result == 0:\n        print(f"Port {port} OPEN ஆக உள்ளது 🚨")\n    s.close()')}`
             },
             { 
                 id: 9, icon: "🧱", img: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80",
@@ -878,7 +878,7 @@
                     <h3>Open-Source Intelligence (OSINT)</h3>
                     <p>OSINT is the art of gathering actionable intelligence from publicly available sources without directly interacting with the target's servers (Passive Recon).</p>
                     <ul>
-                        <li><b>Google Dorking:</b> Using advanced search operators to find exposed files. (e.g., `site:example.com ext:sql` will find exposed database backups).</li>
+                        <li><b>Google Dorking:</b> Using advanced search operators to find exposed files. (e.g., \`site:example.com ext:sql\` will find exposed database backups).</li>
                         <li><b>Social Engineering Recon:</b> Scraping LinkedIn to find the names of the IT administrators, then using tools like Hunter.io to guess their corporate email structure to prepare for a spear-phishing campaign.</li>
                     </ul>
                     <h3>Active Reconnaissance & Scanning</h3>
@@ -891,7 +891,7 @@
                     <h3>OSINT (பொதுவெளியில் தகவல் சேகரித்தல்)</h3>
                     <p>இலக்கின் சர்வரைத் தொடாமலேயே, இன்டர்நெட்டில் கிடைக்கும் பொதுவான தகவல்களை வைத்து ஆராய்வது OSINT ஆகும்.</p>
                     <ul>
-                        <li><b>Google Dorking:</b> கூகுளில் சில சிறப்பு வார்த்தைகளைப் பயன்படுத்தி, மறைக்கப்பட்ட ஃபைல்களைக் கண்டுபிடிப்பது. (எ.கா: `site:example.com ext:pdf password`).</li>
+                        <li><b>Google Dorking:</b> கூகுளில் சில சிறப்பு வார்த்தைகளைப் பயன்படுத்தி, மறைக்கப்பட்ட ஃபைல்களைக் கண்டுபிடிப்பது. (எ.கா: \`site:example.com ext:pdf password\`).</li>
                         <li><b>LinkedIn:</b> லிங்க்ட்இனில் நிறுவனத்தின் IT அட்மின் யார், மேனேஜர் யார் என்ற பெயர்களைக் கண்டுபிடித்து, அவர்களுக்குப் போலி ஈமெயில் (Phishing) அனுப்பத் தயாராவது.</li>
                     </ul>
                     <h3>Active Recon & Nmap</h3>
@@ -910,7 +910,7 @@
                     <ul>
                         <li><b>SQL Injection (SQLi):</b> The attacker types database commands into a website's input field (like a login box). If the code doesn't sanitize the input, the database executes the command, allowing the attacker to dump all usernames and passwords.</li>
                         <li><b>Cross-Site Scripting (XSS):</b> The attacker injects malicious JavaScript into a vulnerable webpage (like a comment section). When other normal users visit that page, the script executes in their browser, stealing their session cookies and hijacking their accounts.</li>
-                        <li><b>Broken Object Level Authorization (BOLA):</b> (Formerly IDOR). A user logs in and their profile URL is `site.com/user?id=10`. They manually change the URL to `id=11` and instantly gain access to another user's private data because the server didn't verify authorization.</li>
+                        <li><b>Broken Object Level Authorization (BOLA):</b> (Formerly IDOR). A user logs in and their profile URL is \`site.com/user?id=10\`. They manually change the URL to \`id=11\` and instantly gain access to another user's private data because the server didn't verify authorization.</li>
                     </ul>
                     <h3>Intercepting Traffic with Burp Suite</h3>
                     <p>Hackers do not use normal web browsers. They use proxy tools like <b>Burp Suite</b>. Burp intercepts the HTTP request *before* it leaves the computer, allowing the hacker to manually modify hidden fields, cookies, and pricing data before sending it to the server.</p>
@@ -923,7 +923,7 @@
                     <ul>
                         <li><b>SQL Injection (SQLi):</b> வெப்சைட்டின் லாகின் பாக்ஸில், ஹேக்கர் டேட்டாபேஸ் கட்டளைகளை டைப் செய்வான். வெப்சைட் அதைச் சரிபார்க்காமல் டேட்டாபேஸிற்கு அனுப்பினால், அது அனைவரின் பாஸ்வேர்டுகளையும் ஹேக்கரிடம் கொடுத்துவிடும்.</li>
                         <li><b>Cross-Site Scripting (XSS):</b> கமெண்ட் செய்யும் இடத்தில் ஹேக்கர் வைரஸ் கோடை (JavaScript) பதிவிடுவான். மற்றவர்கள் அந்தப் பக்கத்தைப் பார்க்கும்போது, அந்த வைரஸ் அவர்களின் பிரவுசரில் இயங்கி அவர்களின் கணக்கைத் திருடிவிடும்.</li>
-                        <li><b>BOLA (IDOR):</b> ஒருவர் தனது ப்ரொபைலைப் பார்க்கும்போது URL `id=10` என இருக்கும். அதை `id=11` என மாற்றினால், சர்வர் சரிபார்க்காமல் அடுத்தவரின் தகவல்களைக் காட்டிவிடும்.</li>
+                        <li><b>BOLA (IDOR):</b> ஒருவர் தனது ப்ரொபைலைப் பார்க்கும்போது URL \`id=10\` என இருக்கும். அதை \`id=11\` என மாற்றினால், சர்வர் சரிபார்க்காமல் அடுத்தவரின் தகவல்களைக் காட்டிவிடும்.</li>
                     </ul>
                     <h3>Burp Suite பயன்பாடு</h3>
                     <p>ஹேக்கர்கள் சாதாரண பிரவுசரைப் பயன்படுத்த மாட்டார்கள். <b>Burp Suite</b> என்ற கருவியைப் பயன்படுத்துவார்கள். இது கம்ப்யூட்டரில் இருந்து டேட்டா வெளியே செல்லும் முன்பே அதைத் தடுத்து நிறுத்தி, விலையையோ அல்லது குக்கீஸையோ (Cookies) தங்களுக்கு ஏற்றவாறு மாற்றி சர்வருக்கு அனுப்ப உதவும்.</p>
@@ -936,9 +936,9 @@
                     <div class="analogy-box"><strong>💡 Simple Analogy:</strong> Breaking into a computer gets you into the janitor's closet. Privilege escalation is hacking your way from the janitor's closet up to the CEO's executive suite where the real company assets are kept.</div>
                     <p>Once reconnaissance identifies a vulnerability, the exploitation phase begins. This is the act of weaponizing the vulnerability to gain unauthorized access to the target system. The ultimate goal is usually establishing a "Reverse Shell"—forcing the target server to connect back to the hacker's computer, granting them a remote command line interface.</p>
                     <h3>The Metasploit Framework</h3>
-                    <p>Exploitation is rarely done from scratch. Penetration testers use <b>Metasploit</b>, a massive open-source database of pre-written exploits. You simply select the exploit (e.g., EternalBlue), set the target IP, set the payload (Meterpreter), and type `exploit`. Metasploit handles the complex memory corruption automatically.</p>
+                    <p>Exploitation is rarely done from scratch. Penetration testers use <b>Metasploit</b>, a massive open-source database of pre-written exploits. You simply select the exploit (e.g., EternalBlue), set the target IP, set the payload (Meterpreter), and type \`exploit\`. Metasploit handles the complex memory corruption automatically.</p>
                     <h3>Privilege Escalation</h3>
-                    <p>When you exploit a web server, you usually gain access as a low-privileged service account (like `www-data`). You cannot read passwords or modify system files. You must perform Privilege Escalation to become `root` (Linux) or `SYSTEM` (Windows).</p>
+                    <p>When you exploit a web server, you usually gain access as a low-privileged service account (like \`www-data\`). You cannot read passwords or modify system files. You must perform Privilege Escalation to become \`root\` (Linux) or \`SYSTEM\` (Windows).</p>
                     <ul>
                         <li><b>Linux Escalation:</b> Searching for misconfigured SUID binaries, cron jobs running as root that can be overwritten, or exploiting an unpatched kernel vulnerability.</li>
                         <li><b>Windows Escalation:</b> Bypassing UAC, exploiting unquoted service paths, or dumping SAM hashes.</li>
@@ -950,7 +950,7 @@
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> கம்ப்யூட்டரை ஹேக் செய்து உள்ளே நுழைவது, ஒரு அலுவலகத்தின் துப்புரவுப் பணியாளர் அறைக்குள் நுழைவது போன்றது. அங்கிருந்து சிஇஓ-வின் (CEO) அறைக்குச் சென்று நிறுவனத்தின் சொத்துக்களைக் கைப்பற்றுவதே Privilege Escalation எனப்படும்.</div>
                     <p>தகவல் சேகரிப்பில் ஒரு பலவீனத்தைக் கண்டுபிடித்த பிறகு, அதை உடைத்து உள்ளே நுழையும் (Exploitation) கட்டம் தொடங்கும். இலக்கின் சர்வரை ஹேக்கரின் கம்ப்யூட்டருடன் இணைத்து, ரிமோட் மூலம் கட்டுப்படுத்துவதே (Reverse Shell) இதன் முக்கிய நோக்கமாகும்.</p>
                     <h3>Metasploit Framework</h3>
-                    <p>ஹேக்கிங் கோடுகளை யாரும் புதிதாக எழுதுவதில்லை. <b>Metasploit</b> என்ற கருவியைப் பயன்படுத்துவார்கள். இதில் உலகிலுள்ள பல வகையான ஹேக்கிங் கோடுகள் ஏற்கனவே எழுதி வைக்கப்பட்டிருக்கும். இலக்கின் ஐபி-யைக் கொடுத்து, `exploit` என்று டைப் செய்தால், அதுவே அனைத்தையும் தானாகச் செய்துவிடும்.</p>
+                    <p>ஹேக்கிங் கோடுகளை யாரும் புதிதாக எழுதுவதில்லை. <b>Metasploit</b> என்ற கருவியைப் பயன்படுத்துவார்கள். இதில் உலகிலுள்ள பல வகையான ஹேக்கிங் கோடுகள் ஏற்கனவே எழுதி வைக்கப்பட்டிருக்கும். இலக்கின் ஐபி-யைக் கொடுத்து, \`exploit\` என்று டைப் செய்தால், அதுவே அனைத்தையும் தானாகச் செய்துவிடும்.</p>
                     <h3>Privilege Escalation (உரிமைகளை உயர்த்துதல்)</h3>
                     <p>ஒரு வெப்சைட்டை ஹேக் செய்தால், உங்களுக்குச் சாதாரண பயனரின் உரிமை மட்டுமே கிடைக்கும். முக்கிய ஃபைல்களை உங்களால் அழிக்க முடியாது. எனவே, உங்கள் உரிமையை அட்மின் (Admin) அல்லது Root அளவிற்கு உயர்த்த வேண்டும்.</p>
                     <ul>
@@ -1091,7 +1091,7 @@
                     <p>This involves examining the malware without actually executing it.</p>
                     <ul>
                         <li><b>Hashing & Fingerprinting:</b> Generating a hash of the file and checking it against databases like VirusTotal to see if other researchers have already identified it.</li>
-                        <li><b>String Extraction:</b> Using the `strings` command to pull readable text out of the compiled binary. Malware authors often leave IP addresses, registry keys, or custom error messages in the code.</li>
+                        <li><b>String Extraction:</b> Using the \`strings\` command to pull readable text out of the compiled binary. Malware authors often leave IP addresses, registry keys, or custom error messages in the code.</li>
                         <li><b>Reverse Engineering:</b> Using advanced decompilers like <b>Ghidra</b> or <b>IDA Pro</b> to translate the machine code back into Assembly language, allowing analysts to manually read the hacker's logic.</li>
                     </ul>
                     <h3>Dynamic Analysis (Detonating the Malware)</h3>
@@ -1105,7 +1105,7 @@
                     <p>வைரஸை இயக்காமலேயே அதை ஆராயும் முறை இது.</p>
                     <ul>
                         <li><b>Hashing:</b> வைரஸின் Hash-ஐ எடுத்து VirusTotal போன்ற தளங்களில் தேடிப் பார்ப்பது.</li>
-                        <li><b>String Extraction:</b> `strings` கமாண்டைப் பயன்படுத்தி, வைரஸ் ஃபைலுக்குள் மறைந்திருக்கும் IP முகவரிகள் அல்லது எழுத்துக்களைப் படிப்பது.</li>
+                        <li><b>String Extraction:</b> \`strings\` கமாண்டைப் பயன்படுத்தி, வைரஸ் ஃபைலுக்குள் மறைந்திருக்கும் IP முகவரிகள் அல்லது எழுத்துக்களைப் படிப்பது.</li>
                         <li><b>Reverse Engineering:</b> <b>Ghidra</b> போன்ற கருவிகளைப் பயன்படுத்தி, மெஷின் கோடை மனிதர்கள் படிக்கும் அசெம்பிளி (Assembly) மொழியாக மாற்றி, ஹேக்கரின் மூளையைப் படிப்பது.</li>
                     </ul>
                     <h3>டைனமிக் அனாலிசிஸ் (வைரஸை இயக்குதல்)</h3>
