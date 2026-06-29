@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management Internship | Launch Your Career</title>
+    <style>
+        /* CSS Reset & Variables */
+        :root {
+            --primary: #2563eb; /* Brand Blue */
+            --primary-hover: #1d4ed8;
+            --bg-light: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* Container & Typography */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3 {
+            color: var(--text-main);
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Header / Navbar */
+        header {
+            background-color: var(--card-bg);
+            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .logo img {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: #fff;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(to bottom, #eff6ff, var(--bg-light));
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero p {
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .duration-badge {
+            display: inline-block;
+            background-color: #dbeafe;
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* Roadmap Section */
+        .roadmap-section {
+            padding: 60px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .grid-roadmap {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .task-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 25px 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+
+        .task-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        .task-num {
+            background-color: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+
+        .task-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .task-card p {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Rewards Section (Certificate & Letter) */
+        .rewards-section {
+            padding: 60px 0;
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .rewards-container {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .reward-box {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            border: 1px dashed #cbd5e1;
+        }
+
+        .reward-img-placeholder {
+            width: 100%;
+            height: 250px;
+            background-color: #e2e8f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: #64748b;
+            font-style: italic;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        /* CTA Bottom */
+        .cta-bottom {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .cta-bottom h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-main);
+            color: #fff;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        footer p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media(max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .rewards-container { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="container nav-content">
+            <div class="logo">
+                <!-- Replace src with your actual icon.png -->
+                <img src="icon.png" alt="Company Icon" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMyNTYzZWIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMmwyIDQgNCAyLTQgNGwtMiA0LTIteC00LTJ6Ii8+PC9zdmc+'">
+                Elevate PM
+            </div>
+            <a href="internship.html" class="btn">Join Now</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <span class="duration-badge">⏳ 1-Month Intensive Internship</span>
+            <h1>Step into the Shoes of a Product Manager</h1>
+            <p>Real products. Real users. Real impact. Stop learning theory and start building products. Join our 4-week structured internship and build a portfolio that stands out to recruiters.</p>
+            <a href="internship.html" class="btn" style="padding: 16px 32px; font-size: 1.1rem;">Start Your Journey &rarr;</a>
+        </div>
+    </section>
+
+    <!-- Roadmap Section (10 Tasks) -->
+    <section class="roadmap-section container">
+        <div class="section-header">
+            <h2>Your 1-Month Roadmap</h2>
+            <p>10 practical tasks designed by industry veterans to take you from idea to launch.</p>
+        </div>
+        
+        <div class="grid-roadmap">
+            <!-- Task 1 -->
+            <div class="task-card">
+                <div class="task-num">1</div>
+                <h3>Market Research</h3>
+                <p>Analyze competitors and identify market gaps.</p>
+            </div>
+            <!-- Task 2 -->
+            <div class="task-card">
+                <div class="task-num">2</div>
+                <h3>User Personas</h3>
+                <p>Build empathy by mapping out your target audience.</p>
+            </div>
+            <!-- Task 3 -->
+            <div class="task-card">
+                <div class="task-num">3</div>
+                <h3>Problem Statement</h3>
+                <p>Define the core pain point your product will solve.</p>
+            </div>
+            <!-- Task 4 -->
+            <div class="task-card">
+                <div class="task-num">4</div>
+                <h3>Feature Ideation</h3>
+                <p>Brainstorm and prioritize features using ICE frameworks.</p>
+            </div>
+            <!-- Task 5 -->
+            <div class="task-card">
+                <div class="task-num">5</div>
+                <h3>Write a PRD</h3>
+                <p>Draft a professional Product Requirements Document.</p>
+            </div>
+            <!-- Task 6 -->
+            <div class="task-card">
+                <div class="task-num">6</div>
+                <h3>Wireframing</h3>
+                <p>Create low-fidelity mockups for user flows.</p>
+            </div>
+            <!-- Task 7 -->
+            <div class="task-card">
+                <div class="task-num">7</div>
+                <h3>Success Metrics</h3>
+                <p>Define KPIs and North Star metrics for your product.</p>
+            </div>
+            <!-- Task 8 -->
+            <div class="task-card">
+                <div class="task-num">8</div>
+                <h3>GTM Strategy</h3>
+                <p>Plan your Go-To-Market and launch strategy.</p>
+            </div>
+            <!-- Task 9 -->
+            <div class="task-card">
+                <div class="task-num">9</div>
+                <h3>Stakeholder Review</h3>
+                <p>Learn to communicate constraints with engineering/design.</p>
+            </div>
+            <!-- Task 10 -->
+            <div class="task-card">
+                <div class="task-num">10</div>
+                <h3>Final Pitch</h3>
+                <p>Present your product strategy to industry experts.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rewards Section -->
+    <section class="rewards-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>What You'll Earn</h2>
+                <p>Validate your hard work with credentials that employers trust.</p>
+            </div>
+            <div class="rewards-container">
+                
+                <!-- Certificate -->
+                <div class="reward-box">
+                    <!-- Replace with <img src="certificate.png" alt="Certificate"> -->
+                    <div class="reward-img-placeholder">
+                        [ certificate.png Image Placeholder ]
+                    </div>
+                    <h3>Certificate of Completion</h3>
+                    <p>A verifiable certificate highlighting your proficiency in product strategy, PRD writing, and lifecycle management.</p>
+                </div>
+
+                <!-- Internship Letter -->
+                <div class="reward-box">
+                    <!-- Replace with <img src="letter.png" alt="Internship Letter"> -->
+                    <div class="reward-img-placeholder">
+                        [ internship-letter.png Image Placeholder ]
+                    </div>
+                    <h3>Official Internship Letter</h3>
+                    <p>An official Letter of Recommendation detailing the 10 real-world tasks you completed during your 1-month tenure.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="cta-bottom">
+        <div class="container">
+            <h2>Ready to build products people love?</h2>
+            <p style="margin-bottom: 30px;">Spots for this month's cohort are filling up fast.</p>
+            <a href="internship.html" class="btn" style="padding: 16px 40px; font-size: 1.2rem;">Apply Now for the Internship</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Elevate PM. All rights reserved.</p>
+            <p style="margin-top: 10px;">Empowering the next generation of Product Managers.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
