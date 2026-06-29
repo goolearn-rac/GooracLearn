@@ -113,7 +113,11 @@
             font-weight: 900;
             font-size: 20px;
         }
-        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links { 
+            display: flex; 
+            gap: 24px; 
+            align-items: center; 
+        }
         .nav-link { 
             color: var(--text-main); 
             font-weight: 600; 
@@ -122,6 +126,81 @@
             transition: color 0.2s; 
         }
         .nav-link:hover { color: var(--primary); }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            padding: 8px;
+        }
+        .hamburger span {
+            width: 24px;
+            height: 3px;
+            background: var(--text-main);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Side Panel */
+        .side-panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 320px;
+            height: 100vh;
+            background: var(--surface-color);
+            box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+            z-index: 1100;
+            transition: right 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .side-panel.open {
+            right: 0;
+        }
+        .side-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .side-panel-header h3 {
+            margin: 0;
+            color: var(--primary);
+        }
+        .side-panel-close {
+            background: none;
+            border: none;
+            font-size: 32px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+        .side-panel-nav a {
+            display: block;
+            padding: 14px 0;
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        .side-panel-nav a:hover {
+            color: var(--primary);
+            padding-left: 8px;
+        }
 
         /* Hero */
         .hero { 
@@ -311,7 +390,10 @@
                 font-size: 22px;
             }
             .nav-links {
-                gap: 20px;
+                display: none;
+            }
+            .hamburger {
+                display: flex;
             }
         }
 
@@ -430,9 +512,35 @@
             </a>
             <div class="nav-links">
                 <a href="#courses" class="nav-link">Courses</a>
+                <a href="#internship-section" class="nav-link">Internship</a>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
         </div>
     </nav>
+
+    <!-- Side Panel -->
+    <div class="side-panel" id="sidePanel">
+        <div class="side-panel-header">
+            <h3>Menu</h3>
+            <button onclick="closeSidePanel()" class="side-panel-close">&times;</button>
+        </div>
+        <div class="side-panel-nav">
+            <a href="#courses" onclick="closeSidePanel()">Courses</a>
+            <a href="#internship-section" onclick="closeSidePanel()">Internship Program</a>
+            <a href="prompt-engineering.html" onclick="closeSidePanel()">Prompt Engineering</a>
+            <a href="data-analytics.html" onclick="closeSidePanel()">Data Analytics</a>
+            <a href="hr-management.html" onclick="closeSidePanel()">HR Management</a>
+            <a href="digital-marketing.html" onclick="closeSidePanel()">Digital Marketing</a>
+            <a href="cyber-security.html" onclick="closeSidePanel()">Cyber Security</a>
+            <a href="product-management.html" onclick="closeSidePanel()">Product Management</a>
+            <a href="cloud-computing.html" onclick="closeSidePanel()">Cloud Computing</a>
+            <a href="intern.html" onclick="closeSidePanel()">Internship Details</a>
+        </div>
+    </div>
 
     <header class="hero">
         <div class="container">
@@ -582,7 +690,7 @@
                     </div>
                 </div>
 
-                <div class="course-card">
+                <div class="course-card" id="internship-section">
                     <div class="course-header" style="background: linear-gradient(135deg, #334155, #0f172a);">
                         <h3>Internship Program</h3>
                         <div class="course-badge">Live Projects</div>
@@ -597,7 +705,7 @@
                             <li>✅ Verifiable Experience Letter</li>
                             <li>✅ Pre-Placement Opportunities</li>
                         </ul>
-                        <a href="internship.html" class="btn" style="background-color: #1e293b;">View Details</a>
+                        <a href="intern.html" class="btn" style="background-color: #1e293b;">View Details</a>
                     </div>
                 </div>
             </div>
@@ -649,7 +757,7 @@
                     <a href="cybersecurity.html" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Cyber Security</a>
                     <a href="product-management.html" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Product Management</a>
                     <a href="cloud-computing.html" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Cloud Computing</a>
-                    <a href="internship.html" style="color: #cbd5e1; text-decoration: none; display: block;">Internship Program</a>
+                    <a href="intern.html" style="color: #cbd5e1; text-decoration: none; display: block;">Internship Program</a>
                 </div>
                 <div>
                     <strong style="color: white;">Company</strong><br><br>
@@ -699,13 +807,48 @@
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
         
+        // Smooth scroll for nav links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
-                if (this.getAttribute('href') === '#courses') {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#courses' || targetId === '#internship-section') {
                     e.preventDefault();
-                    document.getElementById('courses').scrollIntoView({ behavior: 'smooth' });
+                    document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
                 }
             });
+        });
+        
+        // Hamburger Menu
+        const hamburger = document.getElementById('hamburger');
+        const sidePanel = document.getElementById('sidePanel');
+        
+        function openSidePanel() {
+            sidePanel.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeSidePanel() {
+            sidePanel.classList.remove('open');
+            document.body.style.overflow = 'visible';
+        }
+        
+        hamburger.addEventListener('click', function() {
+            if (sidePanel.classList.contains('open')) {
+                closeSidePanel();
+            } else {
+                openSidePanel();
+            }
+            hamburger.classList.toggle('active');
+        });
+        
+        // Close side panel when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!sidePanel.contains(e.target) && !hamburger.contains(e.target)) {
+                if (sidePanel.classList.contains('open')) {
+                    closeSidePanel();
+                    hamburger.classList.remove('active');
+                }
+            }
         });
         
         function showModal(modalId) {
