@@ -198,18 +198,50 @@
         .cert-signature-block { text-align: center; }
         .cert-signature { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.2rem, 3vw, 2.2rem); border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 5px; display: inline-block; min-width: 150px; }
 
+        /* Letter Styles */
+        .letter-wrapper {
+            background: #ffffff;
+            color: #000;
+            padding: 60px;
+            font-family: 'Times New Roman', Times, serif;
+            text-align: left;
+            position: relative;
+            margin: 0 auto;
+            width: 100%;
+            min-width: 800px;
+            max-width: 800px;
+            aspect-ratio: 0.707; /* A4 Portrait */
+            box-sizing: border-box;
+            box-shadow: none;
+        }
+
+        .letter-header {
+            border-bottom: 2px solid #0f172a;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         @media print {
-            @page { size: A4 landscape; margin: 0; }
+            @page { margin: 0; }
             body { background: white; margin: 0; }
             body * { visibility: hidden; }
             #cert-pdf-view, #cert-pdf-view * { visibility: visible; }
-            #cert-pdf-view { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh;}
-            .cert-scroll-container { border: none; background: transparent; padding: 0; overflow: visible; }
-            .certificate-wrapper { 
-                width: 297mm !important; height: 210mm !important; 
-                margin: 0 !important; border: 0px solid transparent !important; 
-                max-width: none !important; min-width: 0 !important; aspect-ratio: auto !important;
+            #cert-pdf-view { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh;}
+            .cert-scroll-container { border: none; background: transparent; padding: 0; overflow: visible; margin-bottom: 50px;}
+            .certificate-wrapper, .letter-wrapper { 
                 -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-shadow: none !important;
+            }
+            .certificate-wrapper {
+                width: 297mm !important; height: 210mm !important; 
+                margin: 0 auto !important; border: 0px solid transparent !important; 
+                max-width: none !important; min-width: 0 !important; aspect-ratio: auto !important;
+            }
+            .letter-wrapper {
+                width: 210mm !important; height: 297mm !important;
+                margin: 0 auto !important; max-width: none !important; min-width: 0 !important; aspect-ratio: auto !important;
             }
             .cert-content { padding-top: 0 !important; }
             .cert-footer { padding-bottom: 0 !important; }
@@ -355,7 +387,7 @@
             <div class="card" style="background: var(--success-bg); border-color: var(--success); text-align: center;">
                 <h3 style="color: var(--success);">🏆 Internship Completed</h3>
                 <p style="color: #064e3b; font-size: 0.95rem;">You have successfully completed all 10 modules and earned your certificate.</p>
-                <button onclick="viewCertificate()" class="btn btn-success">View Certificate</button>
+                <button onclick="viewCertificate()" class="btn btn-success">View Certificate & Documents</button>
             </div>
         </div>
     </div>
@@ -390,12 +422,15 @@
         
         <div class="card" id="task-completed-banner" style="display:none; background: var(--success-bg); border-color: var(--success); text-align: center; margin-top: 30px;">
             <h3 style="color: var(--success); margin: 0;">✅ Task Submitted Successfully</h3>
-            <p style="color: #064e3b; margin-top: 5px; font-size: 0.95rem;">Your work has been recorded. Wait 3 days for the next module.</p>
+            <p style="color: #064e3b; margin-top: 5px; font-size: 0.95rem;">Your work has been recorded. Your next module is processing.</p>
         </div>
     </div>
 
     <div id="cert-screen" class="screen" style="max-width: 100%;">
         <div id="cert-pdf-view" style="display:none; width: 100%;">
+            
+            <h3 style="text-align: center; margin-bottom: 20px; color: var(--primary);">Official Certificate</h3>
+            
             <div class="cert-scroll-container">
                 <div class="certificate-wrapper" id="printable-cert">
                     <div class="cert-content">
@@ -438,9 +473,45 @@
                 </div>
             </div>
 
-            <div style="display: flex; gap: 15px; max-width: 400px; margin: 0 auto;">
+            <div style="display: flex; gap: 15px; max-width: 400px; margin: 0 auto 50px;">
                 <button id="download-pdf-btn" class="btn btn-success">Download High-Res PDF</button>
-                <button onclick="goToDashboard()" class="btn btn-outline">Back to Dashboard</button>
+            </div>
+
+            <hr style="border: 0; height: 1px; background: var(--border-color); margin-bottom: 40px;">
+            <h3 style="text-align: center; margin-bottom: 20px; color: var(--primary);">Official Internship Letter</h3>
+
+            <div class="cert-scroll-container">
+                <div class="letter-wrapper" id="printable-letter">
+                    <div class="letter-header">
+                        <div>
+                            <img src="icon.png" alt="Goorac Logo" onerror="this.style.display='none'" style="width: 50px; height: 50px; margin-bottom: 5px;">
+                            <div style="font-weight: bold; font-size: 1.6rem; color: #059669; font-family: 'Inter', sans-serif;">Goorac Corporation</div>
+                        </div>
+                        <div style="text-align: right; font-size: 0.85rem; font-family: 'Inter', sans-serif; color: #475569;">
+                            49, Mela St, Maveedupannai,<br>Tamil Nadu 628623<br>support@goorac.com
+                        </div>
+                    </div>
+                    <div style="text-align: right; margin-bottom: 30px; font-family: 'Inter', sans-serif; font-size: 0.95rem; color: #333;" id="letter-issue-date">Date: </div>
+                    
+                    <div style="font-weight: 800; font-size: 1.25rem; margin-bottom: 25px; font-family: 'Inter', sans-serif; letter-spacing: 1px;">TO WHOM IT MAY CONCERN</div>
+                    
+                    <div style="line-height: 1.8; font-size: 1.1rem; color: #1e293b;" id="letter-content-body">
+                        </div>
+                    
+                    <div style="margin-top: 60px;">
+                        <div style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.6rem; color: #047857; margin-bottom: 10px;">Director</div>
+                        <div style="border-top: 2px solid #000; width: 220px; padding-top: 8px; font-weight: bold; font-family: 'Inter', sans-serif; font-size: 1rem;">Authorized Signatory</div>
+                        <div style="font-size: 0.9rem; color: #475569; font-family: 'Inter', sans-serif;">Goorac Corporation</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; max-width: 400px; margin: 0 auto 30px;">
+                <button id="download-letter-btn" class="btn btn-outline" style="border-color: var(--primary); color: var(--primary);">Download Internship Letter</button>
+            </div>
+
+            <div style="display: flex; justify-content: center; margin-top: 20px;">
+                <button onclick="goToDashboard()" class="btn btn-outline" style="max-width: 250px;">Back to Dashboard</button>
             </div>
         </div>
     </div>
@@ -998,9 +1069,11 @@
                     isClickable = true;
                 } else if (isCurrent) {
                     if (isTimeLocked) {
-                        const msLeft = THREE_DAYS_MS - timeDiff;
-                        const hoursLeft = Math.ceil(msLeft / (1000 * 60 * 60));
-                        lockStatusText = `🔒 Locked (Unlocks in ${hoursLeft} hrs)`;
+                        const unlockTimestamp = lastCompletedAt + THREE_DAYS_MS;
+                        const unlockDateOptions = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+                        const formattedUnlockDate = new Date(unlockTimestamp).toLocaleString('en-IN', unlockDateOptions);
+                        
+                        lockStatusText = `🔒 Unlocks on ${formattedUnlockDate}`;
                         isClickable = false;
                     } else {
                         lockStatusText = '📖 Task Ready';
@@ -1031,7 +1104,7 @@
         window.loadModule = (id) => {
             viewingModuleId = id;
             setContentLang(contentLang);
-            document.getElementById('task-input').value = ""; // Reset input
+            document.getElementById('task-input').value = ""; 
             
             const taskContainer = document.getElementById('task-container');
             const completedBanner = document.getElementById('task-completed-banner');
@@ -1090,12 +1163,26 @@
                 document.getElementById('cert-pdf-view').style.display = 'block';
                 document.getElementById('cert-name-display').innerText = currentUserData.fullName;
                 
-                const issueDate = new Date();
-                const formattedDate = issueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                document.getElementById('cert-date-display').innerText = "Issued on: " + formattedDate;
+                const lastCompletedTs = currentUserData.courses[CURRENT_COURSE_ID].lastCompletedAt || Date.now();
+                const issueDate = new Date(lastCompletedTs);
+                const startDate = new Date(lastCompletedTs - (30 * 24 * 60 * 60 * 1000));
                 
-                const encodedData = encodeURIComponent(`VERIFIED INTERNSHIP\nName: ${currentUserData.fullName}\nRole: Product Management Intern\nCompany: Goorac Corporation\nDate: ${formattedDate}\nStatus: COMPLETED`);
+                const formattedEndDate = issueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                const formattedStartDate = startDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                
+                document.getElementById('cert-date-display').innerText = "Issued on: " + formattedEndDate;
+                
+                const encodedData = encodeURIComponent(`VERIFIED INTERNSHIP\nName: ${currentUserData.fullName}\nRole: Product Management Intern\nCompany: Goorac Corporation\nDate: ${formattedEndDate}\nStatus: COMPLETED`);
                 document.getElementById('cert-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedData}`;
+
+                // Populate Letter Details
+                document.getElementById('letter-issue-date').innerText = "Date: " + formattedEndDate;
+                document.getElementById('letter-content-body').innerHTML = `
+                    <p style="margin-bottom: 20px;">This letter is to certify that <strong>${currentUserData.fullName}</strong> has successfully completed a 1-month unpaid Product Management Internship at Goorac Corporation.</p>
+                    <p style="margin-bottom: 20px;">The official internship tenure was from <strong>${formattedStartDate}</strong> to <strong>${formattedEndDate}</strong>.</p>
+                    <p style="margin-bottom: 20px;">During this period, they completed 10 rigorous, real-world practical modules covering agile methodology, user research, wireframing, feature prioritization, revenue models, and stakeholder management. They have demonstrated strong problem-solving skills, dedication, and a professional understanding of modern product management principles.</p>
+                    <p style="margin-bottom: 20px;">Their performance during this tenure was exceptional, and they fulfilled all responsibilities assigned to them efficiently. We wish them the very best in all their future professional endeavors.</p>
+                `;
             }
         }
 
@@ -1118,6 +1205,32 @@
             html2pdf().set(opt).from(element).save().then(() => {
                 btn.innerText = originalText;
                 showToast("PDF Downloaded Successfully!");
+            }).catch(err => {
+                console.error("PDF generation error: ", err);
+                btn.innerText = originalText;
+                showToast("Error generating PDF");
+            });
+        };
+
+        document.getElementById('download-letter-btn').onclick = () => {
+            const btn = document.getElementById('download-letter-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Generating Letter PDF...";
+            
+            const element = document.getElementById('printable-letter');
+            const fileName = currentUserData.fullName ? `${currentUserData.fullName.replace(/\s+/g, '_')}_Internship_Letter.pdf` : 'Internship_Letter.pdf';
+            
+            const opt = {
+                margin:       0,
+                filename:     fileName,
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 3, useCORS: true, allowTaint: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerText = originalText;
+                showToast("Letter Downloaded Successfully!");
             }).catch(err => {
                 console.error("PDF generation error: ", err);
                 btn.innerText = originalText;
