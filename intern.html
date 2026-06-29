@@ -2,399 +2,554 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Management Internship | Launch Your Career</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta name="title" content="Product Management Internship | Elevate PM">
+    <meta name="description" content="Step into the shoes of a Product Manager. Complete our 1-month intensive internship, finish 10 real-world tasks, and earn your official certificate and letter of recommendation.">
+    <meta name="keywords" content="Product Management, PM Internship, Elevate PM, Product Manager Course, PRD, Wireframing, Go-To-Market, Portfolio">
+    <meta name="author" content="Elevate PM">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.yourwebsite.com/index.html"> 
+    <meta property="og:title" content="Product Management Internship | Elevate PM">
+    <meta property="og:description" content="A flagship 1-month internship initiative. Stop learning theory and start building products. Complete 10 real-world tasks and build a portfolio that stands out.">
+    <meta property="og:image" content="https://www.yourwebsite.com/icon.png"> 
+    <meta property="og:image:secure_url" content="https://www.yourwebsite.com/icon.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Elevate PM">
+
+    <meta property="twitter:card" content="summary_large_image"> 
+    <meta property="twitter:url" content="https://www.yourwebsite.com/index.html"> 
+    <meta property="twitter:title" content="Product Management Internship | Elevate PM">
+    <meta property="twitter:description" content="A flagship 1-month internship initiative. Stop learning theory and start building products. Complete 10 real-world tasks and build a portfolio that stands out.">
+    <meta property="twitter:image" content="https://www.yourwebsite.com/icon.png"> 
+    <title>Product Management Internship | Elevate PM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* CSS Reset & Variables */
+        /* Premium SaaS Theme Variables - Emerald & Midnight Blue */
         :root {
-            --primary: #2563eb; /* Brand Blue */
-            --primary-hover: #1d4ed8;
-            --bg-light: #f8fafc;
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
             --text-main: #0f172a;
-            --text-muted: #475569;
-            --card-bg: #ffffff;
-            --border: #e2e8f0;
+            --text-muted: #64748b;
+            --primary: #059669; /* Emerald Green */
+            --primary-hover: #047857;
+            --border-color: #e2e8f0;
+            --code-bg: #0f172a; /* Midnight Blue */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #020617; /* Deep Midnight Blue */
+                --surface-color: #0f172a;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --border-color: #1e293b;
+                --code-bg: #000000;
+            }
         }
 
-        body {
-            background-color: var(--bg-light);
-            color: var(--text-main);
-            line-height: 1.6;
+        /* Global Reset */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: var(--bg-color); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; line-height: 1.6;
+            -webkit-font-smoothing: antialiased; overflow-x: hidden;
+            display: flex; flex-direction: column; min-height: 100vh;
         }
 
-        /* Container & Typography */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+        /* Typography & Utilities */
+        h1, h2, h3 { font-weight: 800; line-height: 1.2; letter-spacing: -0.5px; }
+        p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 20px; }
+        .text-primary { color: var(--primary); }
+        .text-center { text-align: center; }
+        
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; width: 100%; }
+        .section { padding: 80px 0; }
 
-        h1, h2, h3 {
-            color: var(--text-main);
+        /* Navigation */
+        .top-nav {
+            background-color: rgba(var(--surface-color), 0.9); border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); backdrop-filter: blur(10px);
         }
-
-        p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
-
-        /* Header / Navbar */
-        header {
-            background-color: var(--card-bg);
-            padding: 20px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            font-size: 1.25rem;
-            color: var(--primary);
-        }
-
-        .logo img {
-            width: 32px;
-            height: 32px;
-            object-fit: cover;
-        }
-
-        .btn {
-            background-color: var(--primary);
-            color: #fff;
-            padding: 12px 24px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            transition: background 0.3s ease;
-            display: inline-block;
-        }
-
-        .btn:hover {
-            background-color: var(--primary-hover);
-        }
+        .brand { font-size: 22px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; text-decoration: none; display: flex; align-items: center; gap: 10px;}
+        .brand-logo { width: 32px; height: 32px; border-radius: 8px; box-shadow: var(--shadow-sm); }
+        .nav-link { color: var(--text-main); font-weight: 600; text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+        .nav-link:hover { color: var(--primary); }
 
         /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 80px 20px;
-            background: linear-gradient(to bottom, #eff6ff, var(--bg-light));
+        .hero { text-align: center; padding: 100px 20px 60px; }
+        .hero-logo { width: 100px; height: 100px; border-radius: 50%; box-shadow: var(--shadow-lg); margin-bottom: 24px; border: 4px solid var(--surface-color); }
+        /* Adjusted font size clamp for the longer text to fit gracefully */
+        .hero h1 { font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 16px; color: var(--text-main); }
+        .hero p { max-width: 600px; margin: 0 auto 32px; font-size: 1.2rem; }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+            background-color: var(--primary); color: white; border: none; text-decoration: none;
+            border-radius: var(--radius-lg); padding: 16px 32px; font-size: 1.1rem;
+            font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px 0 rgba(5, 150, 105, 0.39);
         }
+        .btn:hover { background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4); }
+        .btn:active { transform: translateY(0); }
 
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            letter-spacing: -0.5px;
-        }
+        /* Trusted By Section */
+        .trusted-section { padding: 40px 0; background: var(--surface-color); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); text-align: center; }
+        .trusted-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); font-weight: 700; margin-bottom: 24px; }
+        .logo-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 40px; opacity: 0.7; filter: grayscale(100%); transition: 0.3s; }
+        .logo-grid:hover { filter: grayscale(0%); opacity: 1; }
+        .logo-grid img { height: 28px; object-fit: contain; }
 
-        .hero p {
-            max-width: 600px;
-            margin: 0 auto 30px;
+        /* Features Grid */
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 40px; }
+        .feature-card {
+            background: var(--surface-color); border-radius: var(--radius-xl); padding: 32px;
+            border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s;
         }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--primary); }
+        .icon-wrapper { width: 56px; height: 56px; background: rgba(5, 150, 105, 0.1); color: var(--primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+        .icon-wrapper svg { width: 28px; height: 28px; }
+        .feature-card h3 { font-size: 1.25rem; margin-bottom: 12px; }
+        .feature-card p { font-size: 0.95rem; margin-bottom: 0; }
 
-        .duration-badge {
-            display: inline-block;
-            background-color: #dbeafe;
-            color: var(--primary);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
+        /* Curriculum Table */
+        .table-wrapper { background: var(--surface-color); border-radius: var(--radius-xl); border: 1px solid var(--border-color); overflow: hidden; box-shadow: var(--shadow-md); margin-top: 40px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: rgba(5, 150, 105, 0.05); padding: 16px 24px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--primary); letter-spacing: 0.05em; border-bottom: 1px solid var(--border-color); }
+        td { padding: 20px 24px; font-size: 0.95rem; border-bottom: 1px solid var(--border-color); color: var(--text-main); font-weight: 500; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: var(--bg-color); }
+        .module-num { font-family: 'JetBrains Mono', monospace; color: var(--text-muted); font-size: 0.85rem; margin-right: 12px; font-weight: 600; }
 
-        /* Roadmap Section */
-        .roadmap-section {
-            padding: 60px 0;
+        /* Pricing Section */
+        .pricing-card {
+            background: var(--surface-color); border-radius: var(--radius-xl); padding: 40px;
+            border: 2px solid var(--primary); box-shadow: var(--shadow-lg);
+            max-width: 450px; margin: 40px auto 0; text-align: center; position: relative;
         }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 50px;
+        .pricing-card::before {
+            content: "Most Popular"; position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+            background: var(--primary); color: white; font-size: 0.8rem; font-weight: 700;
+            padding: 4px 16px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px;
         }
-
-        .section-header h2 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-        }
-
-        .grid-roadmap {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .task-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 25px 20px;
-            border-radius: 12px;
-            text-align: center;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            position: relative;
-        }
-
-        .task-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-        }
-
-        .task-num {
-            background-color: var(--primary);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin: 0 auto 15px;
-        }
-
-        .task-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-        }
-
-        .task-card p {
-            font-size: 0.9rem;
-            margin: 0;
-        }
-
-        /* Rewards Section (Certificate & Letter) */
-        .rewards-section {
-            padding: 60px 0;
-            background-color: var(--card-bg);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .rewards-container {
-            display: flex;
-            gap: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .reward-box {
-            flex: 1;
-            min-width: 300px;
-            max-width: 500px;
-            background: var(--bg-light);
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-            border: 1px dashed #cbd5e1;
-        }
-
-        .reward-img-placeholder {
-            width: 100%;
-            height: 250px;
-            background-color: #e2e8f0;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            color: #64748b;
-            font-style: italic;
-            border: 2px solid #fff;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-        }
-
-        /* CTA Bottom */
-        .cta-bottom {
-            text-align: center;
-            padding: 80px 20px;
-        }
-
-        .cta-bottom h2 {
-            font-size: 2.2rem;
-            margin-bottom: 20px;
-        }
+        .pricing-header h3 { font-size: 1.4rem; margin-bottom: 12px; }
+        .price { font-size: 3.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; line-height: 1; }
+        .price span { font-size: 1rem; color: var(--text-muted); font-weight: 500; }
+        .pricing-header p { font-size: 0.95rem; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 24px; }
+        .pricing-features { list-style: none; text-align: left; margin-bottom: 32px; }
+        .pricing-features li { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; font-size: 1rem; font-weight: 500; }
+        .pricing-features li svg { color: var(--primary); flex-shrink: 0; }
 
         /* Footer */
-        footer {
-            background-color: var(--text-main);
-            color: #fff;
+        footer { background: var(--code-bg); color: #94a3b8; padding: 40px 20px; text-align: center; margin-top: auto; }
+        .footer-brand { font-size: 1.5rem; font-weight: 800; color: white; margin-bottom: 10px; display: inline-block; }
+        .footer-brand span { color: var(--primary); }
+        .footer-links { display: flex; justify-content: center; gap: 24px; margin: 20px 0; }
+        .footer-links a { color: #cbd5e1; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; cursor: pointer; }
+        .footer-links a:hover { color: white; }
+        .copyright { font-size: 0.85rem; opacity: 0.7; }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: var(--surface-color); border-radius: var(--radius-xl);
+            width: 90%; max-width: 700px; max-height: 85vh;
+            box-shadow: var(--shadow-lg); display: flex; flex-direction: column;
+            transform: translateY(20px); transition: all 0.3s ease;
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .modal-header {
+            padding: 24px; border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-header h2 { font-size: 1.5rem; margin: 0; color: var(--text-main); }
+        .close-modal {
+            background: none; border: none; color: var(--text-muted); cursor: pointer;
+            font-size: 1.8rem; line-height: 1; transition: color 0.2s;
+        }
+        .close-modal:hover { color: var(--primary); }
+        .modal-body {
+            padding: 24px; overflow-y: auto; color: var(--text-muted); font-size: 0.95rem; text-align: left;
+        }
+        .modal-body h3 { color: var(--text-main); font-size: 1.1rem; margin: 24px 0 12px; }
+        .modal-body p { margin-bottom: 16px; font-size: 0.95rem; }
+        .modal-body ul { margin-left: 20px; margin-bottom: 16px; }
+        .modal-body li { margin-bottom: 8px; }
+        .modal-body strong { color: var(--text-main); }
+        
+        /* --- ADDED: IG/Browser Detection Modal Styles --- */
+        #igBrowserModal .modal-content { max-width: 400px; text-align: center; padding: 40px 24px; align-items: center;}
+        .browser-icon { width: 56px; height: 56px; margin-bottom: 20px; color: #4285F4; background: rgba(66, 133, 244, 0.1); padding: 12px; border-radius: 50%;}
+        .chrome-btn {
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            background-color: #4285F4; color: white; border: none; border-radius: var(--radius-lg);
+            padding: 16px 24px; font-weight: 700; font-size: 1.05rem; cursor: pointer; text-decoration: none;
+            margin-top: 24px; width: 100%; transition: all 0.2s; box-shadow: 0 4px 14px 0 rgba(66, 133, 244, 0.39);
+        }
+        .chrome-btn:hover { background-color: #3367D6; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4); }
+        .chrome-btn svg { width: 22px; height: 22px; }
+
+        /* --- NEW: IG/Browser Top Banner Styles --- */
+        #igBrowserBanner {
+            display: none;
+            background-color: #4285F4;
+            color: white;
+            padding: 12px 20px;
             text-align: center;
-            padding: 30px 20px;
+            font-size: 0.95rem;
+            position: sticky;
+            top: 0;
+            z-index: 1001; /* Above modal overlays if any */
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            box-shadow: var(--shadow-md);
         }
-
-        footer p {
-            color: #94a3b8;
-            font-size: 0.9rem;
+        #igBrowserBanner.active {
+            display: flex;
+            animation: slideDown 0.3s ease-out forwards;
         }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+        .banner-text { flex-grow: 1; text-align: left; }
+        .banner-btn {
+            background: white;
+            color: #4285F4;
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.2s;
+        }
+        .banner-btn:hover { background: #f8fafc; }
+        .dismiss-banner {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.5rem;
+            line-height: 1;
+            opacity: 0.8;
+            padding: 0 5px;
+            transition: opacity 0.2s;
+        }
+        .dismiss-banner:hover { opacity: 1; }
 
-        /* Responsive */
-        @media(max-width: 768px) {
-            .hero h1 { font-size: 2.2rem; }
-            .rewards-container { flex-direction: column; align-items: center; }
+        @media (max-width: 600px) {
+            #igBrowserBanner { flex-direction: column; gap: 10px; text-align: center; }
+            .banner-text { text-align: center; }
+            .dismiss-banner { position: absolute; top: 10px; right: 10px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Header Navigation -->
-    <header>
-        <div class="container nav-content">
-            <div class="logo">
-                <!-- Replace src with your actual icon.png -->
-                <img src="icon.png" alt="Company Icon" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMyNTYzZWIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMmwyIDQgNCAyLTQgNGwtMiA0LTIteC00LTJ6Ii8+PC9zdmc+'">
-                Elevate PM
-            </div>
-            <a href="internship.html" class="btn">Join Now</a>
-        </div>
+    <div id="igBrowserBanner">
+        <span class="banner-text"><strong>Action Required:</strong> Instagram's browser restricts enrollment. Open in Chrome for the best experience.</span>
+        <button onclick="forceOpenChrome()" class="banner-btn">Open in Chrome</button>
+        <button onclick="dismissBanner()" class="dismiss-banner">&times;</button>
+    </div>
+
+    <header class="hero container">
+        <img src="icon.png" alt="Elevate PM Logo" class="hero-logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23059669\'/><text x=\'50\' y=\'65\' font-size=\'50\' font-family=\'sans-serif\' font-weight=\'bold\' fill=\'white\' text-anchor=\'middle\'>E</text></svg>'">
+        <h1>Step into the Shoes of a <br><span class="text-primary">Product Manager</span></h1>
+        <p>A flagship 1-month internship initiative from <strong>Elevate PM</strong>. Stop learning theory and start building products through real-world execution.</p>
+        <a href="internship.html" class="btn">
+            Join Now
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+        </a>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
+    <section class="trusted-section">
         <div class="container">
-            <span class="duration-badge">⏳ 1-Month Intensive Internship</span>
-            <h1>Step into the Shoes of a Product Manager</h1>
-            <p>Real products. Real users. Real impact. Stop learning theory and start building products. Join our 4-week structured internship and build a portfolio that stands out to recruiters.</p>
-            <a href="internship.html" class="btn" style="padding: 16px 32px; font-size: 1.1rem;">Start Your Journey &rarr;</a>
+            <div class="trusted-label">Build Skills Recognized By Top Companies</div>
+            <div class="logo-grid">
+                <span style="font-weight: 800; font-size: 1.4rem; color: var(--text-main);">Google</span>
+                <span style="font-weight: 800; font-size: 1.4rem; color: var(--text-main);">Amazon</span>
+                <span style="font-weight: 800; font-size: 1.4rem; color: var(--text-main);">Microsoft</span>
+                <span style="font-weight: 800; font-size: 1.4rem; color: var(--text-main);">Atlassian</span>
+            </div>
         </div>
     </section>
 
-    <!-- Roadmap Section (10 Tasks) -->
-    <section class="roadmap-section container">
-        <div class="section-header">
-            <h2>Your 1-Month Roadmap</h2>
-            <p>10 practical tasks designed by industry veterans to take you from idea to launch.</p>
+    <section class="section container">
+        <h2 class="text-center">What You'll Earn in 1 Month</h2>
+        <p class="text-center" style="max-width: 600px; margin: 0 auto;">Validate your hard work with credentials that employers trust and a portfolio showcasing real product execution.</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                </div>
+                <h3>Official Internship Letter</h3>
+                <p>An official Letter of Recommendation detailing the 10 real-world tasks you successfully completed during your tenure.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                </div>
+                <h3>Certificate of Completion</h3>
+                <p>A verifiable certificate highlighting your proficiency in product strategy, PRD writing, and lifecycle management.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                </div>
+                <h3>Real Portfolio Projects</h3>
+                <p>Walk away with a professional portfolio filled with wireframes, metrics, and go-to-market strategies to show recruiters.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section container" style="padding-top: 0;">
+        <h2 class="text-center">Your 1-Month Roadmap (10 Tasks)</h2>
+        
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Practical Tasks Required</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="module-num">Task 01-02</span> Research & Empathy</td>
+                        <td><strong>Market Research:</strong> Analyze competitors.<br><strong>User Personas:</strong> Map out target audiences.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="module-num">Task 03-04</span> Ideation & Strategy</td>
+                        <td><strong>Problem Statement:</strong> Define the core pain point.<br><strong>Feature Ideation:</strong> Prioritize using ICE frameworks.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="module-num">Task 05-06</span> Documentation & Design</td>
+                        <td><strong>Write a PRD:</strong> Draft standard requirements.<br><strong>Wireframing:</strong> Create low-fidelity mockups.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="module-num">Task 07-08</span> Metrics & Launch</td>
+                        <td><strong>Success Metrics:</strong> Define North Star & KPIs.<br><strong>GTM Strategy:</strong> Plan product launch strategies.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="module-num">Task 09-10</span> Communication</td>
+                        <td><strong>Stakeholder Review:</strong> Navigate constraints.<br><strong>Final Pitch:</strong> Present strategy to industry experts.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section container" style="padding-top: 0;">
+        <h2 class="text-center">Simple, Transparent Pricing</h2>
+        <p class="text-center" style="max-width: 600px; margin: 0 auto;">Secure your internship spot today and invest in your product management future.</p>
+        
+        <div class="pricing-card">
+            <div class="pricing-header">
+                <h3>Internship Program</h3>
+                <div class="price">₹149<span> / one-time</span></div>
+                <p>Document handling fee. No hidden monthly charges.</p>
+            </div>
+            <ul class="pricing-features">
+                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> Access to all 10 Practical Tasks</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> Official Internship Letter</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> Verifiable Completion Certificate</li>
+                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> Real-world Portfolio Building</li>
+            </ul>
+            <a href="internship.html" class="btn" style="width: 100%;">Join Now for ₹149</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-brand">Elevate <span>PM</span></div>
+        <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 0;">Empowering the next generation of Product Managers.</p>
+        
+        <div class="footer-links">
+            <a href="internship.html">Internship Portal</a>
+            <a onclick="openModal('privacyModal')">Privacy Policy</a>
+            <a onclick="openModal('termsModal')">Terms of Service</a>
         </div>
         
-        <div class="grid-roadmap">
-            <!-- Task 1 -->
-            <div class="task-card">
-                <div class="task-num">1</div>
-                <h3>Market Research</h3>
-                <p>Analyze competitors and identify market gaps.</p>
-            </div>
-            <!-- Task 2 -->
-            <div class="task-card">
-                <div class="task-num">2</div>
-                <h3>User Personas</h3>
-                <p>Build empathy by mapping out your target audience.</p>
-            </div>
-            <!-- Task 3 -->
-            <div class="task-card">
-                <div class="task-num">3</div>
-                <h3>Problem Statement</h3>
-                <p>Define the core pain point your product will solve.</p>
-            </div>
-            <!-- Task 4 -->
-            <div class="task-card">
-                <div class="task-num">4</div>
-                <h3>Feature Ideation</h3>
-                <p>Brainstorm and prioritize features using ICE frameworks.</p>
-            </div>
-            <!-- Task 5 -->
-            <div class="task-card">
-                <div class="task-num">5</div>
-                <h3>Write a PRD</h3>
-                <p>Draft a professional Product Requirements Document.</p>
-            </div>
-            <!-- Task 6 -->
-            <div class="task-card">
-                <div class="task-num">6</div>
-                <h3>Wireframing</h3>
-                <p>Create low-fidelity mockups for user flows.</p>
-            </div>
-            <!-- Task 7 -->
-            <div class="task-card">
-                <div class="task-num">7</div>
-                <h3>Success Metrics</h3>
-                <p>Define KPIs and North Star metrics for your product.</p>
-            </div>
-            <!-- Task 8 -->
-            <div class="task-card">
-                <div class="task-num">8</div>
-                <h3>GTM Strategy</h3>
-                <p>Plan your Go-To-Market and launch strategy.</p>
-            </div>
-            <!-- Task 9 -->
-            <div class="task-card">
-                <div class="task-num">9</div>
-                <h3>Stakeholder Review</h3>
-                <p>Learn to communicate constraints with engineering/design.</p>
-            </div>
-            <!-- Task 10 -->
-            <div class="task-card">
-                <div class="task-num">10</div>
-                <h3>Final Pitch</h3>
-                <p>Present your product strategy to industry experts.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Rewards Section -->
-    <section class="rewards-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>What You'll Earn</h2>
-                <p>Validate your hard work with credentials that employers trust.</p>
-            </div>
-            <div class="rewards-container">
-                
-                <!-- Certificate -->
-                <div class="reward-box">
-                    <!-- Replace with <img src="certificate.png" alt="Certificate"> -->
-                    <div class="reward-img-placeholder">
-                        [ certificate.png Image Placeholder ]
-                    </div>
-                    <h3>Certificate of Completion</h3>
-                    <p>A verifiable certificate highlighting your proficiency in product strategy, PRD writing, and lifecycle management.</p>
-                </div>
-
-                <!-- Internship Letter -->
-                <div class="reward-box">
-                    <!-- Replace with <img src="letter.png" alt="Internship Letter"> -->
-                    <div class="reward-img-placeholder">
-                        [ internship-letter.png Image Placeholder ]
-                    </div>
-                    <h3>Official Internship Letter</h3>
-                    <p>An official Letter of Recommendation detailing the 10 real-world tasks you completed during your 1-month tenure.</p>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Final CTA -->
-    <section class="cta-bottom">
-        <div class="container">
-            <h2>Ready to build products people love?</h2>
-            <p style="margin-bottom: 30px;">Spots for this month's cohort are filling up fast.</p>
-            <a href="internship.html" class="btn" style="padding: 16px 40px; font-size: 1.2rem;">Apply Now for the Internship</a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2026 Elevate PM. All rights reserved.</p>
-            <p style="margin-top: 10px;">Empowering the next generation of Product Managers.</p>
+        <div class="copyright">
+            &copy; <span id="year"></span> Elevate PM. All rights reserved.
         </div>
     </footer>
 
+    <div id="privacyModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Privacy Policy</h2>
+                <button class="close-modal" onclick="closeModal('privacyModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Effective Date:</strong> January 1, 2024</p>
+                <p>Elevate PM ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use the Elevate PM platform.</p>
+                
+                <h3>1. Information We Collect</h3>
+                <p>We may collect personal information that you voluntarily provide to us when you register for the Internship, express an interest in obtaining information about us, or otherwise contact us. This includes:</p>
+                <ul>
+                    <li><strong>Personal Data:</strong> Name, email address, billing address, and payment information.</li>
+                    <li><strong>Usage Data:</strong> Task progress, submission status, and interaction times on our platform.</li>
+                </ul>
+
+                <h3>2. How We Use Your Information</h3>
+                <p>Having accurate information about you permits us to provide you with a smooth, efficient, and customized experience. Specifically, we may use your information to:</p>
+                <ul>
+                    <li>Process transactions and generate your digital certificate and internship letter.</li>
+                    <li>Email you regarding your account, task updates, and feedback.</li>
+                    <li>Monitor and analyze usage and trends to improve your experience.</li>
+                </ul>
+
+                <h3>3. Data Security</h3>
+                <p>We use administrative, technical, and physical security measures to help protect your personal information.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="termsModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Terms of Service</h2>
+                <button class="close-modal" onclick="closeModal('termsModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Last Updated:</strong> January 1, 2024</p>
+                <p>Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the Elevate PM website.</p>
+                
+                <h3>1. Acceptance of Terms</h3>
+                <p>By accessing or using our platform, you agree to be bound by these Terms. If you disagree with any part of the terms, then you may not access the internship material.</p>
+
+                <h3>2. Intellectual Property License</h3>
+                <p>Upon enrollment, Elevate PM grants you a revocable, non-exclusive, non-transferable, limited license to access the task content for your educational purposes. You may not:</p>
+                <ul>
+                    <li>Reproduce, duplicate, copy, sell, or resell any part of the curriculum.</li>
+                    <li>Share your login credentials with unauthorized third parties.</li>
+                </ul>
+
+                <h3>3. Limitation of Liability</h3>
+                <p>In no event shall Elevate PM, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="igBrowserModal" class="modal-overlay">
+        <div class="modal-content">
+            <svg class="browser-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 10a3 3 0 106 0m-6 0a3 3 0 116 0m-6 0H3m15 0h-3m-6 4v5m0-5v-5" />
+            </svg>
+            <h2 style="font-size: 1.4rem; margin-bottom: 8px; color: var(--text-main);">For the Best Experience</h2>
+            <p style="font-size: 1rem; color: var(--text-muted); margin-bottom: 24px;">Instagram's built-in browser might restrict enrollment. Please open this page in Google Chrome.</p>
+            <button onclick="forceOpenChrome()" class="chrome-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.844 5.372a.5.5 0 0 1-.397.608l-1.92.384a.5.5 0 1 1-.192-.98l1.32-.264-1.28-1.28A6.97 6.97 0 0 0 8 1.018a6.97 6.97 0 0 0-4.938 2.052L4.01 4.02l.264 1.32a.5.5 0 0 1-.98.192l-.384-1.92a.5.5 0 0 1 .608-.608l1.92.384 1.28-1.28A8.02 8.02 0 0 1 8 0c2.21 0 4.21.896 5.662 2.348l1.28 1.28 1.28-1.28a.5.5 0 0 1 .808.536l-1.12 5.6a.5.5 0 0 1-.58.39l-5.6-1.12a.5.5 0 0 1 .192-.98l1.32.264-1.28-1.28A6.97 6.97 0 0 0 8 1.018a6.97 6.97 0 0 0-4.938 2.052l1.28 1.28.264-1.32a.5.5 0 1 1 .98.192l-.384 1.92a.5.5 0 0 1-.608.608l-1.92-.384a.5.5 0 1 1 .192-.98l1.32-.264 1.28-1.28A8.02 8.02 0 0 1 8 0a8.02 8.02 0 0 1 5.662 2.348z"/>
+                </svg>
+                Open in Chrome
+            </button>
+            <p style="font-size: 0.85rem; margin-top: 20px; margin-bottom: 0; color: var(--text-muted);">
+                Or tap the <strong>3 dots</strong> (top right) and select<br><strong>"Open in system browser"</strong>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Automatically set the current copyright year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Modal Logic
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = ''; // Restore background scrolling
+        }
+
+        // Close modal when clicking outside the modal content
+        window.onclick = function(event) {
+            // Note: Preventing click-outside for IG modal so they don't accidentally close it
+            if (event.target.classList.contains('modal-overlay') && event.target.id !== 'igBrowserModal') {
+                event.target.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // --- NEW: Dismiss banner logic ---
+        function dismissBanner() {
+            document.getElementById('igBrowserBanner').classList.remove('active');
+        }
+
+        // --- ADDED: Instagram Detection & Auto-Redirect Logic ---
+        function isInstagramBrowser() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            return (ua.indexOf('Instagram') > -1);
+        }
+
+        function forceOpenChrome() {
+            const currentUrl = window.location.href;
+            const isAndroid = /android/i.test(navigator.userAgent);
+            const isIOS = /ipad|iphone|ipod/i.test(navigator.userAgent);
+
+            if (isAndroid) {
+                // Uses Android Intent to force open Chrome
+                const intentUrl = `intent://${window.location.host}${window.location.pathname}${window.location.search}#Intent;scheme=https;package=com.android.chrome;end;`;
+                window.location.href = intentUrl;
+            } else if (isIOS) {
+                // Uses googlechrome:// scheme for iOS devices
+                const iosUrl = currentUrl.replace(/^https?:\/\//i, 'googlechrome://');
+                window.location.href = iosUrl;
+            } else {
+                window.open(currentUrl, '_blank');
+            }
+        }
+
+        // Check on load
+        window.addEventListener('load', function() {
+            if (isInstagramBrowser()) {
+                // NEW: Show top banner instead of the intrusive modal
+                document.getElementById('igBrowserBanner').classList.add('active');
+
+                // NEW: Intercept clicks on the enroll buttons strictly requiring them to open Chrome
+                const enrollBtns = document.querySelectorAll('a.btn');
+                enrollBtns.forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault(); // Stop standard link behavior
+                        forceOpenChrome();  // Force open in Chrome instead
+                    });
+                });
+
+                // --- ORIGINAL MODAL LOGIC (Commented out as requested instead of removed) ---
+                // Show the modal
+                // openModal('igBrowserModal');
+                
+                // Try automatically redirecting after 1.5 seconds (fulfills your "auto redirect" requirement)
+                // Note: IG occasionally blocks auto-redirects, which is why the modal is there as a fallback!
+                // setTimeout(forceOpenChrome, 1500); 
+            }
+        });
+    </script>
 </body>
 </html>
