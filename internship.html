@@ -210,10 +210,9 @@
             width: 100%;
             min-width: 800px;
             max-width: 800px;
-            aspect-ratio: 210 / 297; /* Fixed A4 Portrait ratio to prevent extra blank page */
+            aspect-ratio: 0.707; /* A4 Portrait */
             box-sizing: border-box;
             box-shadow: none;
-            overflow: hidden; /* Ensures content doesn't spill over to cause page break */
         }
 
         .letter-header {
@@ -236,12 +235,12 @@
                 -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-shadow: none !important;
             }
             .certificate-wrapper {
-                width: 297mm !important; height: 209.5mm !important; /* Slightly less to avoid page break */
+                width: 297mm !important; height: 210mm !important; 
                 margin: 0 auto !important; border: 0px solid transparent !important; 
                 max-width: none !important; min-width: 0 !important; aspect-ratio: auto !important;
             }
             .letter-wrapper {
-                width: 210mm !important; height: 296.5mm !important; /* Slightly less to avoid page break */
+                width: 210mm !important; height: 297mm !important;
                 margin: 0 auto !important; max-width: none !important; min-width: 0 !important; aspect-ratio: auto !important;
             }
             .cert-content { padding-top: 0 !important; }
@@ -659,7 +658,7 @@
                 content_ta: `
                     <div class="analogy-box"><strong>💡 எளிய உதாரணம்:</strong> வாடிக்கையாளர்களைப் பற்றி ஆராயாமல் ஒரு பொருளை உருவாக்குவது, முகம் தெரியாத ஒருவருக்குப் பிறந்தநாள் பரிசு வாங்குவது போன்றது. நீங்கள் விலை உயர்ந்த கடிகாரத்தை வாங்கலாம், ஆனால் அவர் கண் தெரியாதவராக இருக்கலாம்! காசைச் செலவழிக்கும் முன் அவர்களிடம் கேட்பதே யூசர் ரிசர்ச்.</div>
                     <p>ஒரு சிறந்த PM-ஆக இருக்க, வாடிக்கையாளர்களின் வலியை நீங்கள் முழுமையாக உணர வேண்டும். நீங்கள் வாடிக்கையாளர் இல்லை என்பதை முதலில் புரிந்துகொள்ளுங்கள். Goorac Corp அலுவலகத்தில் அமர்ந்துகொண்டு, ஒரு கிராமத்து விவசாயிக்கு என்ன வேண்டும் என நீங்கள் சுயமாக ஊகிக்கக் கூடாது.</p>
-                    <p>इसमें இரண்டு வகைகள் உள்ளன. Qualitative ஆராய்ச்சி என்பது வாடிக்கையாளர்களிடம் நேரடியாகப் பேசி, "ஏன்" இந்தப் பிரச்சனை வருகிறது எனப் புரிந்துகொள்வது. இதில் நீங்கள் 80% கேட்க வேண்டும், 20% மட்டுமே பேச வேண்டும்.</p>
+                    <p>இதில் இரண்டு வகைகள் உள்ளன. Qualitative ஆராய்ச்சி என்பது வாடிக்கையாளர்களிடம் நேரடியாகப் பேசி, "ஏன்" இந்தப் பிரச்சனை வருகிறது எனப் புரிந்துகொள்வது. இதில் நீங்கள் 80% கேட்க வேண்டும், 20% மட்டுமே பேச வேண்டும்.</p>
                     <p>Quantitative ஆராய்ச்சி என்பது டேட்டா மற்றும் சர்வேக்களை (Surveys) வைத்துப் பல ஆயிரம் பேரின் பழக்கவழக்கங்களைக் கண்டுபிடிப்பது.</p>
                     <p>இந்த ஆராய்ச்சிகளை முடித்த பின், "User Personas" (வாடிக்கையாளர் மாதிரி) உருவாக்க வேண்டும். இது, உங்கள் வாடிக்கையாளர்களின் குணாதிசயங்களைக் குறிக்கும் ஒரு கற்பனைக் கதாபாத்திரமாகும்.</p>
                     <p>ஆராய்ச்சி செய்யாமல் நீங்களாகவே ஒரு முடிவுக்கு வந்தால், அது பெரிய தோல்வியில்தான் முடியும்.</p>`,
