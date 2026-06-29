@@ -49,9 +49,12 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); -webkit-font-smoothing: antialiased; }
 
-        /* Login Screen */
-        #login-screen {
+        /* Login Screen & Access Denied Screen */
+        #login-screen, #access-denied-screen {
             display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px;
+        }
+        #access-denied-screen {
+            display: none;
         }
         .login-card {
             background: var(--surface-color); padding: 40px; border-radius: var(--radius-lg);
@@ -236,6 +239,17 @@
         </div>
     </div>
 
+    <!-- Access Denied Screen without Logging User out of current session -->
+    <div id="access-denied-screen">
+        <div class="login-card">
+            <h2><span class="header-brand">Access Denied</span></h2>
+            <p>You do not have administrative privileges for this dashboard.</p>
+            <button class="btn-primary" onclick="handleAdminLogout()">
+                Log Out
+            </button>
+        </div>
+    </div>
+
     <div id="admin-screen">
         
         <div class="header">
@@ -369,18 +383,21 @@
                 if (user.uid === 'y6BDbmERJLbY4nBgh2R1JexGsxH2') {
                     errorEl.style.display = 'none';
                     document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('access-denied-screen').style.display = 'none';
                     document.getElementById('admin-screen').style.display = 'block';
                     fetchData();
                 } else {
-                    // Show access denied without immediate logout from session
-                    errorEl.innerText = "Access Denied: You do not have administrative privileges. Logout button below.";
-                    errorEl.style.display = 'block';
+                    // Kick out regular users immediately visually without logging them out of their active working session
+                    // await signOut(auth); // Deliberately kept but commented out to preserve active learning session elsewhere
+                    errorEl.innerText = "Access Denied: You do not have administrative privileges.";
+                    errorEl.style.display = 'none';
                     document.getElementById('admin-screen').style.display = 'none';
-                    document.getElementById('login-screen').style.display = 'flex';
-                    // Add logout button logic but keep session if needed
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('access-denied-screen').style.display = 'flex';
                 }
             } else {
                 document.getElementById('admin-screen').style.display = 'none';
+                document.getElementById('access-denied-screen').style.display = 'none';
                 document.getElementById('login-screen').style.display = 'flex';
             }
         });
@@ -613,15 +630,6 @@
             }
         };
 
-        // Helper to determine max modules and if dropdown shown
-        function getCourseModuleConfig(courseId) {
-            if (courseId.toLowerCase().includes('internship')) {
-                return { maxModules: 11, showDropdown: true, label: 'Tasks' };
-            } else {
-                return { maxModules: 25, showDropdown: false, label: 'Modules' };
-            }
-        };
-
         // Status Elements Color Palette Synthesizer
         function updateSelectStyle(el, status) {
             if(status === 'paid') { el.className = "status-select bg-success"; }
@@ -671,28 +679,31 @@
                     const course = user.courses[courseId];
                     const courseName = courseId.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()); // Formats "prompt-engineering" to "Prompt Engineering"
                     
-                    const config = getCourseModuleConfig(courseId);
                     let currentModVal = course.currentModule || 1;
-                    if(currentModVal > config.maxModules) currentModVal = config.maxModules;
                     
                     let isCertified = course.hasPassedQuiz === true || course.hasPassedQuiz === "true";
                     let selectClass = course.paymentStatus === 'paid' ? "status-select bg-success" : "status-select bg-neutral";
                     
-                    let moduleOptions = '';
-                    let progressHTMLPart = '';
-                    if (config.showDropdown) {
-                        for(let i=1; i<=config.maxModules; i++) {
-                            let label = i <= (config.maxModules-1) ? `Task ${i}` : `Completed`;
+                    let progressUI = '';
+                    if (courseId === 'internship') {
+                        if(currentModVal > 11) currentModVal = 11;
+                        let moduleOptions = '';
+                        for(let i=1; i<=11; i++) {
+                            let label = i <= 10 ? `Task ${i}` : `Completed`;
                             let selected = currentModVal == i ? 'selected' : '';
-                            moduleOptions += `<option value="${i}" \( {selected}> \){label}</option>`;
+                            moduleOptions += `<option value="${i}" ${selected}>${label}</option>`;
                         }
-                        progressHTMLPart = `
-                                    <select class="status-select bg-neutral" style="width: 100%; padding: 6px; font-size: 0.9rem; margin-top: 4px;" onchange="updateModule('\( {user.uid}', ' \){courseId}', this)">
-                                        ${moduleOptions}
-                                    </select> 
-                                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Out of ${config.maxModules-1} ${config.label}</div>`;
+                        progressUI = `
+                            <select class="status-select bg-neutral" style="width: 100%; padding: 6px; font-size: 0.9rem; margin-top: 4px;" onchange="updateModule('${user.uid}', '${courseId}', this)">
+                                ${moduleOptions}
+                            </select> 
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Out of 10 Tasks</div>
+                        `;
                     } else {
-                        progressHTMLPart = `<div style="font-size: 0.9rem; padding: 6px; background: var(--neutral-bg); border-radius: 4px;">\( {currentModVal}/ \){config.maxModules} ${config.label}</div>`;
+                        let displayVal = currentModVal > 25 ? 25 : currentModVal;
+                        progressUI = `
+                            <div style="font-size: 1.1rem; font-weight: 600; padding-top: 6px; color: var(--text-main);">${displayVal} <span style="font-size: 0.85rem; font-weight: normal; color: var(--text-muted);">/ 25 Modules</span></div>
+                        `;
                     }
 
                     coursesDetailHTML += `
@@ -701,13 +712,13 @@
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
                                 <div>
                                     <span class="modal-label">Progress</span><br>
-                                    ${progressHTMLPart}
+                                    ${progressUI}
                                 </div>
                                 <div><span class="modal-label">Certification</span><br>${isCertified ? '<span class="badge bg-success">🏆 Certified</span>' : '<span class="badge bg-neutral">Pending</span>'}</div>
                             </div>
                             <div>
                                 <span class="modal-label" style="display:block; margin-bottom: 6px;">Payment Status</span>
-                                <select class="\( {selectClass}" style="width: 100%; padding: 10px; font-size: 1rem;" onchange="updatePayment(' \){user.uid}', '${courseId}', this)">
+                                <select class="${selectClass}" style="width: 100%; padding: 10px; font-size: 1rem;" onchange="updatePayment('${user.uid}', '${courseId}', this)">
                                     <option value="none" ${course.paymentStatus !== 'paid' ? 'selected' : ''}>Unpaid</option>
                                     <option value="paid" ${course.paymentStatus === 'paid' ? 'selected' : ''}>Paid</option>
                                 </select>
@@ -791,43 +802,43 @@
                         const course = user.courses[courseId];
                         const courseName = courseId.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
                         
-                        const config = getCourseModuleConfig(courseId);
                         let currentModVal = course.currentModule || 1;
-                        if(currentModVal > config.maxModules) currentModVal = config.maxModules;
-                        
                         let isCertified = course.hasPassedQuiz === true || course.hasPassedQuiz === "true";
-                        
-                        let moduleOptions = '';
-                        if (config.showDropdown) {
-                            for(let i=1; i<=config.maxModules; i++) {
-                                let label = i <= (config.maxModules-1) ? `Task ${i}` : `Completed`;
-                                let selected = currentModVal == i ? 'selected' : '';
-                                moduleOptions += `<option value="${i}" \( {selected}> \){label}</option>`;
-                            }
-                        }
 
                         // Desktop Stack Rows
                         coursesHTML += `<div style="margin-bottom: 12px; font-weight: 600; color: var(--primary); font-size: 0.85rem;">${courseName}</div>`;
-                        if (config.showDropdown) {
+                        
+                        if (courseId === 'internship') {
+                            if(currentModVal > 11) currentModVal = 11;
+                            let moduleOptions = '';
+                            for(let i=1; i<=11; i++) {
+                                let label = i <= 10 ? `Task ${i}` : `Completed`;
+                                let selected = currentModVal == i ? 'selected' : '';
+                                moduleOptions += `<option value="${i}" ${selected}>${label}</option>`;
+                            }
                             progressHTML += `
-                                <div style="margin-bottom: 12px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
-                                    <select class="status-select bg-neutral" style="width: 110px; padding: 4px 20px 4px 8px; font-size: 0.8rem;" onchange="updateModule('\( {user.uid}', ' \){courseId}', this)">
+                                <div style="margin-bottom: 12px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; height: 28px;">
+                                    <select class="status-select bg-neutral" style="width: 110px; padding: 4px 20px 4px 8px; font-size: 0.8rem;" onchange="updateModule('${user.uid}', '${courseId}', this)">
                                         ${moduleOptions}
                                     </select> 
-                                    <span style="color: var(--text-muted);">/ ${config.maxModules-1}</span>
+                                    <span style="color: var(--text-muted);">/ 10</span>
                                 </div>`;
                         } else {
+                            let displayVal = currentModVal > 25 ? 25 : currentModVal;
                             progressHTML += `
-                                <div style="margin-bottom: 12px; font-size: 0.85rem;">\( {currentModVal}/ \){config.maxModules} ${config.label}</div>`;
+                                <div style="margin-bottom: 12px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; height: 28px;">
+                                    <span style="font-weight: 600;">${displayVal}</span> <span style="color: var(--text-muted);">/ 25</span>
+                                </div>`;
                         }
-                        quizHTML += `<div style="margin-bottom: 12px;">${isCertified ? '<span class="badge bg-success">🏆 Certified</span>' : '<span class="badge bg-neutral">Pending</span>'}</div>`;
+
+                        quizHTML += `<div style="margin-bottom: 12px; height: 28px; display: flex; align-items: center;">${isCertified ? '<span class="badge bg-success">🏆 Certified</span>' : '<span class="badge bg-neutral">Pending</span>'}</div>`;
                         
                         let selectClass = course.paymentStatus === 'paid' ? "status-select bg-success" : "status-select bg-neutral";
                         
                         // The Dropdown has been heavily restricted to just two states
                         paymentHTML += `
-                            <div style="margin-bottom: 12px;">
-                                <select class="\( {selectClass}" onchange="updatePayment(' \){user.uid}', '${courseId}', this)">
+                            <div style="margin-bottom: 12px; height: 28px; display: flex; align-items: center;">
+                                <select class="${selectClass}" onchange="updatePayment('${user.uid}', '${courseId}', this)">
                                     <option value="none" ${course.paymentStatus !== 'paid' ? 'selected' : ''}>Unpaid</option>
                                     <option value="paid" ${course.paymentStatus === 'paid' ? 'selected' : ''}>Paid</option>
                                 </select>
@@ -838,7 +849,7 @@
                         let mobileColor = course.paymentStatus === 'paid' ? 'bg-success' : 'bg-neutral';
                         let mobileStatusName = course.paymentStatus === 'paid' ? 'PAID' : 'UNPAID';
                         let shortCName = courseId.split('-')[0].toUpperCase(); // Just "PROMPT" or "PYTHON"
-                        mobileCoursesHTML += `<span class="badge \( {mobileColor}" style="margin-right: 4px; margin-bottom: 4px;"> \){shortCName}: ${mobileStatusName}</span>`;
+                        mobileCoursesHTML += `<span class="badge ${mobileColor}" style="margin-right: 4px; margin-bottom: 4px;">${shortCName}: ${mobileStatusName}</span>`;
                     });
                 } else {
                     coursesHTML = "<span style='color:var(--text-muted)'>None</span>";
@@ -859,7 +870,7 @@
                         <td>${quizHTML}</td>
                         <td>${paymentHTML}</td>
                         <td style="text-align: center;">
-                            <button class="btn-icon" title="Delete User" onclick="deleteUser('\( {user.uid}', ' \){user.fullName || 'User'}')">
+                            <button class="btn-icon" title="Delete User" onclick="deleteUser('${user.uid}', '${user.fullName || 'User'}')">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
