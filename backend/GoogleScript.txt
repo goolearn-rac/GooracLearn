@@ -1,0 +1,61 @@
+One 
+// This prevents the Google Drive error if you click the link in a browser
+function doGet(e) {
+  return ContentService.createTextOutput("✅ Webhook is live and listening for data!");
+}
+
+// This receives the data from Hugging Face and sends the email
+function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    
+    MailApp.sendEmail({
+      to: data.to,
+      subject: data.subject,
+      htmlBody: data.html
+    });
+    
+    return ContentService.createTextOutput(JSON.stringify({"status": "success"}))
+      .setMimeType(ContentService.MimeType.JSON);
+      
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+
+
+
+
+Two 
+
+// This prevents the Google Drive mobile app/browser crash screen
+function doGet(e) {
+  return ContentService.createTextOutput("✅ Goorac Email Pipeline is Live & Healthy!");
+}
+
+// This processes secure JSON payloads sent from your Hugging Face space
+function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    
+    MailApp.sendEmail({
+      to: data.to,
+      subject: data.subject,
+      htmlBody: data.html
+    });
+    
+    return ContentService.createTextOutput(JSON.stringify({"status": "success"}))
+      .setMimeType(ContentService.MimeType.JSON);
+      
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+
+
+Which one is good 
+Or both are same 
