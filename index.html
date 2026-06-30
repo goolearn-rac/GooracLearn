@@ -753,7 +753,7 @@
                     <a href="prompt-engineering.html" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Prompt Engineering</a>
                     <a href="hr-management.html" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">HR Management</a>
                     <a href="digital-marketing.html" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Digital Marketing</a>
-                    <a href="cybersecurity.html" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Cyber Security</a>
+                    <a href="cyber-security.html" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Cyber Security</a>
                     <a href="product-management.html" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Product Management</a>
                     <a href="cloud-computing.html" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Cloud Computing</a>
                     <a href="intern.html" style="color: #cbd5e1; text-decoration: none; display: block;">Internship Program</a>
@@ -764,8 +764,9 @@
                 </div>
                 <div>
                     <strong style="color: white;">Legal</strong><br><br>
-                    <a href="#" onclick="showModal('privacyModal')" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Privacy Policy</a>
-                    <a href="#" onclick="showModal('termsModal')" style="color: #cbd5e1; text-decoration: none; display: block;">Terms of Service</a>
+                    <!-- Fixed href and onclick handling below so the modals show correctly without screen jumping -->
+                    <a href="#" onclick="showModal('privacyModal'); return false;" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Privacy Policy</a>
+                    <a href="#" onclick="showModal('termsModal'); return false;" style="color: #cbd5e1; text-decoration: none; display: block;">Terms of Service</a>
                 </div>
             </div>
 
@@ -783,8 +784,20 @@
             </div>
             <div class="modal-body">
                 <div class="modal-back" onclick="closeModal('privacyModal')">← Back</div>
-                <p><strong>Last updated: June 27, 2026</strong></p>
-                <p>Goorac Corporation respects your privacy. We collect minimal data necessary to provide our certification services, including account details and course progress. We never sell your personal information to third parties.</p>
+                <p><strong>Last updated: June 30, 2026</strong></p>
+                <p>Hello there! At Goorac Corporation, we believe your privacy isn't just a compliance checklist—it's a fundamental digital right. We've written this policy not as a maze of legal jargon, but as a straightforward commitment to you, advocating for the protection of your personal data.</p>
+                
+                <h3>1. What Information We Collect</h3>
+                <p>We only collect what we absolutely need to provide you with an exceptional learning experience. This includes your basic profile details (like your name and email address), billing information for secure transactions, and your course progress analytics to help you stay on track.</p>
+                
+                <h3>2. How We Use Your Data</h3>
+                <p>Your data is used strictly to deliver your certification courses, issue your verifiable credentials, and occasionally send you crucial updates regarding your enrolled programs. We do not use your personal information to train public AI models.</p>
+                
+                <h3>3. The "No Selling" Guarantee</h3>
+                <p>Let’s be unequivocal: <strong>we never sell your personal information to third parties.</strong> Period. Your data stays securely with us and our trusted infrastructure partners, who are contractually and legally bound to safeguard it to the highest industry standards.</p>
+                
+                <h3>4. Your Rights as a Learner</h3>
+                <p>You have the absolute right to access, modify, export, or permanently delete your data at any given time. If you wish to exercise these rights, simply reach out to our support team, and we will handle it promptly—no jumping through unnecessary hoops.</p>
             </div>
         </div>
     </div>
@@ -797,8 +810,20 @@
             </div>
             <div class="modal-body">
                 <div class="modal-back" onclick="closeModal('termsModal')">← Back</div>
-                <p><strong>Last updated: June 27, 2026</strong></p>
-                <p>By using Goorac Learn, you agree to our terms. All course materials are intellectual property of Goorac Corporation and are for personal, educational use only.</p>
+                <p><strong>Last updated: June 30, 2026</strong></p>
+                <p>Welcome to Goorac Learn. We've drafted these terms to be as clear, balanced, and fair as possible. By enrolling in our courses, you are agreeing to a mutual pact of professional integrity designed to protect both your learning environment and our intellectual property.</p>
+                
+                <h3>1. Your Learning License</h3>
+                <p>When you purchase a course from Goorac Learn, we grant you a personal, non-exclusive, and non-transferable lifetime license to access the content. This means the knowledge and skills you acquire are yours forever; however, the actual materials—such as videos, PDFs, and proprietary frameworks—remain the exclusive intellectual property of Goorac Corporation.</p>
+                
+                <h3>2. Professional Community Standards</h3>
+                <p>We expect all our learners to act with professional and academic integrity. Sharing your account credentials, pirating course materials, or distributing our intellectual property fundamentally violates this agreement and will result in the immediate termination of your account without a refund.</p>
+                
+                <h3>3. Internships & Verifiable Credentials</h3>
+                <p>Our verifiable certificates and internship experience letters hold weight in the industry because they are earned through actual completion and merit. We reserve the right to revoke credentials or deny internship letters if we discover instances of academic dishonesty or fraudulent activity.</p>
+                
+                <h3>4. Limitation of Liability</h3>
+                <p>While our mission is to provide industry-leading education to accelerate your career, we cannot legally guarantee specific job placements, exact salary increases, or professional promotions. Your career success ultimately depends on how effectively you apply the skills and frameworks you learn here.</p>
             </div>
         </div>
     </div>
