@@ -53,7 +53,7 @@ const razorpay = new Razorpay({
 // 🚀 DYNAMIC COURSE PRICING ENGINE (NEW)
 // ==========================================
 const coursePrices = {
-    "prompt-engineering": 100,  // ₹149.00
+    "prompt-engineering": 14900,  // ₹149.00
     "data-analytics": 14900,      // ₹149.00 (Example for future)
     "hr-management": 19900,       // ₹199.00 (Example for future)
     "digital-marketing": 19900,   // ₹199.00
