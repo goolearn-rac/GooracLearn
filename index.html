@@ -28,7 +28,7 @@
     <meta property="twitter:image" content="https://www.yourwebsite.com/icon.png"> 
 
     <title>Goorac Learn | Cyber Security, Digital Marketing, Data Analytics, Prompt Engineering, HR & Product Management Certifications</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         /* Premium SaaS Theme Variables - Emerald & Midnight Blue */
         :root {
@@ -202,11 +202,25 @@
             padding-left: 8px;
         }
 
-        /* Hero */
+        /* Hero - Custom Designed for images/cover.png Layout */
         .hero { 
-            text-align: center; 
-            padding: 120px 20px 80px; 
-            background: linear-gradient(135deg, var(--surface-color) 0%, rgba(5,150,105,0.05) 100%);
+            text-align: left; 
+            padding: 140px 0; 
+            background-color: #041a14; /* Deep emerald-toned background matching image dark tone */
+            background-image: linear-gradient(to right, #041a14 35%, rgba(4, 26, 20, 0.75) 60%, rgba(4, 26, 20, 0) 100%), url('images/cover.png');
+            background-size: cover;
+            background-position: right center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            min-height: 75vh;
+            position: relative;
+        }
+        .hero .container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
         }
         .hero-logo { 
             width: 110px; 
@@ -214,19 +228,22 @@
             border-radius: 50%; 
             box-shadow: var(--shadow-lg); 
             margin-bottom: 24px; 
-            border: 6px solid var(--surface-color);
+            border: 6px solid rgba(255, 255, 255, 0.15);
         }
         .hero h1 { 
             font-size: clamp(2.8rem, 5.5vw, 4.2rem); 
             margin-bottom: 20px; 
             line-height: 1.1;
+            color: #ffffff;
+            max-width: 750px;
+            font-weight: 800;
         }
-        .hero .highlight { color: var(--primary); }
+        .hero .highlight { color: #10b981; } /* Vibrant green tone for dark hero readability */
         .hero p { 
-            max-width: 680px; 
-            margin: 0 auto 40px; 
+            max-width: 580px; 
+            margin: 0 0 40px 0; 
             font-size: 1.25rem; 
-            color: var(--text-muted);
+            color: #cbd5e1; /* Smooth grey-white contrast color */
         }
 
         /* Course Cards */
@@ -372,6 +389,24 @@
             margin-top: 50px;
             opacity: 0.7;
             font-size: 0.9rem;
+        }
+
+        /* Responsive Breakpoint Matrix for Tablets and PC Layout adjustments */
+        @media (max-width: 1024px) {
+            .hero {
+                background-image: linear-gradient(to bottom, rgba(4, 26, 20, 0.85) 0%, rgba(4, 26, 20, 0.95) 100%), url('images/cover.png');
+                background-position: 65% center;
+                text-align: center;
+                padding: 110px 20px 90px;
+                min-height: auto;
+            }
+            .hero .container {
+                align-items: center;
+                text-align: center;
+            }
+            .hero p {
+                margin: 0 auto 40px;
+            }
         }
 
         /* Mobile Optimizations */
@@ -764,7 +799,6 @@
                 </div>
                 <div>
                     <strong style="color: white;">Legal</strong><br><br>
-                    <!-- Fixed href and onclick handling below so the modals show correctly without screen jumping -->
                     <a href="#" onclick="showModal('privacyModal'); return false;" style="color: #cbd5e1; text-decoration: none; display: block; margin-bottom: 8px;">Privacy Policy</a>
                     <a href="#" onclick="showModal('termsModal'); return false;" style="color: #cbd5e1; text-decoration: none; display: block;">Terms of Service</a>
                 </div>
