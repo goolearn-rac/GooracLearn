@@ -1367,20 +1367,37 @@
         ];
 
         // ==========================================
-        // 10-QUESTION QUIZ
+        // DYNAMIC 25-QUESTION POOL
         // ==========================================
-        const quizData = [
+        const allQuizData = [
+            { q: "What do LLMs primarily predict?", opts: ["Words", "Sentences", "Tokens", "Characters"], ans: 2 },
             { q: "What does the 'C' in the ACT Framework stand for?", opts: ["Code", "Context", "Calculation", "Creative"], ans: 1 },
-            { q: "Which setting makes AI output highly robotic and factual?", opts: ["Temperature 1.0", "Top-K 50", "Temperature 0.0", "Presence Penalty"], ans: 2 },
             { q: "Providing completed examples before asking a task is called:", opts: ["Zero-Shot", "Meta-Prompting", "Few-Shot Prompting", "Chain of Thought"], ans: 2 },
             { q: "What phrase reduces logic errors in math prompts?", opts: ["Let's think step-by-step", "Solve instantly", "Do not hallucinate", "Use JSON"], ans: 0 },
+            { q: "What is Negative Prompting?", opts: ["Insulting the AI", "Telling the AI exactly what NOT to do", "Using negative numbers", "Creating sad stories"], ans: 1 },
+            { q: "When extracting data to JSON, what is crucial to prevent errors?", opts: ["Using Temperature 1.0", "Adding emojis", "Strict schema definition", "Writing in French"], ans: 2 },
+            { q: "Which setting makes AI output highly robotic and factual?", opts: ["Temperature 1.0", "Top-K 50", "Temperature 0.0", "Presence Penalty"], ans: 2 },
             { q: "What is Prompt Injection?", opts: ["Injecting code into the database", "A security flaw where users bypass AI instructions", "Making the AI run faster", "Adding more tokens"], ans: 1 },
             { q: "In Midjourney, what command is used at the end to set aspect ratio?", opts: ["--size", "--ratio", "--ar", "--dim"], ans: 2 },
+            { q: "What is Meta-Prompting?", opts: ["Prompting on Facebook", "Using AI to write prompts for you", "Writing prompts in Python", "Deleting the AI memory"], ans: 1 },
+            { q: "How do you emulate a specific writing tone?", opts: ["Tell it to be funny", "Use Temperature 0", "Provide examples of your writing to reverse-engineer", "Ask for a Markdown table"], ans: 2 },
+            { q: "When prompting for code, what should you act as?", opts: ["A Junior Developer", "A Senior Technical Architect", "A Project Manager", "A Designer"], ans: 1 },
+            { q: "What triad of context is essential for AI debugging?", opts: ["Goal, Actual Output, Environment", "Code, Comments, Variables", "HTML, CSS, JS", "Time, Date, User"], ans: 0 },
             { q: "What is 'Tree of Thoughts'?", opts: ["A botanical dataset", "Asking AI to propose multiple solutions and evaluate them", "A Python library", "A type of token"], ans: 1 },
-            { q: "If an AI gives a generic answer, what was likely missing?", opts: ["Temperature 0.0", "A strict Persona/Role", "A JSON format", "A Markdown table"], ans: 1 },
-            { q: "Which of these is a Negative Prompt?", opts: ["Write a story", "Format as CSV", "Do not use corporate jargon", "Act as an expert"], ans: 2 },
-            { q: "What is Meta-Prompting?", opts: ["Prompting on Facebook", "Using AI to write prompts for you", "Writing prompts in Python", "Deleting the AI memory"], ans: 1 }
+            { q: "To beat the 'Lost in the Middle' syndrome, where should you place core instructions?", opts: ["At the very top", "In the middle", "At the very bottom", "In a separate file"], ans: 2 },
+            { q: "What is Iterative Refinement?", opts: ["Asking the same question repeatedly", "Sculpting the AI's output through continuous feedback", "Deleting the chat history", "Changing the API key"], ans: 1 },
+            { q: "What Markdown element is best for making complex comparison data scannable?", opts: ["Headers", "Bold Text", "Tables", "Blockquotes"], ans: 2 },
+            { q: "Why use Hyper-Specific Personas?", opts: ["To save tokens", "To force the AI to access incredibly niche vectors and expert insights", "To make the AI talk faster", "To reduce API costs"], ans: 1 },
+            { q: "What is the 'Devil's Advocate' technique used for?", opts: ["Generating code", "Mitigating bias and finding flaws in your ideas", "Translating languages", "Creating images"], ans: 1 },
+            { q: "What distinguishes Localization from standard Translation?", opts: ["Adapting to local culture, slang, and context", "Translating word-for-word exactly", "Using older languages", "Ignoring grammar"], ans: 0 },
+            { q: "What method ensures an AI only fills specific blanks without altering the template?", opts: ["Bracket Injection Method", "Loop Method", "Zero-Shot", "CoT"], ans: 0 },
+            { q: "What is the golden rule for Interactive Simulations (e.g., Interviews)?", opts: ["Write a long script", "Ask one question at a time and WAIT for a reply", "Use Temperature 1.0", "Generate JSON"], ans: 1 },
+            { q: "What does PAS stand for in psychological storytelling?", opts: ["Price, Action, Sale", "Problem, Agitation, Solution", "Person, Area, Story", "Post, Analyze, Share"], ans: 1 },
+            { q: "What is Prompt Chaining?", opts: ["Writing long paragraphs", "Splitting a task into sequentially linked micro-tasks", "Locking the AI", "Using blockchain"], ans: 1 },
+            { q: "What defines an Autonomous Agent?", opts: ["An AI that prompts itself to achieve a high-level goal", "A human reviewer", "A static script", "A chatbot that only answers yes/no"], ans: 0 }
         ];
+
+        let currentQuizData = []; // Store the 10 randomly selected questions for validation
 
         // ==========================================
         // UI & ROUTING
@@ -1685,8 +1702,10 @@
         // QUIZ & CERTIFICATE
         // ==========================================
         document.getElementById('start-quiz-btn').onclick = () => {
+            currentQuizData = [...allQuizData].sort(() => 0.5 - Math.random()).slice(0, 10);
+            
             const qc = document.getElementById('quiz-container');
-            qc.innerHTML = quizData.map((q, i) => `
+            qc.innerHTML = currentQuizData.map((q, i) => `
                 <div class="quiz-question">
                     <h3>${i+1}. ${q.q}</h3>
                     ${q.opts.map((opt, oIdx) => `
@@ -1702,7 +1721,7 @@
 
         document.getElementById('submit-quiz-btn').onclick = async () => {
             let score = 0;
-            quizData.forEach((q, i) => {
+            currentQuizData.forEach((q, i) => {
                 const selected = document.querySelector(`input[name="q${i}"]:checked`);
                 if(selected && parseInt(selected.value) === q.ans) score++;
             });
