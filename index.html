@@ -522,7 +522,6 @@
         </div>
     </nav>
 
-    <!-- Side Panel -->
     <div class="side-panel" id="sidePanel">
         <div class="side-panel-header">
             <h3>Menu</h3>
@@ -824,41 +823,68 @@
         
         function openSidePanel() {
             sidePanel.classList.add('open');
+            hamburger.classList.add('active'); // Fixes hamburger remaining 3 bars
             document.body.style.overflow = 'hidden';
+            history.pushState({ panelOpen: true }, '', '#menu'); // Mobile back button support
         }
         
         function closeSidePanel() {
-            sidePanel.classList.remove('open');
-            document.body.style.overflow = 'visible';
+            if (sidePanel.classList.contains('open')) {
+                sidePanel.classList.remove('open');
+                hamburger.classList.remove('active'); // Fixes X not reverting back
+                document.body.style.overflow = 'visible';
+                if (window.location.hash === '#menu') {
+                    history.back(); // Trigger popstate
+                }
+            }
         }
         
-        hamburger.addEventListener('click', function() {
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
             if (sidePanel.classList.contains('open')) {
                 closeSidePanel();
             } else {
                 openSidePanel();
             }
-            hamburger.classList.toggle('active');
         });
         
         // Close side panel when clicking outside
         document.addEventListener('click', function(e) {
-            if (!sidePanel.contains(e.target) && !hamburger.contains(e.target)) {
-                if (sidePanel.classList.contains('open')) {
-                    closeSidePanel();
-                    hamburger.classList.remove('active');
-                }
+            if (sidePanel.classList.contains('open') && !sidePanel.contains(e.target) && !hamburger.contains(e.target)) {
+                closeSidePanel();
             }
+        });
+
+        // Mobile back button support for Side Panel & Modals
+        window.addEventListener('popstate', function(e) {
+            // Close side panel if it's open and hash is no longer #menu
+            if (sidePanel.classList.contains('open') && window.location.hash !== '#menu') {
+                sidePanel.classList.remove('open');
+                hamburger.classList.remove('active');
+                document.body.style.overflow = 'visible';
+            }
+            
+            // Handle modals if back button is pressed
+            document.querySelectorAll('.modal').forEach(modal => {
+                if (modal.style.display === 'flex' && window.location.hash !== '#' + modal.id) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'visible';
+                }
+            });
         });
         
         function showModal(modalId) {
             document.getElementById(modalId).style.display = 'flex';
             document.body.style.overflow = 'hidden';
+            history.pushState({ modalOpen: true }, '', '#' + modalId); // Mobile back button support
         }
         
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
             document.body.style.overflow = 'visible';
+            if (window.location.hash === '#' + modalId) {
+                history.back(); // Trigger popstate
+            }
         }
         
         document.querySelectorAll('.modal').forEach(modal => {
