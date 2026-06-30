@@ -3,12 +3,16 @@ const cors = require('cors');
 const Razorpay = require('razorpay');
 const admin = require('firebase-admin');
 const crypto = require('crypto');
+const { sendCourseReceipt } = require('./mailer'); // ◄ NEW: Import the mailer logic
 require('dotenv').config();
 
 const app = express();
 
 // Hugging Face standard port binding assignment
 const PORT = process.env.PORT || 7860;
+
+// ◄ NEW: In-Memory Idempotency Cache to strictly prevent duplicate emails from rapid Razorpay webhook retries (Zero Firestore Reads)
+const processedPayments = new Set();
 
 // Enable CORS to allow your frontend index.html to communicate securely with this Space
 app.use(cors({
@@ -49,7 +53,7 @@ const razorpay = new Razorpay({
 // 🚀 DYNAMIC COURSE PRICING ENGINE (NEW)
 // ==========================================
 const coursePrices = {
-    "prompt-engineering": 14900,  // ₹149.00
+    "prompt-engineering": 100,  // ₹149.00
     "data-analytics": 14900,      // ₹149.00 (Example for future)
     "hr-management": 19900,       // ₹199.00 (Example for future)
     "digital-marketing": 19900,   // ₹199.00
@@ -131,10 +135,28 @@ app.post('/razorpay-webhook', async (req, res) => {
 
         if (eventType === 'payment.captured') {
             const paymentEntity = payload.payload.payment.entity;
+            const paymentId = paymentEntity.id; // Extract unique payment ID
+            
+            // ◄ NEW: Edge-Case Handler - Idempotency check prevents duplicate emails and DB writes from webhook retries
+            if (processedPayments.has(paymentId)) {
+                console.log(`⚠️ Webhook duplicate caught: Payment ${paymentId} already processed. Skipping to prevent duplicate emails.`);
+                return res.status(200).json({ status: 'acknowledged_duplicate' });
+            }
+            
+            // Add to cache and cap size at 5000 to prevent memory leaks in the Hugging Face container
+            processedPayments.add(paymentId);
+            if (processedPayments.size > 5000) {
+                const firstItem = processedPayments.values().next().value;
+                processedPayments.delete(firstItem);
+            }
             
             // Extract the user identity and course identity notes we embedded during configuration step 1
             const systemTargetUser = paymentEntity.notes ? paymentEntity.notes.userId : null;
             const purchasedCourseId = paymentEntity.notes && paymentEntity.notes.courseId ? paymentEntity.notes.courseId : 'prompt-engineering';
+            
+            // Extract the financial variables to pass to the mailer
+            const amountPaid = paymentEntity.amount; 
+            const currency = paymentEntity.currency || "INR";
 
             if (systemTargetUser) {
                 console.log(`Processing verified access provisioning updates for target: ${systemTargetUser} | Course: ${purchasedCourseId}`);
@@ -149,6 +171,26 @@ app.post('/razorpay-webhook', async (req, res) => {
                 }, { merge: true }); // Merge ensures we don't wipe out their other existing courses
 
                 console.log(`🎉 Success: User database node updated safely [${systemTargetUser}] for course [${purchasedCourseId}]`);
+                
+                // ◄ NEW: Fetch User Details from Auth API (ZERO Firestore Document Reads) & Trigger Email
+                try {
+                    const userRecord = await admin.auth().getUser(systemTargetUser);
+                    const userEmail = userRecord.email;
+                    const userName = userRecord.displayName || 'Learner';
+
+                    if (userEmail) {
+                        // Fire-and-forget async function call so the webhook can instantly return 200 OK to Razorpay
+                        sendCourseReceipt(userEmail, userName, purchasedCourseId, amountPaid, currency, paymentId).catch(err => {
+                            console.error("❌ Async Email Dispatch Failed:", err);
+                        });
+                        console.log(`📧 Dispatching payment receipt email to ${userEmail}...`);
+                    } else {
+                        console.warn(`⚠️ No email found in Auth for user ${systemTargetUser}, skipping receipt dispatch.`);
+                    }
+                } catch (authError) {
+                    console.error("❌ Failed to fetch user from Firebase Auth API:", authError);
+                }
+
             } else {
                 console.error("❌ Critical: Received valid webhook payment block but data identification note was missing.");
             }
